@@ -16,7 +16,11 @@ function FooterMenu(props) {
     function loopMenuObj(menus) {
         return Object.values(menus).map((menu) => {
             return (
-                <Link to={createLink(menu)} className="btn btn-link">
+                <Link
+                    to={createLink(menu)}
+                    key={menu.id}
+                    className="btn btn-link"
+                >
                     {menu.title_en}
                 </Link>
             );
