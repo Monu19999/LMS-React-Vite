@@ -44,7 +44,7 @@ export default function Layout() {
                 data-wow-delay="0.1s"
             >
                 {apiData?.data.bottom_menus && (
-                    <FooterMenu menus={apiData.bottom_menus} />
+                    <FooterMenu menus={apiData.data.bottom_menus} />
                 )}
                 {/* <FooterMenu /> */}
                 <div className="container">

@@ -9,8 +9,10 @@ function FooterMenu(props) {
             return menu.db_controller_route
                 ? menu.db_controller_route.route
                 : "/";
-        } else {
+        } else if (menu.menu_type == 3) {
             return menu.custom_url;
+        } else {
+            return "#";
         }
     }
     function loopMenuObj(menus) {
