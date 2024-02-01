@@ -10,9 +10,15 @@ const useFetch = (method, url, data) => {
         const fetchData = async () => {
             try {
                 const resp = await fetch(url, {
+                    mode: 'cors',
                     method: method,
+                    // headers: {
+                    //     'Accept': 'application/json',
+                    //     'Content-Type':'application/json',
+                    //     'Access-Control-Allow-Origin': '*'
+                    // },
                     data: data,
-                    cache: "no-cache"
+                    cache: "no-cache",
                 });
                 const api_data = await resp.json();
 
