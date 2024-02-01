@@ -387,7 +387,7 @@ function Navbar(props) {
                                         className="navbar-brand d-flex align-items-center px-4 p-4"
                                     >
                                         <img
-                                            src="/assets/img/logo.png"
+                                            src="./assets/img/logo.png"
                                             alt="logo.png"
                                         />
                                         <div
