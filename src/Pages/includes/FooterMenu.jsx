@@ -1,4 +1,39 @@
-function FooterMenu() {
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+function FooterMenu(props) {
+    function createLink(menu) {
+        if (menu.menu_type == 1) {
+            return menu.page ? "page/" + menu.page.slug : "/";
+        } else if (menu.menu_type == 2) {
+            return menu.db_controller_route
+                ? "module/" + menu.db_controller_route.route
+                : "/";
+        } else {
+            return menu.custom_url;
+        }
+    }
+    function loopMenuObj(menus) {
+        return Object.values(menus).map((menu) => {
+            return (
+                <Link to={createLink(menu)} className="btn btn-link">
+                    {menu.title_en}
+                </Link>
+            );
+        });
+    }
+    function renderMenus() {
+        return (
+            <div className="col-lg-12 col-md-12 text-center">
+                {loopMenuObj(props.menus)}
+            </div>
+        );
+    }
+    const [menus, setMenus] = useState("");
+    useEffect(() => {
+        let menu_tree = props.menus ? renderMenus(props.menus) : "";
+        setMenus(menu_tree);
+    }, []);
     return (
         <div
             className="container-fluid py-3"
@@ -8,7 +43,8 @@ function FooterMenu() {
             }}
         >
             <div className="row g-5 justify-content-center">
-                <div className="col-lg-12 col-md-12 text-center">
+                {menus}
+                {/* <div className="col-lg-12 col-md-12 text-center">
                     <a className="btn btn-link" href="index.html">
                         Feedback
                     </a>
@@ -30,7 +66,7 @@ function FooterMenu() {
                     <a href="index.html" className="btn btn-link">
                         FQAs
                     </a>
-                </div>
+                </div> */}
             </div>
         </div>
     );

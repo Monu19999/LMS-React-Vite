@@ -12,6 +12,7 @@ export default function Layout() {
         "https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/main/src/apis/home.json",
         {}
     );
+    //http://localhost:8000/api/home
     return (
         <>
             {/* Spinner Start */}
@@ -40,7 +41,10 @@ export default function Layout() {
                 className="container-fluid bg-dark text-light footer wow fadeIn"
                 data-wow-delay="0.1s"
             >
-                <FooterMenu />
+                {apiData?.bottom_menus && (
+                    <FooterMenu menus={apiData.bottom_menus} />
+                )}
+                {/* <FooterMenu /> */}
                 <div className="container">
                     <div className="copyright">
                         <div className="row">
