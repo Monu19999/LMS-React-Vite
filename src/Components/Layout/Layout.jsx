@@ -31,7 +31,9 @@ export default function Layout() {
             {/* Spinner End */}
             <Settings />
             {isLoading && <BootstrapSpinner />}
-            {apiData?.top_menus && <Navbar menus={apiData.top_menus} />}
+            {apiData?.data.top_menus && (
+                <Navbar menus={apiData.data.top_menus} />
+            )}
             {/* <Navbar /> */}
 
             <Outlet />
@@ -41,7 +43,7 @@ export default function Layout() {
                 className="container-fluid bg-dark text-light footer wow fadeIn"
                 data-wow-delay="0.1s"
             >
-                {apiData?.bottom_menus && (
+                {apiData?.data.bottom_menus && (
                     <FooterMenu menus={apiData.bottom_menus} />
                 )}
                 {/* <FooterMenu /> */}

@@ -7,7 +7,7 @@ function FooterMenu(props) {
             return menu.page ? "page/" + menu.page.slug : "/";
         } else if (menu.menu_type == 2) {
             return menu.db_controller_route
-                ? "module/" + menu.db_controller_route.route
+                ? menu.db_controller_route.route
                 : "/";
         } else {
             return menu.custom_url;

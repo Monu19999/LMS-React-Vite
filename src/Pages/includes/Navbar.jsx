@@ -8,7 +8,7 @@ function Navbar(props) {
             return menu.page ? "page/" + menu.page.slug : "/";
         } else if (menu.menu_type == 2) {
             return menu.db_controller_route
-                ? "module/" + menu.db_controller_route.route
+                ? menu.db_controller_route.route
                 : "/";
         } else {
             return menu.custom_url;
@@ -387,7 +387,7 @@ function Navbar(props) {
                                         className="navbar-brand d-flex align-items-center px-4 p-4"
                                     >
                                         <img
-                                            src="./assets/img/logo.png"
+                                            src="/assets/img/logo.png"
                                             alt="logo.png"
                                         />
                                         <div

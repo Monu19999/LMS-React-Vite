@@ -49,7 +49,7 @@ export default function Home() {
                     <div className="owl-carousel-item position-relative">
                         <img
                             className="img-fluid"
-                            src="./assets/img/carousel-1.jpg"
+                            src="/assets/img/carousel-1.jpg"
                             alt="carousel-1.jpg"
                         />
                         <div
@@ -88,7 +88,7 @@ export default function Home() {
                     <div className="owl-carousel-item position-relative">
                         <img
                             className="img-fluid"
-                            src="./assets/img/carousel-2.jpg"
+                            src="/assets/img/carousel-2.jpg"
                             alt="carousel-2.jpg"
                         />
                         <div
@@ -179,7 +179,7 @@ export default function Home() {
                             <div className="position-relative h-100">
                                 <img
                                     className="img-fluid position-absolute w-100 h-100"
-                                    src="./assets/img/e-book1.png"
+                                    src="/assets/img/e-book1.png"
                                     alt="e-book1.png"
                                     style={{ objectFit: "cover" }}
                                 />
@@ -244,7 +244,7 @@ export default function Home() {
                             <div className="thumbnail">
                                 <div className="thumb-logo">
                                     <img
-                                        src="./assets/img/logo.png"
+                                        src="/assets/img/logo.png"
                                         alt="logo.png"
                                         style={{ height: 70 }}
                                     />
@@ -252,7 +252,7 @@ export default function Home() {
                                 </div>
                                 <div className="caption">
                                     <img
-                                        src="./assets/img/logo.png"
+                                        src="/assets/img/logo.png"
                                         alt="logo.png"
                                         style={{ height: 70 }}
                                     />
@@ -264,7 +264,7 @@ export default function Home() {
                             <div className="thumbnail">
                                 <div className="thumb-logo">
                                     <img
-                                        src="./assets/img/departments/iti.jpg"
+                                        src="/assets/img/departments/iti.jpg"
                                         alt="iti.jpg"
                                         style={{ height: 70 }}
                                     />
@@ -272,7 +272,7 @@ export default function Home() {
                                 </div>
                                 <div className="caption">
                                     <img
-                                        src="./assets/img/departments/iti.jpg"
+                                        src="/assets/img/departments/iti.jpg"
                                         alt="iti.jpg"
                                         style={{ height: 70 }}
                                     />
@@ -284,7 +284,7 @@ export default function Home() {
                             <div className="thumbnail">
                                 <div className="thumb-logo">
                                     <img
-                                        src="./assets/img/departments/phq.png"
+                                        src="/assets/img/departments/phq.png"
                                         alt="phq.png"
                                         style={{ height: 70 }}
                                     />
@@ -294,7 +294,7 @@ export default function Home() {
                                 </div>
                                 <div className="caption">
                                     <img
-                                        src="./assets/img/departments/phq.png"
+                                        src="/assets/img/departments/phq.png"
                                         alt="phq.png"
                                         style={{ height: 70 }}
                                     />
@@ -308,7 +308,7 @@ export default function Home() {
                             <div className="thumbnail">
                                 <div className="thumb-logo">
                                     <img
-                                        src="./assets/img/departments/mptaas.png"
+                                        src="/assets/img/departments/mptaas.png"
                                         alt="mptaas.png"
                                         style={{ height: 70 }}
                                     />
@@ -316,7 +316,7 @@ export default function Home() {
                                 </div>
                                 <div className="caption">
                                     <img
-                                        src="./assets/img/departments/mptaas.png"
+                                        src="/assets/img/departments/mptaas.png"
                                         alt="mptaas.png"
                                         style={{ height: 70 }}
                                     />
@@ -328,7 +328,7 @@ export default function Home() {
                             <div className="thumbnail">
                                 <div className="thumb-logo">
                                     <img
-                                        src="./assets/img/departments/epco.jpg"
+                                        src="/assets/img/departments/epco.jpg"
                                         alt="epco.jpg"
                                         style={{ height: 70 }}
                                     />
@@ -336,7 +336,7 @@ export default function Home() {
                                 </div>
                                 <div className="caption">
                                     <img
-                                        src="./assets/img/departments/epco.jpg"
+                                        src="/assets/img/departments/epco.jpg"
                                         alt="epco.jpg"
                                         style={{ height: 70 }}
                                     />
@@ -348,7 +348,7 @@ export default function Home() {
                             <div className="thumbnail">
                                 <div className="thumb-logo">
                                     <img
-                                        src="./assets/img/logo.png"
+                                        src="/assets/img/logo.png"
                                         alt="logo.png"
                                         style={{ height: 70 }}
                                     />
@@ -356,7 +356,7 @@ export default function Home() {
                                 </div>
                                 <div className="caption">
                                     <img
-                                        src="./assets/img/logo.png"
+                                        src="/assets/img/logo.png"
                                         alt="logo.png"
                                         style={{ height: 70 }}
                                     />
@@ -368,7 +368,7 @@ export default function Home() {
                             <div className="thumbnail">
                                 <div className="thumb-logo">
                                     <img
-                                        src="./assets/img/departments/dmi.png"
+                                        src="/assets/img/departments/dmi.png"
                                         alt="dmi.png"
                                         style={{ height: 70 }}
                                     />
@@ -376,7 +376,7 @@ export default function Home() {
                                 </div>
                                 <div className="caption">
                                     <img
-                                        src="./assets/img/departments/dmi.png"
+                                        src="/assets/img/departments/dmi.png"
                                         alt="dmi.png"
                                         style={{ height: 70 }}
                                     />
@@ -388,7 +388,7 @@ export default function Home() {
                             <div className="thumbnail">
                                 <div className="thumb-logo">
                                     <img
-                                        src="./assets/img/logo.png"
+                                        src="/assets/img/logo.png"
                                         alt="logo.png"
                                         style={{ height: 70 }}
                                     />
@@ -396,7 +396,7 @@ export default function Home() {
                                 </div>
                                 <div className="caption">
                                     <img
-                                        src="./assets/img/logo.png"
+                                        src="/assets/img/logo.png"
                                         alt="logo.png"
                                         style={{ height: 70 }}
                                     />
@@ -440,7 +440,7 @@ export default function Home() {
                                     <div className="position-relative overflow-hidden">
                                         <img
                                             className="img-fluid"
-                                            src="./assets/img/course-1.jpg"
+                                            src="/assets/img/course-1.jpg"
                                             alt="course-1.jpg"
                                         />
                                         <div className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
@@ -486,7 +486,7 @@ export default function Home() {
                                     <div className="position-relative overflow-hidden">
                                         <img
                                             className="img-fluid"
-                                            src="./assets/img/course-2.jpg"
+                                            src="/assets/img/course-2.jpg"
                                             alt="course-2.jpg"
                                         />
                                         <div className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
