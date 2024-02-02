@@ -6,9 +6,10 @@ function Page() {
     let { page } = useParams();
     const { isLoading, serverError, apiData } = useFetch(
         "GET",
-        `http://localhost:8000/api/page/${page}/show`,
+        `https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/main/src/apis/${page}.json`,
         {}
     );
+    // `http://localhost:8000/api/page/${page}/show`,
     return (
         <div>
             {isLoading && <p>Loading...</p>}
