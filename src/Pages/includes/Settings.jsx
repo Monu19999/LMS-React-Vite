@@ -10,7 +10,7 @@ import { useEffect } from "react";
 
 function Settings() {
     const theme = useSelector((state) => {
-        // console.log(state);
+        // console.log(state.app.theme);
         return state.app.theme;
     });
     const dispatch = useDispatch();

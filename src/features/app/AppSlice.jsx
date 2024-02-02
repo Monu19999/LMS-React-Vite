@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import $ from "jquery";
 var $affectedElements = $("p, h1, h2, h3, h4, h5, h6, li, a");
 function setDefaultTheme(theme) {
+    // console.log("theme", theme);
     if (theme) {
         document.documentElement.classList.add("theme-dark");
         localStorage.setItem("theme", "dark");
@@ -9,6 +10,7 @@ function setDefaultTheme(theme) {
         document.documentElement.classList.remove("theme-dark");
         localStorage.removeItem("theme");
     }
+    document.getElementById("themeSwitchToggle").checked = theme ? true : false;
 }
 
 export const appSlice = createSlice({

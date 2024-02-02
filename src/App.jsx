@@ -20,6 +20,14 @@ function App() {
                         }
                     />
                     <Route
+                        path="dashboard"
+                        element={
+                            <Suspense fallback={<BootstrapSpinner />}>
+                                <Home />
+                            </Suspense>
+                        }
+                    />
+                    <Route
                         path="page/:page"
                         element={
                             <Suspense fallback={<BootstrapSpinner />}>
