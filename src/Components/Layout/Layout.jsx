@@ -9,7 +9,7 @@ import BootstrapSpinner from "../BootstrapSpinner";
 export default function Layout() {
     const { isLoading, serverError, apiData } = useFetch(
         "GET",
-        "https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/main/src/apis/home.json",
+        "https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/harsh-work/src/apis/home.json",
         {}
     );
     //http://localhost:8000/api/home

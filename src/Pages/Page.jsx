@@ -8,10 +8,9 @@ function Page() {
     let { page } = useParams();
     const { isLoading, serverError, apiData } = useFetch(
         "GET",
-        `https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/main/src/apis/${page}.json`,
+        `https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/harsh-work/src/apis/${page}.json`,
         {}
     );
-    console.log(apiData);
     // `http://localhost:8000/api/page/${page}/show`,
     return (
         <>
