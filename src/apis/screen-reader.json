@@ -1,0 +1,32 @@
+{
+    "status": 200,
+    "data": {
+        "slug": "screen-reader",
+        "page": {
+            "id": 4,
+            "title_hi": "\u0938\u094d\u0915\u094d\u0930\u0940\u0928 \u0930\u0940\u0921\u0930",
+            "description_hi": "<div class=\\\"text-center\\\">\t<p>\t\t<strong>\u0938\u094d\u0915\u094d\u0930\u0940\u0928 \u0930\u0940\u0921\u0930</strong></p>\t<p>\t\t\u0935\u0947\u092c\u0938\u093e\u0907\u091f \u0935\u0930\u094d\u0932\u094d\u0921 \u0935\u093e\u0907\u0921 \u0935\u0947\u092c \u0915\u0902\u0938\u094b\u0930\u094d\u091f\u093f\u092f\u092e (W3C) \u0935\u0947\u092c \u0938\u093e\u092e\u0917\u094d\u0930\u0940 Accessibility \u0926\u093f\u0936\u093e\u0928\u093f\u0930\u094d\u0926\u0947\u0936 (WCAG) 2.0 \u0938\u094d\u0924\u0930 \u090f.\u090f. \u0915\u0947 \u0938\u093e\u0925 \u0905\u0928\u0941\u092a\u093e\u0932\u0928. \u092f\u0939 \u0926\u0943\u0936\u094d\u092f impairments \u0915\u0947 \u0938\u093e\u0925 \u0932\u094b\u0917\u094b\u0902 \u0915\u094b \u0938\u094d\u0915\u094d\u0930\u0940\u0928 \u092a\u093e\u0920\u0915\u094b\u0902 \u0915\u0947 \u0930\u0942\u092a \u092e\u0947\u0902 \u0938\u0939\u093e\u092f\u0915 \u092a\u094d\u0930\u094c\u0926\u094d\u092f\u094b\u0917\u093f\u0915\u093f\u092f\u094b\u0902 \u0915\u093e \u0909\u092a\u092f\u094b\u0917 \u0915\u0930 \u0935\u0947\u092c\u0938\u093e\u0907\u091f \u0915\u093e \u0909\u092a\u092f\u094b\u0917 \u0915\u0930\u0928\u0947 \u092e\u0947\u0902 \u0938\u0915\u094d\u0937\u092e \u0939\u094b \u091c\u093e\u090f\u0917\u093e|</p>\t<p>\t\t\u0928\u0940\u091a\u0947 \u0926\u0940 \u0917\u0908 \u0924\u093e\u0932\u093f\u0915\u093e \u0935\u093f\u092d\u093f\u0928\u094d\u0928 \u0938\u094d\u0915\u094d\u0930\u0940\u0928 \u092a\u093e\u0920\u0915\u094b\u0902 \u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 \u091c\u093e\u0928\u0915\u093e\u0930\u0940 \u0915\u0940 \u0938\u0942\u091a\u0940:</p>\t<p>\t\t\u0935\u093f\u092d\u093f\u0928\u094d\u0928 \u0938\u094d\u0915\u094d\u0930\u0940\u0928 \u092a\u093e\u0920\u0915\u094b\u0902 \u0915\u0947 \u0932\u093f\u090f \u0938\u0902\u092c\u0902\u0927\u093f\u0924 \u0938\u0942\u091a\u0928\u093e</p></div><div class=\\\"table-responsive tbl_style\\\">\t<table class=\\\"table table-striped table-bordered table-hover\\\">\t\t<thead class=\\\"thead-default\\\">\t\t\t<tr>\t\t\t\t<th width=\\\"5%\\\">\t\t\t\t\t\u0915\u094d\u0930\u092e\u093e\u0902\u0915</th>\t\t\t\t<th width=\\\"40%\\\">\t\t\t\t\t\u0938\u094d\u0915\u094d\u0930\u0940\u0928 \u0930\u0940\u0921\u0930</th>\t\t\t\t<th width=\\\"35%\\\">\t\t\t\t\t\u0935\u0947\u092c\u0938\u093e\u0907\u091f</th>\t\t\t\t<th width=\\\"20%\\\">\t\t\t\t\t\u092e\u0941\u092b\u094d\u0924 / \u0935\u093e\u0923\u093f\u091c\u094d\u092f\u093f\u0915</th>\t\t\t</tr>\t\t</thead>\t\t<tbody>\t\t\t<tr>\t\t\t\t<td>\t\t\t\t\t1</td>\t\t\t\t<td>\t\t\t\t\t\u091c\u093e\u0935\u0938</td>\t\t\t\t<td>\t\t\t\t\t<a href=\\\"http://www.freedomscientific.com/Downloads/JAWS\\\" target=\\\"_blank\\\">Freedom Scientific</a></td>\t\t\t\t<td>\t\t\t\t\t\u0935\u093e\u0923\u093f\u091c\u094d\u092f\u093f\u0915</td>\t\t\t</tr>\t\t\t<tr>\t\t\t\t<td>\t\t\t\t\t2</td>\t\t\t\t<td>\t\t\t\t\t\u0928\u0949\u0928 \u0935\u093f\u091c\u0941\u0905\u0932 \u0921\u0947\u0938\u094d\u0915\u091f\u0949\u092a \u090f\u0915\u094d\u0938\u0947\u0938 (\u090d\u0928.\u0935\u0940.\u0921\u0940.\u0910.)</td>\t\t\t\t<td>\t\t\t\t\t<a href=\\\"http://www.nvaccess.org/download/\\\" target=\\\"_blank\\\">NV Access</a></td>\t\t\t\t<td>\t\t\t\t\t\u092e\u0941\u092b\u094d\u0924</td>\t\t\t</tr>\t\t</tbody>\t</table></div><p>\t&nbsp;</p>",
+            "title_en": "Screen Reader",
+            "description_en": "<div class=\\\"text-center\\\">\t<p>\t\t<strong>Screen Reader</strong></p>\t<p>\t\tThe website complies with World Wide Web Consortium (W3C) Web Content Accessibility Guidelines (WCAG) 2.0 level AA. This will enable people with visual impairments access the website using assistive technologies, such as screen readers.</p>\t<p>\t\tFollowing table lists the information about different screen readers:</p>\t<p>\t\tInformation related to the various screen readers</p></div><div class=\\\"table-responsive tbl_style\\\">\t<table class=\\\"table table-striped table-bordered table-hover\\\">\t\t<thead class=\\\"thead-default\\\">\t\t\t<tr>\t\t\t\t<th width=\\\"5%\\\">\t\t\t\t\tS.No.</th>\t\t\t\t<th width=\\\"40%\\\">\t\t\t\t\tScreen Reader</th>\t\t\t\t<th width=\\\"35%\\\">\t\t\t\t\tWebsite</th>\t\t\t\t<th class=\\\"text-center\\\" width=\\\"20%\\\">\t\t\t\t\tFree / Commercial</th>\t\t\t</tr>\t\t</thead>\t\t<tbody>\t\t\t<tr>\t\t\t\t<td>\t\t\t\t\t1</td>\t\t\t\t<td>\t\t\t\t\tJAWS</td>\t\t\t\t<td>\t\t\t\t\t<a href=\\\"http://www.freedomscientific.com/Downloads/JAWS\\\" target=\\\"_blank\\\">Freedom Scientific</a></td>\t\t\t\t<td>\t\t\t\t\tCommercial</td>\t\t\t</tr>\t\t\t<tr>\t\t\t\t<td>\t\t\t\t\t2</td>\t\t\t\t<td>\t\t\t\t\tNon Visual Desktop Access (NVDA)</td>\t\t\t\t<td>\t\t\t\t\t<a href=\\\"http://www.nvaccess.org/download/\\\" target=\\\"_blank\\\">NV Access</a></td>\t\t\t\t<td>\t\t\t\t\tFree</td>\t\t\t</tr>\t\t</tbody>\t</table></div><p>\t&nbsp;</p>",
+            "pre_url": "page/content/",
+            "slug": "screen-reader",
+            "added_date": "2018-11-15 02:35:31",
+            "added_by": "1",
+            "edit_date": "2018-11-29 04:58:19",
+            "edit_by": "1",
+            "meta_title": "",
+            "meta_keyword": "",
+            "meta_description": "",
+            "is_default": 0,
+            "is_on_homepage": 0,
+            "banner": "",
+            "is_sidebar": 0,
+            "sidebar_id": 0,
+            "status": 1,
+            "created_by": null,
+            "updated_by": null,
+            "created_at": "2023-10-11T14:45:00.000000Z",
+            "updated_at": "2023-10-11T14:45:00.000000Z"
+        }
+    }
+}

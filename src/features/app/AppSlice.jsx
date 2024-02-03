@@ -18,7 +18,7 @@ export const appSlice = createSlice({
     initialState: {
         lang: "en",
         theme: null,
-        affectedElements: null,
+        affectedElements: [],
     },
     reducers: {
         setTheme: (state, action) => {
@@ -36,23 +36,26 @@ export const appSlice = createSlice({
         },
 
         setSize: (state, action) => {
-            console.log("setSize");
-            state.affectedElements = $("p, h1, h2, h3, h4, h5, h6, li, a");
-            state.affectedElements.each(function () {
+            // console.log("setSize");
+            // state.affectedElements.push();
+            $("p, h1, h2, h3, h4, h5, h6, li, a").each(function (e, node) {
+                // console.log(node);
+                // state.affectedElements.push($(this));
                 var $this = $(this);
                 $this.data("orig-size", $this.css("font-size"));
             });
         },
         changeFontSize: (state, action) => {
-            console.log("action => ", action);
-            console.log("affectedElements => ", $affectedElements);
+            // console.log("action => ", action);
+            // console.log("affectedElements => ", $affectedElements);
             if (action.payload === 0) {
-                $affectedElements.each(function () {
+                $("p, h1, h2, h3, h4, h5, h6, li, a").each(function (e, node) {
+                    console.log(node.getAttribute("orig-size"));
                     var $this = $(this);
                     $this.css("font-size", $this.data("orig-size"));
                 });
             } else {
-                $affectedElements.each(function () {
+                $("p, h1, h2, h3, h4, h5, h6, li, a").each(function () {
                     var $this = $(this);
                     $this.css(
                         "font-size",

@@ -85,7 +85,7 @@ function Settings() {
                         </li>
                     </ul>
                     <div className="contact-info d-flex align-items-center">
-                        <Link to="#" className="d-sm-hide">
+                        <Link to="page/screen-reader" className="d-sm-hide">
                             <i className="fa fa-book px-2" />
                             <span className="d-none-head">Screen Reader</span>
                         </Link>
