@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import CreateMenuTree from "@src/Utilities/CreateMenuTree";
 import { useEffect, useState } from "react";
+import logo from "@public/assets/img/logo.png";
 
 function Navbar(props) {
     function createLink(menu) {
@@ -388,10 +389,7 @@ function Navbar(props) {
                                         to="/"
                                         className="navbar-brand d-flex align-items-center px-4 p-4"
                                     >
-                                        <img
-                                            src="/assets/img/logo.png"
-                                            alt="logo.png"
-                                        />
+                                        <img src={logo} alt="logo.png" />
                                         <div
                                             className="ml-2"
                                             style={{ marginLeft: 10 }}
