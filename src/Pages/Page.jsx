@@ -3,12 +3,13 @@ import { useParams } from "react-router-dom";
 import useFetch from "@src/Hooks/useFetch";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import parse from "html-react-parser";
+import api from "@src/apis/api";
 
 function Page() {
     let { page } = useParams();
     const { isLoading, serverError, apiData } = useFetch(
         "GET",
-        `https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/harsh-work/src/apis/${page}.json`,
+        api("page", page),
         {}
     );
     // `http://localhost:8000/api/page/${page}/show`,

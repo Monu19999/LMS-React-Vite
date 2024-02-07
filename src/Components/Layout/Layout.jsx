@@ -5,13 +5,10 @@ import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import useFetch from "@src/Hooks/useFetch";
 import BootstrapSpinner from "../BootstrapSpinner";
+import api from "@src/apis/api";
 
 export default function Layout() {
-    const { isLoading, serverError, apiData } = useFetch(
-        "GET",
-        "https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/harsh-work/src/apis/app.json",
-        {}
-    );
+    const { isLoading, serverError, apiData } = useFetch("GET", api("api"), {});
     //http://localhost:8000/api/home
     return (
         <>
