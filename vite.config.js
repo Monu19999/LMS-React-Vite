@@ -18,6 +18,6 @@ export default defineConfig({
       }
   },
   plugins: [react()],
-  base: '/',
+  base: 'LMS-React-Vite',
   baseServer: '/LMS-React/'
 })
