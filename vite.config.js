@@ -18,6 +18,6 @@ export default defineConfig({
       }
   },
   plugins: [react()],
-  base: 'http://localhost::5173',
+  base: '/',
   baseServer: '/LMS-React/'
 })
