@@ -1,0 +1,17 @@
+{
+    "status": 200,
+    "data": {
+        "registered_users": 1,
+        "courses_enrolled": 0,
+        "department_onboarded": [
+            {
+                "id": 53,
+                "title_hi": "\u0935\u093f\u091c\u094d\u091e\u093e\u0928 \u090f\u0935\u0902 \u092a\u094d\u0930\u094c\u0926\u094d\u092f\u094b\u0917\u093f\u0915\u0940 \u0935\u093f\u092d\u093e\u0917",
+                "title_en": "Science & Technology",
+                "status": 1,
+                "deleted_at": null
+            }
+        ],
+        "department_onboarded_count": 1
+    }
+}
