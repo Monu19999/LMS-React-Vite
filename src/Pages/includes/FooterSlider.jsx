@@ -1,6 +1,6 @@
 import React from "react";
 import OwlCarousel from "react-owl-carousel";
-import "@public/assets/lib/owlcarousel/assets/owl.carousel.min.css";
+import "../../../public/assets/lib/owlcarousel/assets/owl.carousel.min.css";
 
 function FooterSlider() {
     const options = {
@@ -56,7 +56,7 @@ function FooterSlider() {
                                             <div className="owl-item active">
                                                 <div className="item">
                                                     <img
-                                                        src="/assets/img/departments/scroll/cmhelpline.png"
+                                                        src="assets/img/departments/scroll/cmhelpline.png"
                                                         className="img-fluid"
                                                         alt="cmhelpline.png"
                                                     />
@@ -65,7 +65,7 @@ function FooterSlider() {
                                             <div className="owl-item">
                                                 <div className="item">
                                                     <img
-                                                        src="/assets/img/departments/scroll/fomp.png"
+                                                        src="assets/img/departments/scroll/fomp.png"
                                                         className="img-fluid"
                                                         alt="fomp.png"
                                                     />
@@ -74,7 +74,7 @@ function FooterSlider() {
                                             <div className="owl-item">
                                                 <div className="item">
                                                     <img
-                                                        src="/assets/img/departments/scroll/indiaportal.png"
+                                                        src="assets/img/departments/scroll/indiaportal.png"
                                                         className="img-fluid"
                                                         alt="indiaportal.png"
                                                     />
@@ -83,7 +83,7 @@ function FooterSlider() {
                                             <div className="owl-item">
                                                 <div className="item">
                                                     <img
-                                                        src="/assets/img/departments/scroll/investmp.png"
+                                                        src="assets/img/departments/scroll/investmp.png"
                                                         className="img-fluid"
                                                         alt="investmp.png"
                                                     />
@@ -92,7 +92,7 @@ function FooterSlider() {
                                             <div className="owl-item">
                                                 <div className="item">
                                                     <img
-                                                        src="/assets/img/departments/scroll/lokseva.png"
+                                                        src="assets/img/departments/scroll/lokseva.png"
                                                         className="img-fluid"
                                                         alt="lokseva.png"
                                                     />
@@ -101,7 +101,7 @@ function FooterSlider() {
                                             <div className="owl-item">
                                                 <div className="item">
                                                     <img
-                                                        src="/assets/img/departments/scroll/mapit.png"
+                                                        src="assets/img/departments/scroll/mapit.png"
                                                         className="img-fluid"
                                                         alt="mapit.png"
                                                     />
@@ -110,7 +110,7 @@ function FooterSlider() {
                                             <div className="owl-item">
                                                 <div className="item">
                                                     <img
-                                                        src="/assets/img/departments/scroll/mpcode.png"
+                                                        src="assets/img/departments/scroll/mpcode.png"
                                                         className="img-fluid"
                                                         alt="mpcode.png"
                                                     />
@@ -119,7 +119,7 @@ function FooterSlider() {
                                             <div className="owl-item">
                                                 <div className="item">
                                                     <img
-                                                        src="/assets/img/departments/scroll/mpdashboard.png"
+                                                        src="assets/img/departments/scroll/mpdashboard.png"
                                                         className="img-fluid"
                                                         alt="mpdashboard.png"
                                                     />
@@ -128,7 +128,7 @@ function FooterSlider() {
                                             <div className="owl-item">
                                                 <div className="item">
                                                     <img
-                                                        src="/assets/img/departments/scroll/mpdashboard.png"
+                                                        src="assets/img/departments/scroll/mpdashboard.png"
                                                         className="img-fluid"
                                                         alt="mpdashboard.png"
                                                     />
@@ -137,7 +137,7 @@ function FooterSlider() {
                                             <div className="owl-item">
                                                 <div className="item">
                                                     <img
-                                                        src="/assets/img/departments/scroll/mpgov.png"
+                                                        src="assets/img/departments/scroll/mpgov.png"
                                                         className="img-fluid"
                                                         alt="mpgov.png"
                                                     />
@@ -146,7 +146,7 @@ function FooterSlider() {
                                             <div className="owl-item">
                                                 <div className="item">
                                                     <img
-                                                        src="/assets/img/departments/scroll/mpinfo.png"
+                                                        src="assets/img/departments/scroll/mpinfo.png"
                                                         className="img-fluid"
                                                         alt="mpinfo.png"
                                                     />
@@ -155,7 +155,7 @@ function FooterSlider() {
                                             <div className="owl-item">
                                                 <div className="item">
                                                     <img
-                                                        src="/assets/img/departments/scroll/mptourism.png"
+                                                        src="assets/img/departments/scroll/mptourism.png"
                                                         className="img-fluid"
                                                         alt="mptourism.png"
                                                     />
@@ -164,7 +164,7 @@ function FooterSlider() {
                                             <div className="owl-item">
                                                 <div className="item">
                                                     <img
-                                                        src="/assets/img/departments/scroll/rajbhavan.png"
+                                                        src="assets/img/departments/scroll/rajbhavan.png"
                                                         className="img-fluid"
                                                         alt="rajbhavan.png"
                                                     />

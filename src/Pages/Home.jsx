@@ -1,6 +1,6 @@
 import React from "react";
 import OwlCarousel from "react-owl-carousel";
-import FooterSlider from "@pages/includes/FooterSlider";
+import FooterSlider from "@src/Pages/includes/FooterSlider";
 import api from "@src/apis/api";
 import useFetch from "@src/Hooks/useFetch";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
@@ -57,7 +57,7 @@ export default function Home() {
                     <div className="owl-carousel-item position-relative">
                         <img
                             className="img-fluid"
-                            src="/assets/img/carousel-1.jpg"
+                            src="assets/img/carousel-1.jpg"
                             alt="carousel-1.jpg"
                         />
                         <div
@@ -96,7 +96,7 @@ export default function Home() {
                     <div className="owl-carousel-item position-relative">
                         <img
                             className="img-fluid"
-                            src="/assets/img/carousel-2.jpg"
+                            src="assets/img/carousel-2.jpg"
                             alt="carousel-2.jpg"
                         />
                         <div
@@ -199,7 +199,7 @@ export default function Home() {
                             <div className="position-relative h-100">
                                 <img
                                     className="img-fluid position-absolute w-100 h-100"
-                                    src="/assets/img/e-book1.png"
+                                    src="assets/img/e-book1.png"
                                     alt="e-book1.png"
                                     style={{ objectFit: "cover" }}
                                 />
@@ -272,7 +272,7 @@ export default function Home() {
                                             <div className="thumbnail">
                                                 <div className="thumb-logo">
                                                     <img
-                                                        src="./assets/img/logo.png"
+                                                        src="assets/img/logo.png"
                                                         alt="logo.png"
                                                         style={{ height: 70 }}
                                                     />
@@ -284,7 +284,7 @@ export default function Home() {
                                                 </div>
                                                 <div className="caption">
                                                     <img
-                                                        src="./assets/img/logo.png"
+                                                        src="assets/img/logo.png"
                                                         alt="logo.png"
                                                         style={{ height: 70 }}
                                                     />
@@ -499,7 +499,7 @@ export default function Home() {
                                     <div className="position-relative overflow-hidden">
                                         <img
                                             className="img-fluid"
-                                            src="/assets/img/course-1.jpg"
+                                            src="assets/img/course-1.jpg"
                                             alt="course-1.jpg"
                                         />
                                         <div className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
@@ -545,7 +545,7 @@ export default function Home() {
                                     <div className="position-relative overflow-hidden">
                                         <img
                                             className="img-fluid"
-                                            src="/assets/img/course-2.jpg"
+                                            src="assets/img/course-2.jpg"
                                             alt="course-2.jpg"
                                         />
                                         <div className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">

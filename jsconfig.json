@@ -7,7 +7,7 @@
         "allowImportingTsExtensions": true,
         "strictNullChecks": true,
         "strictFunctionTypes": true,
-        "baseUrl": ".",
+        "baseUrl": "./LMS-React",
     },
     "exclude": [
         "node_modules",

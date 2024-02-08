@@ -6,14 +6,18 @@ let __dirname = '.';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      baseUrl: 'https://LMS-React/configuration-options/'
+    },
+  },
   resolve: {
       alias: {
           '@public'   : path.resolve(__dirname, 'public/'),
           '@src'   : path.resolve(__dirname, 'src/'),
-          '@features'   : path.resolve(__dirname, 'src/features'),
-          '@pages'   : path.resolve(__dirname, 'src/Pages/'),
-          '@components'   : path.resolve(__dirname, 'src/Components/'),
       }
   },
   plugins: [react()],
+  base: 'LMS-React-Vite',
+  baseServer: '/LMS-React/'
 })

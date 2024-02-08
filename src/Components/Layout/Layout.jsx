@@ -1,6 +1,6 @@
 import FooterMenu from "@src/Pages/includes/FooterMenu";
-import Settings from "@pages/includes/Settings";
-import Navbar from "@pages/includes/Navbar";
+import Settings from "@src/Pages/includes/Settings";
+import Navbar from "@src/Pages/includes/Navbar";
 import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import useFetch from "@src/Hooks/useFetch";

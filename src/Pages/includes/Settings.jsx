@@ -5,7 +5,7 @@ import {
     updateTheme,
     setSize,
     changeFontSize,
-} from "@features/app/AppSlice";
+} from "@src/features/app/AppSlice";
 import { useEffect } from "react";
 
 function Settings() {
