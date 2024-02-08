@@ -1,6 +1,6 @@
 import React from "react";
 import OwlCarousel from "react-owl-carousel";
-import FooterSlider from "@src/Pages/includes/FooterSlider";
+import FooterSlider from "@src/pages/includes/FooterSlider";
 import api from "@src/apis/api";
 import useFetch from "@src/Hooks/useFetch";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
