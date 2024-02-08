@@ -2,8 +2,11 @@ import { Link } from "react-router-dom";
 import CreateMenuTree from "@src/Utilities/CreateMenuTree";
 import { useEffect, useState } from "react";
 import logo from "@public/assets/img/logo.png";
+import { mobileNavToggle } from "@features/app/AppSlice";
+import { useDispatch } from "react-redux";
 
 function Navbar(props) {
+    const dispatch = useDispatch();
     function createLink(menu) {
         if (menu.menu_type == 1) {
             return menu.page ? "page/" + menu.page.slug : "/";
@@ -17,7 +20,6 @@ function Navbar(props) {
             return "#";
         }
     }
-
     function makeLi(menu, deep) {
         return (
             <li
@@ -378,6 +380,9 @@ function Navbar(props) {
                                         className="c-navbar__menu"
                                         id="js-navbar-menu-toggle"
                                         aria-controls="js-navbar-links"
+                                        onClick={() =>
+                                            dispatch(mobileNavToggle())
+                                        }
                                     >
                                         <span>
                                             <span className="u-visually-hide" />

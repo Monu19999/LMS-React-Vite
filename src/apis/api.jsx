@@ -1,12 +1,14 @@
 const data = {
     development: {
-        api: "http://localhost:8000/api/home",
+        api: "http://localhost:8000/api/app",
+        home: "http://localhost:8000/api/home",
         page: function (page_name) {
             return `http://localhost:8000/api/page/${page_name}/show`;
         },
     },
     production: {
         api: "https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/harsh-work/src/apis/app.json",
+        home: "https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/harsh-work/src/apis/home.json",
         page: function (page_name) {
             return `https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/harsh-work/src/apis/${page_name}.json`;
         },

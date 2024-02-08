@@ -31980,24 +31980,24 @@ var FEAccordion = {
         FEMasthead.Init();
     },
     BurgerNav: function () {
-      var e = $("body");
-      $("#js-navbar-menu-toggle").on("click", function (t) {
-        t.preventDefault(),
-          t.stopPropagation(),
-          e.hasClass("is-nav-open")
-            ? e.removeClass("is-nav-open")
-            : e.addClass("is-nav-open");
-      }),
-        $(document).on("click", function (t) {
-          e.removeClass("is-nav-open").removeClass("is-nav-dropdown-open"),
-            $("div.js-navbar-dropdown")
-              .removeClass("is-active")
-              .prev("button")
-              .removeClass("is-active");
-        }),
-        $("div.js-navbar-links").on("click", function (t) {
-          t.stopPropagation();
-        });
+      // var e = $("body");
+      // $("#js-navbar-menu-toggle").on("click", function (t) {
+      //   t.preventDefault(),
+      //     t.stopPropagation(),
+      //     e.hasClass("is-nav-open")
+      //       ? e.removeClass("is-nav-open")
+      //       : e.addClass("is-nav-open");
+      // }),
+      //   $(document).on("click", function (t) {
+      //     e.removeClass("is-nav-open").removeClass("is-nav-dropdown-open"),
+      //       $("div.js-navbar-dropdown")
+      //         .removeClass("is-active")
+      //         .prev("button")
+      //         .removeClass("is-active");
+      //   }),
+      //   $("div.js-navbar-links").on("click", function (t) {
+      //     t.stopPropagation();
+      //   });
     },
     NavDropdown: function () {
       var i = $("body"),

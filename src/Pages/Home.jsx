@@ -1,6 +1,9 @@
 import React from "react";
 import OwlCarousel from "react-owl-carousel";
 import FooterSlider from "@pages/includes/FooterSlider";
+import api from "@src/apis/api";
+import useFetch from "@src/Hooks/useFetch";
+import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 
 export default function Home() {
     const slider_options = {
@@ -37,6 +40,11 @@ export default function Home() {
             },
         },
     };
+    const { isLoading, serverError, apiData } = useFetch(
+        "GET",
+        api("home"),
+        {}
+    );
     return (
         <>
             {/* hero slider */}
@@ -133,7 +141,11 @@ export default function Home() {
                         data-wow-delay="0.1s"
                     >
                         <div className="counter-box ">
-                            <span className="counter">20</span>
+                            <span className="counter">
+                                {apiData?.data?.department_onboarded_count
+                                    ? apiData.data.department_onboarded_count
+                                    : 0}
+                            </span>
                             <p>Total Departments Onboarded</p>
                         </div>
                     </div>
@@ -142,7 +154,11 @@ export default function Home() {
                         data-wow-delay="0.3s"
                     >
                         <div className="counter-box">
-                            <span className="counter">400</span>
+                            <span className="counter">
+                                {apiData?.data?.courses_enrolled
+                                    ? apiData.data.courses_enrolled
+                                    : 0}
+                            </span>
                             <p>Courses Enrolled </p>
                         </div>
                     </div>
@@ -151,7 +167,11 @@ export default function Home() {
                         data-wow-delay="0.3s"
                     >
                         <div className="counter-box">
-                            <span className="counter">1300</span>
+                            <span className="counter">
+                                {apiData?.data?.registered_users
+                                    ? apiData.data.registered_users
+                                    : 0}
+                            </span>
                             <p>Total Users Registered</p>
                         </div>
                     </div>
@@ -240,7 +260,46 @@ export default function Home() {
                         <h1 className="mb-5">Onboarded Departments</h1>
                     </div>
                     <div className="row">
-                        <div className="col-xs-12 col-md-6 col-lg-3 mb-4">
+                        {isLoading && <BootstrapSpinner />}
+                        {apiData?.data?.department_onboarded &&
+                            apiData.data.department_onboarded.map(
+                                (department_onboarded) => {
+                                    return (
+                                        <div
+                                            className="col-xs-12 col-md-6 col-lg-3 mb-4"
+                                            key={department_onboarded.id}
+                                        >
+                                            <div className="thumbnail">
+                                                <div className="thumb-logo">
+                                                    <img
+                                                        src="./assets/img/logo.png"
+                                                        alt="logo.png"
+                                                        style={{ height: 70 }}
+                                                    />
+                                                    <h4 className="mt-2">
+                                                        {
+                                                            department_onboarded.title_en
+                                                        }
+                                                    </h4>
+                                                </div>
+                                                <div className="caption">
+                                                    <img
+                                                        src="./assets/img/logo.png"
+                                                        alt="logo.png"
+                                                        style={{ height: 70 }}
+                                                    />
+                                                    <h4 className="mt-2">
+                                                        {
+                                                            department_onboarded.title_en
+                                                        }
+                                                    </h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                }
+                            )}
+                        {/* <div className="col-xs-12 col-md-6 col-lg-3 mb-4">
                             <div className="thumbnail">
                                 <div className="thumb-logo">
                                     <img
@@ -416,7 +475,7 @@ export default function Home() {
                                     style={{ marginLeft: 10 }}
                                 />
                             </a>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

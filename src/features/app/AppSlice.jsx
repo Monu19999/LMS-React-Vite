@@ -64,11 +64,22 @@ export const appSlice = createSlice({
                 });
             }
         },
+        mobileNavToggle: (state, action) => {
+            document.body.classList.contains("is-nav-open")
+                ? document.body.classList.remove("is-nav-open")
+                : document.body.classList.add("is-nav-open");
+        },
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { updateLang, updateTheme, changeFontSize, setTheme, setSize } =
-    appSlice.actions;
+export const {
+    updateLang,
+    updateTheme,
+    changeFontSize,
+    setTheme,
+    setSize,
+    mobileNavToggle,
+} = appSlice.actions;
 
 export default appSlice.reducer;
