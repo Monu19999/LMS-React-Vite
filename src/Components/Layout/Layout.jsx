@@ -4,7 +4,7 @@ import Navbar from "@src/Pages/includes/Navbar";
 import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import useFetch from "@src/Hooks/useFetch";
-import BootstrapSpinner from "../BootstrapSpinner";
+import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import api from "@src/apis/api";
 
 export default function Layout() {

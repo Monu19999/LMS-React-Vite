@@ -2,8 +2,8 @@ import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "@src/Pages/Home";
 import Page from "@src/Pages/Page";
-import BootstrapSpinner from "@src/components/BootstrapSpinner";
-import Layout from "@src/components/Layout/Layout";
+import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import Layout from "@src/Components/Layout/Layout";
 
 function App() {
     return (
