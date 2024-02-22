@@ -1,9 +1,9 @@
 const data = {
     development: {
-        api: "http://localhost:8000/api/app",
-        home: "http://localhost:8000/api/home",
+        api: "http://eshiksha.test.com/api/app",
+        home: "http://eshiksha.test.com/api/home",
         page: function (page_name) {
-            return `http://localhost:8000/api/page/${page_name}/show`;
+            return `http://eshiksha.test.com/api/page/${page_name}/show`;
         },
     },
     production: {
