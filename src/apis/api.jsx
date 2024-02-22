@@ -7,10 +7,10 @@ const data = {
         },
     },
     production: {
-        api: "https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/main/src/apis/app.json",
-        home: "https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/main/src/apis/home.json",
+        api: "http://164.100.196.171/learning_mng_sys/api/app",
+        home: "http://164.100.196.171/learning_mng_sys/api/home",
         page: function (page_name) {
-            return `https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/main/src/apis/${page_name}.json`;
+            return `http://164.100.196.171/learning_mng_sys/api/${page_name}/show`;
         },
     },
 };
