@@ -7,10 +7,10 @@ const data = {
         },
     },
     production: {
-        api: "https://raw.githubusercontent.com/Monu19999/main/harsh-work/src/apis/app.json",
-        home: "https://raw.githubusercontent.com/Monu19999/main/harsh-work/src/apis/home.json",
+        api: "https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/main/src/apis/app.json",
+        home: "https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/main/src/apis/home.json",
         page: function (page_name) {
-            return `https://raw.githubusercontent.com/Monu19999/main/harsh-work/src/apis/${page_name}.json`;
+            return `https://raw.githubusercontent.com/Monu19999/LMS-React-Vite/main/src/apis/${page_name}.json`;
         },
     },
 };
