@@ -4,6 +4,7 @@ import useFetch from "@src/Hooks/useFetch";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import parse from "html-react-parser";
 import api from "@src/apis/api";
+import image from "@public/assets/img/e-book.png";
 
 function Page() {
     let { page } = useParams();
@@ -67,7 +68,7 @@ function Page() {
                                     <div className="position-relative h-100">
                                         <img
                                             className="img-fluid position-absolute w-100 h-100"
-                                            src="/assets/img/e-book.png"
+                                            src={image}
                                             alt={apiData?.data.page.title_en}
                                             style={{ objectFit: "cover" }}
                                         />

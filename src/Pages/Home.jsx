@@ -4,8 +4,23 @@ import FooterSlider from "@src/Pages/includes/FooterSlider";
 import api from "@src/apis/api";
 import useFetch from "@src/Hooks/useFetch";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import ShowImage from "@src/Utilities/ShowImage";
 
 export default function Home() {
+    function createLink(item) {
+        if (item.menu_type == 1) {
+            return item.page ? "page/" + item.page.slug : "/";
+        } else if (item.menu_type == 2) {
+            return item.db_controller_route
+                ? item.db_controller_route.route
+                : "/";
+        } else if (item.menu_type == 3) {
+            return item.custom_url;
+        } else {
+            return "#";
+        }
+    }
+
     const slider_options = {
         autoplay: true,
         smartSpeed: 1500,
@@ -49,87 +64,66 @@ export default function Home() {
         <>
             {/* hero slider */}
             {/* Carousel Start */}
-            <div className="container-fluid p-0 mb-5">
-                <OwlCarousel
-                    {...slider_options}
-                    className="owl-carousel header-carousel position-relative"
-                >
-                    <div className="owl-carousel-item position-relative">
-                        <img
-                            className="img-fluid"
-                            src="assets/img/carousel-1.jpg"
-                            alt="carousel-1.jpg"
-                        />
-                        <div
-                            className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center"
-                            style={{ background: "rgba(24, 29, 56, .7)" }}
-                        >
-                            <div className="container">
-                                <div className="row justify-content-start">
-                                    <div className="col-sm-10 col-lg-8">
-                                        {/* <h5 class="text-primary text-uppercase mb-3 animated slideInDown">
-                                            e-Shiksha{" "}
-                                        </h5> */}
-                                        <h1 className="display-4 text-white animated slideInDown mb-4">
-                                            {" "}
-                                            Learning Management System
-                                        </h1>
-                                        <a
-                                            href="index.html"
-                                            className="btn btn-primary py-md-2 px-md-4 me-3 animated slideInLeft"
-                                            style={{ borderRadius: 40 }}
-                                        >
-                                            Read More
-                                        </a>
-                                        <a
-                                            href="index.html"
-                                            className="btn btn-light py-md-2 px-md-4 animated slideInRight"
-                                            style={{ borderRadius: 40 }}
-                                        >
-                                            Enroll Now
-                                        </a>
+            {isLoading && <BootstrapSpinner />}
+            {apiData?.data?.sliders && (
+                <div className="container-fluid p-0 mb-5">
+                    <OwlCarousel
+                        {...slider_options}
+                        className="owl-carousel header-carousel position-relative"
+                    >
+                        {apiData.data.sliders.map((slider) => {
+                            return (
+                                <div
+                                    className="owl-carousel-item position-relative"
+                                    key={slider.id}
+                                >
+                                    <img
+                                        className="img-fluid"
+                                        src={ShowImage(slider.upload.file_path)}
+                                        alt={slider.upload.original_name}
+                                    />
+                                    <div
+                                        className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center"
+                                        style={{
+                                            background: "rgba(24, 29, 56, .7)",
+                                        }}
+                                    >
+                                        <div className="container">
+                                            <div className="row justify-content-start">
+                                                <div className="col-sm-10 col-lg-8">
+                                                    <h1 className="display-4 text-white animated slideInDown mb-4">
+                                                        {slider.title_en}
+                                                    </h1>
+                                                    <a
+                                                        href={createLink(
+                                                            slider
+                                                        )}
+                                                        className="btn btn-primary py-md-2 px-md-4 me-3 animated slideInLeft"
+                                                        style={{
+                                                            borderRadius: 40,
+                                                        }}
+                                                    >
+                                                        Read More
+                                                    </a>
+                                                    <a
+                                                        href="index.html"
+                                                        className="btn btn-light py-md-2 px-md-4 animated slideInRight"
+                                                        style={{
+                                                            borderRadius: 40,
+                                                        }}
+                                                    >
+                                                        Enroll Now
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="owl-carousel-item position-relative">
-                        <img
-                            className="img-fluid"
-                            src="assets/img/carousel-2.jpg"
-                            alt="carousel-2.jpg"
-                        />
-                        <div
-                            className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center"
-                            style={{ background: "rgba(24, 29, 56, .7)" }}
-                        >
-                            <div className="container">
-                                <div className="row justify-content-start">
-                                    <div className="col-sm-10 col-lg-8">
-                                        <h1 className="display-4 text-white animated slideInDown mb-4">
-                                            Learning Management System
-                                        </h1>
-                                        <a
-                                            href="index.html"
-                                            className="btn btn-primary py-md-2 px-md-4 me-3 animated slideInLeft"
-                                            style={{ borderRadius: 40 }}
-                                        >
-                                            Read More
-                                        </a>
-                                        <a
-                                            href="index.html"
-                                            className="btn btn-light py-md-2 px-md-4 animated slideInRight"
-                                            style={{ borderRadius: 40 }}
-                                        >
-                                            Enroll Now
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </OwlCarousel>
-            </div>
+                            );
+                        })}
+                    </OwlCarousel>
+                </div>
+            )}
             {/* Carousel End */}
             <div className="container mb-4">
                 <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
@@ -299,183 +293,6 @@ export default function Home() {
                                     );
                                 }
                             )}
-                        {/* <div className="col-xs-12 col-md-6 col-lg-3 mb-4">
-                            <div className="thumbnail">
-                                <div className="thumb-logo">
-                                    <img
-                                        src="/assets/img/logo.png"
-                                        alt="logo.png"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">MAP_IT - TCU</h4>
-                                </div>
-                                <div className="caption">
-                                    <img
-                                        src="/assets/img/logo.png"
-                                        alt="logo.png"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">MAP_IT - TCU</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-md-6 col-lg-3 mb-4">
-                            <div className="thumbnail">
-                                <div className="thumb-logo">
-                                    <img
-                                        src="/assets/img/departments/iti.jpg"
-                                        alt="iti.jpg"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">Skill Development</h4>
-                                </div>
-                                <div className="caption">
-                                    <img
-                                        src="/assets/img/departments/iti.jpg"
-                                        alt="iti.jpg"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">Skill Development</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-md-6 col-lg-3 mb-4">
-                            <div className="thumbnail">
-                                <div className="thumb-logo">
-                                    <img
-                                        src="/assets/img/departments/phq.png"
-                                        alt="phq.png"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">
-                                        Police Head Quarters
-                                    </h4>
-                                </div>
-                                <div className="caption">
-                                    <img
-                                        src="/assets/img/departments/phq.png"
-                                        alt="phq.png"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">
-                                        Police Head Quarters
-                                    </h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-md-6 col-lg-3 mb-4">
-                            <div className="thumbnail">
-                                <div className="thumb-logo">
-                                    <img
-                                        src="/assets/img/departments/mptaas.png"
-                                        alt="mptaas.png"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">MP-TAAS</h4>
-                                </div>
-                                <div className="caption">
-                                    <img
-                                        src="/assets/img/departments/mptaas.png"
-                                        alt="mptaas.png"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">MP-TAAS</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-md-6 col-lg-3 mb-4">
-                            <div className="thumbnail">
-                                <div className="thumb-logo">
-                                    <img
-                                        src="/assets/img/departments/epco.jpg"
-                                        alt="epco.jpg"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">EPCO</h4>
-                                </div>
-                                <div className="caption">
-                                    <img
-                                        src="/assets/img/departments/epco.jpg"
-                                        alt="epco.jpg"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">EPCO</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-md-6 col-lg-3 mb-4">
-                            <div className="thumbnail">
-                                <div className="thumb-logo">
-                                    <img
-                                        src="/assets/img/logo.png"
-                                        alt="logo.png"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">Higher Education</h4>
-                                </div>
-                                <div className="caption">
-                                    <img
-                                        src="/assets/img/logo.png"
-                                        alt="logo.png"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">Higher Education</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-md-6 col-lg-3 mb-4">
-                            <div className="thumbnail">
-                                <div className="thumb-logo">
-                                    <img
-                                        src="/assets/img/departments/dmi.png"
-                                        alt="dmi.png"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">DMI</h4>
-                                </div>
-                                <div className="caption">
-                                    <img
-                                        src="/assets/img/departments/dmi.png"
-                                        alt="dmi.png"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">DMI</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-md-6 col-lg-3 mb-4">
-                            <div className="thumbnail">
-                                <div className="thumb-logo">
-                                    <img
-                                        src="/assets/img/logo.png"
-                                        alt="logo.png"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">MP-Tender</h4>
-                                </div>
-                                <div className="caption">
-                                    <img
-                                        src="/assets/img/logo.png"
-                                        alt="logo.png"
-                                        style={{ height: 70 }}
-                                    />
-                                    <h4 className="mt-2">MP-Tender</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-12 text-center">
-                            <a
-                                className="btn btn-primary py-2 px-4 mt-2"
-                                href="index.html"
-                                style={{ borderRadius: 40 }}
-                            >
-                                Find out more{" "}
-                                <i
-                                    className="fas fa-arrow-alt-circle-right"
-                                    style={{ marginLeft: 10 }}
-                                />
-                            </a>
-                        </div> */}
                     </div>
                 </div>
             </div>

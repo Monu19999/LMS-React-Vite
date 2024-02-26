@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function FooterMenu(props) {
-    function createLink(menu) {
-        if (menu.menu_type == 1) {
-            return menu.page ? "page/" + menu.page.slug : "/";
-        } else if (menu.menu_type == 2) {
-            return menu.db_controller_route
-                ? menu.db_controller_route.route
+    function createLink(item) {
+        if (item.menu_type == 1) {
+            return item.page ? "page/" + item.page.slug : "/";
+        } else if (item.menu_type == 2) {
+            return item.db_controller_route
+                ? item.db_controller_route.route
                 : "/";
-        } else if (menu.menu_type == 3) {
-            return menu.custom_url;
+        } else if (item.menu_type == 3) {
+            return item.custom_url;
         } else {
             return "#";
         }

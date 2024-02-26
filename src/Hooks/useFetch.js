@@ -12,11 +12,11 @@ const useFetch = (method, url, data) => {
                 const resp = await fetch(url, {
                     mode: 'cors',
                     method: method,
-                    // headers: {
-                    //     'Accept': 'application/json',
-                    //     'Content-Type':'application/json',
-                    //     'Access-Control-Allow-Origin': '*'
-                    // },
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        // 'Access-Control-Allow-Origin': '*'
+                    },
                     data: data,
                     cache: "no-cache",
                 });
