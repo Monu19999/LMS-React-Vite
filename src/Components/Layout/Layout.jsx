@@ -9,7 +9,6 @@ import api from "@src/apis/api";
 
 export default function Layout() {
     const { isLoading, serverError, apiData } = useFetch("GET", api("api"), {});
-    //http://localhost:8000/api/home
     return (
         <>
             {/* Spinner Start */}

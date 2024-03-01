@@ -10,7 +10,7 @@ const data = {
         api: "http://164.100.196.171/learning_mng_sys/api/app",
         home: "http://164.100.196.171/learning_mng_sys/api/home",
         page: function (page_name) {
-            return `http://164.100.196.171/learning_mng_sys/api/${page_name}/show`;
+            return `http://164.100.196.171/learning_mng_sys/api/page/${page_name}/show`;
         },
     },
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useFetch from "@src/Hooks/useFetch";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import parse from "html-react-parser";
@@ -13,7 +13,6 @@ function Page() {
         api("page", page),
         {}
     );
-    // `http://localhost:8000/api/page/${page}/show`,
     return (
         <>
             {isLoading && <BootstrapSpinner />}
@@ -29,20 +28,20 @@ function Page() {
                                     <nav aria-label="breadcrumb">
                                         <ol className="breadcrumb justify-content-center">
                                             <li className="breadcrumb-item">
-                                                <a
+                                                <Link
                                                     className="text-white"
-                                                    href="#"
+                                                    to="/"
                                                 >
                                                     Home
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li className="breadcrumb-item">
-                                                <a
+                                                <Link
                                                     className="text-white"
-                                                    href="#"
+                                                    to="/"
                                                 >
                                                     Pages
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li
                                                 className="breadcrumb-item text-white active"
