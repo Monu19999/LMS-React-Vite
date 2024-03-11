@@ -1,5 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import $ from "jquery";
+import api from "@src/apis/api";
 var $affectedElements = $("p, h1, h2, h3, h4, h5, h6, li, a");
 function setDefaultTheme(theme) {
     // console.log("theme", theme);
@@ -13,12 +14,34 @@ function setDefaultTheme(theme) {
     document.getElementById("themeSwitchToggle").checked = theme ? true : false;
 }
 
+export const getDepartments = createAsyncThunk(
+    "departments/getDepartments",
+    async () => {
+        let api_url = api("departments");
+        const response = await fetch(api_url, {
+            method: "get",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            cache: "no-cache",
+        });
+        const json = await response.json();
+        return json.data;
+    }
+);
+
 export const appSlice = createSlice({
     name: "app",
     initialState: {
         lang: "en",
         theme: null,
         affectedElements: [],
+
+        departments: [],
+        message: "",
+        dept_loading: false,
+        isDeptSuccess: false,
     },
     reducers: {
         setTheme: (state, action) => {
@@ -70,6 +93,23 @@ export const appSlice = createSlice({
                 : document.body.classList.add("is-nav-open");
         },
     },
+    extraReducers(builder) {
+        builder
+            .addCase(getDepartments.pending, (state, { payload }) => {
+                state.dept_loading = true;
+            })
+            .addCase(getDepartments.fulfilled, (state, { payload }) => {
+                state.dept_loading = false;
+                // console.log(payload);
+                state.departments = payload.departments;
+                state.isDeptSuccess = true;
+            })
+            .addCase(getDepartments.rejected, (state, { payload }) => {
+                state.message = payload;
+                state.dept_loading = false;
+                state.isDeptSuccess = false;
+            });
+    },
 });
 
 // Action creators are generated for each case reducer function
@@ -80,6 +120,7 @@ export const {
     setTheme,
     setSize,
     mobileNavToggle,
+    departments,
 } = appSlice.actions;
 
 export default appSlice.reducer;
