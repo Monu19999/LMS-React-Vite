@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import OwlCarousel from "react-owl-carousel";
 import FooterSlider from "@src/Pages/includes/FooterSlider";
 import api from "@src/apis/api";
 import useFetch from "@src/Hooks/useFetch";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import ShowImage from "@src/Utilities/ShowImage";
+import { Link } from "react-router-dom";
+import CourseItem from "@src/Pages/courses/includes/CourseItem";
+import { useSelector, useDispatch } from "react-redux";
+import { getCourses } from "@src/features/app/CourseSlice";
 
 export default function Home() {
+    const { courses, loading } = useSelector((state) => state.course);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getCourses());
+    }, []);
+
     function createLink(item) {
         if (item.menu_type == 1) {
             return item.page ? "page/" + item.page.slug : "/";
@@ -55,16 +67,19 @@ export default function Home() {
             },
         },
     };
+
     const { isLoading, serverError, apiData } = useFetch(
         "GET",
         api("home"),
         {}
     );
+    if (loading) return <BootstrapSpinner />;
+    // console.log(courses.courses?.data);
     return (
         <>
             {/* hero slider */}
             {/* Carousel Start */}
-            {isLoading && <BootstrapSpinner />}
+            {/* {isLoading && <BootstrapSpinner />} */}
             {apiData?.data?.sliders && (
                 <div className="container-fluid p-0 mb-5">
                     <OwlCarousel
@@ -79,8 +94,18 @@ export default function Home() {
                                 >
                                     <img
                                         className="img-fluid"
-                                        src={ShowImage(slider.upload.file_path)}
-                                        alt={slider.upload.original_name}
+                                        src={
+                                            slider?.upload
+                                                ? ShowImage(
+                                                      slider.upload.file_path
+                                                  )
+                                                : ""
+                                        }
+                                        alt={
+                                            slider?.upload
+                                                ? slider.upload.original_name
+                                                : ""
+                                        }
                                     />
                                     <div
                                         className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center"
@@ -222,7 +247,7 @@ export default function Home() {
                                 </p>
                                 <a
                                     className="btn btn-primary py-2 px-4 mt-2"
-                                    href="index.html"
+                                    href=""
                                     style={{ borderRadius: 40 }}
                                 >
                                     Find out more
@@ -254,7 +279,7 @@ export default function Home() {
                         <h1 className="mb-5">Onboarded Departments</h1>
                     </div>
                     <div className="row">
-                        {isLoading && <BootstrapSpinner />}
+                        {/* {isLoading && <BootstrapSpinner />} */}
                         {apiData?.data?.department_onboarded &&
                             apiData.data.department_onboarded.map(
                                 (department_onboarded) => {
@@ -310,104 +335,27 @@ export default function Home() {
                         className="owl-carousel courses-carousel position-relative"
                         {...course_options}
                     >
-                        <div className="owl-carousel-item active">
-                            <div className="wow fadeInUp" data-wow-delay="0.1s">
-                                <div className="course-item bg-light">
-                                    <div className="position-relative overflow-hidden">
-                                        <img
-                                            className="img-fluid"
-                                            src="assets/img/course-1.jpg"
-                                            alt="course-1.jpg"
-                                        />
-                                        <div className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
-                                            <a
-                                                href="index.html"
-                                                className="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
-                                                style={{
-                                                    borderRadius:
-                                                        "30px 0 0 30px",
-                                                }}
-                                            >
-                                                View
-                                            </a>
-                                            <a
-                                                href="index.html"
-                                                className="flex-shrink-0 btn btn-sm btn-primary px-3"
-                                                style={{
-                                                    borderRadius:
-                                                        "0 30px 30px 0",
-                                                }}
-                                            >
-                                                Enroll Now
-                                            </a>
+                        {courses?.courses?.data &&
+                            courses.courses.data.map((course) => {
+                                return (
+                                    <div
+                                        className="owl-carousel-item active"
+                                        key={course.id}
+                                    >
+                                        <div
+                                            className="wow fadeInUp"
+                                            data-wow-delay="0.1s"
+                                        >
+                                            <CourseItem course={course} />
                                         </div>
                                     </div>
-                                    <div className="text-center p-4 pb-0 min-h">
-                                        <h5 className="mb-4">
-                                            Advance Oracle Apex Training
-                                        </h5>
-                                    </div>
-                                    <div className="d-flex border-top">
-                                        <small className="flex-fill text-center border-end py-2">
-                                            <i className="fa fa-clock text-primary me-2" />{" "}
-                                            Duration - 10 Hrs
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="owl-carousel-item active">
-                            <div className="wow fadeInUp" data-wow-delay="0.3s">
-                                <div className="course-item bg-light">
-                                    <div className="position-relative overflow-hidden">
-                                        <img
-                                            className="img-fluid"
-                                            src="assets/img/course-2.jpg"
-                                            alt="course-2.jpg"
-                                        />
-                                        <div className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
-                                            <a
-                                                href="index.html"
-                                                className="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
-                                                style={{
-                                                    borderRadius:
-                                                        "30px 0 0 30px",
-                                                }}
-                                            >
-                                                View
-                                            </a>
-                                            <a
-                                                href="index.html"
-                                                className="flex-shrink-0 btn btn-sm btn-primary px-3"
-                                                style={{
-                                                    borderRadius:
-                                                        "0 30px 30px 0",
-                                                }}
-                                            >
-                                                Enroll Now
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div className="text-center p-4 pb-0 min-h">
-                                        <h5 className="mb-4">
-                                            Solar Technician (Electrical) -
-                                            (Trade Code-560)
-                                        </h5>
-                                    </div>
-                                    <div className="d-flex border-top">
-                                        <small className="flex-fill text-center border-end py-2">
-                                            <i className="fa fa-clock text-primary me-2" />
-                                            Duration - 1.49 Hrs
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                );
+                            })}
                     </OwlCarousel>
                     <div className="col-12 text-center">
-                        <a
+                        <Link
                             className="btn btn-primary py-2 px-4 mt-4"
-                            href="index.html"
+                            to="/courses"
                             style={{ borderRadius: 40 }}
                         >
                             Find out more{" "}
@@ -415,7 +363,7 @@ export default function Home() {
                                 className="fas fa-arrow-alt-circle-right"
                                 style={{ marginLeft: 10 }}
                             />
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
