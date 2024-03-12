@@ -12,7 +12,7 @@ const initialState = {
 
 export const getCourses = createAsyncThunk(
     "courses/getCourses",
-    async (data = {}) => {
+    async (data) => {
         let search_params =
             data != undefined ? "?" + new URLSearchParams(data).toString() : "";
         let api_url = api("courses") + search_params;

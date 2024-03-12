@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { getCourse } from "@src/features/app/CourseSlice";
+import ShowImage from "@src/Utilities/ShowImage";
 
 function CourseView() {
     let { course_id } = useParams();
@@ -87,10 +88,10 @@ function CourseView() {
     return (
         <>
             <div
-                className="container-fluid bg-primary py-4 mb-4 "
+                className="container-fluid py-4 mb-4 "
                 style={{
+                    backgroundColor: "#343747",
                     minHeight: 380,
-                    backgroundColor: "#343747 !important",
                 }}
             >
                 <div className="container">
@@ -176,7 +177,13 @@ function CourseView() {
                                 <div className="position-relative overflow-hidden">
                                     <img
                                         className="img-fluid"
-                                        src={course?.upload?.file_path}
+                                        src={
+                                            course?.upload?.file_path ??
+                                            ShowImage(
+                                                "frontend/img/course-1.jpg",
+                                                null
+                                            )
+                                        }
                                     />
                                     <div
                                         className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4"
