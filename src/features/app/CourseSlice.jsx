@@ -16,7 +16,7 @@ export const getCourses = createAsyncThunk(
         let search_params =
             data != undefined ? "?" + new URLSearchParams(data).toString() : "";
         let api_url = api("courses") + search_params;
-        // console.log("api_url => ", api_url);
+
         const response = await fetch(api_url, {
             method: "get",
             headers: {

@@ -1,10 +1,9 @@
 {
     "name": "lms-react",
-    "homepage": "https://monu19999.github.io/LMS-React-Vite/",
+    "homepage": "http://eshiksha.react.com/",
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "proxy": "http://localhost:5173/",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
@@ -13,6 +12,7 @@
     },
     "dependencies": {
         "@reduxjs/toolkit": "^2.1.0",
+        "bootstrap": "^5.0.0",
         "html-react-parser": "^5.1.1",
         "jquery": "^3.4.1",
         "react": "^18.2.0",

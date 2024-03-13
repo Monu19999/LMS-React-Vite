@@ -297,12 +297,13 @@ function CourseView() {
                                 </div>
                             </div>
                         </div>
-                        {topics()}
                         <div className="row mt-4 list">
                             <div
                                 className="wow fadeIndown p-0"
                                 data-wow-delay="0.1s"
-                            ></div>
+                            >
+                                {topics()}
+                            </div>
                         </div>
                         <div className="row mt-4 list">
                             <div className="wow fadeInUp" data-wow-delay="0.1s">

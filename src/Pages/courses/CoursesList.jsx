@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CourseItem from "@src/Pages/Courses/includes/CourseItem";
+import CourseItem from "@src/Pages/courses/includes/CourseItem";
 import { useSelector, useDispatch } from "react-redux";
 import { getCourses } from "@src/features/app/CourseSlice";
 import Pagination from "@src/Utilities/Pagination";

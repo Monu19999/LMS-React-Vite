@@ -21,6 +21,7 @@ function App() {
                         }
                     />
                     <Route
+                        exact
                         path="dashboard"
                         element={
                             <Suspense fallback={<BootstrapSpinner />}>
@@ -29,6 +30,7 @@ function App() {
                         }
                     />
                     <Route
+                        exact
                         path="page/:page"
                         element={
                             <Suspense fallback={<BootstrapSpinner />}>
@@ -37,6 +39,7 @@ function App() {
                         }
                     />
                     <Route
+                        exact
                         path="courses"
                         element={
                             <Suspense fallback={<BootstrapSpinner />}>
@@ -45,6 +48,7 @@ function App() {
                         }
                     />
                     <Route
+                        exact
                         path="course/:course_id/show"
                         element={
                             <Suspense fallback={<BootstrapSpinner />}>

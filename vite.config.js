@@ -8,16 +8,16 @@ let __dirname = '.';
 export default defineConfig({
   build: {
     rollupOptions: {
-      baseUrl: 'https://LMS-React/configuration-options/'
+      base: 'http://eshiksha.test.com/assets/',
     },
   },
   resolve: {
-      alias: {
-          '@public'   : path.resolve(__dirname, 'public/'),
-          '@src'   : path.resolve(__dirname, 'src/'),
-      }
+    alias: {
+      '@public': path.resolve(__dirname, 'public/'),
+      '@src': path.resolve(__dirname, 'src/'),
+    }
   },
   plugins: [react()],
-  base: '',
-  baseServer: '/LMS-React/'
+  base: '/',
+  baseServer: 'http://eshiksha.test.com'
 })
