@@ -9,13 +9,16 @@ import { Link } from "react-router-dom";
 import CourseItem from "@src/Pages/courses/includes/CourseItem";
 import { useSelector, useDispatch } from "react-redux";
 import { getCourses } from "@src/features/app/CourseSlice";
+import { getHomeData } from "@src/features/app/HomeSlice";
 
 export default function Home() {
+    const { homedata, home_loading } = useSelector((state) => state.home);
     const { courses, loading } = useSelector((state) => state.course);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(getHomeData());
         dispatch(getCourses());
     }, []);
 
@@ -68,11 +71,6 @@ export default function Home() {
         },
     };
 
-    const { isLoading, serverError, apiData } = useFetch(
-        "GET",
-        api("home"),
-        {}
-    );
     if (loading) return <BootstrapSpinner />;
     // console.log(courses.courses?.data);
     return (
@@ -80,13 +78,13 @@ export default function Home() {
             {/* hero slider */}
             {/* Carousel Start */}
             {/* {isLoading && <BootstrapSpinner />} */}
-            {apiData?.data?.sliders && (
+            {homedata.sliders && (
                 <div className="container-fluid p-0 mb-5">
                     <OwlCarousel
                         {...slider_options}
                         className="owl-carousel header-carousel position-relative"
                     >
-                        {apiData.data.sliders.map((slider) => {
+                        {homedata.sliders.map((slider) => {
                             return (
                                 <div
                                     className="owl-carousel-item position-relative"
@@ -161,8 +159,8 @@ export default function Home() {
                     >
                         <div className="counter-box ">
                             <span className="counter">
-                                {apiData?.data?.department_onboarded_count
-                                    ? apiData.data.department_onboarded_count
+                                {homedata.department_onboarded_count
+                                    ? homedata.department_onboarded_count
                                     : 0}
                             </span>
                             <p>Total Departments Onboarded</p>
@@ -174,8 +172,8 @@ export default function Home() {
                     >
                         <div className="counter-box">
                             <span className="counter">
-                                {apiData?.data?.courses_enrolled
-                                    ? apiData.data.courses_enrolled
+                                {homedata.courses_enrolled
+                                    ? homedata.courses_enrolled
                                     : 0}
                             </span>
                             <p>Courses Enrolled </p>
@@ -187,8 +185,8 @@ export default function Home() {
                     >
                         <div className="counter-box">
                             <span className="counter">
-                                {apiData?.data?.registered_users
-                                    ? apiData.data.registered_users
+                                {homedata.registered_users
+                                    ? homedata.registered_users
                                     : 0}
                             </span>
                             <p>Total Users Registered</p>
@@ -280,8 +278,8 @@ export default function Home() {
                     </div>
                     <div className="row">
                         {/* {isLoading && <BootstrapSpinner />} */}
-                        {apiData?.data?.department_onboarded &&
-                            apiData.data.department_onboarded.map(
+                        {homedata.department_onboarded &&
+                            homedata.department_onboarded.map(
                                 (department_onboarded) => {
                                     return (
                                         <div
