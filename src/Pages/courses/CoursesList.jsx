@@ -5,17 +5,15 @@ import { getCourses } from "@src/features/app/CourseSlice";
 import Pagination from "@src/Utilities/Pagination";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import { getDepartments } from "@src/features/app/AppSlice";
+import { setSearch, resetSearch } from "@src/features/app/CourseSlice";
+import { useNavigate } from "react-router-dom";
 
 function CoursesList() {
-    const [params, setParams] = useState({
-        page: null,
-        department: "",
-        course_name: "",
-    });
+    const navigate = useNavigate();
     const [is_params_changed, setParamsChanged] = useState(false);
 
     const { departments, dept_loading } = useSelector((state) => state.app);
-    const { courses, loading } = useSelector((state) => state.course);
+    const { courses, loading, search } = useSelector((state) => state.course);
 
     const dispatch = useDispatch();
 
@@ -25,34 +23,33 @@ function CoursesList() {
     }, []);
 
     useEffect(() => {
-        if (!is_params_changed) {
-            dispatch(getCourses(params));
-        }
-    }, [params.page]);
+        dispatch(getCourses(navigate));
+    }, []);
 
     // if (loading) return <p>Loading...</p>;
 
     let handleFormFilter = (e) => {
         e.preventDefault();
-        dispatch(getCourses(params));
+        dispatch(getCourses(navigate));
     };
 
     let handleFormFilterOnChange = (e) => {
-        setParamsChanged(true);
-        let old_params = {
-            ...params,
-            [e.target.name]: e.target.value,
-        };
-        setParams(old_params);
+        dispatch(
+            setSearch({
+                ...search,
+                [e.target.name]: e.target.value,
+                page: null,
+            })
+        );
     };
 
     function changePage(data) {
-        setParamsChanged(false);
-        let old_params = { ...params, page: data.page };
-        setParams(old_params);
+        dispatch(setSearch({ ...search, page: data.page }));
+        dispatch(getCourses(navigate));
     }
     return (
         <>
+            {/* Header Start */}
             <div className="container-fluid bg-primary py-4 mb-4 page-header">
                 <div className="container">
                     <div className="row justify-content-center">
@@ -84,10 +81,11 @@ function CoursesList() {
                     </div>
                 </div>
             </div>
-
+            {/* Header End */}
             <div className="container-xxl ">
                 <div className="container">
                     <div className="row mb-4">
+                        {/* Print Button Start */}
                         <div className="innertitle d-flex justify-content-end mb-4 p-0">
                             <a
                                 href="#"
@@ -96,6 +94,8 @@ function CoursesList() {
                                 <span className="fa fa-print"> Print</span>
                             </a>
                         </div>
+                        {/* Print Button End */}
+                        {/* Search Form Start */}
                         <div className="col-12">
                             <div
                                 className="wow fadeInUp"
@@ -110,7 +110,7 @@ function CoursesList() {
                             </div>
                         </div>
                         <div
-                            className="col-lg-12 wow fadeInUp "
+                            className="col-lg-12 wow fadeInUp"
                             style={{ backgroundColor: "#06bbcc" }}
                         >
                             <div className="search-title">
@@ -126,6 +126,7 @@ function CoursesList() {
                                                     onChange={
                                                         handleFormFilterOnChange
                                                     }
+                                                    value={search.department}
                                                 >
                                                     <option value="">
                                                         Please Select
@@ -136,10 +137,10 @@ function CoursesList() {
                                                                 return (
                                                                     <option
                                                                         value={
-                                                                            department.encr_id
+                                                                            department.id
                                                                         }
                                                                         key={
-                                                                            department.encr_id
+                                                                            department.id
                                                                         }
                                                                     >
                                                                         {
@@ -162,7 +163,7 @@ function CoursesList() {
                                                     name="course_name"
                                                     id="course_name"
                                                     autoComplete="off"
-                                                    value={params.course_name}
+                                                    value={search.course_name}
                                                     onChange={
                                                         handleFormFilterOnChange
                                                     }
@@ -189,6 +190,9 @@ function CoursesList() {
                                                     style={{ borderRadius: 40 }}
                                                     name="search-all"
                                                     id="search-all"
+                                                    onClick={() =>
+                                                        dispatch(resetSearch())
+                                                    }
                                                 >
                                                     <i className="fas fa-refresh" />{" "}
                                                     Reset
@@ -199,8 +203,10 @@ function CoursesList() {
                                 </form>
                             </div>
                         </div>
+                        {/* Search Form End */}
                     </div>
 
+                    {/* All searched Courses Start */}
                     <div className="container-xxl py-5">
                         <div className="container ">
                             <div
@@ -228,7 +234,9 @@ function CoursesList() {
                             </div>
                         </div>
                     </div>
+                    {/* All searched Courses Start */}
 
+                    {/* Searched Courses Pagination Start */}
                     <div className="row mb-4 ">
                         <div className="col-12 text-center">
                             <Pagination
@@ -302,6 +310,7 @@ function CoursesList() {
                             </ul> */}
                         </div>
                     </div>
+                    {/* Searched Courses Pagination End */}
                 </div>
             </div>
         </>

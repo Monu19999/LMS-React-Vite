@@ -2,9 +2,24 @@ import Spinner from "react-bootstrap/Spinner";
 
 function BootstrapSpinner() {
     return (
-        <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-        </Spinner>
+        <div
+            style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100px",
+            }}
+        >
+            <Spinner
+                animation="border"
+                role="status"
+                style={{
+                    margin: "0 auto",
+                }}
+            >
+                <span className="visually-hidden">Loading...</span>
+            </Spinner>
+        </div>
     );
 }
 

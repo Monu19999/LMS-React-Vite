@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import logo from "@public/assets/img/logo.png";
 import { mobileNavToggle } from "@src/features/app/AppSlice";
 import { useDispatch } from "react-redux";
+import { Button } from "react-bootstrap";
 
 function Navbar(props) {
     const dispatch = useDispatch();
@@ -150,7 +151,7 @@ function Navbar(props) {
                                 <div className="navbar-3 c-navbar__buttons ">
                                     <Link
                                         className="btn btn-primary py-2 px-4 fa-search-toggle"
-                                        to="/"
+                                        to="#"
                                         style={{ borderRadius: 40 }}
                                     >
                                         <span className="d-none-head">

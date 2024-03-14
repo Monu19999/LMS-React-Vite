@@ -1,5 +1,6 @@
 const data = {
     development: {
+        user: "http://eshiksha.test.com/api/user",
         api: "http://eshiksha.test.com/api/app",
         home: "http://eshiksha.test.com/api/home",
         page: function (page_name) {
@@ -12,6 +13,7 @@ const data = {
         },
     },
     production: {
+        user: "http://164.100.196.171/learning_mng_sys/api/user",
         api: "http://164.100.196.171/learning_mng_sys/api/app",
         home: "http://164.100.196.171/learning_mng_sys/api/home",
         page: function (page_name) {

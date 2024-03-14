@@ -222,40 +222,38 @@ export default function Home() {
                                 />
                             </div>
                         </div>
-                        <div
-                            className="col-lg-6 wow fadeInUp"
-                            data-wow-delay="0.3s"
-                            style={{ display: "table" }}
-                        >
+                        {homedata?.page && (
                             <div
-                                style={{
-                                    verticalAlign: "middle",
-                                    display: "table-cell",
-                                }}
+                                className="col-lg-6 wow fadeInUp"
+                                data-wow-delay="0.3s"
+                                style={{ display: "table" }}
                             >
-                                <h1 className="mb-4">Welcome to e-Shiksha</h1>
-                                <p className="mb-4">
-                                    eShiksha is an education management portal
-                                    which simplifies the management and provides
-                                    enormous facilities to an Institute. Our
-                                    portal assists educators to manage, analyze
-                                    and report extensive data, while making your
-                                    institutes management "A cashless and
-                                    paperless management".{" "}
-                                </p>
-                                <a
-                                    className="btn btn-primary py-2 px-4 mt-2"
-                                    href=""
-                                    style={{ borderRadius: 40 }}
+                                <div
+                                    style={{
+                                        verticalAlign: "middle",
+                                        display: "table-cell",
+                                    }}
                                 >
-                                    Find out more
-                                    <i
-                                        className="fas fa-arrow-alt-circle-right"
-                                        style={{ marginLeft: 10 }}
-                                    />
-                                </a>
+                                    <h1 className="mb-4">
+                                        {homedata.page.title_en}
+                                    </h1>
+                                    <div className="mb-4">
+                                        {homedata.page.description_en}
+                                    </div>
+                                    <Link
+                                        className="btn btn-primary py-2 px-4 mt-2"
+                                        to={"page/" + homedata.page.slug}
+                                        style={{ borderRadius: 40 }}
+                                    >
+                                        Find out more
+                                        <i
+                                            className="fas fa-arrow-alt-circle-right"
+                                            style={{ marginLeft: 10 }}
+                                        />
+                                    </Link>
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -291,7 +289,9 @@ export default function Home() {
                                                     <img
                                                         src="assets/img/logo.png"
                                                         alt="logo.png"
-                                                        style={{ height: 70 }}
+                                                        style={{
+                                                            height: "70px",
+                                                        }}
                                                     />
                                                     <h4 className="mt-2">
                                                         {
@@ -299,18 +299,20 @@ export default function Home() {
                                                         }
                                                     </h4>
                                                 </div>
-                                                <div className="caption">
+                                                {/* <div className="caption">
                                                     <img
                                                         src="assets/img/logo.png"
                                                         alt="logo.png"
-                                                        style={{ height: 70 }}
+                                                        style={{
+                                                            height: "70px",
+                                                        }}
                                                     />
                                                     <h4 className="mt-2">
                                                         {
                                                             department_onboarded.title_en
                                                         }
                                                     </h4>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                     );

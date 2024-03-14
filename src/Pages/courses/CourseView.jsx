@@ -84,7 +84,7 @@ function CourseView() {
             );
         }
     };
-
+    const created_at = new Date(course.created_at);
     return (
         <>
             <div
@@ -143,7 +143,10 @@ function CourseView() {
                                     <li className="view-course-update">
                                         <Link className="text-white" to="/">
                                             <i className="fas fa-clock" /> Last
-                                            updated 1/2024
+                                            updated{" "}
+                                            {created_at.getDate() +
+                                                "/" +
+                                                created_at.getFullYear()}
                                         </Link>
                                     </li>
                                     <li
@@ -217,8 +220,17 @@ function CourseView() {
                                 <div className="col-12 px-4 list mt-4 mb-4">
                                     <h5>This course includes:</h5>
                                     <ul>
-                                        <li>15 articles</li>
-                                        <li>13 downloadable resources</li>
+                                        {course?.topics?.length > 0 && (
+                                            <li>
+                                                {course.topics.length} topics
+                                            </li>
+                                        )}
+                                        {course.topics_uploads_count > 0 && (
+                                            <li>
+                                                {course.topics_uploads_count}{" "}
+                                                downloadable resources
+                                            </li>
+                                        )}
                                         <li>Full lifetime access</li>
                                         <li>Certificate of completion</li>
                                     </ul>

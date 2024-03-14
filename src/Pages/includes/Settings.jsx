@@ -1,21 +1,16 @@
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {
-    setTheme,
-    updateTheme,
-    setSize,
-    changeFontSize,
-} from "@src/features/app/AppSlice";
+import { setTheme, updateTheme } from "@src/features/app/AppSlice";
 import { useEffect } from "react";
+import { getUser } from "@src/features/app/AuthSlice";
 
 function Settings() {
-    const theme = useSelector((state) => {
-        // console.log(state.app.theme);
-        return state.app.theme;
-    });
+    const user = useSelector((state) => state.auth.user);
+    const theme = useSelector((state) => state.app.theme);
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(getUser());
         dispatch(setTheme());
         // dispatch(setSize());
     }, []);
@@ -111,9 +106,15 @@ function Settings() {
                         </Link>
                         <ul className="dropdown-menu">
                             <li>
-                                <Link className="dropdown-item" to="#">
-                                    Student Login
-                                </Link>
+                                {user ? (
+                                    <Link className="dropdown-item" to="#">
+                                        Welcome {user.first_name}
+                                    </Link>
+                                ) : (
+                                    <Link className="dropdown-item" to="">
+                                        Student Login
+                                    </Link>
+                                )}
                             </li>
                             <li>
                                 <Link className="dropdown-item" to="#">
