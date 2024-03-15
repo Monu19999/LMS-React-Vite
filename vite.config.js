@@ -18,6 +18,6 @@ export default defineConfig({
     }
   },
   plugins: [react()],
-  base: '/',
+  base: '',
   baseServer: 'http://eshiksha.test.com'
 })

@@ -68,7 +68,7 @@ function Page() {
                                     <div className="position-relative h-100">
                                         <img
                                             className="img-fluid position-absolute w-100 h-100"
-                                            src={image}
+                                            src="assets/img/e-book.png"
                                             alt={apiData?.data.page.title_en}
                                             style={{ objectFit: "cover" }}
                                         />
