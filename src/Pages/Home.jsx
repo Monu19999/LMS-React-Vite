@@ -10,6 +10,7 @@ import CourseItem from "@src/Pages/courses/includes/CourseItem";
 import { useSelector, useDispatch } from "react-redux";
 import { getCourses } from "@src/features/app/CourseSlice";
 import { getHomeData } from "@src/features/app/HomeSlice";
+import parse from "html-react-parser";
 
 export default function Home() {
     const { homedata, home_loading } = useSelector((state) => state.home);
@@ -238,7 +239,7 @@ export default function Home() {
                                         {homedata.page.title_en}
                                     </h1>
                                     <div className="mb-4">
-                                        {homedata.page.description_en}
+                                        {parse(homedata.page.description_en)}
                                     </div>
                                     <Link
                                         className="btn btn-primary py-2 px-4 mt-2"
