@@ -3,19 +3,14 @@
 import { Link } from "react-router-dom";
 
 function CourseItem({ course }) {
-
-    // console.log(course);
-
-    // console.log(course?.assigned_admin?.course_category?.category_name_en);
-    // let course_url = "/course/" + course.encr_id;
     return (
         <div className="course-item bg-light">
             <div className="position-relative overflow-hidden">
                 <img
                     className="img-fluid"
                     src={
-                        course?.upload?.file_path ?? 
-                             "/public/assets/img/course-1.jpg"
+                        course?.upload?.file_path ??
+                        "/public/assets/img/course-1.jpg"
                     }
                     alt="course-1.jpg"
                 />
