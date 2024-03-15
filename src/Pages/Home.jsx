@@ -15,7 +15,7 @@ export default function Home() {
   const { homedata, home_loading } = useSelector((state) => state.home);
   const { courses, loading } = useSelector((state) => state.course);
 
-  console.log(courses);
+//   console.log(courses);
   const dispatch = useDispatch();
 
   useEffect(() => {
