@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { getCourse } from "@src/features/app/CourseSlice";
 import ShowImage from "@src/Utilities/ShowImage";
+import BootstrapSpinner from "../../Components/BootstrapSpinner";
 
 function CourseView() {
     let { course_id } = useParams();
@@ -11,7 +12,7 @@ function CourseView() {
     const { course, loading } = useSelector((state) => {
         return state.course;
     });
-
+    // console.log(course);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -20,7 +21,7 @@ function CourseView() {
         }
     }, []);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <BootstrapSpinner/>;
 
     let topics = () => {
         if (course?.topics) {
@@ -183,7 +184,7 @@ function CourseView() {
                                         src={
                                             course?.upload?.file_path ??
                                             ShowImage(
-                                                "frontend/img/course-1.jpg",
+                                                "http://164.100.196.171/learning_mng_sys/public/storage/App/Models/Course/bno0MRfE90.jpg",
                                                 null
                                             )
                                         }
