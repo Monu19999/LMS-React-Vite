@@ -96,14 +96,14 @@ function Settings() {
                                 Skip to Main Content
                             </span>
                         </Link>
-                        <Link
-                            to="#"
+                        <a
+                            href="#"
                             className="d-sm-hide dropdown-toggle"
                             data-bs-toggle="dropdown"
                         >
                             <i className="fa fa-user font-13 px-2" />
                             <span className="d-none-head">Login</span>
-                        </Link>
+                        </a>
                         <ul className="dropdown-menu">
                             <li>
                                 {user ? (
