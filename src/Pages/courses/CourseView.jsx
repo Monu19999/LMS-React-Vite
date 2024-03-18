@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { getCourse } from "@src/features/app/CourseSlice";
 import ShowImage from "@src/Utilities/ShowImage";
+import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 
 function CourseView() {
     let { course_id } = useParams();
@@ -20,7 +21,7 @@ function CourseView() {
         }
     }, []);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <BootstrapSpinner />;
 
     let topics = () => {
         if (course?.topics) {
