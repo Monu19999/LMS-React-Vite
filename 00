@@ -1,0 +1,355 @@
+[33mcommit 0f9a6516a4ce2aaebd20d3c4ff0ee29f18618cd3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mRahulDiwan-work[m[33m, [m[1;31morigin/RahulDiwan-work[m[33m)[m
+Author: diwanrahul <72813257+diwanrahul@users.noreply.github.com>
+Date:   Fri Mar 15 17:45:34 2024 +0530
+
+    Changes in Home Component for course looping
+
+[33mcommit 6d2b3208c2c22ca4fc234b0c2a228d4b5103fd7c[m
+Author: diwanrahul <72813257+diwanrahul@users.noreply.github.com>
+Date:   Fri Mar 15 17:31:11 2024 +0530
+
+    changes in courseItem component for image src path
+
+[33mcommit d3cef7f9ef45092d981a5d39ef28b0c077c973ae[m
+Author: diwanrahul <72813257+diwanrahul@users.noreply.github.com>
+Date:   Fri Mar 15 17:18:31 2024 +0530
+
+    changes in home component for looping course
+
+[33mcommit 3386061d3574e745e532d21bcd851429cec70050[m
+Author: diwanrahul <72813257+diwanrahul@users.noreply.github.com>
+Date:   Fri Mar 15 13:32:00 2024 +0530
+
+    changes in home component for looping courses
+    changes in courseview component for courseimage sync
+
+[33mcommit 444658082c95d0dad7943ed6404e0e822b1a49b9[m[33m ([m[1;32mmain[m[33m)[m
+Author: diwanrahul <72813257+diwanrahul@users.noreply.github.com>
+Date:   Fri Mar 15 13:21:00 2024 +0530
+
+    changes in course image and default images
+
+[33mcommit a5d965b1dc6c564b876a8a9f7c2a3baaee14531d[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Mar 14 15:24:17 2024 +0530
+
+    HashRouter used
+
+[33mcommit c86b88456edcbc2835192cd8c330e3603b2d70e7[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Mar 14 12:49:06 2024 +0530
+
+    course pagination issue resolved
+
+[33mcommit e638fbadf63760393b23d8eff808ec847bde4630[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Wed Mar 13 11:26:59 2024 +0530
+
+    Bug Fixing
+
+[33mcommit e1556b7756e75a184f4361c3305c762abdbb5e66[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Wed Mar 13 11:26:17 2024 +0530
+
+    HomeSlice created
+
+[33mcommit cfd05deba2f04ac45577fc537dd9b3ee553761b0[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Tue Mar 12 12:35:47 2024 +0530
+
+    bug fixed
+
+[33mcommit e1148582b536a888e48f192de74ac19529bfd4c6[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Mon Mar 11 12:02:07 2024 +0530
+
+    Working on show Course list and details
+
+[33mcommit fe198844c7855a0b0274294845aafc11c0fc5d16[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Mon Mar 11 12:01:23 2024 +0530
+
+    departments added into app slice
+
+[33mcommit 6b037b50ed70be5ce0c7d1614a721df69604418d[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Mon Mar 11 12:00:48 2024 +0530
+
+    Course store added
+
+[33mcommit cd3fe6cd1e7e34e74b0f00d8b51b6598a14752f1[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Mon Mar 11 12:00:03 2024 +0530
+
+    Api JSON files removed
+
+[33mcommit dcd72c20a09275ffddb2dcb765ba7c45a5d9954f[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Fri Mar 1 12:09:04 2024 +0530
+
+    code updated
+
+[33mcommit 48021b252e093df3931add83a16571043c7cd57c[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Mon Feb 26 12:27:01 2024 +0530
+
+    dynamic slider created
+
+[33mcommit 4edc8a4af7f9134c0bc743fb299cb5d6432d0719[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 22 17:58:28 2024 +0530
+
+    production api changed
+
+[33mcommit a6b4bb429547ffa6c637128da3ed304d3c8a9b51[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 22 11:00:11 2024 +0530
+
+    local api url updated
+
+[33mcommit 49158c86de726e9408b5a2b9e9d9c8d6cd186790[m
+Author: Deepesh <deepesh.acs@gmail.com>
+Date:   Thu Feb 22 10:58:52 2024 +0530
+
+    api files updated
+
+[33mcommit 9c699a05bee0c337922f3d92e9ff39633e444669[m
+Author: Deepesh <deepesh.acs@gmail.com>
+Date:   Thu Feb 22 10:58:12 2024 +0530
+
+    api path updated
+
+[33mcommit 38ed4823674e041c54bfc8cdd731d7fc2d46a33d[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 16:00:00 2024 +0530
+
+    error handle
+
+[33mcommit 3faeb7ae4c7c08d416e53238a3a22dddf1adb52b[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 15:46:18 2024 +0530
+
+    files updated
+
+[33mcommit 0f30e7efb20b935708dcb828bfc46d787cf8f5fc[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 15:37:26 2024 +0530
+
+    folder name updated
+
+[33mcommit 05c04fa8c458f265e888309f1fbbe57835f03c3b[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 15:34:18 2024 +0530
+
+    folder name updated
+
+[33mcommit bec649f35ee78d940fd041fde9e19dbdd1ec2e2a[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 15:11:59 2024 +0530
+
+    files updated
+
+[33mcommit d85e3575606e6bc92d32ecc84881977afe95f5e8[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 14:43:11 2024 +0530
+
+    updated
+
+[33mcommit a18675df5f158d991d0d26bc16b41d65cda26df4[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 14:42:06 2024 +0530
+
+    updated
+
+[33mcommit dd37e8aa0be75d5f565970a95321d2c81cf33ea6[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 14:11:57 2024 +0530
+
+    updated
+
+[33mcommit ac2261a0b1f707b19d3cefab9f577835bcd4bbc1[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 14:11:01 2024 +0530
+
+    updated
+
+[33mcommit 2d01d2dad7c30810beea02cfa9ee4d84d1ccd771[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 13:20:55 2024 +0530
+
+    testing changes
+
+[33mcommit b18649421604b498334202cd99ec92a80e8d1d39[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 12:38:45 2024 +0530
+
+    vite config file updated
+
+[33mcommit 6d441c181bfdd43fb579ba8c905fdea5a11c21ac[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 12:37:39 2024 +0530
+
+    home api json uploaded
+
+[33mcommit 0f39967f0e53d7204d1cf0bfa566ece5eb112cb4[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 12:34:29 2024 +0530
+
+    env file changed
+
+[33mcommit 91e0cb03766253e0a536dd37122dac18a9ca9ecc[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 12:27:33 2024 +0530
+
+    folder name changed
+
+[33mcommit 6b98ac3f7b1ad5d9644194452fcf09051569a0ab[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 12:26:49 2024 +0530
+
+    file name changed
+
+[33mcommit ac2e4c7aae89cb55686b6d6262b789d1e9ac640e[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 12:25:29 2024 +0530
+
+    base changed
+
+[33mcommit 7bfd1e33d7666b3103e2e8710005bc5e1a5981d5[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 8 10:09:08 2024 +0530
+
+    home api created and making page dynamic
+
+[33mcommit eb50506f88f0946bc550235a0d2ba8c02cede7c6[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Wed Feb 7 17:02:25 2024 +0530
+
+    env file added and used
+
+[33mcommit 5bc2615c53deb2d0978265f6676533631c9a7c08[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Wed Feb 7 10:41:29 2024 +0530
+
+    deploy workflow
+
+[33mcommit 867ae5377709641c2964559b3c97a5d05834bb0c[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Sat Feb 3 17:49:00 2024 +0530
+
+    file name updated
+
+[33mcommit d04c70730579e10efdce132d215f73f841ce3d68[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Sat Feb 3 17:46:51 2024 +0530
+
+    files updated
+
+[33mcommit f5d170fc79466164c32ba96ffd606ba244799b25[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Sat Feb 3 17:45:15 2024 +0530
+
+    new json api files added
+
+[33mcommit d6d2a4e1e262d3d12a36052add7cf5c3e6663896[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Sat Feb 3 16:04:13 2024 +0530
+
+    screen reader json api created
+
+[33mcommit 9a3222e78a83ba5eb840db3eef1029b280972958[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Fri Feb 2 15:13:10 2024 +0530
+
+    worked change theme function
+
+[33mcommit 420ff20820ab4c7323bdbda1ce719af028161901[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Fri Feb 2 13:20:26 2024 +0530
+
+    json api for about, contact uploaded
+
+[33mcommit fc87f0feb68f04169857cf752b9f6432fea78402[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Fri Feb 2 13:06:45 2024 +0530
+
+    page added
+
+[33mcommit e2f2ce4d65951c154bb5bf3c1e09b03e7fbab470[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Fri Feb 2 10:44:00 2024 +0530
+
+    file deleted
+
+[33mcommit cc8549908b23311dd72a89da22909d837722b479[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 1 18:05:40 2024 +0530
+
+    hash url handled
+
+[33mcommit 49bead816e6ec424f4e3977cb29350cc7b09e136[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 1 17:31:54 2024 +0530
+
+    code updated
+
+[33mcommit 15d3ff38e0d61bea95fb0974c6d17732ab7dffa2[m
+Merge: 18a1c0b e4c5e87
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 1 16:03:35 2024 +0530
+
+    Merge branch 'main' of https://github.com/Monu19999/LMS-React-Vite
+
+[33mcommit 18a1c0b9f9f7c80d9d7f86c171019350970c3252[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 1 16:03:32 2024 +0530
+
+    images, js and css file paths changed
+
+[33mcommit e4c5e87d1fb79b7a13509b81f2a511c293f0f0f1[m
+Author: Deepesh <deepesh.acs@gmail.com>
+Date:   Thu Feb 1 15:27:56 2024 +0530
+
+    Changed Course navigation color
+
+[33mcommit 24b59cb7d4b2383651d357fdd0f9a091f6080125[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 1 15:20:29 2024 +0530
+
+    footer menu key added into map function
+
+[33mcommit 0e2e3097eeb9fd568546e119263347aad93bded8[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 1 15:19:48 2024 +0530
+
+    Footer Menus Added in JSON and show
+
+[33mcommit c16c32f2b17b1683e1333600498751bb1d5fb555[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 1 14:58:20 2024 +0530
+
+    spinner added
+
+[33mcommit 0d7de6d384c3a954c56dfde0190dcf3d603de79a[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 1 14:51:59 2024 +0530
+
+    json api file uploaded on github
+
+[33mcommit 56a34c255ab8620ee8ae1708e887336a381fdb0e[m
+Author: Deepesh <deepesh.acs@gmail.com>
+Date:   Thu Feb 1 13:00:08 2024 +0530
+
+    Changed Favicon and Title
+
+[33mcommit 36793490ba2b31a32949413754c7f873f094bbf4[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 1 12:50:40 2024 +0530
+
+    home api content added
+
+[33mcommit 983adcd3c2d42b29418c8a9b72927107b7faf6b2[m
+Author: Harshwardhan <hw.sharma9@gmail.com>
+Date:   Thu Feb 1 12:42:37 2024 +0530
+
+    initial commit
