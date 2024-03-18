@@ -1,6 +1,10 @@
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { enrollCourse } from "@src/features/app/CourseSlice";
 
 function CourseItem({ course }) {
+    const dispatch = useDispatch();
+
     return (
         <div className="course-item bg-light">
             <div className="position-relative overflow-hidden">
@@ -10,7 +14,7 @@ function CourseItem({ course }) {
                         course?.upload?.file_path ??
                         "/public/assets/img/course-1.jpg"
                     }
-                    alt="course-1.jpg"
+                    alt={course?.upload?.original_name}
                 />
                 <div className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
                     <Link
@@ -22,15 +26,16 @@ function CourseItem({ course }) {
                     >
                         View
                     </Link>
-                    <Link
-                        to={"/course/" + course.encr_id + "/show"}
+                    <button
+                        type="button"
+                        onClick={() => dispatch(enrollCourse(course.id))}
                         className="flex-shrink-0 btn btn-sm btn-primary px-3"
                         style={{
                             borderRadius: "0 30px 30px 0",
                         }}
                     >
                         Enroll Now
-                    </Link>
+                    </button>
                 </div>
             </div>
             <div className="text-center p-4 pb-0 min-h">

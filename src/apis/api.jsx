@@ -1,36 +1,39 @@
-const data = {
-    development: {
-        user: "http://eshiksha.test.com/api/user",
-        api: "http://eshiksha.test.com/api/app",
-        home: "http://eshiksha.test.com/api/home",
-        page: function (page_name) {
-            return `http://eshiksha.test.com/api/page/${page_name}/show`;
-        },
-        departments: "http://eshiksha.test.com/api/departments",
-        courses: "http://eshiksha.test.com/api/courses",
-        course: function (id) {
-            return `http://eshiksha.test.com/api/courses/${id}`;
-        },
+const env = import.meta.env;
+
+const api_urls = {
+    api: "/api/app",
+    home: "/api/home",
+    page: function (page_name) {
+        return `/api/page/${page_name}/show`;
     },
-    production: {
-        user: "http://164.100.196.171/learning_mng_sys/api/user",
-        api: "http://164.100.196.171/learning_mng_sys/api/app",
-        home: "http://164.100.196.171/learning_mng_sys/api/home",
-        page: function (page_name) {
-            return `http://164.100.196.171/learning_mng_sys/api/page/${page_name}/show`;
-        },
-        departments: "http://164.100.196.171/learning_mng_sys/api/departments",
-        courses: "http://164.100.196.171/learning_mng_sys/api/courses",
-        course: function (id) {
-            return `http://164.100.196.171/learning_mng_sys/api/courses/${id}`;
-        },
+    departments: "/api/departments",
+    courses: "/api/courses",
+    course: function (id) {
+        return `/api/courses/${id}`;
+    },
+
+    // Authenticated users urls
+    user: "/api/auth/user",
+    auth_courses: "/api/auth/courses",
+    auth_course: function (id) {
+        return `/api/auth/courses/${id}`;
+    },
+    auth_course_enroll: function (id) {
+        return `/api/auth/courses/${id}/enrollments`;
     },
 };
 
-export default function api(api_name, page_name = null) {
-    if (page_name != null) {
-        return data[import.meta.env.VITE_APP_ENV][api_name](page_name);
-    } else {
-        return data[import.meta.env.VITE_APP_ENV][api_name];
-    }
+export default function api(api_name, param = null) {
+    // Get API domain based on the current app environment
+    let url =
+        env.VITE_APP_ENV == "production"
+            ? env.VITE_PROD_APP_URL
+            : env.VITE_DEV_APP_URL;
+    // console.log(typeof api_urls[api_name]);
+    return (
+        url +
+        (typeof api_urls[api_name] == "function"
+            ? api_urls[api_name](param)
+            : api_urls[api_name])
+    );
 }

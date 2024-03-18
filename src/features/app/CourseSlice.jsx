@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "@src/apis/api";
-import useFetch from "@src/Hooks/useFetch";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const initialState = {
     courses: [],
@@ -43,12 +41,19 @@ export const getCourses = createAsyncThunk(
 
         let api_url = api("courses") + query_string;
 
+        let headers = {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        };
+        const token =
+            Cookies.get("token") == undefined ? null : Cookies.get("token");
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+            api_url = api("auth_courses") + query_string;
+        }
         const response = await fetch(api_url, {
             method: "get",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
+            headers,
             cache: "no-cache",
         });
         const json = await response.json();
@@ -71,6 +76,30 @@ export const getCourse = createAsyncThunk("course/getCourse", async (id) => {
     const json = await response.json();
     return json.data;
 });
+
+export const enrollCourse = createAsyncThunk(
+    "course/enrollCourse",
+    async (id) => {
+        let headers = {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        };
+        const token =
+            Cookies.get("token") == undefined ? null : Cookies.get("token");
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+        }
+        const response = await fetch(api("auth_course_enroll", id), {
+            method: "post",
+            headers,
+            cache: "no-cache",
+        });
+        const json = await response.json();
+        // console.log(json);
+        return json.data;
+    }
+);
+
 export const courseSlice = createSlice({
     name: "course",
     initialState,
@@ -117,7 +146,5 @@ export const courseSlice = createSlice({
 });
 
 export const { setSearch, resetSearch } = courseSlice.actions;
-// export const { courses } = (state) => state.courses.courses;
 
-// export default courseSlice.reducer;
 export default courseSlice.reducer;
