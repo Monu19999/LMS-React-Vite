@@ -6,6 +6,7 @@ import CoursesList from "@src/Pages/courses/CoursesList";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import Layout from "@src/Components/Layout/Layout";
 import CourseView from "./Pages/courses/CourseView";
+import Login from "./Pages/auth/Login";
 
 function App() {
     return (
@@ -17,6 +18,15 @@ function App() {
                         element={
                             <Suspense fallback={<BootstrapSpinner />}>
                                 <Home />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="login"
+                        element={
+                            <Suspense fallback={<BootstrapSpinner />}>
+                                <Login />
                             </Suspense>
                         }
                     />
