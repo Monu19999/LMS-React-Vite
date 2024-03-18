@@ -10,11 +10,12 @@ function CourseItem({ course }) {
                 <img
                     className="img-fluid"
                     src={
-                      course?.upload?.file_path ??
-                          "http://164.100.196.171/learning_mng_sys/public/storage/App/Models/Course/bno0MRfE90.jpg"?.
-                          null
-                   
-                  }
+                        course?.upload?.file_path && course.upload.file_path !== ""
+                          ? course.upload.file_path
+                          : "/public/assets/img/course-1.jpg"
+                      }
+
+                 
                     alt="course-1.jpg"
                 />
                 <div className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
