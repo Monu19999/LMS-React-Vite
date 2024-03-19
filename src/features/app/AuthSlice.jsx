@@ -43,7 +43,8 @@ export const authSlice = createSlice({
             })
             .addCase(getUser.fulfilled, (state, { payload }) => {
                 state.user_loading = false;
-                state.user = payload;
+                state.user =
+                    payload.message == "Unauthenticated." ? null : payload;
             })
             .addCase(getUser.rejected, (state, { payload }) => {
                 state.message = payload;
