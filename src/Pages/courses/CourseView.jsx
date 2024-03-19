@@ -12,7 +12,7 @@ function CourseView() {
     const { course, loading } = useSelector((state) => {
         return state.course;
     });
-
+    // console.log(course);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -184,7 +184,7 @@ function CourseView() {
                                         src={
                                             course?.upload?.file_path ??
                                             ShowImage(
-                                                "frontend/img/course-1.jpg",
+                                                "http://164.100.196.171/learning_mng_sys/public/storage/App/Models/Course/bno0MRfE90.jpg",
                                                 null
                                             )
                                         }
