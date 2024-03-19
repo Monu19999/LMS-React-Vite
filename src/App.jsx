@@ -5,7 +5,8 @@ import Page from "@src/Pages/Page";
 import CoursesList from "@src/Pages/courses/CoursesList";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import Layout from "@src/Components/Layout/Layout";
-import CourseView from "./Pages/courses/CourseView";
+import CourseView from "@src/Pages/courses/CourseView";
+import GuestLayout from "@src/Components/Layout/GuestLayout";
 
 function App() {
     return (
@@ -56,15 +57,34 @@ function App() {
                             </Suspense>
                         }
                     />
+                </Route>
+                <Route path="/auth" element={<GuestLayout />}>
                     <Route
-                        path="*"
+                        index
                         element={
                             <Suspense fallback={<BootstrapSpinner />}>
-                                <Home />
+                                <h1>auth</h1>
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="login"
+                        element={
+                            <Suspense fallback={<BootstrapSpinner />}>
+                                <h1>login</h1>
                             </Suspense>
                         }
                     />
                 </Route>
+                <Route
+                    path="*"
+                    element={
+                        <Suspense fallback={<BootstrapSpinner />}>
+                            <Home />
+                        </Suspense>
+                    }
+                />
             </Routes>
         </>
     );
