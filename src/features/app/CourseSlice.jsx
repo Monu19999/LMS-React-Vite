@@ -33,9 +33,8 @@ export const getCourses = createAsyncThunk(
         const state = getState();
 
         let search_state = removeEmpty(state.course.search);
-
         let query_string =
-            search_state != undefined
+            Object.keys(search_state).length > 0
                 ? "?" + new URLSearchParams(search_state).toString()
                 : "";
 
@@ -95,7 +94,6 @@ export const enrollCourse = createAsyncThunk(
             cache: "no-cache",
         });
         const json = await response.json();
-        // console.log(json);
         return json.data;
     }
 );

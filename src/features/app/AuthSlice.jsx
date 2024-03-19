@@ -23,13 +23,25 @@ export const getUser = createAsyncThunk(
     }
 );
 
+export const login = createAsyncThunk("auth/login", async (credentials) => {
+    let api_url = api("auth_login");
+    const response = await fetch(api_url, {
+        method: "post",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+        cache: "no-cache",
+    });
+    const json = await response.json();
+    return json.data;
+});
+
 const initialState = {
     user: null,
     user_loading: false,
-    token:
-        Cookies.get("token") == undefined
-            ? "9|g5woG0GTCurNNiWj2RIH9b3pnCpIXmUeV21owbbz50ab76f3"
-            : Cookies.get("token"),
+    token: Cookies.get("token") == undefined ? null : Cookies.get("token"),
 };
 
 export const authSlice = createSlice({
@@ -47,6 +59,20 @@ export const authSlice = createSlice({
                     payload.message == "Unauthenticated." ? null : payload;
             })
             .addCase(getUser.rejected, (state, { payload }) => {
+                state.message = payload;
+                state.user_loading = false;
+            })
+
+            // Login User
+            .addCase(login.pending, (state, { payload }) => {
+                state.user_loading = true;
+            })
+            .addCase(login.fulfilled, (state, { payload }) => {
+                Cookies.set("token", payload.token);
+                state.user = payload.user;
+                state.token = payload.token;
+            })
+            .addCase(login.rejected, (state, { payload }) => {
                 state.message = payload;
                 state.user_loading = false;
             });

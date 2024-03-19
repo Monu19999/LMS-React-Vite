@@ -111,7 +111,10 @@ function Settings() {
                                         Welcome {user.first_name}
                                     </Link>
                                 ) : (
-                                    <Link className="dropdown-item" to="">
+                                    <Link
+                                        className="dropdown-item"
+                                        to="/auth/login"
+                                    >
                                         Student Login
                                     </Link>
                                 )}

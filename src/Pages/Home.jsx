@@ -167,66 +167,18 @@ export default function Home() {
                             </span>
                             <p>Total Departments Onboarded</p>
                         </div>
-                        {/* About Start */}
-                        <div className="container-xxl py-5">
-                            <div className="container">
-                                <div className="row g-5">
-                                    <div
-                                        className="col-lg-6 wow fadeInUp"
-                                        data-wow-delay="0.1s"
-                                        style={{ minHeight: 400 }}
-                                    >
-                                        <div className="position-relative h-100">
-                                            <img
-                                                className="img-fluid position-absolute w-100 h-100"
-                                                src="assets/img/e-book1.png"
-                                                alt="e-book1.png"
-                                                style={{ objectFit: "cover" }}
-                                            />
-                                        </div>
-                                    </div>
-                                    {homedata?.page && (
-                                        <div
-                                            className="col-lg-6 wow fadeInUp"
-                                            data-wow-delay="0.3s"
-                                            style={{ display: "table" }}
-                                        >
-                                            <div
-                                                style={{
-                                                    verticalAlign: "middle",
-                                                    display: "table-cell",
-                                                }}
-                                            >
-                                                <h1 className="mb-4">
-                                                    {homedata.page.title_en}
-                                                </h1>
-                                                <div className="mb-4">
-                                                    {parse(
-                                                        homedata.page
-                                                            .description_en
-                                                    )}
-                                                </div>
-                                                <Link
-                                                    className="btn btn-primary py-2 px-4 mt-2"
-                                                    to={
-                                                        "page/" +
-                                                        homedata.page.slug
-                                                    }
-                                                    style={{ borderRadius: 40 }}
-                                                >
-                                                    Find out more
-                                                    <i
-                                                        className="fas fa-arrow-alt-circle-right"
-                                                        style={{
-                                                            marginLeft: 10,
-                                                        }}
-                                                    />
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
+                    </div>
+                    <div
+                        className="four col-md-6 col-lg-3 wow zoomIn"
+                        data-wow-delay="0.3s"
+                    >
+                        <div className="counter-box">
+                            <span className="counter">
+                                {homedata.courses_enrolled
+                                    ? homedata.courses_enrolled
+                                    : 0}
+                            </span>
+                            <p>Courses Enrolled </p>
                         </div>
                     </div>
                     <div

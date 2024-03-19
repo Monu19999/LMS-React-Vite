@@ -12,6 +12,9 @@ const api_urls = {
         return `/api/courses/${id}`;
     },
 
+    // Authentication
+    auth_login: "/api/auth/login",
+
     // Authenticated users urls
     user: "/api/auth/user",
     auth_courses: "/api/auth/courses",

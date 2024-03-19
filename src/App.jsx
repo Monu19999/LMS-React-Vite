@@ -1,5 +1,5 @@
-import { Suspense } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Suspense, useEffect } from "react";
+import { Navigate, Route, Routes, redirect } from "react-router-dom";
 import Home from "@src/Pages/Home";
 import Page from "@src/Pages/Page";
 import CoursesList from "@src/Pages/courses/CoursesList";
@@ -7,9 +7,11 @@ import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import Layout from "@src/Components/Layout/Layout";
 import CourseView from "@src/Pages/courses/CourseView";
 import GuestLayout from "@src/Components/Layout/GuestLayout";
-import Login from "./Pages/auth/Login";
+import Login from "@src//Pages/auth/Login";
+import { useSelector } from "react-redux";
 
 function App() {
+    const token = useSelector((state) => state.auth.token);
     return (
         <>
             <Routes>
@@ -22,7 +24,7 @@ function App() {
                             </Suspense>
                         }
                     />
-                    <Route
+                    {/* <Route
                         exact
                         path="login"
                         element={
@@ -30,7 +32,7 @@ function App() {
                                 <Login />
                             </Suspense>
                         }
-                    />
+                    /> */}
                     <Route
                         exact
                         path="dashboard"
@@ -73,7 +75,11 @@ function App() {
                         index
                         element={
                             <Suspense fallback={<BootstrapSpinner />}>
-                                <h1>auth</h1>
+                                {token == null ? (
+                                    <Login />
+                                ) : (
+                                    <Navigate to="/dashboard" />
+                                )}
                             </Suspense>
                         }
                     />
@@ -82,7 +88,11 @@ function App() {
                         path="login"
                         element={
                             <Suspense fallback={<BootstrapSpinner />}>
-                                <h1>login</h1>
+                                {token == null ? (
+                                    <Login />
+                                ) : (
+                                    <Navigate to="/dashboard" />
+                                )}
                             </Suspense>
                         }
                     />
