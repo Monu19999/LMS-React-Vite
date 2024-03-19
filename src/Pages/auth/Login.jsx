@@ -15,33 +15,32 @@ const isValidPassword = (password) => {
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
 
-  const validateEmail = (e) => {
-    const newEmail = e.target.value;
+  const validateEmail = (newEmail) => {
     setEmail(newEmail);
-    if (!isValidEmail(newEmail) && newEmail.length > 0) {
-      setEmailError("Please enter a valid email address");
-    } else {
-      setEmailError("");
-    }
+    setEmailError(newEmail && !isValidEmail(newEmail) ? "Please enter a valid email address" : "");
   };
 
-  const validatePassword = (e) => {
-    const newPassword = e.target.value;
+  const validatePassword = (newPassword) => {
     setPassword(newPassword);
-    if (!isValidPassword(newPassword) && newPassword.length > 0) {
-      setPasswordError(
-        "Password must be 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character"
-      );
-    } else {
-      setPasswordError("");
-    }
+    setPasswordError(newPassword && !isValidPassword(newPassword) ? "Password must be 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character" : "");
   };
 
   const handleLogin = (e) => {
     e.preventDefault();
+    if(emailError===null || passwordError===null){
+        alert("Enter email and Password");
+        return;
+    }
+    if(emailError && emailError!==""){
+        alert("email is not valid");
+        return;
+    }else if(passwordError && passwordError!==""){
+        alert("password is not valid");
+        return;
+    }
     console.log("email: ", email);
     console.log("password : ", password);
     console.log("form submitted successfully");
@@ -69,9 +68,9 @@ export default function Login() {
               style={{ borderRadius: "5px" }}
               type="email"
               className="form-control"
-              required
+              
               value={email}
-              onChange={(e) => validateEmail(e)}
+              onChange={(e) => validateEmail(e.target.value)}
             />
             {emailError && <div className="text-danger">{emailError}</div>}
           </div>
@@ -83,9 +82,9 @@ export default function Login() {
               style={{ borderRadius: "5px" }}
               type="password"
               className="form-control"
-              required
+              
               value={password}
-              onChange={(e) => validatePassword(e)}
+              onChange={(e) => validatePassword(e.target.value)}
             />
             {passwordError && (
               <div className="text-danger">{passwordError}</div>
@@ -118,6 +117,7 @@ export default function Login() {
               </span>
             </Link>
             <button
+            // disabled={ !(emailError==="" && passwordError==="")}
               style={{
                 borderRadius: "8px",
                 padding: "8px 12px",
@@ -127,7 +127,7 @@ export default function Login() {
               }}
               className="btn btn-dark text-white"
               onMouseEnter={(e) => {
-                e.target.style.backgroundColor = "rgb(0, 0, 0, 0.8)";
+                e.target.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
                 e.target.style.color = "white";
               }}
               onMouseLeave={(e) => {
