@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { login } from "@src/features/app/AuthSlice";
@@ -22,9 +22,6 @@ export default function Login() {
     const [passwordError, setPasswordError] = useState(null);
 
     const user = useSelector((state) => state.auth.user);
-    // if (!user) {
-    //     return redirect("/login");
-    // }
 
     const dispatch = useDispatch();
 
@@ -32,11 +29,12 @@ export default function Login() {
 
     const saveEmployee = (e) => {
         e.preventDefault();
-        console.log(validateForm());
+        // console.log(validateForm());
         if (validateForm()) {
             const employee = { email, password };
             console.log(employee);
             dispatch(login(employee));
+            navigate("/front");
         }
     };
 

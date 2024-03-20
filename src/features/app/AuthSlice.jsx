@@ -47,7 +47,13 @@ const initialState = {
 export const authSlice = createSlice({
     name: "auth",
     initialState,
-    reducers: {},
+    reducers: {
+        logout: (state) => {
+            Cookies.remove("token", "");
+            state.user = null;
+            state.token = null;
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getUser.pending, (state, { payload }) => {
@@ -78,5 +84,7 @@ export const authSlice = createSlice({
             });
     },
 });
+
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;
