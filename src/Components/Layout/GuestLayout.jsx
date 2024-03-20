@@ -1,17 +1,11 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 
 function GuestLayout() {
+    const token = useSelector((state) => state.auth.token);
     return (
         <>
-            <div id="loading">
-                <div id="loading-content">
-                    <div className="overlay" style={{ display: "none" }}>
-                        <i className="fas fa-3x fa-sync-alt fa-spin" />
-                        <div className="text-bold pt-2">Loading...</div>
-                    </div>
-                </div>
-            </div>
             <Outlet />
         </>
     );

@@ -7,8 +7,21 @@ import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import Layout from "@src/Components/Layout/Layout";
 import CourseView from "@src/Pages/courses/CourseView";
 import GuestLayout from "@src/Components/Layout/GuestLayout";
-import Login from "@src//Pages/auth/Login";
+import Login from "@src/Pages/auth/Login";
 import { useSelector } from "react-redux";
+import UserDashboard from "@src/Pages/frontend/UserDashboard";
+import UserLayout from "@src/Components/Layout/UserLayout";
+
+function PrivateRoute(props) {
+    let { component: Component, children, render, ...rest } = props;
+    let auth = useAuth();
+    return (
+        <Route
+            {...rest}
+            render={() => (auth ? <Component /> : <Navigate to="/login" />)}
+        />
+    );
+}
 
 function App() {
     const token = useSelector((state) => state.auth.token);
@@ -93,6 +106,16 @@ function App() {
                                 ) : (
                                     <Navigate to="/dashboard" />
                                 )}
+                            </Suspense>
+                        }
+                    />
+                </Route>
+                <Route path="/front" element={<UserLayout />}>
+                    <Route
+                        index
+                        element={
+                            <Suspense fallback={<BootstrapSpinner />}>
+                                <UserDashboard />
                             </Suspense>
                         }
                     />

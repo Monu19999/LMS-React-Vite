@@ -2,10 +2,21 @@ import FooterMenu from "@src/Pages/includes/FooterMenu";
 import Settings from "@src/Pages/includes/Settings";
 import Navbar from "@src/Pages/includes/Navbar";
 import { Outlet } from "react-router-dom";
-import { useEffect } from "react";
 import useFetch from "@src/Hooks/useFetch";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import api from "@src/apis/api";
+
+// Load css
+import "@public/assets/css/bootstrap.min.css";
+import "@public/assets/css/style.css";
+import "@public/assets/css/change.css";
+import "@public/assets/lib/animate/animate.min.css";
+
+// import "@public/assets/lib/wow/wow.min.js";
+// import "@public/assets/lib/easing/easing.min.js";
+// import "@public/assets/lib/waypoints/waypoints.min.js";
+// import "@public/assets/js/main.js";
+// import "@public/assets/js/global-min.js";
 
 export default function Layout() {
     const { isLoading, serverError, apiData } = useFetch("GET", api("api"), {});
