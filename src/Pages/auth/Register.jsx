@@ -138,7 +138,7 @@ export default function Register() {
         >
           {/* first name field */}
           <div className="d-flex flex-column">
-            <label htmlFor="fname" className="from-label">
+            <label htmlFor="fname" className="form-label ">
               First Name
             </label>
             <input
@@ -155,7 +155,7 @@ export default function Register() {
 
           {/* last name field */}
           <div className="d-flex flex-column">
-            <label htmlFor="lname" className="from-label font-weight-bold">
+            <label htmlFor="lname" className="form-label">
               Last Name
             </label>
             <input
@@ -171,7 +171,7 @@ export default function Register() {
 
           {/* email field */}
           <div className="d-flex flex-column">
-            <label htmlFor="email" className="from-label font-weight-bold">
+            <label htmlFor="email" className="form-label">
               Email
             </label>
             <input
