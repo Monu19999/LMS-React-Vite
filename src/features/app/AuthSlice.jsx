@@ -25,21 +25,48 @@ export const getUser = createAsyncThunk(
 
 export const login = createAsyncThunk("auth/login", async (credentials) => {
     let api_url = api("auth_login");
-    const response = await fetch(api_url, {
-        method: "post",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-        cache: "no-cache",
-    });
-    const json = await response.json();
-    return json.data;
+    try {
+        const response = await fetch(api_url, {
+            method: "post",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(credentials),
+            cache: "no-cache",
+        });
+        // .then((res) => {
+        //     if (res.ok) {
+        //         let response = res.json();
+        //         console.log("res", response);
+        //     }
+        //     console.log(res);
+        //     throw new Error("Something went wrong");
+        // })
+        // .catch((error) => {
+        //     console.log("catch errors => ", error);
+        //     // throw error;
+        // });
+        if (response.status !== 200) {
+            const json = await response.json();
+            console.log("error => ", json);
+            throw new Error("Bad response", {
+                cause: json,
+            });
+        }
+        const json = await response.json();
+        return json.data;
+    } catch (error) {
+        console.log("error.cause.response");
+        console.log(error.cause);
+        return error.cause;
+    }
 });
 
 const initialState = {
     user: null,
+    errors: [],
+    error_message: null,
     user_loading: false,
     token: Cookies.get("token") == undefined ? null : Cookies.get("token"),
 };
@@ -65,7 +92,7 @@ export const authSlice = createSlice({
                     payload.message == "Unauthenticated." ? null : payload;
             })
             .addCase(getUser.rejected, (state, { payload }) => {
-                state.message = payload;
+                state.error_message = payload;
                 state.user_loading = false;
             })
 
@@ -74,12 +101,22 @@ export const authSlice = createSlice({
                 state.user_loading = true;
             })
             .addCase(login.fulfilled, (state, { payload }) => {
-                Cookies.set("token", payload.token);
-                state.user = payload.user;
-                state.token = payload.token;
+                console.log("login.fulfilled => ", payload);
+                if (payload.hasOwnProperty("errors")) {
+                    console.log(payload.message);
+                    state.errors = payload.errors;
+                    state.error_message = payload.message;
+                } else {
+                    Cookies.set("token", payload.token);
+                    state.user = payload.user;
+                    state.token = payload.token;
+                    state.errors = [];
+                    state.error_message = null;
+                }
             })
             .addCase(login.rejected, (state, { payload }) => {
-                state.message = payload;
+                console.log("login.rejected");
+                state.error_message = payload;
                 state.user_loading = false;
             });
     },

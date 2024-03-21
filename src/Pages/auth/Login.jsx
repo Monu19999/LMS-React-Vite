@@ -17,67 +17,31 @@ const isValidPassword = (password) => {
 
 export default function Login() {
     const [email, setEmail] = useState("hw.sharma9@mp.gov.in");
-    const [password, setPassword] = useState("password");
-    const [emailError, setEmailError] = useState(null);
-    const [passwordError, setPasswordError] = useState(null);
+    const [password, setPassword] = useState("passwor");
+    const [errors, setErrors] = useState({
+        email: "",
+        password: "",
+    });
 
-    const user = useSelector((state) => state.auth.user);
+    const auth_state = useSelector((state) => state.auth);
 
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
-    const saveEmployee = (e) => {
+    const saveEmployee = async (e) => {
         e.preventDefault();
         // console.log(validateForm());
         if (validateForm()) {
             const employee = { email, password };
             console.log(employee);
-            dispatch(login(employee));
-            navigate("/front");
+            let response = await dispatch(login(employee));
+            // console.log("response => ", response);
+            console.log("auth_state => ", auth_state);
+            if (auth_state.error_message == "") {
+                navigate("/front");
+            }
         }
-    };
-
-    const [errors, setErrors] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-    });
-
-    const validateEmail = (newEmail) => {
-        setEmail(newEmail);
-        setEmailError(
-            newEmail && !isValidEmail(newEmail)
-                ? "Please enter a valid email address"
-                : ""
-        );
-    };
-
-    const validatePassword = (newPassword) => {
-        setPassword(newPassword);
-        setPasswordError(
-            newPassword && !isValidPassword(newPassword)
-                ? "Password must be 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character"
-                : ""
-        );
-    };
-
-    const handleLogin = (e) => {
-        e.preventDefault();
-        if (emailError === null || passwordError === null) {
-            alert("Enter email and Password");
-            return;
-        }
-        if (emailError && emailError !== "") {
-            alert("email is not valid");
-            return;
-        } else if (passwordError && passwordError !== "") {
-            alert("password is not valid");
-            return;
-        }
-        console.log("email: ", email);
-        console.log("password : ", password);
-        console.log("form submitted successfully");
     };
 
     const validateForm = () => {
@@ -87,7 +51,7 @@ export default function Login() {
         if (!email.trim()) {
             errorsCopy.email = "Email is required";
             valid = false;
-        } else if (validateEmail(email) == false) {
+        } else if (isValidEmail(email) == false) {
             errorsCopy.email = "Email is invalid";
             valid = false;
         } else {
@@ -126,6 +90,11 @@ export default function Login() {
                 className="card d-flex align-items-center shadow-sm p-3 bg-white"
                 style={{ borderRadius: "10px", width: "400px" }}
             >
+                {auth_state?.error_message && (
+                    <div className="alert alert-danger alert-block mt-3 ml-3 mr-3">
+                        <strong>{auth_state.error_message}</strong>
+                    </div>
+                )}
                 <form
                     className="d-flex py-3 w-100 flex-column gap-3"
                     onSubmit={saveEmployee}
@@ -142,7 +111,7 @@ export default function Login() {
                             type="email"
                             className="form-control"
                             value={email}
-                            onChange={(e) => validateEmail(e.target.value)}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                         {errors.email && (
                             <div className="text-danger">{errors.email}</div>
@@ -157,7 +126,7 @@ export default function Login() {
                             type="password"
                             className="form-control"
                             value={password}
-                            onChange={(e) => validatePassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                         {errors.password && (
                             <div className="text-danger">{errors.password}</div>
