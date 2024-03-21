@@ -16,8 +16,8 @@ const isValidPassword = (password) => {
 };
 
 export default function Login() {
-    const [email, setEmail] = useState("hw.sharma9@mp.gov.in");
-    const [password, setPassword] = useState("passwor");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({
         email: "",
         password: "",
