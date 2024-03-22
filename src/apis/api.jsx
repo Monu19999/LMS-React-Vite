@@ -14,7 +14,7 @@ const api_urls = {
 
     // Authentication
     auth_login: "/api/auth/login",
-    auth_register: "/api/auth/register",
+    auth_login: "/api/auth/login",
 
     // Authenticated users urls
     user: "/api/auth/user",
@@ -25,6 +25,8 @@ const api_urls = {
     auth_course_enroll: function (id) {
         return `/api/auth/courses/${id}/enrollments`;
     },
+    member_dashboard: "/api/auth/member/dashboard",
+    member_courses: "/api/auth/member/courses",
 };
 
 export default function api(api_name, param = null) {

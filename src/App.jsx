@@ -7,10 +7,13 @@ import CourseView from "@src/Pages/courses/CourseView";
 import GuestLayout from "@src/Components/Layout/GuestLayout";
 import Login from "@src/Pages/auth/Login";
 import { useSelector } from "react-redux";
-import UserDashboard from "@src/Pages/frontend/UserDashboard";
+import UserDashboard from "@src/Pages/member/UserDashboard";
 import UserLayout from "@src/Components/Layout/UserLayout";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
+import MyCourses from "@src/Pages/member/MyCourses";
+import MyCertificates from "@src/Pages/member/MyCertificates";
+import AvailableCourses from "@src/Pages/member/AvailableCourses";
 
 function App() {
     const token = useSelector((state) => state.auth.token);
@@ -44,9 +47,24 @@ function App() {
                         <Route exact path="login" element={<Login />} />
                     </Route>
                 </Route>
-                <Route path="/front" element={<PrivateRoute />}>
-                    <Route path="/front" element={<UserLayout />}>
+                <Route path="/member" element={<PrivateRoute />}>
+                    <Route path="/member" element={<UserLayout />}>
                         <Route index element={<UserDashboard />} />
+                        <Route
+                            exact
+                            path="courses"
+                            element={<MyCourses />}
+                        ></Route>
+                        <Route
+                            exact
+                            path="certificates"
+                            element={<MyCertificates />}
+                        ></Route>
+                        <Route
+                            exact
+                            path="available_courses"
+                            element={<AvailableCourses />}
+                        ></Route>
                     </Route>
                 </Route>
             </Routes>

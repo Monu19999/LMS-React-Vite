@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "@src/features/app/AuthSlice";
 
 const isValidEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i;
-    console.log("email => ", emailRegex.test(email));
     return emailRegex.test(email);
 };
 
@@ -16,8 +15,8 @@ const isValidPassword = (password) => {
 };
 
 export default function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("hw.sharma9@mp.gov.in");
+    const [password, setPassword] = useState("password");
     const [errors, setErrors] = useState({
         email: "",
         password: "",
@@ -34,12 +33,11 @@ export default function Login() {
         // console.log(validateForm());
         if (validateForm()) {
             const employee = { email, password };
-            console.log(employee);
+
             let response = await dispatch(login(employee));
-            // console.log("response => ", response);
-            console.log("auth_state => ", auth_state);
+
             if (auth_state.error_message == "") {
-                navigate("/front");
+                navigate("/member");
             }
         }
     };

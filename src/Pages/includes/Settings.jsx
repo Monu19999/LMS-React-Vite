@@ -107,7 +107,10 @@ function Settings() {
                         <ul className="dropdown-menu">
                             <li>
                                 {user ? (
-                                    <Link className="dropdown-item" to="/front">
+                                    <Link
+                                        className="dropdown-item"
+                                        to="/member"
+                                    >
                                         Welcome {user.first_name}
                                     </Link>
                                 ) : (
