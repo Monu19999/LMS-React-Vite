@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "@src/features/app/AuthSlice";
@@ -8,11 +8,11 @@ const isValidEmail = (email) => {
     return emailRegex.test(email);
 };
 
-const isValidPassword = (password) => {
-    const passwordRegex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return passwordRegex.test(password);
-};
+// const isValidPassword = (password) => {
+//     const passwordRegex =
+//         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+//     return passwordRegex.test(password);
+// };
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -35,7 +35,7 @@ export default function Login() {
             const employee = { email, password };
 
             let response = await dispatch(login(employee));
-
+            // console.log(response);
             if (auth_state.error_message == "") {
                 navigate("/member");
             }

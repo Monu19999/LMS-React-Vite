@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, redirect } from "react-router-dom";
+import { Route, Routes,} from "react-router-dom";
 import Home from "@src/Pages/Home";
 import Page from "@src/Pages/Page";
 import CoursesList from "@src/Pages/courses/CoursesList";

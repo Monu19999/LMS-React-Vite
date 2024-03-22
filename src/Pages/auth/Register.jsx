@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import {useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, redirect, useNavigate } from "react-router-dom";
-import { login } from "@src/features/app/AuthSlice";
+import { Link,useNavigate } from "react-router-dom";
 import { register } from "@src/features/app/AuthSlice";
 
 const isValidEmail = (email) => {
@@ -10,41 +9,41 @@ const isValidEmail = (email) => {
   return emailRegex.test(email);
 };
 
-const isValidPassword = (password) => {
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  return passwordRegex.test(password);
+// const isValidPassword = (password) => {
+//   const passwordRegex =
+//     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+//   return passwordRegex.test(password);
+// };
+
+
+const isValidfirst_name = (first_name) => {
+    const first_nameRegex = /^[a-zA-Z\s]+$/;
+    return first_nameRegex.test(first_name);
 };
 
 
-const isValidFirstName = (firstName) => {
-    const firstNameRegex = /^[a-zA-Z\s]+$/;
-    return firstNameRegex.test(firstName);
-};
 
-
-
-const isValidLastName = (lastName) => {
-    const lastNameRegex = /^[a-zA-Z\s]+$/;
-    return lastNameRegex.test(lastName);
+const isValidlast_name = (last_name) => {
+    const last_nameRegex = /^[a-zA-Z\s]+$/;
+    return last_nameRegex.test(last_name);
 };
 
 
 export default function Register() {
+    const [first_name, setfirst_name] = useState("");
+    const [last_name, setlast_name] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password_confirmation, setpassword_confirmation] = useState("");
+
   const [errors, setErrors] = useState({
-    firstName:"",
-    lastName:"",
+    first_name:"",
+    last_name:"",
     email: "",
     password: "",
-    confirmPassword: "",
+    password_confirmation: "",
   });
-  const [name, setName] = useState({
-    first_name: "",
-    last_name: "",
-  });
+
 
   const auth_state = useSelector((state) => state.auth);
 
@@ -56,20 +55,19 @@ export default function Register() {
     e.preventDefault();
     if (validateForm()) {
         const employee = {
-          name: {
-            first_name: name.first_name,
-            last_name: name.last_name
-          },
+         first_name,
+         last_name,
           email,
-          password
+          password,
+          password_confirmation
         };
 
-        console.log(employee);
+        // console.log(employee);
         let response = await dispatch(register(employee));
         console.log("response => ", response);
         console.log("auth_state => ", auth_state);
         if(auth_state.error_message === ""){
-            navigate("/front");
+            navigate("/member");
         }
       }
          
@@ -96,35 +94,35 @@ export default function Register() {
       errorsCopy.password = "";
     }
 
-    if (!name.first_name.trim()) {
-        errorsCopy.firstName = "First name is required";
+    if (!first_name.trim()) {
+        errorsCopy.first_name = "First name is required";
         valid = false;
-    } else if (!isValidFirstName(name.first_name)) {
-        errorsCopy.firstName = "First name is invalid";
-        valid = false;
-    } else {
-        errorsCopy.firstName = "";
-    }
-
-    if (!name.last_name.trim()) {
-        errorsCopy.lastName = "Last name is required";
-        valid = false;
-    } else if (!isValidLastName(name.last_name)) {
-        errorsCopy.lastName = "Last name is invalid";
+    } else if (!isValidfirst_name(first_name)) {
+        errorsCopy.first_name = "First name is invalid";
         valid = false;
     } else {
-        errorsCopy.lastName = "";
+        errorsCopy.first_name = "";
+    }
+
+    if (!last_name.trim()) {
+        errorsCopy.last_name = "Last name is required";
+        valid = false;
+    } else if (!isValidlast_name(last_name)) {
+        errorsCopy.last_name = "Last name is invalid";
+        valid = false;
+    } else {
+        errorsCopy.last_name = "";
     }
 
 
-    if(!confirmPassword.trim()){
-        errorsCopy.confirmPassword = "Confirm Password is Required";
+    if(!password_confirmation.trim()){
+        errorsCopy.password_confirmation = "Confirm Password is Required";
         valid = false;
-    }else if(confirmPassword!== password){
-        errorsCopy.confirmPassword = "password not match";
+    }else if(password_confirmation!== password){
+        errorsCopy.password_confirmation = "password not match";
         valid = false;
     }else {
-        errorsCopy.confirmPassword = "";
+        errorsCopy.password_confirmation = "";
     }
     setErrors(errorsCopy);
     return valid;
@@ -147,7 +145,7 @@ export default function Register() {
         >
           {/* first name field */}
           <div className="d-flex flex-column">
-            <label htmlFor="fname" className="form-label ">
+            <label htmlFor="first_name" className="form-label ">
               First Name
             </label>
             <input
@@ -155,16 +153,16 @@ export default function Register() {
               style={{ borderRadius: "5px" }}
               type="text"
               className="form-control"
-              value={name.first_name}
-              onChange={(e) => setName({ ...name, first_name: e.target.value })}
+              value={first_name}
+              onChange={(e) => setfirst_name(e.target.value )}
             />
-            {errors.firstName && <div className="text-danger">{errors.firstName}</div>}
+            {errors.first_name && <div className="text-danger">{errors.first_name}</div>}
           
           </div>
 
           {/* last name field */}
           <div className="d-flex flex-column">
-            <label htmlFor="lname" className="form-label">
+            <label htmlFor="last_name" className="form-label">
               Last Name
             </label>
             <input
@@ -172,10 +170,10 @@ export default function Register() {
               style={{ borderRadius: "5px" }}
               type="text"
               className="form-control"
-              value={name.last_name}
-              onChange={(e) => setName({ ...name, last_name: e.target.value })}
+              value={last_name}
+              onChange={(e) => setlast_name(e.target.value )}
             />
-          {errors.lastName && <div className="text-danger">{errors.lastName}</div>}
+          {errors.last_name && <div className="text-danger">{errors.last_name}</div>}
           </div>
 
           {/* email field */}
@@ -219,11 +217,11 @@ export default function Register() {
               style={{ borderRadius: "5px" }}
               type="password"
               className="form-control"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={password_confirmation}
+              onChange={(e) => setpassword_confirmation(e.target.value)}
             />
-             {errors.confirmPassword && (
-              <div className="text-danger">{errors.confirmPassword}</div>
+             {errors.password_confirmation && (
+              <div className="text-danger">{errors.password_confirmation}</div>
             )}
           </div>
 
