@@ -1,9 +1,17 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { enrollCourse } from "@src/features/app/CourseSlice";
 
 function CourseItem({ course }) {
     const dispatch = useDispatch();
+
+    const course_states = useSelector((state) => state.course);
+
+    const handleEnroll = () => {
+        // console.log("enroll course");
+        dispatch(enrollCourse(course.id));
+        console.log(course_states);
+    };
 
     return (
         <div className="course-item bg-light">
@@ -28,7 +36,7 @@ function CourseItem({ course }) {
                     </Link>
                     <button
                         type="button"
-                        onClick={() => dispatch(enrollCourse(course.id))}
+                        onClick={handleEnroll}
                         className="flex-shrink-0 btn btn-sm btn-primary px-3"
                         style={{
                             borderRadius: "0 30px 30px 0",

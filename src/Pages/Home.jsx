@@ -16,6 +16,7 @@ export default function Home() {
     const { homedata, home_loading } = useSelector((state) => state.home);
     const { courses, loading } = useSelector((state) => state.course);
 
+    //   console.log(courses);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -57,7 +58,7 @@ export default function Home() {
         center: true,
         margin: 24,
         dots: true,
-        loop: true,
+        loop: false,
         nav: false,
         responsive: {
             0: {
@@ -239,7 +240,7 @@ export default function Home() {
                                         {homedata.page.title_en}
                                     </h1>
                                     <div className="mb-4">
-                                        {parse(homedata.page.description_en)}
+                                        {homedata.page.description_en}
                                     </div>
                                     <Link
                                         className="btn btn-primary py-2 px-4 mt-2"
@@ -337,6 +338,7 @@ export default function Home() {
                         {...course_options}
                     >
                         {courses?.courses?.data &&
+                            courses.courses.data.length >= 0 &&
                             courses.courses.data.map((course) => {
                                 return (
                                     <div
