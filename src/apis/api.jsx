@@ -14,7 +14,7 @@ const api_urls = {
 
     // Authentication
     auth_login: "/api/auth/login",
-    auth_login: "/api/auth/login",
+    auth_register: "/api/auth/register",
 
     // Authenticated users urls
     user: "/api/auth/user",
