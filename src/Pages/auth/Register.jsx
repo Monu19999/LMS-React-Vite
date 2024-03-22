@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { login } from "@src/features/app/AuthSlice";
+import { register } from "@src/features/app/AuthSlice";
 
 const isValidEmail = (email) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i;
@@ -53,17 +54,25 @@ export default function Register() {
 
   const saveEmployee = async (e) => {
     e.preventDefault();
-    // console.log(validateForm());
     if (validateForm()) {
-      const employee = { email, password };
-      console.log(employee);
-      let response = await dispatch(login(employee));
-      // console.log("response => ", response);
-      console.log("auth_state => ", auth_state);
-      if (auth_state.error_message == "") {
-        navigate("/front");
+        const employee = {
+          name: {
+            first_name: name.first_name,
+            last_name: name.last_name
+          },
+          email,
+          password
+        };
+
+        console.log(employee);
+        let response = await dispatch(register(employee));
+        console.log("response => ", response);
+        console.log("auth_state => ", auth_state);
+        if(auth_state.error_message === ""){
+            navigate("/front");
+        }
       }
-    }
+         
   };
 
   const validateForm = () => {
