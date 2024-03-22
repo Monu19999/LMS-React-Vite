@@ -35,30 +35,14 @@ export const login = createAsyncThunk("auth/login", async (credentials) => {
             body: JSON.stringify(credentials),
             cache: "no-cache",
         });
-        // .then((res) => {
-        //     if (res.ok) {
-        //         let response = res.json();
-        //         console.log("res", response);
-        //     }
-        //     console.log(res);
-        //     throw new Error("Something went wrong");
-        // })
-        // .catch((error) => {
-        //     console.log("catch errors => ", error);
-        //     // throw error;
-        // });
+        const json = await response.json();
         if (response.status !== 200) {
-            const json = await response.json();
-            console.log("error => ", json);
             throw new Error("Bad response", {
                 cause: json,
             });
         }
-        const json = await response.json();
         return json.data;
     } catch (error) {
-        console.log("error.cause.response");
-        console.log(error.cause);
         return error.cause;
     }
 });
@@ -101,7 +85,6 @@ export const authSlice = createSlice({
                 state.user_loading = true;
             })
             .addCase(login.fulfilled, (state, { payload }) => {
-                console.log("login.fulfilled => ", payload);
                 if (payload.hasOwnProperty("errors")) {
                     console.log(payload.message);
                     state.errors = payload.errors;
@@ -115,7 +98,6 @@ export const authSlice = createSlice({
                 }
             })
             .addCase(login.rejected, (state, { payload }) => {
-                console.log("login.rejected");
                 state.error_message = payload;
                 state.user_loading = false;
             });
