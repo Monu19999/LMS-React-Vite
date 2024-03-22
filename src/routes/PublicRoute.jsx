@@ -3,8 +3,7 @@ import { useSelector } from "react-redux";
 
 const PublicRoute = () => {
     const token = useSelector((state) => state.auth.token);
-    console.log("token on PublicRoute => ", token);
-    return token != null ? <Navigate to="/front" /> : <Outlet />;
+    return token != null ? <Navigate to="/member" /> : <Outlet />;
 };
 
 export default PublicRoute;

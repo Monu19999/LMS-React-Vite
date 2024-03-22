@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "@src/features/app/AuthSlice";
 
 const isValidEmail = (email) => {
+<<<<<<< HEAD
   const emailRegex = /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i;
   console.log("email => ", emailRegex.test(email));
   return emailRegex.test(email);
+=======
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i;
+    return emailRegex.test(email);
+>>>>>>> origin/harsh-work
 };
 
 const isValidPassword = (password) => {
@@ -16,12 +21,21 @@ const isValidPassword = (password) => {
 };
 
 export default function Login() {
+<<<<<<< HEAD
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
     email: "",
     password: "",
   });
+=======
+    const [email, setEmail] = useState("hw.sharma9@mp.gov.in");
+    const [password, setPassword] = useState("password");
+    const [errors, setErrors] = useState({
+        email: "",
+        password: "",
+    });
+>>>>>>> origin/harsh-work
 
   const auth_state = useSelector((state) => state.auth);
 
@@ -29,6 +43,7 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+<<<<<<< HEAD
   const saveEmployee = async (e) => {
     e.preventDefault();
     // console.log(validateForm());
@@ -43,6 +58,21 @@ export default function Login() {
       }
     }
   };
+=======
+    const saveEmployee = async (e) => {
+        e.preventDefault();
+        // console.log(validateForm());
+        if (validateForm()) {
+            const employee = { email, password };
+
+            let response = await dispatch(login(employee));
+
+            if (auth_state.error_message == "") {
+                navigate("/member");
+            }
+        }
+    };
+>>>>>>> origin/harsh-work
 
   const validateForm = () => {
     let valid = true;
