@@ -102,7 +102,7 @@ export default function Login() {
                     <div className="d-flex flex-column">
                         <label
                             htmlFor="email"
-                            className="from-label font-weight-bold"
+                            className="form-label font-weight-bold"
                         >
                             Email
                         </label>
