@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import logo from "@public/assets/img/logo.png";
 import { mobileNavToggle } from "@src/features/app/AppSlice";
 import { useDispatch } from "react-redux";
-import { Button } from "react-bootstrap";
 
 function Navbar(props) {
     const dispatch = useDispatch();
@@ -137,7 +135,7 @@ function Navbar(props) {
                                         className="navbar-brand d-flex align-items-center px-4 p-4"
                                     >
                                         <img
-                                            src="assets/img/logo.png"
+                                            src="/assets/img/logo.png"
                                             alt="logo.png"
                                         />
                                         <div
