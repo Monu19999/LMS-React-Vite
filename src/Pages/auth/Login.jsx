@@ -43,22 +43,6 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-<<<<<<< HEAD
-  const saveEmployee = async (e) => {
-    e.preventDefault();
-    // console.log(validateForm());
-    if (validateForm()) {
-      const employee = { email, password };
-      console.log(employee);
-      let response = await dispatch(login(employee));
-      // console.log("response => ", response);
-      console.log("auth_state => ", auth_state);
-      if (auth_state.error_message == "") {
-        navigate("/front");
-      }
-    }
-  };
-=======
     const saveEmployee = async (e) => {
         e.preventDefault();
         // console.log(validateForm());
@@ -72,7 +56,6 @@ export default function Login() {
             }
         }
     };
->>>>>>> origin/harsh-work
 
   const validateForm = () => {
     let valid = true;

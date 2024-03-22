@@ -11,39 +11,7 @@ import UserDashboard from "@src/Pages/member/UserDashboard";
 import UserLayout from "@src/Components/Layout/UserLayout";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
-<<<<<<< HEAD
-import Register from "./Pages/auth/Register";
-
-function App() {
-  const token = useSelector((state) => state.auth.token);
-  return (
-    <>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route exact path="dashboard" element={<Home />} />
-          <Route exact path="page/:page" element={<Page />} />
-          <Route exact path="courses" element={<CoursesList />} />
-          <Route exact path="course/:course_id/show" element={<CourseView />} />
-          <Route path="*" element={<Home />} />
-        </Route>
-        <Route path="/auth" element={<PublicRoute />}>
-          <Route path="/auth" element={<GuestLayout />}>
-            <Route index element={<Login />} />
-            <Route exact path="login" element={<Login />} />
-            <Route exact path="register" element={<Register />} />
-          </Route>
-        </Route>
-
-        <Route path="/front" element={<PrivateRoute />}>
-          <Route path="/front" element={<UserLayout />}>
-            <Route index element={<UserDashboard />} />
-          </Route>
-        </Route>
-      </Routes>
-    </>
-  );
-=======
+import Register from "@src/Pages/auth/Register";
 import MyCourses from "@src/Pages/member/MyCourses";
 import MyCertificates from "@src/Pages/member/MyCertificates";
 import AvailableCourses from "@src/Pages/member/AvailableCourses";
@@ -78,6 +46,7 @@ function App() {
                     <Route path="/auth" element={<GuestLayout />}>
                         <Route index element={<Login />} />
                         <Route exact path="login" element={<Login />} />
+                        <Route exact path="register" element={<Register />} />
                     </Route>
                 </Route>
                 <Route path="/member" element={<PrivateRoute />}>
@@ -103,7 +72,6 @@ function App() {
             </Routes>
         </>
     );
->>>>>>> origin/harsh-work
 }
 
 export default App;
