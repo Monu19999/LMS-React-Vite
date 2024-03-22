@@ -35,7 +35,7 @@ const MyCourses = () => {
                         data-bs-parent="#accordionExample"
                     >
                         <div class="accordion-body">
-                            {member?.my_courses?.my_courses.map((course) => {
+                            {/* {member?.my_courses?.my_courses.map((course) => {
                                 return (
                                     <div
                                         className="col-lg-4 col-md-6 mb-4"
@@ -44,7 +44,7 @@ const MyCourses = () => {
                                         <CourseItem course={course} />
                                     </div>
                                 );
-                            })}
+                            })} */}
                         </div>
                     </div>
                 </div>

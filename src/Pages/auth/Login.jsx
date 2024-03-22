@@ -139,23 +139,32 @@ export default function Login() {
                         <span>Remember me</span>
                     </div>
 
-                    <div className="d-flex gap-3 align-items-center justify-content-end">
-                        <Link
-                            to="/auth/forget-password"
-                            style={{ textDecoration: "underline" }}
-                            className="text-dark"
-                        >
-                            <span
-                                onMouseEnter={(e) => {
-                                    e.target.style.color = "blue";
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.target.style.color = "black";
-                                }}
+                    <div className="d-flex gap-1 align-items-center justify-content-end">
+                        <div className="d-flex flex-col flex-wrap">
+                            <Link
+                                to="/auth/forget-password"
+                                style={{ textDecoration: "underline" }}
+                                className="text-dark"
                             >
-                                Forgot your Password?
-                            </span>
-                        </Link>
+                                <span
+                                    onMouseEnter={(e) => {
+                                        e.target.style.color = "blue";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.target.style.color = "black";
+                                    }}
+                                >
+                                    Forgot your Password?
+                                </span>
+                            </Link>
+                            <Link
+                                to="/auth/register"
+                                style={{ textDecoration: "underline" }}
+                                className="text-dark"
+                            >
+                                Register a new membership
+                            </Link>
+                        </div>
                         <button
                             style={{
                                 borderRadius: "8px",
