@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, redirect } from "react-router-dom";
+import { Route, Routes,} from "react-router-dom";
 import Home from "@src/Pages/Home";
 import Page from "@src/Pages/Page";
 import CoursesList from "@src/Pages/courses/CoursesList";
@@ -11,6 +11,7 @@ import UserDashboard from "@src/Pages/member/UserDashboard";
 import UserLayout from "@src/Components/Layout/UserLayout";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
+import Register from "@src/Pages/auth/Register";
 import MyCourses from "@src/Pages/member/MyCourses";
 import MyCertificates from "@src/Pages/member/MyCertificates";
 import AvailableCourses from "@src/Pages/member/AvailableCourses";
@@ -45,6 +46,7 @@ function App() {
                     <Route path="/auth" element={<GuestLayout />}>
                         <Route index element={<Login />} />
                         <Route exact path="login" element={<Login />} />
+                        <Route exact path="register" element={<Register />} />
                     </Route>
                 </Route>
                 <Route path="/member" element={<PrivateRoute />}>
