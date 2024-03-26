@@ -15,8 +15,8 @@ const isValidEmail = (email) => {
 // };
 
 export default function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("hw.sharma9@mp.gov.in");
+    const [password, setPassword] = useState("password");
     const [errors, setErrors] = useState({
         email: "",
         password: "",

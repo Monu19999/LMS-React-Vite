@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userCourses } from "@src/features/member/MemberSlice";
-import CourseItem from "../courses/includes/CourseItem";
+import CourseItem from "@src/Pages/courses/includes/CourseItem";
 
 const MyCourses = () => {
     const dispatch = useDispatch();
@@ -34,8 +34,8 @@ const MyCourses = () => {
                         className="accordion-collapse collapse show"
                         data-bs-parent="#accordionExample"
                     >
-                        <div class="accordion-body">
-                            {/* {member?.my_courses?.my_courses.map((course) => {
+                        <div className="accordion-body">
+                            {member?.my_courses?.my_courses.map((course) => {
                                 return (
                                     <div
                                         className="col-lg-4 col-md-6 mb-4"
@@ -44,7 +44,7 @@ const MyCourses = () => {
                                         <CourseItem course={course} />
                                     </div>
                                 );
-                            })} */}
+                            })}
                         </div>
                     </div>
                 </div>

@@ -1,26 +1,66 @@
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { enrollCourse } from "@src/features/app/CourseSlice";
 
-function CourseItem({ course }) {
+function Enrolled({ course }) {
+    const auth_states = useSelector((state) => state.auth);
+
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const course_states = useSelector((state) => state.course);
-
-    const handleEnroll = () => {
+    const handleEnroll = async () => {
         // console.log("enroll course");
-        dispatch(enrollCourse(course.id));
-        console.log(course_states);
+        let response = await dispatch(enrollCourse(course.id));
+        if (
+            response.payload.hasOwnProperty("message") &&
+            response.payload.message === "Unauthenticated."
+        ) {
+            navigate("/auth/login");
+        }
     };
 
+    if (auth_states?.user) {
+        // console.log(course.enrollments);
+        // console.log(auth_states.user);
+        if (course?.enrollments?.length === 1) {
+            if (course.enrollments[0].fk_user_id == auth_states.user.id) {
+                return (
+                    <button
+                        type="button"
+                        className="flex-shrink-0 btn btn-sm btn-primary px-3"
+                        style={{
+                            borderRadius: "0 30px 30px 0",
+                        }}
+                    >
+                        Enrolled
+                    </button>
+                );
+            }
+        }
+    }
+    return (
+        <button
+            type="button"
+            onClick={handleEnroll}
+            className="flex-shrink-0 btn btn-sm btn-primary px-3"
+            style={{
+                borderRadius: "0 30px 30px 0",
+            }}
+        >
+            Enroll Now
+        </button>
+    );
+}
+
+function CourseItem({ course }) {
     return (
         <div className="course-item bg-light">
             <div className="position-relative overflow-hidden">
                 <img
                     className="img-fluid"
                     src={
-                        course?.upload?.file_path ??
-                        "/public/assets/img/course-1.jpg"
+                        course?.upload?.file_path ?? "/assets/img/course-1.jpg"
                     }
                     alt={course?.upload?.original_name}
                 />
@@ -34,16 +74,7 @@ function CourseItem({ course }) {
                     >
                         View
                     </Link>
-                    <button
-                        type="button"
-                        onClick={handleEnroll}
-                        className="flex-shrink-0 btn btn-sm btn-primary px-3"
-                        style={{
-                            borderRadius: "0 30px 30px 0",
-                        }}
-                    >
-                        Enroll Now
-                    </button>
+                    <Enrolled course={course} />
                 </div>
             </div>
             <div className="text-center p-4 pb-0 min-h">
