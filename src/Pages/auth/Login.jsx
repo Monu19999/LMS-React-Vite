@@ -79,8 +79,8 @@ export default function Login() {
                 <img
                     height={64}
                     width={64}
-                    src="/public/assets/img/logo.png"
-                    alt=""
+                    src="assets/img/logo.png"
+                    alt="logo"
                 />
             </div>
 
