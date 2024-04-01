@@ -2,6 +2,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userCourses } from "@src/features/member/MemberSlice";
 import CourseItem from "@src/Pages/courses/includes/CourseItem";
+import {
+    Accordion,
+    AccordionBody,
+    AccordionButton,
+    AccordionItem,
+} from "react-bootstrap";
 
 const MyCourses = () => {
     const dispatch = useDispatch();
@@ -14,8 +20,25 @@ const MyCourses = () => {
 
     return (
         <>
-            <h1>My Courses</h1>
-            <div className="accordion" id="accordionExample">
+            <h2 className="mb-4">My Courses</h2>
+            <Accordion>
+                <AccordionItem>
+                    <AccordionButton>PHP</AccordionButton>
+                    <AccordionBody>
+                        {member?.my_courses?.my_courses.map((course) => {
+                            return (
+                                <div
+                                    className="col-lg-4 col-md-6 mb-4"
+                                    key={course.id}
+                                >
+                                    <CourseItem course={course} />
+                                </div>
+                            );
+                        })}
+                    </AccordionBody>
+                </AccordionItem>
+            </Accordion>
+            {/* <div className="accordion" id="accordionExample">
                 <div className="accordion-item">
                     <h2 className="accordion-header">
                         <button
@@ -26,7 +49,7 @@ const MyCourses = () => {
                             aria-expanded="true"
                             aria-controls="collapseOne"
                         >
-                            Accordion Item #1
+                            PHP
                         </button>
                     </h2>
                     <div
@@ -48,7 +71,7 @@ const MyCourses = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </>
     );
 };

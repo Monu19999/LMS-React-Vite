@@ -131,7 +131,7 @@ function Navbar(props) {
                                 </div>
                                 <div className="navbar-2">
                                     <Link
-                                        to="/"
+                                        to="/dashboard"
                                         className="navbar-brand d-flex align-items-center px-4 p-4"
                                     >
                                         <img

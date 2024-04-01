@@ -4,8 +4,6 @@ import useFetch from "@src/Hooks/useFetch";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import parse from "html-react-parser";
 import api from "@src/apis/api";
-import image from "@public/assets/img/e-book.png";
-import { Breadcrumb } from "react-bootstrap";
 
 function Page() {
     let { page } = useParams();

@@ -1,6 +1,5 @@
 import React from "react";
 import OwlCarousel from "react-owl-carousel";
-import "../../../public/assets/lib/owlcarousel/assets/owl.carousel.min.css";
 
 function FooterSlider() {
     const options = {
@@ -12,7 +11,7 @@ function FooterSlider() {
         smartSpeed: 450,
         autoplay: true,
         loop: true,
-        navText: ["<img src='prevArrow.png'>", "<img src='nextArrow.png'>"],
+        // navText: ["<img src='prevArrow.png'>", "<img src='nextArrow.png'>"],
         dots: false,
         responsiveClass: true,
         responsive: {

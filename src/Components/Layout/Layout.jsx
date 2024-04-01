@@ -7,10 +7,10 @@ import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import api from "@src/apis/api";
 
 // Load css
-import "@public/assets/css/bootstrap.min.css";
-import "@public/assets/css/style.css";
-import "@public/assets/css/change.css";
-import "@public/assets/lib/animate/animate.min.css";
+// import "@public/assets/css/bootstrap.min.css";
+// import "@public/assets/css/style.css";
+// import "@public/assets/css/change.css";
+// import "@public/assets/lib/animate/animate.min.css";
 
 // import "@public/assets/lib/wow/wow.min.js";
 // import "@public/assets/lib/easing/easing.min.js";
@@ -86,7 +86,7 @@ export default function Layout() {
 
             {/* Back to Top */}
             <a
-                href="index.html"
+                href="#"
                 className="btn btn-lg btn-primary btn-lg-square back-to-top"
             >
                 <i className="bi bi-arrow-up" />
