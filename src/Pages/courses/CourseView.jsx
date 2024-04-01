@@ -5,6 +5,7 @@ import parse from "html-react-parser";
 import { getCourse } from "@src/features/app/CourseSlice";
 import ShowImage from "@src/Utilities/ShowImage";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import Enrolled from "./includes/EnrollCourse";
 
 function CourseView() {
     let { course_id } = useParams();
@@ -238,10 +239,10 @@ function CourseView() {
                                 </div>
                                 <div className="col-12 mt-4 text-center mb-4">
                                     <Link
-                                        className="btn btn-primary px-4"
+                                        
                                         to="/"
                                     >
-                                        Enroll Now
+                                       <Enrolled className="btn btn-primary px-4" />
                                     </Link>
                                 </div>
                             </div>

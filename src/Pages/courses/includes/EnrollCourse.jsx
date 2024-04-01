@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { enrollCourse } from "@src/features/app/CourseSlice";
 
-function Enrolled({ course }) {
+function Enrolled({ course , className, style}) {
     const auth_states = useSelector((state) => state.auth);
 
     const dispatch = useDispatch();
@@ -40,10 +40,8 @@ function Enrolled({ course }) {
         <button
             type="button"
             onClick={handleEnroll}
-            className="flex-shrink-0 btn btn-sm btn-primary px-3"
-            style={{
-                borderRadius: "0 30px 30px 0",
-            }}
+        className={className}
+            style={style}
         >
             Enroll Now
         </button>
