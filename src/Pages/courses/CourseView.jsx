@@ -242,7 +242,7 @@ function CourseView() {
                                         
                                         to="/"
                                     >
-                                       <Enrolled className="btn btn-primary px-4" />
+                                       <Enrolled course={course} className="btn btn-primary px-4" />
                                     </Link>
                                 </div>
                             </div>

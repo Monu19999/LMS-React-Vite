@@ -25,10 +25,8 @@ function Enrolled({ course , className, style}) {
                 return (
                     <button
                         type="button"
-                        className="flex-shrink-0 btn btn-sm btn-primary px-3"
-                        style={{
-                            borderRadius: "0 30px 30px 0",
-                        }}
+                        className={className}
+                        style={style || {}}
                     >
                         Enrolled
                     </button>
@@ -41,7 +39,7 @@ function Enrolled({ course , className, style}) {
             type="button"
             onClick={handleEnroll}
         className={className}
-            style={style}
+            style={style || {}}
         >
             Enroll Now
         </button>
