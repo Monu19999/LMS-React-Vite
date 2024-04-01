@@ -139,8 +139,11 @@ export default function Login() {
                         <span>Remember me</span>
                     </div>
 
-                    <div className="d-flex gap-1 align-items-center justify-content-end">
-                        <div className="d-flex flex-col flex-wrap">
+                    <div className="d-flex gap-1 align-items-center">
+                        <div
+                            className="d-flex flex-wrap"
+                            style={{ width: "70%", textAlign: "left" }}
+                        >
                             <Link
                                 to="/auth/forget-password"
                                 style={{ textDecoration: "underline" }}
