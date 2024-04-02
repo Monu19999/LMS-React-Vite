@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import api from "@src/apis/api";
 import Cookies from "js-cookie";
 
@@ -118,6 +118,24 @@ export const enrollCourse = createAsyncThunk(
     }
 );
 
+const replaceCourse = (current, course) => {
+    console.log("current", current);
+    let update_courses = { ...current };
+    console.log("current data", update_courses);
+    console.log("current course", course);
+    let index = update_courses.findIndex((c) => c.id == course.id);
+    console.log("index", index);
+    console.log("update_courses.data", update_courses[index]);
+    console.log("course", course);
+    if (index >= 0) {
+        delete update_courses[index];
+        console.log("update_courses 1", update_courses[index]);
+        update_courses[index] = course;
+    }
+    console.log("update_courses", update_courses);
+    return update_courses;
+};
+
 export const courseSlice = createSlice({
     name: "course",
     initialState,
@@ -137,7 +155,7 @@ export const courseSlice = createSlice({
             })
             .addCase(getCourses.fulfilled, (state, { payload }) => {
                 state.loading = false;
-                state.courses = payload;
+                state.courses = payload.courses;
                 state.isSuccess = true;
             })
             .addCase(getCourses.rejected, (state, { payload }) => {
@@ -177,12 +195,22 @@ export const courseSlice = createSlice({
                 if (payload.hasOwnProperty("message")) {
                     state.error_message = payload.message;
                 } else {
-                    console.log("successfull!");
+                    console.log("successfulls!");
                     state.loading = false;
                     state.course = payload.course;
                     state.isSuccess = true;
                     state.errors = [];
                     state.error_message = null;
+                    // console.log(current(state));
+                    // let current_state = current(state);
+                    // console.log(
+                    //     "replaceCourse => ",
+                    //     replaceCourse(
+                    //         current_state.courses.data,
+                    //         current_state.course
+                    //     )
+                    // );
+                    // state.courses = current_state;
                 }
             })
             .addCase(enrollCourse.rejected, (state, { payload }) => {

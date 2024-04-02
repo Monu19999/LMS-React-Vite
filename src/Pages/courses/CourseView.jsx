@@ -10,10 +10,9 @@ import Enrolled from "./includes/EnrollCourse";
 function CourseView() {
     let { course_id } = useParams();
 
-    const { course, loading } = useSelector((state) => {
-        return state.course;
-    });
-    // console.log(course);
+    const loading = useSelector((state) => state.course.loading);
+    const course = useSelector((state) => state.course.course);
+    console.log(course);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -22,7 +21,7 @@ function CourseView() {
         }
     }, []);
 
-    if (loading) return <BootstrapSpinner />;
+    // if (loading) return <BootstrapSpinner />;
 
     let topics = () => {
         if (course?.topics) {
@@ -86,7 +85,7 @@ function CourseView() {
             );
         }
     };
-    const created_at = new Date(course.created_at);
+    const created_at = new Date(course?.created_at);
     return (
         <>
             <div
@@ -227,7 +226,7 @@ function CourseView() {
                                                 {course.topics.length} topics
                                             </li>
                                         )}
-                                        {course.topics_uploads_count > 0 && (
+                                        {course?.topics_uploads_count > 0 && (
                                             <li>
                                                 {course.topics_uploads_count}{" "}
                                                 downloadable resources

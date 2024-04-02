@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { enrollCourse } from "@src/features/app/CourseSlice";
+import { enrollCourse, getCourses } from "@src/features/app/CourseSlice";
 
 function Enrolled({ course, className, style }) {
     const auth_states = useSelector((state) => state.auth);
@@ -8,7 +8,8 @@ function Enrolled({ course, className, style }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleEnroll = async () => {
+    const handleEnroll = async (e) => {
+        e.preventDefault();
         console.log("enroll course");
         let response = await dispatch(enrollCourse(course.id));
         console.log(response);
@@ -18,11 +19,11 @@ function Enrolled({ course, className, style }) {
         ) {
             navigate("/auth/login");
         }
+        await dispatch(getCourses());
     };
 
     const hasEnrolled = function (enrolments) {
         if (enrolments) {
-            console.log("here");
             let enrolled_user = enrolments.filter((enrolment) => {
                 if (
                     enrolment.fk_user_id == auth_states.user.id &&

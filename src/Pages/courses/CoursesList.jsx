@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 
 function CoursesList() {
     const navigate = useNavigate();
-    const [is_params_changed, setParamsChanged] = useState(false);
 
     const { departments, app_loading } = useSelector((state) => state.app);
     const { courses, loading, search } = useSelector((state) => state.course);
@@ -25,8 +24,6 @@ function CoursesList() {
     useEffect(() => {
         dispatch(getCourses(navigate));
     }, []);
-
-    // if (loading) return <p>Loading...</p>;
 
     let handleFormFilter = (e) => {
         e.preventDefault();
@@ -219,8 +216,8 @@ function CoursesList() {
                                 {loading ? (
                                     <BootstrapSpinner />
                                 ) : (
-                                    courses?.courses?.data &&
-                                    courses.courses.data.map((course) => {
+                                    courses?.data &&
+                                    courses.data.map((course) => {
                                         return (
                                             <div
                                                 className="col-lg-4 col-md-6 mb-4"
