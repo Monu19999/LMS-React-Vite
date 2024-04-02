@@ -8,8 +8,9 @@ function Enrolled({ course , className, style}) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleEnroll = async () => {
+    const handleEnroll = async (event) => {
         // console.log("enroll course");
+        event.preventDefault();
         let response = await dispatch(enrollCourse(course.id));
         if (
             response.payload.hasOwnProperty("message") &&
