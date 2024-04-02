@@ -14,7 +14,7 @@ import parse from "html-react-parser";
 
 export default function Home() {
     const { homedata, home_loading } = useSelector((state) => state.home);
-    const { courses, loading } = useSelector((state) => state.course);
+    const { courses, course_loading } = useSelector((state) => state.course);
 
     //   console.log(courses);
     const dispatch = useDispatch();
@@ -73,7 +73,6 @@ export default function Home() {
         },
     };
 
-    if (loading) return <BootstrapSpinner />;
     // console.log(courses.courses?.data);
     return (
         <>
@@ -333,28 +332,32 @@ export default function Home() {
                     >
                         <h1 className="mb-5">Our Courses</h1>
                     </div>
-                    <OwlCarousel
-                        className="owl-carousel courses-carousel position-relative"
-                        {...course_options}
-                    >
-                        {courses?.data &&
-                            courses.data.length >= 0 &&
-                            courses.data.map((course) => {
-                                return (
-                                    <div
-                                        className="owl-carousel-item active"
-                                        key={course.id}
-                                    >
+                    {course_loading ? (
+                        <BootstrapSpinner />
+                    ) : (
+                        <OwlCarousel
+                            className="owl-carousel courses-carousel position-relative"
+                            {...course_options}
+                        >
+                            {courses?.data &&
+                                courses.data.length >= 0 &&
+                                courses.data.map((course) => {
+                                    return (
                                         <div
-                                            className="wow fadeInUp"
-                                            data-wow-delay="0.1s"
+                                            className="owl-carousel-item active"
+                                            key={course.id}
                                         >
-                                            <CourseItem course={course} />
+                                            <div
+                                                className="wow fadeInUp"
+                                                data-wow-delay="0.1s"
+                                            >
+                                                <CourseItem course={course} />
+                                            </div>
                                         </div>
-                                    </div>
-                                );
-                            })}
-                    </OwlCarousel>
+                                    );
+                                })}
+                        </OwlCarousel>
+                    )}
                     <div className="col-12 text-center">
                         <Link
                             className="btn btn-primary py-2 px-4 mt-4"

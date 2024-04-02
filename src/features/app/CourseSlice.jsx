@@ -10,7 +10,7 @@ const initialState = {
         department: "",
         course_name: "",
     },
-    loading: false,
+    course_loading: false,
     isSuccess: false,
     message: "",
 
@@ -151,29 +151,29 @@ export const courseSlice = createSlice({
         builder
             // Getting all courses
             .addCase(getCourses.pending, (state, { payload }) => {
-                state.loading = true;
+                state.course_loading = true;
             })
             .addCase(getCourses.fulfilled, (state, { payload }) => {
-                state.loading = false;
+                state.course_loading = false;
                 state.courses = payload.courses;
                 state.isSuccess = true;
             })
             .addCase(getCourses.rejected, (state, { payload }) => {
                 state.message = payload;
-                state.loading = false;
+                state.course_loading = false;
                 state.isSuccess = false;
             })
 
             // Getting Course detail
             .addCase(getCourse.pending, (state, { payload }) => {
-                state.loading = true;
+                state.course_loading = true;
             })
             .addCase(getCourse.fulfilled, (state, { payload }) => {
                 if (payload.hasOwnProperty("errors")) {
                     state.errors = payload.errors;
                     state.error_message = payload.message;
                 } else {
-                    state.loading = false;
+                    state.course_loading = false;
                     state.course = payload.course;
                     state.isSuccess = true;
                     state.errors = [];
@@ -182,13 +182,13 @@ export const courseSlice = createSlice({
             })
             .addCase(getCourse.rejected, (state, { payload }) => {
                 state.message = payload;
-                state.loading = false;
+                state.course_loading = false;
                 state.isSuccess = false;
             })
 
             // Course enroll
             .addCase(enrollCourse.pending, (state, { payload }) => {
-                state.loading = true;
+                state.course_loading = true;
             })
             .addCase(enrollCourse.fulfilled, (state, { payload }) => {
                 console.log(payload);
@@ -196,7 +196,7 @@ export const courseSlice = createSlice({
                     state.error_message = payload.message;
                 } else {
                     console.log("successfulls!");
-                    state.loading = false;
+                    state.course_loading = false;
                     state.course = payload.course;
                     state.isSuccess = true;
                     state.errors = [];
@@ -215,7 +215,7 @@ export const courseSlice = createSlice({
             })
             .addCase(enrollCourse.rejected, (state, { payload }) => {
                 state.message = payload;
-                state.loading = false;
+                state.course_loading = false;
                 state.isSuccess = false;
             });
     },
