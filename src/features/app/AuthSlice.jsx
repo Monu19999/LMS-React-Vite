@@ -136,7 +136,7 @@ export const authSlice = createSlice({
                 state.user_loading = true;
                 state.error_message = null;
             })
-            .addCase(register.fulfilled, (state, action) => {
+            .addCase(register.fulfilled, (state, { payload }) => {
                 if (payload.hasOwnProperty("errors")) {
                     console.log(payload.message);
                     state.errors = payload.errors;

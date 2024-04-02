@@ -67,12 +67,21 @@ export const getCourses = createAsyncThunk(
 );
 
 export const getCourse = createAsyncThunk("course/getCourse", async (id) => {
-    const response = await fetch(api("course", id), {
+    let api_url = api("course", id);
+
+    let headers = {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    };
+    const token =
+        Cookies.get("token") == undefined ? null : Cookies.get("token");
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
+        api_url = api("auth_course", id);
+    }
+    const response = await fetch(api_url, {
         method: "get",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
+        headers,
         cache: "no-cache",
     });
     const json = await response.json();
@@ -95,7 +104,6 @@ export const enrollCourse = createAsyncThunk(
             const response = await fetch(api("auth_course_enroll", id), {
                 method: "post",
                 headers,
-                cache: "no-cache",
             });
             const json = await response.json();
             if (response.status !== 200) {
@@ -165,9 +173,11 @@ export const courseSlice = createSlice({
                 state.loading = true;
             })
             .addCase(enrollCourse.fulfilled, (state, { payload }) => {
+                console.log(payload);
                 if (payload.hasOwnProperty("message")) {
                     state.error_message = payload.message;
                 } else {
+                    console.log("successfull!");
                     state.loading = false;
                     state.course = payload.course;
                     state.isSuccess = true;

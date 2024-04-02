@@ -238,12 +238,10 @@ function CourseView() {
                                     </ul>
                                 </div>
                                 <div className="col-12 mt-4 text-center mb-4">
-                                    <Link
-                                        
-                                        to="/"
-                                    >
-                                       <Enrolled course={course} className="btn btn-primary px-4" />
-                                    </Link>
+                                    <Enrolled
+                                        course={course}
+                                        className="btn btn-primary px-4"
+                                    />
                                 </div>
                             </div>
                         </div>

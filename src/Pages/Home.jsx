@@ -240,7 +240,7 @@ export default function Home() {
                                         {homedata.page.title_en}
                                     </h1>
                                     <div className="mb-4">
-                                        {homedata.page.description_en}
+                                        {parse(homedata.page.description_en)}
                                     </div>
                                     <Link
                                         className="btn btn-primary py-2 px-4 mt-2"

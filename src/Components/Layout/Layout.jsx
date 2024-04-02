@@ -5,6 +5,9 @@ import { Outlet } from "react-router-dom";
 import useFetch from "@src/Hooks/useFetch";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import api from "@src/apis/api";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getAppData } from "@src/features/app/AppSlice";
 
 // Load css
 // import "@public/assets/css/bootstrap.min.css";
@@ -20,24 +23,26 @@ import api from "@src/apis/api";
 
 export default function Layout() {
     const { isLoading, serverError, apiData } = useFetch("GET", api("api"), {});
+    // const { app_state, app_loading } = useSelector((state) => state.app);
+
+    // const dispatch = useDispatch();
+    // useEffect(() => {
+    //     dispatch(getAppData());
+    // }, []);
+    // if (app_loading) return <BootstrapSpinner />;
+
+    // let nevbar = () => {
+    //     if (app_state?.data?.top_menus) {
+    //         console.log("yes");
+    //     } else {
+    //         console.log("no");
+    //     }
+    // };
+
     return (
         <>
-            {/* Spinner Start */}
-            {/* <div
-                id="spinner"
-                className="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
-            >
-                <div
-                    className="spinner-border text-primary"
-                    style={{ width: "3rem", height: "3rem" }}
-                    role="status"
-                >
-                    <span className="sr-only">Loading...</span>
-                </div>
-            </div> */}
             {/* Spinner End */}
             <Settings />
-            {isLoading && <BootstrapSpinner />}
             {apiData?.data.top_menus && (
                 <Navbar menus={apiData.data.top_menus} />
             )}

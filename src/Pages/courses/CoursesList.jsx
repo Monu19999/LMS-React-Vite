@@ -12,7 +12,7 @@ function CoursesList() {
     const navigate = useNavigate();
     const [is_params_changed, setParamsChanged] = useState(false);
 
-    const { departments, dept_loading } = useSelector((state) => state.app);
+    const { departments, app_loading } = useSelector((state) => state.app);
     const { courses, loading, search } = useSelector((state) => state.course);
 
     const dispatch = useDispatch();

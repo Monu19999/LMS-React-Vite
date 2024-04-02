@@ -21,23 +21,25 @@ const MyCourses = () => {
     return (
         <>
             <h2 className="mb-4">My Courses</h2>
-            <Accordion>
-                <AccordionItem>
-                    <AccordionButton>PHP</AccordionButton>
-                    <AccordionBody>
-                        {member?.my_courses?.my_courses.map((course) => {
-                            return (
-                                <div
-                                    className="col-lg-4 col-md-6 mb-4"
-                                    key={course.id}
-                                >
-                                    <CourseItem course={course} />
-                                </div>
-                            );
-                        })}
-                    </AccordionBody>
-                </AccordionItem>
-            </Accordion>
+            {member?.my_courses?.my_courses.length > 0 && (
+                <Accordion>
+                    <AccordionItem>
+                        <AccordionButton>PHP</AccordionButton>
+                        <AccordionBody>
+                            {member?.my_courses?.my_courses.map((course) => {
+                                return (
+                                    <div
+                                        className="col-lg-4 col-md-6 mb-4"
+                                        key={course.id}
+                                    >
+                                        <CourseItem course={course} />
+                                    </div>
+                                );
+                            })}
+                        </AccordionBody>
+                    </AccordionItem>
+                </Accordion>
+            )}
             {/* <div className="accordion" id="accordionExample">
                 <div className="accordion-item">
                     <h2 className="accordion-header">

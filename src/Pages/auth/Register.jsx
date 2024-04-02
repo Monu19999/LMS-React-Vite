@@ -136,6 +136,11 @@ export default function Register() {
                 className="card d-flex align-items-center shadow-sm p-3 bg-white"
                 style={{ borderRadius: "10px", width: "400px" }}
             >
+                {auth_state?.error_message && (
+                    <div className="alert alert-danger alert-block mt-3 ml-3 mr-3">
+                        <strong>{auth_state.error_message}</strong>
+                    </div>
+                )}
                 <form
                     className="d-flex py-3 w-100 flex-column gap-3"
                     onSubmit={saveEmployee}
