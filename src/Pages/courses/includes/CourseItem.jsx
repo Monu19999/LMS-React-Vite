@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
 import Enrolled from "./EnrollCourse";
+import { useSelector } from "react-redux";
+import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 
 function CourseItem({ course }) {
+    const course_enrolment_loading = useSelector(
+        (state) => state.course.course_enrolment_loading
+    );
     return (
         <div className="course-item bg-light">
             <div className="position-relative overflow-hidden">
@@ -26,6 +31,7 @@ function CourseItem({ course }) {
                         style={{
                             borderRadius: "0 30px 30px 0",
                         }}
+                        course_enrolment_loading={course_enrolment_loading}
                     />
                 </div>
             </div>

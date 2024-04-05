@@ -15,8 +15,8 @@ const isValidEmail = (email) => {
 // };
 
 export default function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("hw.sharma9@mp.gov.in");
+    const [password, setPassword] = useState("password");
     const [errors, setErrors] = useState({
         email: "",
         password: "",
@@ -76,12 +76,14 @@ export default function Login() {
     return (
         <div className="d-flex flex-column my-3 gap-3 align-items-center">
             <div className="d-flex justify-content-center">
-                <img
-                    height={64}
-                    width={64}
-                    src="assets/img/logo.png"
-                    alt="logo"
-                />
+                <Link to="/">
+                    <img
+                        height={64}
+                        width={64}
+                        src="assets/img/logo.png"
+                        alt="logo"
+                    />
+                </Link>
             </div>
 
             <div

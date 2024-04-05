@@ -12,7 +12,9 @@ function CoursesList() {
     const navigate = useNavigate();
 
     const { departments, app_loading } = useSelector((state) => state.app);
-    const { courses, loading, search } = useSelector((state) => state.course);
+    const { courses, course_loading, search } = useSelector(
+        (state) => state.course
+    );
 
     const dispatch = useDispatch();
 
@@ -213,7 +215,7 @@ function CoursesList() {
                                 <h1 className="mb-5">All Courses</h1>
                             </div>
                             <div className="row">
-                                {loading ? (
+                                {course_loading ? (
                                     <BootstrapSpinner />
                                 ) : (
                                     courses?.data &&

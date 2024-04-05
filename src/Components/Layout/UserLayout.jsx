@@ -12,10 +12,10 @@ function UserLayout() {
     const member = useSelector((state) => state.member);
     const auth_state = useSelector((state) => state.auth);
 
-    const handleLogout = (e) => {
+    const handleLogout = async (e) => {
         e.preventDefault();
-        dispatch(logout());
-        navigate("/auth/login");
+        let response = await dispatch(logout());
+        console.log(response);
     };
     return (
         <>

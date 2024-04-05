@@ -1,18 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { enrollCourse, getCourses } from "@src/features/app/CourseSlice";
+import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import { useEffect, useState } from "react";
 
-function Enrolled({ course, className, style }) {
+function Enrolled({ course, className, style, course_enrolment_loading }) {
     const auth_states = useSelector((state) => state.auth);
+    const [course_enrolment_loading1, setCourseEnrolmentLoading] = useState(
+        course_enrolment_loading
+    );
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const handleEnroll = async (e) => {
+        setCourseEnrolmentLoading(true);
         e.preventDefault();
-        console.log("enroll course");
-        let response = await dispatch(enrollCourse(course.id));
-        console.log(response);
+        let response = await dispatch(enrollCourse(course));
         if (
             response.payload.hasOwnProperty("message") &&
             response.payload.message === "Unauthenticated."
@@ -20,6 +23,7 @@ function Enrolled({ course, className, style }) {
             navigate("/auth/login");
         }
         await dispatch(getCourses());
+        setCourseEnrolmentLoading(false);
     };
 
     const hasEnrolled = function (enrolments) {
@@ -35,7 +39,6 @@ function Enrolled({ course, className, style }) {
             return enrolled_user.length > 0;
         }
     };
-
     if (auth_states?.user) {
         if (course?.enrollments?.length === 1) {
             // hasEnrolled(course.enrollments);
@@ -48,8 +51,9 @@ function Enrolled({ course, className, style }) {
                         type="button"
                         className={className}
                         style={style || {}}
+                        disabled={course_enrolment_loading1}
                     >
-                        Enrolled
+                        {course_enrolment_loading1 ? "Enroling..." : "Enrolled"}
                     </button>
                 );
             }
@@ -61,8 +65,9 @@ function Enrolled({ course, className, style }) {
             onClick={handleEnroll}
             className={className}
             style={style || {}}
+            disabled={course_enrolment_loading1}
         >
-            Enroll Now
+            {course_enrolment_loading1 ? "Enroling..." : "Enroll Now"}
         </button>
     );
 }

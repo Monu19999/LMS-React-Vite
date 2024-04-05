@@ -46,6 +46,34 @@ export const login = createAsyncThunk("auth/login", async (credentials) => {
         return error.cause;
     }
 });
+export const logout = createAsyncThunk(
+    "auth/logout",
+    async (args, { getState }) => {
+        let api_url = api("auth_logout");
+        try {
+            const state = getState();
+            const token = state.auth.token;
+            const response = await fetch(api_url, {
+                method: "delete",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                cache: "no-cache",
+            });
+            const json = await response.json();
+            if (response.status !== 200) {
+                throw new Error("Bad response", {
+                    cause: json,
+                });
+            }
+            return json;
+        } catch (error) {
+            return error.cause;
+        }
+    }
+);
 export const register = createAsyncThunk("auth/register", async (userData) => {
     // console.log(userData);
     let api_url = api("auth_register");
@@ -86,12 +114,12 @@ export const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        logout: (state) => {
-            Cookies.remove("token", "");
-            Cookies.remove("user", "");
-            state.user = null;
-            state.token = null;
-        },
+        // logout: (state) => {
+        //     Cookies.remove("token", "");
+        //     Cookies.remove("user", "");
+        //     state.user = null;
+        //     state.token = null;
+        // },
     },
     extraReducers: (builder) => {
         builder
@@ -131,6 +159,24 @@ export const authSlice = createSlice({
                 state.user_loading = false;
             })
 
+            // Logout User
+            .addCase(logout.pending, (state, { payload }) => {
+                state.user_loading = true;
+            })
+            .addCase(logout.fulfilled, (state, { payload }) => {
+                console.log(payload);
+                Cookies.remove("token", "");
+                Cookies.remove("user", "");
+                state.user = null;
+                state.token = null;
+                state.errors = [];
+                state.error_message = null;
+            })
+            .addCase(logout.rejected, (state, { payload }) => {
+                state.error_message = payload;
+                state.user_loading = false;
+            })
+
             //register user
             .addCase(register.pending, (state) => {
                 state.user_loading = true;
@@ -157,6 +203,6 @@ export const authSlice = createSlice({
     },
 });
 
-export const { logout } = authSlice.actions;
+// export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;

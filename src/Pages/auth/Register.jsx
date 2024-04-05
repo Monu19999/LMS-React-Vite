@@ -124,12 +124,14 @@ export default function Register() {
     return (
         <div className="d-flex flex-column my-3 gap-3 align-items-center">
             <div className="d-flex justify-content-center">
-                <img
-                    height={64}
-                    width={64}
-                    src="assets/img/logo.png"
-                    alt="logo"
-                />
+                <Link to="/">
+                    <img
+                        height={64}
+                        width={64}
+                        src="assets/img/logo.png"
+                        alt="logo"
+                    />
+                </Link>
             </div>
 
             <div

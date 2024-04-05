@@ -10,7 +10,9 @@ import Enrolled from "./includes/EnrollCourse";
 function CourseView() {
     let { course_id } = useParams();
 
-    const loading = useSelector((state) => state.course.loading);
+    const course_enrolment_loading = useSelector(
+        (state) => state.course.course_enrolment_loading
+    );
     const course = useSelector((state) => state.course.course);
     console.log(course);
     const dispatch = useDispatch();
@@ -183,10 +185,7 @@ function CourseView() {
                                         className="img-fluid"
                                         src={
                                             course?.upload?.file_path ??
-                                            ShowImage(
-                                                "http://164.100.196.171/learning_mng_sys/public/storage/App/Models/Course/bno0MRfE90.jpg",
-                                                null
-                                            )
+                                            "assets/img/course-1.jpg"
                                         }
                                     />
                                     <div
@@ -240,6 +239,9 @@ function CourseView() {
                                     <Enrolled
                                         course={course}
                                         className="btn btn-primary px-4"
+                                        course_enrolment_loading={
+                                            course_enrolment_loading
+                                        }
                                     />
                                 </div>
                             </div>

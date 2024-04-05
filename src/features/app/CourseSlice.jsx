@@ -11,6 +11,7 @@ const initialState = {
         course_name: "",
     },
     course_loading: false,
+    course_enrolment_loading: false,
     isSuccess: false,
     message: "",
 
@@ -90,7 +91,7 @@ export const getCourse = createAsyncThunk("course/getCourse", async (id) => {
 
 export const enrollCourse = createAsyncThunk(
     "course/enrollCourse",
-    async (id) => {
+    async (course) => {
         try {
             let headers = {
                 Accept: "application/json",
@@ -101,9 +102,14 @@ export const enrollCourse = createAsyncThunk(
             if (token) {
                 headers.Authorization = `Bearer ${token}`;
             }
-            const response = await fetch(api("auth_course_enroll", id), {
+            let data = JSON.stringify({
+                fk_department_id:
+                    course.assigned_admin.course_category.fk_department_id,
+            });
+            const response = await fetch(api("auth_course_enroll", course.id), {
                 method: "post",
                 headers,
+                body: data,
             });
             const json = await response.json();
             if (response.status !== 200) {
@@ -154,12 +160,14 @@ export const courseSlice = createSlice({
                 state.course_loading = true;
             })
             .addCase(getCourses.fulfilled, (state, { payload }) => {
+                state.course_enrolment_loading = false;
                 state.course_loading = false;
                 state.courses = payload.courses;
                 state.isSuccess = true;
             })
             .addCase(getCourses.rejected, (state, { payload }) => {
                 state.message = payload;
+                state.course_enrolment_loading = false;
                 state.course_loading = false;
                 state.isSuccess = false;
             })
@@ -188,15 +196,13 @@ export const courseSlice = createSlice({
 
             // Course enroll
             .addCase(enrollCourse.pending, (state, { payload }) => {
-                state.course_loading = true;
+                state.course_enrolment_loading = true;
             })
             .addCase(enrollCourse.fulfilled, (state, { payload }) => {
-                console.log(payload);
                 if (payload.hasOwnProperty("message")) {
                     state.error_message = payload.message;
                 } else {
-                    console.log("successfulls!");
-                    state.course_loading = false;
+                    state.course_enrolment_loading = false;
                     state.course = payload.course;
                     state.isSuccess = true;
                     state.errors = [];
@@ -215,7 +221,7 @@ export const courseSlice = createSlice({
             })
             .addCase(enrollCourse.rejected, (state, { payload }) => {
                 state.message = payload;
-                state.course_loading = false;
+                state.course_enrolment_loading = false;
                 state.isSuccess = false;
             });
     },
