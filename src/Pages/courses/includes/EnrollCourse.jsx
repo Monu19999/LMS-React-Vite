@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { enrollCourse, getCourses } from "@src/features/app/CourseSlice";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import { useEffect, useState } from "react";
+import { availableCourses } from "@src/features/member/MemberSlice";
 
-function Enrolled({ course, className, style, course_enrolment_loading }) {
+function EnrollCourse({ course, className, style, course_enrolment_loading }) {
+    console.log("EnrollCourse => ", course);
     const auth_states = useSelector((state) => state.auth);
     const [course_enrolment_loading1, setCourseEnrolmentLoading] = useState(
         course_enrolment_loading
@@ -23,6 +25,7 @@ function Enrolled({ course, className, style, course_enrolment_loading }) {
             navigate("/auth/login");
         }
         await dispatch(getCourses());
+        await dispatch(availableCourses());
         setCourseEnrolmentLoading(false);
     };
 
@@ -40,6 +43,8 @@ function Enrolled({ course, className, style, course_enrolment_loading }) {
         }
     };
     if (auth_states?.user) {
+        // console.log("auth_status => ", auth_states?.user);
+        // console.log("course => ", course);
         if (course?.enrollments?.length === 1) {
             // hasEnrolled(course.enrollments);
             if (
@@ -72,4 +77,4 @@ function Enrolled({ course, className, style, course_enrolment_loading }) {
     );
 }
 
-export default Enrolled;
+export default EnrollCourse;

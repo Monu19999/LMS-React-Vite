@@ -42,7 +42,7 @@ export const getCourses = createAsyncThunk(
                 ? "?" + new URLSearchParams(search_state).toString()
                 : "";
 
-        let api_url = api("courses") + query_string;
+        let api_url = api("category_courses") + query_string;
 
         let headers = {
             Accept: "application/json",
@@ -52,7 +52,7 @@ export const getCourses = createAsyncThunk(
             Cookies.get("token") == undefined ? null : Cookies.get("token");
         if (token) {
             headers.Authorization = `Bearer ${token}`;
-            api_url = api("auth_courses") + query_string;
+            api_url = api("auth_category_courses") + query_string;
         }
         const response = await fetch(api_url, {
             method: "get",
@@ -68,7 +68,7 @@ export const getCourses = createAsyncThunk(
 );
 
 export const getCourse = createAsyncThunk("course/getCourse", async (id) => {
-    let api_url = api("course", id);
+    let api_url = api("category_course", id);
 
     let headers = {
         Accept: "application/json",
@@ -78,7 +78,7 @@ export const getCourse = createAsyncThunk("course/getCourse", async (id) => {
         Cookies.get("token") == undefined ? null : Cookies.get("token");
     if (token) {
         headers.Authorization = `Bearer ${token}`;
-        api_url = api("auth_course", id);
+        api_url = api("auth_category_course", id);
     }
     const response = await fetch(api_url, {
         method: "get",
@@ -104,13 +104,20 @@ export const enrollCourse = createAsyncThunk(
             }
             let data = JSON.stringify({
                 fk_department_id:
-                    course.assigned_admin.course_category.fk_department_id,
+                    course.course.assigned_admin.course_category
+                        .fk_department_id,
             });
-            const response = await fetch(api("auth_course_enroll", course.id), {
-                method: "post",
-                headers,
-                body: data,
-            });
+            const response = await fetch(
+                api(
+                    "auth_course_enroll",
+                    course.course.assigned_admin.category_course.id
+                ),
+                {
+                    method: "post",
+                    headers,
+                    body: data,
+                }
+            );
             const json = await response.json();
             if (response.status !== 200) {
                 throw new Error("Bad response", {
@@ -118,6 +125,7 @@ export const enrollCourse = createAsyncThunk(
                 });
             }
             return json.data;
+            // return course;
         } catch (error) {
             return error.cause;
         }
@@ -199,6 +207,7 @@ export const courseSlice = createSlice({
                 state.course_enrolment_loading = true;
             })
             .addCase(enrollCourse.fulfilled, (state, { payload }) => {
+                console.log("payload => ", payload);
                 if (payload.hasOwnProperty("message")) {
                     state.error_message = payload.message;
                 } else {

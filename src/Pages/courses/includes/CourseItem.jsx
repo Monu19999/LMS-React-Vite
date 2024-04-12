@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
-import Enrolled from "./EnrollCourse";
+import EnrollCourse from "./EnrollCourse";
 import { useSelector } from "react-redux";
-import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 
 function CourseItem({ course }) {
     const course_enrolment_loading = useSelector(
@@ -12,8 +11,11 @@ function CourseItem({ course }) {
             <div className="position-relative overflow-hidden">
                 <img
                     className="img-fluid"
-                    src={course?.upload?.file_path ?? "assets/img/course-1.jpg"}
-                    alt={course?.upload?.original_name}
+                    src={
+                        course?.course?.upload?.file_path ??
+                        "assets/img/course-1.jpg"
+                    }
+                    alt={course?.course?.upload?.original_name}
                 />
                 <div className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
                     <Link
@@ -25,7 +27,7 @@ function CourseItem({ course }) {
                     >
                         View
                     </Link>
-                    <Enrolled
+                    <EnrollCourse
                         course={course}
                         className="flex-shrink-0 btn btn-sm btn-primary px-3"
                         style={{
@@ -36,9 +38,10 @@ function CourseItem({ course }) {
                 </div>
             </div>
             <div className="text-center p-4 pb-0 min-h">
-                <h5 className="mb-4">
-                    {course?.assigned_admin?.category_course?.course_name_en}
-                </h5>
+                <h5 className="mb-2">{course?.course_name_en}</h5>
+                <p style={{ marginTop: "none" }}>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </p>
             </div>
             <div className="d-flex border-top">
                 <small className="flex-fill text-center border-end py-2">

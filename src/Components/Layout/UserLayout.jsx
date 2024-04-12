@@ -60,27 +60,21 @@ function UserLayout() {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/member/courses">
-                                    <span className="fas fa-book mr-3" /> My
-                                    Courses
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/member/certificates">
-                                    <span className="fas fa-user-graduate mr-3" />{" "}
-                                    My Certificate
-                                </Link>
-                            </li>
-                            <li>
                                 <Link to="/member/available_courses">
                                     <span className="fa fa-gift mr-3" />{" "}
                                     Available Courses
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/member">
-                                    <span className="fa fa-support mr-3" />{" "}
-                                    Support
+                                <Link to="/member/courses">
+                                    <span className="fas fa-book mr-3" />
+                                    My Courses
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/member/certificates">
+                                    <span className="fas fa-user-graduate mr-3" />{" "}
+                                    My Certificate
                                 </Link>
                             </li>
                             <li>

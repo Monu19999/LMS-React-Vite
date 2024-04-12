@@ -7,6 +7,10 @@ const api_urls = {
         return `/api/page/${page_name}/show`;
     },
     departments: "/api/departments",
+    category_courses: "/api/category_courses",
+    category_course: function (id) {
+        return `/api/category_courses/${id}`;
+    },
     courses: "/api/courses",
     course: function (id) {
         return `/api/courses/${id}`;
@@ -19,15 +23,16 @@ const api_urls = {
 
     // Authenticated users urls
     user: "/api/auth/user",
-    auth_courses: "/api/auth/courses",
-    auth_course: function (id) {
-        return `/api/auth/courses/${id}`;
+    auth_category_courses: "/api/auth/category_courses",
+    auth_category_course: function (id) {
+        return `/api/auth/category_courses/${id}`;
     },
     auth_course_enroll: function (id) {
         return `/api/auth/courses/${id}/enrollments`;
     },
     member_dashboard: "/api/auth/member/dashboard",
     member_courses: "/api/auth/member/courses",
+    member_available_courses: "/api/auth/member/available_courses",
 };
 
 export default function api(api_name, param = null) {
