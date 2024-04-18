@@ -12,7 +12,7 @@ function CourseItem({ course }) {
                 <img
                     className="img-fluid"
                     src={
-                        course?.course?.upload?.file_path ??
+                        course?.course?.upload?.preview_path ??
                         "assets/img/course-1.jpg"
                     }
                     alt={course?.course?.upload?.original_name}

@@ -6,7 +6,7 @@ import Pagination from "@src/Utilities/Pagination";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import { getDepartments } from "@src/features/app/AppSlice";
 import { setSearch, resetSearch } from "@src/features/app/CourseSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 function CoursesList() {
     const navigate = useNavigate();
@@ -17,6 +17,7 @@ function CoursesList() {
     );
 
     const dispatch = useDispatch();
+    const [searchParams] = useSearchParams();
 
     // For fetching departments in app slice
     useEffect(() => {
@@ -24,6 +25,14 @@ function CoursesList() {
     }, []);
 
     useEffect(() => {
+        let search = {};
+        for (const entry of searchParams.entries()) {
+            const [param, value] = entry;
+            search[param] = value;
+        }
+        if (Object.values(search).length > 0) {
+            dispatch(setSearch(search));
+        }
         dispatch(getCourses(navigate));
     }, []);
 

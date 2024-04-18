@@ -55,6 +55,7 @@ export const getCourses = createAsyncThunk(
             api_url = api("auth_category_courses") + query_string;
         }
         const response = await fetch(api_url, {
+            mode: "cors",
             method: "get",
             headers,
             cache: "no-cache",

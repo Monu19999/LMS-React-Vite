@@ -67,8 +67,8 @@ function UserLayout() {
                             </li>
                             <li>
                                 <Link to="/member/courses">
-                                    <span className="fas fa-book mr-3" />
-                                    My Courses
+                                    <span className="fas fa-book mr-3" /> My
+                                    Courses
                                 </Link>
                             </li>
                             <li>

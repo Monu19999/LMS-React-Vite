@@ -9,6 +9,9 @@ export const getUser = createAsyncThunk(
         const state = getState();
         const token = state.auth.token;
         // console.log("token => ", state.auth.token);
+        if (!token) {
+            return { message: "Unauthenticated." };
+        }
         const response = await fetch(api_url, {
             method: "get",
             headers: {

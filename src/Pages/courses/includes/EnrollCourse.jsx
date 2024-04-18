@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { availableCourses } from "@src/features/member/MemberSlice";
 
 function EnrollCourse({ course, className, style, course_enrolment_loading }) {
-    console.log("EnrollCourse => ", course);
+    // console.log("EnrollCourse => ", course);
     const auth_states = useSelector((state) => state.auth);
     const [course_enrolment_loading1, setCourseEnrolmentLoading] = useState(
         course_enrolment_loading

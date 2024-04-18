@@ -184,7 +184,8 @@ function CourseView() {
                                     <img
                                         className="img-fluid"
                                         src={
-                                            course?.course?.upload?.file_path ??
+                                            course?.course?.upload
+                                                ?.preview_path ??
                                             "assets/img/course-1.jpg"
                                         }
                                     />
