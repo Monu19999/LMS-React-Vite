@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import api from "@src/apis/api";
 import Cookies from "js-cookie";
 
@@ -130,9 +130,20 @@ export const authSlice = createSlice({
                 state.user_loading = true;
             })
             .addCase(getUser.fulfilled, (state, { payload }) => {
-                state.user_loading = false;
-                state.user =
-                    payload.message == "Unauthenticated." ? null : payload;
+                let current_state = current(state);
+                if (
+                    current_state.token &&
+                    payload.message == "Unauthenticated."
+                ) {
+                    Cookies.remove("token", "");
+                    Cookies.remove("user", "");
+                    state.user = null;
+                    state.token = null;
+                } else {
+                    state.user_loading = false;
+                    state.user =
+                        payload.message == "Unauthenticated." ? null : payload;
+                }
             })
             .addCase(getUser.rejected, (state, { payload }) => {
                 state.error_message = payload;
