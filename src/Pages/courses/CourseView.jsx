@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { getCourse } from "@src/features/app/CourseSlice";
-import ShowImage from "@src/Utilities/ShowImage";
-import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import EnrollCourse from "./includes/EnrollCourse";
 
 function CourseView() {
@@ -22,8 +20,6 @@ function CourseView() {
             dispatch(getCourse(course_id));
         }
     }, []);
-
-    // if (loading) return <BootstrapSpinner />;
 
     let topics = () => {
         if (course?.course?.topics) {
