@@ -129,7 +129,7 @@ export default function Home() {
                                                     >
                                                         Read More
                                                     </a>
-                                                    <a
+                                                    {/* <a
                                                         href="index.html"
                                                         className="btn btn-light py-md-2 px-md-4 animated slideInRight"
                                                         style={{
@@ -137,7 +137,7 @@ export default function Home() {
                                                         }}
                                                     >
                                                         Enroll Now
-                                                    </a>
+                                                    </a> */}
                                                 </div>
                                             </div>
                                         </div>
@@ -177,7 +177,7 @@ export default function Home() {
                                     ? homedata.courses_enrolled
                                     : 0}
                             </span>
-                            <p>Courses Enrolled </p>
+                            <p>Available Courses</p>
                         </div>
                     </div>
                     <div
@@ -200,7 +200,7 @@ export default function Home() {
                         <div className="counter-box">
                             {" "}
                             <span className="counter">350</span>
-                            <p>Total Certification</p>
+                            <p>Total Certification Courses</p>
                         </div>
                     </div>
                 </div>
@@ -330,7 +330,7 @@ export default function Home() {
                         className="text-center wow fadeInUp"
                         data-wow-delay="0.1s"
                     >
-                        <h1 className="mb-5">Our Courses</h1>
+                        <h1 className="mb-5">Available Courses</h1>
                     </div>
                     {course_loading ? (
                         <BootstrapSpinner />
