@@ -8,10 +8,12 @@ import {
     AccordionButton,
     AccordionItem,
 } from "react-bootstrap";
+import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 
 const MyCourses = () => {
     const dispatch = useDispatch();
 
+    const Memberloading = useSelector((state) => state.member.member_loading);
     const member = useSelector((state) => state.member.pages);
 
     useEffect(() => {
@@ -21,36 +23,47 @@ const MyCourses = () => {
     return (
         <>
             <h2 className="mb-4">My Courses</h2>
-            {member?.my_courses?.my_courses.length > 0 ? (
-                member?.my_courses?.my_courses.map((category) => (
-                    <Accordion key={category.id}>
-                        <AccordionItem>
-                            <AccordionButton>
-                                {category.category_name_en}
-                            </AccordionButton>
-                            <AccordionBody>
-                                <div className="row">
-                                    {category.category_courses.map((course) => {
-                                        return (
-                                            course.enrollments.length > 0 && (
-                                                <div
-                                                    className="col-lg-4 col-md-6 mb-4"
-                                                    key={course.id}
-                                                >
-                                                    <CourseItem
-                                                        course={course}
-                                                    />
-                                                </div>
-                                            )
-                                        );
-                                    })}
-                                </div>
-                            </AccordionBody>
-                        </AccordionItem>
-                    </Accordion>
-                ))
+            {Memberloading ? (
+                <BootstrapSpinner />
             ) : (
-                <h1 className="text-center">No Course Enrolled Yet!</h1>
+                <>
+                    {member?.my_courses?.my_courses.length > 0 ? (
+                        member?.my_courses?.my_courses.map((category) => (
+                            <Accordion key={category.id}>
+                                <AccordionItem>
+                                    <AccordionButton>
+                                        {category.category_name_en}
+                                    </AccordionButton>
+                                    <AccordionBody>
+                                        <div className="row">
+                                            {category.category_courses.map(
+                                                (course) => {
+                                                    return (
+                                                        course.enrollments
+                                                            .length > 0 && (
+                                                            <div
+                                                                className="col-lg-4 col-md-6 mb-4"
+                                                                key={course.id}
+                                                            >
+                                                                <CourseItem
+                                                                    course={
+                                                                        course
+                                                                    }
+                                                                />
+                                                            </div>
+                                                        )
+                                                    );
+                                                }
+                                            )}
+                                        </div>
+                                    </AccordionBody>
+                                </AccordionItem>
+                            </Accordion>
+                        ))
+                    ) : (
+                        <h1 className="text-center">No Course Enrolled Yet!</h1>
+                    )}
+                </>
             )}
         </>
     );
