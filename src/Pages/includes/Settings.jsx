@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setTheme, updateTheme } from "@src/features/app/AppSlice";
 import { useEffect } from "react";
 import { getUser } from "@src/features/app/AuthSlice";
+import { Logout } from "@src/Pages/auth/Logout";
 
 function Settings() {
     const user = useSelector((state) => state.auth.user);
@@ -105,28 +106,39 @@ function Settings() {
                             <span className="d-none-head">Login</span>
                         </a>
                         <ul className="dropdown-menu">
-                            <li>
-                                {user ? (
-                                    <Link
-                                        className="dropdown-item"
-                                        to="/member"
-                                    >
-                                        Welcome {user.first_name}
-                                    </Link>
-                                ) : (
-                                    <Link
-                                        className="dropdown-item"
-                                        to="/auth/login"
-                                    >
-                                        Student Login
-                                    </Link>
-                                )}
-                            </li>
-                            <li>
+                            {user ? (
+                                <>
+                                    <li>
+                                        <Link
+                                            className="dropdown-item"
+                                            to="/member"
+                                        >
+                                            Welcome {user.first_name}
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Logout className="dropdown-item">
+                                            Logout
+                                        </Logout>
+                                    </li>
+                                </>
+                            ) : (
+                                <>
+                                    <li>
+                                        <Link
+                                            className="dropdown-item"
+                                            to="/auth/login"
+                                        >
+                                            Student Login
+                                        </Link>
+                                    </li>
+                                </>
+                            )}
+                            {/* <li>
                                 <Link className="dropdown-item" to="#">
                                     Department Login
                                 </Link>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
                 </div>
