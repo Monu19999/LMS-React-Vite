@@ -277,13 +277,13 @@ export default function Home() {
                     </div>
                     <div className="row">
                         {/* {isLoading && <BootstrapSpinner />} */}
-                        {homedata.department_onboarded &&
-                            homedata.department_onboarded.map(
-                                (department_onboarded) => {
+                        {homedata.onboarded_departments &&
+                            homedata.onboarded_departments.map(
+                                (onboarded_department) => {
                                     return (
                                         <div
                                             className="col-xs-12 col-md-6 col-lg-3 mb-4"
-                                            key={department_onboarded.id}
+                                            key={onboarded_department.id}
                                         >
                                             <div className="thumbnail">
                                                 <div className="thumb-logo">
@@ -294,26 +294,16 @@ export default function Home() {
                                                             height: "70px",
                                                         }}
                                                     />
-                                                    <h4 className="mt-2">
-                                                        {
-                                                            department_onboarded.title_en
-                                                        }
-                                                    </h4>
+                                                    <Link
+                                                        to={`/courses?department=${onboarded_department.id}`}
+                                                    >
+                                                        <h4 className="mt-2">
+                                                            {
+                                                                onboarded_department.title_en
+                                                            }
+                                                        </h4>
+                                                    </Link>
                                                 </div>
-                                                {/* <div className="caption">
-                                                    <img
-                                                        src="assets/img/logo.png"
-                                                        alt="logo.png"
-                                                        style={{
-                                                            height: "70px",
-                                                        }}
-                                                    />
-                                                    <h4 className="mt-2">
-                                                        {
-                                                            department_onboarded.title_en
-                                                        }
-                                                    </h4>
-                                                </div> */}
                                             </div>
                                         </div>
                                     );

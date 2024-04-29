@@ -25,7 +25,7 @@ function CourseView() {
         if (course?.course?.topics) {
             return (
                 <>
-                    <h4>This course includes:</h4>
+                    <h4>Course contains:</h4>
                     <div className="col-lg-8 p-0">
                         <div className="accordion" id="regularAccordionRobots">
                             {course.course.topics.map((topic, index) => {
@@ -130,13 +130,13 @@ function CourseView() {
                                         ?.category_course?.course_name_en
                                 }
                             </p>
-                            <div
+                            {/* <div
                                 className="text-white mt-4 mb-4"
                                 style={{ fontSize: 18 }}
                             >
                                 {course?.course?.description &&
                                     parse(course.course.description)}
-                            </div>
+                            </div> */}
                             <nav>
                                 <ol className="view-course-update ">
                                     <li className="view-course-update">
@@ -148,7 +148,7 @@ function CourseView() {
                                                 created_at.getFullYear()}
                                         </Link>
                                     </li>
-                                    <li
+                                    {/* <li
                                         className="view-course-update text-white active"
                                         aria-current="page"
                                     >
@@ -156,10 +156,10 @@ function CourseView() {
                                             <i className="fas fa-globe" />
                                             English
                                         </Link>
-                                    </li>
+                                    </li> */}
                                 </ol>
                             </nav>
-                            <p className="text-white">
+                            {/* <p className="text-white">
                                 4.50{" "}
                                 <i className="fa fa-star" aria-hidden="true" />
                                 <i className="fa fa-star" aria-hidden="true" />
@@ -169,7 +169,7 @@ function CourseView() {
                                     className="fa fa-star-half"
                                     aria-hidden="true"
                                 />
-                            </p>
+                            </p> */}
                         </div>
                         <div
                             className="col-lg-4"
@@ -185,7 +185,7 @@ function CourseView() {
                                             "assets/img/course-1.jpg"
                                         }
                                     />
-                                    <div
+                                    {/* <div
                                         className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4"
                                         style={{ top: "50%" }}
                                     >
@@ -201,8 +201,8 @@ function CourseView() {
                                                 aria-hidden="true"
                                             />
                                         </button>
-                                    </div>
-                                    <div className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4 mt-4">
+                                    </div> */}
+                                    {/* <div className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4 mt-4">
                                         <Link
                                             to="/"
                                             className="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
@@ -212,7 +212,7 @@ function CourseView() {
                                         >
                                             Preview this course
                                         </Link>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className="col-12 px-4 list mt-4 mb-4">
                                     <h5>This course includes:</h5>
@@ -237,7 +237,7 @@ function CourseView() {
                                         <li>Certificate of completion</li>
                                     </ul>
                                 </div>
-                                <div className="col-12 mt-4 text-center mb-4">
+                                {/* <div className="col-12 mt-4 text-center mb-4">
                                     <EnrollCourse
                                         course={course}
                                         className="btn btn-primary px-4"
@@ -245,7 +245,7 @@ function CourseView() {
                                             course_enrolment_loading
                                         }
                                     />
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -299,15 +299,19 @@ function CourseView() {
                                 >
                                     <h4>Course Information</h4>
                                     <p className="text-primary">
-                                        Skill Development
+                                        {
+                                            course?.course?.assigned_admin
+                                                ?.category_course
+                                                ?.course_name_en
+                                        }
                                     </p>
                                     <ul>
                                         <li>
-                                            Full Name Solar Technician
-                                            (Electrical) - (Trade Code-560)
+                                            {course?.course?.description &&
+                                                parse(
+                                                    course.course.description
+                                                )}
                                         </li>
-                                        <li>Category Skill Development</li>
-                                        <li>Course Duration 1</li>
                                     </ul>
                                 </div>
                             </div>
@@ -320,7 +324,7 @@ function CourseView() {
                                 {topics()}
                             </div>
                         </div>
-                        <div className="row mt-4 list">
+                        {/* <div className="row mt-4 list">
                             <div className="wow fadeInUp" data-wow-delay="0.1s">
                                 <h4>Course Description :</h4>
                                 <p className="text-primary">Courtesy:</p>
@@ -336,7 +340,7 @@ function CourseView() {
                                     <li>Government of India</li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

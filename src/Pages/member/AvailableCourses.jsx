@@ -4,6 +4,12 @@ import { availableCourses } from "@src/features/member/MemberSlice";
 import CourseItem from "@src/Pages/courses/includes/CourseItem";
 import { Link } from "react-router-dom";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import {
+    Accordion,
+    AccordionBody,
+    AccordionButton,
+    AccordionItem,
+} from "react-bootstrap";
 
 const AvailableCourses = () => {
     const dispatch = useDispatch();
@@ -25,44 +31,33 @@ const AvailableCourses = () => {
                     {member?.available_courses?.available_courses.length > 0 ? (
                         member?.available_courses?.available_courses.map(
                             (category) => (
-                                <div key={category.id}>
-                                    <div
-                                        className="d-flex justify-content-between mb-2"
-                                        style={{
-                                            borderBottom: "1px solid #d8e7e9",
-                                            padding: "0 10px",
-                                        }}
-                                    >
-                                        <h5>{category.category_name_en}</h5>
-                                        <Link
-                                            to={`/courses?department=${category.fk_department_id}`}
-                                        >
-                                            View all
-                                        </Link>
-                                    </div>
-                                    <div
-                                        className="row"
-                                        style={{ padding: "1rem 1.25rem" }}
-                                    >
-                                        {category.category_courses.map(
-                                            (course) => {
-                                                return (
-                                                    course.enrollments.length ==
-                                                        0 && (
-                                                        <div
-                                                            className="col-lg-4 col-md-6 mb-4"
-                                                            key={course.id}
-                                                        >
-                                                            <CourseItem
-                                                                course={course}
-                                                            />
-                                                        </div>
-                                                    )
-                                                );
-                                            }
-                                        )}
-                                    </div>
-                                </div>
+                                <Accordion key={category.id}>
+                                    <AccordionItem>
+                                        <AccordionButton>
+                                            {category.category_name_en}
+                                        </AccordionButton>
+                                        <AccordionBody>
+                                            <div className="row">
+                                                {category.category_courses.map(
+                                                    (course) => {
+                                                        return (
+                                                            <div
+                                                                className="col-lg-4 col-md-6 mb-4"
+                                                                key={course.id}
+                                                            >
+                                                                <CourseItem
+                                                                    course={
+                                                                        course
+                                                                    }
+                                                                />
+                                                            </div>
+                                                        );
+                                                    }
+                                                )}
+                                            </div>
+                                        </AccordionBody>
+                                    </AccordionItem>
+                                </Accordion>
                             )
                         )
                     ) : (
