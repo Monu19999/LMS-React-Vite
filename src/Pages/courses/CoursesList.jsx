@@ -12,6 +12,7 @@ function CoursesList() {
     const navigate = useNavigate();
 
     const { departments, app_loading } = useSelector((state) => state.app);
+    // console.log(departments);
     const { courses, course_loading, search } = useSelector(
         (state) => state.course
     );
