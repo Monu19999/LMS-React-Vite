@@ -12,10 +12,10 @@ function UserLayout() {
     const member = useSelector((state) => state.member);
     const auth_state = useSelector((state) => state.auth);
 
-    const handleLogout = (e) => {
+    const handleLogout = async (e) => {
         e.preventDefault();
-        dispatch(logout());
-        navigate("/auth/login");
+        let response = await dispatch(logout());
+        console.log(response);
     };
     return (
         <>
@@ -27,7 +27,12 @@ function UserLayout() {
                                 type="button"
                                 id="sidebarCollapse"
                                 className="btn btn-primary"
-                            ></button>
+                            >
+                                <i
+                                    className="fa fa-bars text-white"
+                                    aria-hidden="true"
+                                ></i>
+                            </button>
                         </div>
                         <div
                             className="img bg-wrap text-center py-4"
@@ -55,6 +60,12 @@ function UserLayout() {
                                 </Link>
                             </li>
                             <li>
+                                <Link to="/member/available_courses">
+                                    <span className="fa fa-gift mr-3" />{" "}
+                                    Available Courses
+                                </Link>
+                            </li>
+                            <li>
                                 <Link to="/member/courses">
                                     <span className="fas fa-book mr-3" /> My
                                     Courses
@@ -64,18 +75,6 @@ function UserLayout() {
                                 <Link to="/member/certificates">
                                     <span className="fas fa-user-graduate mr-3" />{" "}
                                     My Certificate
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/member/available_courses">
-                                    <span className="fa fa-gift mr-3" />{" "}
-                                    Available Courses
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/member">
-                                    <span className="fa fa-support mr-3" />{" "}
-                                    Support
                                 </Link>
                             </li>
                             <li>
@@ -93,41 +92,6 @@ function UserLayout() {
                     </div>
                 </div>
             </div>
-
-            {/* <div className="d-flex justify-content-between m-2 container mx-auto">
-                <ul className="d-flex gap-2">
-                    <li className="">
-                        <Link to="/member">Dashboard</Link>
-                    </li>
-                    <li>
-                        <Link to="/member/courses">My Courses</Link>
-                    </li>
-                    <li>
-                        <Link to="/member/certificates">My Certificates</Link>
-                    </li>
-                    <li>
-                        <Link to="/member/available_courses">
-                            Available Courses
-                        </Link>
-                    </li>
-                </ul>
-                <ul className="d-flex gap-2">
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <a
-                            href="#"
-                            onClick={handleLogout}
-                            className="btn btn-primary"
-                        >
-                            Logout
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            {member?.error}
-            <Outlet /> */}
         </>
     );
 }

@@ -2,9 +2,11 @@ import FooterMenu from "@src/Pages/includes/FooterMenu";
 import Settings from "@src/Pages/includes/Settings";
 import Navbar from "@src/Pages/includes/Navbar";
 import { Outlet } from "react-router-dom";
-import useFetch from "@src/Hooks/useFetch";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import api from "@src/apis/api";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getAppData } from "@src/features/app/AppSlice";
 
 // Load css
 // import "@public/assets/css/bootstrap.min.css";
@@ -19,29 +21,32 @@ import api from "@src/apis/api";
 // import "@public/assets/js/global-min.js";
 
 export default function Layout() {
-    const { isLoading, serverError, apiData } = useFetch("GET", api("api"), {});
+    const app_loading = useSelector((state) => state.app.app_loading);
+    const app_state = useSelector((state) => state.app);
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getAppData());
+    }, []);
+
+    let navbar_menu = () => {
+        if (app_state?.data?.top_menus) {
+            return <Navbar menus={app_state.data.top_menus} />;
+        }
+    };
+
+    let footer_menu = () => {
+        if (app_state?.data?.bottom_menus) {
+            return <FooterMenu menus={app_state.data.bottom_menus} />;
+        }
+    };
+
+    // if (app_loading) return <BootstrapSpinner />;
     return (
         <>
-            {/* Spinner Start */}
-            {/* <div
-                id="spinner"
-                className="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
-            >
-                <div
-                    className="spinner-border text-primary"
-                    style={{ width: "3rem", height: "3rem" }}
-                    role="status"
-                >
-                    <span className="sr-only">Loading...</span>
-                </div>
-            </div> */}
             {/* Spinner End */}
             <Settings />
-            {isLoading && <BootstrapSpinner />}
-            {apiData?.data.top_menus && (
-                <Navbar menus={apiData.data.top_menus} />
-            )}
-            {/* <Navbar /> */}
+            {navbar_menu()}
 
             <Outlet />
 
@@ -50,9 +55,7 @@ export default function Layout() {
                 className="container-fluid bg-dark text-light footer wow fadeIn"
                 data-wow-delay="0.1s"
             >
-                {apiData?.data.bottom_menus && (
-                    <FooterMenu menus={apiData.data.bottom_menus} />
-                )}
+                {footer_menu()}
                 {/* <FooterMenu /> */}
                 <div className="container">
                     <div className="copyright">

@@ -183,3 +183,23 @@ $(".back-to-top").click(function () {
     return false;
 });
 
+(function ($) {
+    "use strict";
+
+    var fullHeight = function () {
+
+        $('.js-fullheight').css('height', $(window).height());
+        $(window).resize(function () {
+            $('.js-fullheight').css('height', $(window).height());
+        });
+
+    };
+    fullHeight();
+
+    $(document).on('click', '#sidebarCollapse', function () {
+        $('#sidebar').toggleClass('active');
+    });
+
+})(jQuery);
+
+

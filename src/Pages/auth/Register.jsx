@@ -65,7 +65,248 @@ export default function Register() {
     console.log("department", selectedDepartment);
 
     const selectedDepartmentObj = departmentAndOffice.departments.find(
-      (department) => department.name === selectedDepartment
+      (department) => department.name === selectedDepartment)
+    }
+    const navigate = useNavigate();
+
+    const saveEmployee = async (e) => {
+        e.preventDefault();
+        if (validateForm()) {
+            const employee = {
+                first_name,
+                last_name,
+                email,
+                password,
+                password_confirmation,
+            };
+
+            // console.log(employee);
+            let response = await dispatch(register(employee));
+            console.log("response => ", response);
+            console.log("auth_state => ", auth_state);
+            if (auth_state.error_message === "") {
+                navigate("/member");
+            }
+        }
+    };
+
+    const validateForm = () => {
+        let valid = true;
+        const errorsCopy = { ...errors };
+
+        if (!email.trim()) {
+            errorsCopy.email = "Email is required";
+            valid = false;
+        } else if (!isValidEmail(email)) {
+            errorsCopy.email = "Email is invalid";
+            valid = false;
+        } else {
+            errorsCopy.email = "";
+        }
+
+        if (!password.trim()) {
+            errorsCopy.password = "Password is required";
+            valid = false;
+        } else {
+            errorsCopy.password = "";
+        }
+
+        if (!first_name.trim()) {
+            errorsCopy.first_name = "First name is required";
+            valid = false;
+        } else if (!isValidfirst_name(first_name)) {
+            errorsCopy.first_name = "First name is invalid";
+            valid = false;
+        } else {
+            errorsCopy.first_name = "";
+        }
+
+        if (!last_name.trim()) {
+            errorsCopy.last_name = "Last name is required";
+            valid = false;
+        } else if (!isValidlast_name(last_name)) {
+            errorsCopy.last_name = "Last name is invalid";
+            valid = false;
+        } else {
+            errorsCopy.last_name = "";
+        }
+
+        if (!password_confirmation.trim()) {
+            errorsCopy.password_confirmation = "Confirm Password is Required";
+            valid = false;
+        } else if (password_confirmation !== password) {
+            errorsCopy.password_confirmation = "password not match";
+            valid = false;
+        } else {
+            errorsCopy.password_confirmation = "";
+        }
+        setErrors(errorsCopy);
+        return valid;
+    };
+
+    return (
+        <div className="d-flex flex-column my-3 gap-3 align-items-center">
+            <div className="d-flex justify-content-center">
+                <Link to="/">
+                    <img
+                        height={64}
+                        width={64}
+                        src="assets/img/logo.png"
+                        alt="logo"
+                    />
+                </Link>
+            </div>
+
+            <div
+                className="card d-flex align-items-center shadow-sm p-3 bg-white"
+                style={{ borderRadius: "10px", width: "400px" }}
+            >
+                {auth_state?.error_message && (
+                    <div className="alert alert-danger alert-block mt-3 ml-3 mr-3">
+                        <strong>{auth_state.error_message}</strong>
+                    </div>
+                )}
+                <form
+                    className="d-flex py-3 w-100 flex-column gap-3"
+                    onSubmit={saveEmployee}
+                >
+                    {/* first name field */}
+                    <div className="d-flex flex-column">
+                        <label htmlFor="first_name" className="form-label ">
+                            First Name
+                        </label>
+                        <input
+                            // required
+                            style={{ borderRadius: "5px" }}
+                            type="text"
+                            className="form-control"
+                            value={first_name}
+                            onChange={(e) => setfirst_name(e.target.value)}
+                        />
+                        {errors.first_name && (
+                            <div className="text-danger">
+                                {errors.first_name}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* last name field */}
+                    <div className="d-flex flex-column">
+                        <label htmlFor="last_name" className="form-label">
+                            Last Name
+                        </label>
+                        <input
+                            // required
+                            style={{ borderRadius: "5px" }}
+                            type="text"
+                            className="form-control"
+                            value={last_name}
+                            onChange={(e) => setlast_name(e.target.value)}
+                        />
+                        {errors.last_name && (
+                            <div className="text-danger">
+                                {errors.last_name}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* email field */}
+                    <div className="d-flex flex-column">
+                        <label htmlFor="email" className="form-label">
+                            Email
+                        </label>
+                        <input
+                            style={{ borderRadius: "5px" }}
+                            type="email"
+                            className="form-control"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        {errors.email && (
+                            <div className="text-danger">{errors.email}</div>
+                        )}
+                    </div>
+
+                    {/*  password field */}
+                    <div className="d-flex flex-column">
+                        <label htmlFor="password" className="form-label">
+                            Password
+                        </label>
+                        <input
+                            style={{ borderRadius: "5px" }}
+                            type="password"
+                            className="form-control"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        {errors.password && (
+                            <div className="text-danger">{errors.password}</div>
+                        )}
+                    </div>
+
+                    {/* confirm password field */}
+                    <div className="d-flex flex-column">
+                        <label htmlFor="password" className="form-label">
+                            Confirm Password
+                        </label>
+                        <input
+                            style={{ borderRadius: "5px" }}
+                            type="password"
+                            className="form-control"
+                            value={password_confirmation}
+                            onChange={(e) =>
+                                setpassword_confirmation(e.target.value)
+                            }
+                        />
+                        {errors.password_confirmation && (
+                            <div className="text-danger">
+                                {errors.password_confirmation}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="d-flex gap-3 align-items-center justify-content-end">
+                        <Link
+                            to="/auth/login"
+                            style={{ textDecoration: "underline" }}
+                            className="text-dark"
+                        >
+                            <span
+                                onMouseEnter={(e) => {
+                                    e.target.style.color = "blue";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.target.style.color = "black";
+                                }}
+                            >
+                                Already registered?
+                            </span>
+                        </Link>
+                        <button
+                            style={{
+                                borderRadius: "8px",
+                                padding: "8px 12px",
+                                backgroundColor: "black",
+                                color: "white",
+                                transition: "background-color 0.3s, color 0.3s",
+                            }}
+                            className="btn btn-dark text-white"
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundColor =
+                                    "rgba(0, 0, 0, 0.8)";
+                                e.target.style.color = "white";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = "black";
+                                e.target.style.color = "white";
+                            }}
+                        >
+                            Register
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     );
     setOffices([]);
     setSelectedOffice("Select Office---");

@@ -34,10 +34,39 @@ export const getDashboard = createAsyncThunk(
     }
 );
 
-export const userCourses = createAsyncThunk(
-    "member/userCourses",
+export const myCourses = createAsyncThunk(
+    "member/myCourses",
     async (args, { getState }) => {
         let api_url = api("member_courses");
+        try {
+            const state = getState();
+            const token = state.auth.token;
+            const response = await fetch(api_url, {
+                method: "get",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                cache: "no-cache",
+            });
+            const json = await response.json();
+            if (response.status !== 200) {
+                throw new Error("Bad response", {
+                    cause: json,
+                });
+            }
+            return json.data;
+        } catch (error) {
+            return error.cause;
+        }
+    }
+);
+
+export const availableCourses = createAsyncThunk(
+    "member/availableCourses",
+    async (args, { getState }) => {
+        let api_url = api("member_available_courses");
         try {
             const state = getState();
             const token = state.auth.token;
@@ -82,15 +111,20 @@ export const memberSlice = createSlice({
             })
 
             // Get My Courses
-            .addCase(userCourses.pending, (state, action) => {
-                // state.status = "loading";
-            })
-            .addCase(userCourses.fulfilled, (state, { payload }) => {
-                // state.status = "succeeded";
+            .addCase(myCourses.pending, (state, action) => {})
+            .addCase(myCourses.fulfilled, (state, { payload }) => {
                 state.pages.my_courses = payload;
             })
-            .addCase(userCourses.rejected, (state, action) => {
-                // state.status = "failed";
+            .addCase(myCourses.rejected, (state, action) => {
+                state.error = action.error;
+            })
+
+            // Get Available Courses
+            .addCase(availableCourses.pending, (state, action) => {})
+            .addCase(availableCourses.fulfilled, (state, { payload }) => {
+                state.pages.available_courses = payload;
+            })
+            .addCase(availableCourses.rejected, (state, action) => {
                 state.error = action.error;
             });
     },

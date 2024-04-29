@@ -14,6 +14,20 @@ function setDefaultTheme(theme) {
     document.getElementById("themeSwitchToggle").checked = theme ? true : false;
 }
 
+export const getAppData = createAsyncThunk("app/getAppData", async () => {
+    let api_url = api("api");
+    const response = await fetch(api_url, {
+        method: "get",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        cache: "no-cache",
+    });
+    const json = await response.json();
+    return json.data;
+});
+
 export const getDepartments = createAsyncThunk(
     "departments/getDepartments",
     async () => {
@@ -37,11 +51,12 @@ export const appSlice = createSlice({
         lang: "en",
         theme: null,
         affectedElements: [],
+        data: [],
 
         departments: [],
         message: "",
-        dept_loading: false,
-        isDeptSuccess: false,
+        app_loading: false,
+        isSuccess: false,
     },
     reducers: {
         setTheme: (state, action) => {
@@ -96,18 +111,32 @@ export const appSlice = createSlice({
     extraReducers(builder) {
         builder
             .addCase(getDepartments.pending, (state, { payload }) => {
-                state.dept_loading = true;
+                state.app_loading = true;
             })
             .addCase(getDepartments.fulfilled, (state, { payload }) => {
-                state.dept_loading = false;
+                state.app_loading = false;
                 // console.log(payload);
                 state.departments = payload.departments;
-                state.isDeptSuccess = true;
+                state.isSuccess = true;
             })
             .addCase(getDepartments.rejected, (state, { payload }) => {
                 state.message = payload;
-                state.dept_loading = false;
-                state.isDeptSuccess = false;
+                state.app_loading = false;
+                state.isSuccess = false;
+            })
+
+            .addCase(getAppData.pending, (state, { payload }) => {
+                state.app_loading = true;
+            })
+            .addCase(getAppData.fulfilled, (state, { payload }) => {
+                state.app_loading = false;
+                state.data = payload;
+                state.isSuccess = true;
+            })
+            .addCase(getAppData.rejected, (state, { payload }) => {
+                state.message = payload;
+                state.app_loading = false;
+                state.isSuccess = false;
             });
     },
 });

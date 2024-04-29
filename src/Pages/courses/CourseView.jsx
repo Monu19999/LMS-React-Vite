@@ -5,15 +5,16 @@ import parse from "html-react-parser";
 import { getCourse } from "@src/features/app/CourseSlice";
 import ShowImage from "@src/Utilities/ShowImage";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
-import Enrolled from "./includes/EnrollCourse";
+import EnrollCourse from "./includes/EnrollCourse";
 
 function CourseView() {
     let { course_id } = useParams();
 
-    const { course, loading } = useSelector((state) => {
-        return state.course;
-    });
-    // console.log(course);
+    const course_enrolment_loading = useSelector(
+        (state) => state.course.course_enrolment_loading
+    );
+    const course = useSelector((state) => state.course.course);
+    console.log(course);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -22,16 +23,16 @@ function CourseView() {
         }
     }, []);
 
-    if (loading) return <BootstrapSpinner />;
+    // if (loading) return <BootstrapSpinner />;
 
     let topics = () => {
-        if (course?.topics) {
+        if (course?.course?.topics) {
             return (
                 <>
                     <h4>This course includes:</h4>
                     <div className="col-lg-8 p-0">
                         <div className="accordion" id="regularAccordionRobots">
-                            {course.topics.map((topic, index) => {
+                            {course.course.topics.map((topic, index) => {
                                 return (
                                     <div
                                         className="accordion-item"
@@ -86,7 +87,7 @@ function CourseView() {
             );
         }
     };
-    const created_at = new Date(course.created_at);
+    const created_at = new Date(course?.course?.created_at);
     return (
         <>
             <div
@@ -109,7 +110,7 @@ function CourseView() {
                                     <li className="breadcrumb-item">
                                         <Link className="text-white" to="/">
                                             {
-                                                course?.assigned_admin
+                                                course?.course?.assigned_admin
                                                     ?.course_category
                                                     ?.category_name_en
                                             }
@@ -120,7 +121,7 @@ function CourseView() {
                                         aria-current="page"
                                     >
                                         {
-                                            course?.assigned_admin
+                                            course?.course?.assigned_admin
                                                 ?.category_course
                                                 ?.course_name_en
                                         }
@@ -129,16 +130,16 @@ function CourseView() {
                             </nav>
                             <p className="display-6 text-white animated slideInDown mb-4">
                                 {
-                                    course?.assigned_admin?.category_course
-                                        ?.course_name_en
+                                    course?.course?.assigned_admin
+                                        ?.category_course?.course_name_en
                                 }
                             </p>
                             <div
                                 className="text-white mt-4 mb-4"
                                 style={{ fontSize: 18 }}
                             >
-                                {course?.description &&
-                                    parse(course.description)}
+                                {course?.course?.description &&
+                                    parse(course.course.description)}
                             </div>
                             <nav>
                                 <ol className="view-course-update ">
@@ -183,11 +184,9 @@ function CourseView() {
                                     <img
                                         className="img-fluid"
                                         src={
-                                            course?.upload?.file_path ??
-                                            ShowImage(
-                                                "http://164.100.196.171/learning_mng_sys/public/storage/App/Models/Course/bno0MRfE90.jpg",
-                                                null
-                                            )
+                                            course?.course?.upload
+                                                ?.preview_path ??
+                                            "assets/img/course-1.jpg"
                                         }
                                     />
                                     <div
@@ -222,14 +221,19 @@ function CourseView() {
                                 <div className="col-12 px-4 list mt-4 mb-4">
                                     <h5>This course includes:</h5>
                                     <ul>
-                                        {course?.topics?.length > 0 && (
+                                        {course?.course?.topics?.length > 0 && (
                                             <li>
-                                                {course.topics.length} topics
+                                                {course.course.topics.length}{" "}
+                                                topics
                                             </li>
                                         )}
-                                        {course.topics_uploads_count > 0 && (
+                                        {course?.course?.topics_uploads_count >
+                                            0 && (
                                             <li>
-                                                {course.topics_uploads_count}{" "}
+                                                {
+                                                    course.course
+                                                        .topics_uploads_count
+                                                }{" "}
                                                 downloadable resources
                                             </li>
                                         )}
@@ -238,12 +242,13 @@ function CourseView() {
                                     </ul>
                                 </div>
                                 <div className="col-12 mt-4 text-center mb-4">
-                                    <Link
-                                        
-                                        to="/"
-                                    >
-                                       <Enrolled course={course} className="btn btn-primary px-4" />
-                                    </Link>
+                                    <EnrollCourse
+                                        course={course}
+                                        className="btn btn-primary px-4"
+                                        course_enrolment_loading={
+                                            course_enrolment_loading
+                                        }
+                                    />
                                 </div>
                             </div>
                         </div>

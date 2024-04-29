@@ -6,16 +6,18 @@ import Pagination from "@src/Utilities/Pagination";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import { getDepartments } from "@src/features/app/AppSlice";
 import { setSearch, resetSearch } from "@src/features/app/CourseSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 function CoursesList() {
     const navigate = useNavigate();
-    const [is_params_changed, setParamsChanged] = useState(false);
 
-    const { departments, dept_loading } = useSelector((state) => state.app);
-    const { courses, loading, search } = useSelector((state) => state.course);
+    const { departments, app_loading } = useSelector((state) => state.app);
+    const { courses, course_loading, search } = useSelector(
+        (state) => state.course
+    );
 
     const dispatch = useDispatch();
+    const [searchParams] = useSearchParams();
 
     // For fetching departments in app slice
     useEffect(() => {
@@ -23,10 +25,16 @@ function CoursesList() {
     }, []);
 
     useEffect(() => {
+        let search = {};
+        for (const entry of searchParams.entries()) {
+            const [param, value] = entry;
+            search[param] = value;
+        }
+        if (Object.values(search).length > 0) {
+            dispatch(setSearch(search));
+        }
         dispatch(getCourses(navigate));
     }, []);
-
-    // if (loading) return <p>Loading...</p>;
 
     let handleFormFilter = (e) => {
         e.preventDefault();
@@ -216,11 +224,11 @@ function CoursesList() {
                                 <h1 className="mb-5">All Courses</h1>
                             </div>
                             <div className="row">
-                                {loading ? (
+                                {course_loading ? (
                                     <BootstrapSpinner />
                                 ) : (
-                                    courses?.courses?.data &&
-                                    courses.courses.data.map((course) => {
+                                    courses?.data &&
+                                    courses.data.map((course) => {
                                         return (
                                             <div
                                                 className="col-lg-4 col-md-6 mb-4"

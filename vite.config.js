@@ -8,7 +8,7 @@ let __dirname = '.';
 export default defineConfig({
   build: {
     rollupOptions: {
-      base: 'http://eshiksha.test.com/assets/',
+      base: 'http://localhost/lmsbackend-9/assets/',
     },
   },
   resolve: {
@@ -19,5 +19,5 @@ export default defineConfig({
   },
   plugins: [react()],
   base: '',
-  baseServer: 'http://eshiksha.test.com'
+  baseServer: 'http://localhost/lmsbackend-9'
 })
