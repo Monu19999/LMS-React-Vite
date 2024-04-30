@@ -6,9 +6,15 @@ import { getDepartments } from "@src/features/app/AppSlice";
 
 const isValidEmail = (email) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i;
-  console.log("email => ", emailRegex.test(email));
+//   console.log("email => ", emailRegex.test(email));
   return emailRegex.test(email);
 };
+const isValidMobile = (mobile) => {
+    const mobileRegex = /^[6-9]\d{9}$/;
+    console.log("mobile => ", mobileRegex.test(mobile));
+    return mobileRegex.test(mobile);
+  }
+  
 
 // const isValidPassword = (password) => {
 //   const passwordRegex =
@@ -35,6 +41,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [password_confirmation, setpassword_confirmation] = useState("");
   const [offices, setOffices] = useState([]);
+  const [mobile, setMobile] = useState("");
 
 
   const [selectedOffice, setSelectedOffice] = useState("Select Office---");
@@ -66,6 +73,7 @@ export default function Register() {
     first_name: "",
     last_name: "",
     email: "",
+    mobile:"",
     password: "",
     password_confirmation: "",
   });
@@ -118,6 +126,16 @@ export default function Register() {
     } else {
       errorsCopy.email = "";
     }
+
+    if (!mobile.trim()) {
+        errorsCopy.mobile = "Mobile number is required";
+        valid = false;
+      } else if (!isValidMobile(mobile)) {
+        errorsCopy.mobile = "Mobile number is invalid";
+        valid = false;
+      } else {
+        errorsCopy.mobile = "";
+      }
 
     if (!password.trim()) {
       errorsCopy.password = "Password is required";
@@ -237,7 +255,7 @@ export default function Register() {
         </div>
         <button
           onClick={() => setShowMobileSection(!showMobileSection)}
-          style={{ backgroundColor: "lightblue", borderRadius: "10%" }}
+          style={{ backgroundColor: "lightblue", borderRadius: "10%",  }}
         >
           Next
         </button>
@@ -257,9 +275,11 @@ export default function Register() {
             name="mobile"
             className="form-control"
             style={{ width: "250px" }}
+            onChange={(e) => setMobile(e.target.value)}
           />
           <span>Send OTP </span>
         </div>
+        {errors.mobile && <div className="text-danger">{errors.mobile}</div>}
         <div className="py-3 d-flex flex-column">
           <label>Verify OTP</label>
           <input
@@ -270,7 +290,7 @@ export default function Register() {
           />
         </div>
         <button
-          onClick={() => setShowEmailSection(!showEmailSection)}
+          onClick={() =>{ console.log(errors.mobile); setShowEmailSection(!showEmailSection)}}
           style={{ backgroundColor: "lightblue", borderRadius: "10%" }}
         >
           Next
@@ -413,6 +433,8 @@ export default function Register() {
       </div>
     );
   };
+
+
   return (
     <div className="d-flex flex-column my-3 gap-3 align-items-center">
       <div className="d-flex justify-content-center">
@@ -435,9 +457,11 @@ export default function Register() {
           onSubmit={saveEmployee}
         >
           {basicInfoSection()}
-          {showMobileSection && mobileVarificationSection()}
-          {showEmailSection && emailVerificationSection()}
-          {showDepartmentOfficeSection && departmentOfficeSection()}
+          {showMobileSection && !(errors.first_name || errors.last_name ||  errors.password || errors.password_confirmation) && mobileVarificationSection()}
+
+
+          {showEmailSection && !(errors.mobile) && emailVerificationSection()}
+          {showDepartmentOfficeSection && !(errors.email) && departmentOfficeSection()}
         </form>
       </div>
     </div>
