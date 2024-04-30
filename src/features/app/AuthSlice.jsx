@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import api from "@src/apis/api";
 import Cookies from "js-cookie";
 
@@ -49,6 +49,7 @@ export const login = createAsyncThunk("auth/login", async (credentials) => {
         return error.cause;
     }
 });
+
 export const logout = createAsyncThunk(
     "auth/logout",
     async (args, { getState }) => {
@@ -77,11 +78,36 @@ export const logout = createAsyncThunk(
         }
     }
 );
+
 export const register = createAsyncThunk("auth/register", async (userData) => {
     // console.log(userData);
     let api_url = api("auth_register");
     try {
         const response = await fetch(api_url, {
+            method: "post",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+            cache: "no-cache",
+        });
+        const json = await response.json();
+        if (response.status !== 200) {
+            throw new Error("Bad response", {
+                cause: json,
+            });
+        }
+        return json.data;
+    } catch (error) {
+        return error.cause;
+    }
+});
+
+export const sendOTP = createAsyncThunk("auth/sendOTP", async (userData) => {
+    let api_url = api("auth_send_otp");
+    try {
+        const response = await fetch(api_url(userData.id), {
             method: "post",
             headers: {
                 Accept: "application/json",
@@ -130,9 +156,20 @@ export const authSlice = createSlice({
                 state.user_loading = true;
             })
             .addCase(getUser.fulfilled, (state, { payload }) => {
-                state.user_loading = false;
-                state.user =
-                    payload.message == "Unauthenticated." ? null : payload;
+                let current_state = current(state);
+                if (
+                    current_state.token &&
+                    payload.message == "Unauthenticated."
+                ) {
+                    Cookies.remove("token", "");
+                    Cookies.remove("user", "");
+                    state.user = null;
+                    state.token = null;
+                } else {
+                    state.user_loading = false;
+                    state.user =
+                        payload.message == "Unauthenticated." ? null : payload;
+                }
             })
             .addCase(getUser.rejected, (state, { payload }) => {
                 state.error_message = payload;

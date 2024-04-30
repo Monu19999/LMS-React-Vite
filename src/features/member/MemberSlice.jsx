@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "@src/apis/api";
 
 const initialState = {
+    member_loading: false,
     pages: {},
 };
 
@@ -99,32 +100,40 @@ export const memberSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getDashboard.pending, (state, action) => {
-                // state.status = "loading";
+                state.member_loading = true;
             })
             .addCase(getDashboard.fulfilled, (state, { payload }) => {
-                // state.status = "succeeded";
+                state.member_loading = false;
                 state.pages.dashboard = payload;
             })
             .addCase(getDashboard.rejected, (state, action) => {
-                // state.status = "failed";
+                state.member_loading = false;
                 state.error = action.error;
             })
 
             // Get My Courses
-            .addCase(myCourses.pending, (state, action) => {})
+            .addCase(myCourses.pending, (state, action) => {
+                state.member_loading = true;
+            })
             .addCase(myCourses.fulfilled, (state, { payload }) => {
+                state.member_loading = false;
                 state.pages.my_courses = payload;
             })
             .addCase(myCourses.rejected, (state, action) => {
+                state.member_loading = false;
                 state.error = action.error;
             })
 
             // Get Available Courses
-            .addCase(availableCourses.pending, (state, action) => {})
+            .addCase(availableCourses.pending, (state, action) => {
+                state.member_loading = true;
+            })
             .addCase(availableCourses.fulfilled, (state, { payload }) => {
+                state.member_loading = false;
                 state.pages.available_courses = payload;
             })
             .addCase(availableCourses.rejected, (state, action) => {
+                state.member_loading = false;
                 state.error = action.error;
             });
     },

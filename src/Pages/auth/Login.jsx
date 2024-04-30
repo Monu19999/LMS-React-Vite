@@ -15,8 +15,14 @@ const isValidEmail = (email) => {
 // };
 
 export default function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState(
+        import.meta.env.VITE_APP_ENV == "production"
+            ? ""
+            : "hw.sharma9@mp.gov.in"
+    );
+    const [password, setPassword] = useState(
+        import.meta.env.VITE_APP_ENV == "production" ? "" : "password"
+    );
     const [errors, setErrors] = useState({
         email: "",
         password: "",

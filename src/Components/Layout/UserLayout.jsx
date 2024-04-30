@@ -1,22 +1,15 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { logout } from "@src/features/app/AuthSlice";
 import "@public/assets/dashboard/css/style.css";
 // import "@public/assets/dashboard/css/font-awesome.min.css";
 
 function UserLayout() {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const member = useSelector((state) => state.member);
     const auth_state = useSelector((state) => state.auth);
 
-    const handleLogout = async (e) => {
-        e.preventDefault();
-        let response = await dispatch(logout());
-        console.log(response);
-    };
     return (
         <>
             <div className="container-fluid py-5" id="dashboard-layout">
@@ -75,12 +68,6 @@ function UserLayout() {
                                 <Link to="/member/certificates">
                                     <span className="fas fa-user-graduate mr-3" />{" "}
                                     My Certificate
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="#" onClick={handleLogout}>
-                                    <span className="fa fa-sign-out mr-3" />{" "}
-                                    Sign Out
                                 </Link>
                             </li>
                         </ul>
