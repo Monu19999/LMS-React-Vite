@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { getCourse } from "@src/features/app/CourseSlice";
 import EnrollCourse from "./includes/EnrollCourse";
@@ -12,9 +12,14 @@ function CourseView() {
         (state) => state.course.course_enrolment_loading
     );
     const course = useSelector((state) => state.course.course);
-    console.log(course);
+    // console.log(course);
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
+    if (course) {
+        if (!course.course) {
+            navigate("/");
+        }
+    }
     useEffect(() => {
         if (course_id) {
             dispatch(getCourse(course_id));
