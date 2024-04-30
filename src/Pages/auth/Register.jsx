@@ -1,20 +1,19 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { register } from "@src/features/app/AuthSlice";
 import { getDepartments } from "@src/features/app/AppSlice";
 
 const isValidEmail = (email) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i;
-//   console.log("email => ", emailRegex.test(email));
+  //   console.log("email => ", emailRegex.test(email));
   return emailRegex.test(email);
 };
 const isValidMobile = (mobile) => {
-    const mobileRegex = /^[6-9]\d{9}$/;
-    console.log("mobile => ", mobileRegex.test(mobile));
-    return mobileRegex.test(mobile);
-  }
-  
+  const mobileRegex = /^[6-9]\d{9}$/;
+  console.log("mobile => ", mobileRegex.test(mobile));
+  return mobileRegex.test(mobile);
+};
 
 // const isValidPassword = (password) => {
 //   const passwordRegex =
@@ -42,7 +41,6 @@ export default function Register() {
   const [password_confirmation, setpassword_confirmation] = useState("");
   const [offices, setOffices] = useState([]);
   const [mobile, setMobile] = useState("");
-
 
   const [selectedOffice, setSelectedOffice] = useState("Select Office---");
 
@@ -73,7 +71,7 @@ export default function Register() {
     first_name: "",
     last_name: "",
     email: "",
-    mobile:"",
+    mobile: "",
     password: "",
     password_confirmation: "",
   });
@@ -83,9 +81,6 @@ export default function Register() {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-
-  //   const dispatch = useDispatch();
-  //   const [searchParams] = useSearchParams();
 
   // For fetching departments in app slice
   useEffect(() => {
@@ -128,14 +123,14 @@ export default function Register() {
     }
 
     if (!mobile.trim()) {
-        errorsCopy.mobile = "Mobile number is required";
-        valid = false;
-      } else if (!isValidMobile(mobile)) {
-        errorsCopy.mobile = "Mobile number is invalid";
-        valid = false;
-      } else {
-        errorsCopy.mobile = "";
-      }
+      errorsCopy.mobile = "Mobile number is required";
+      valid = false;
+    } else if (!isValidMobile(mobile)) {
+      errorsCopy.mobile = "Mobile number is invalid";
+      valid = false;
+    } else {
+      errorsCopy.mobile = "";
+    }
 
     if (!password.trim()) {
       errorsCopy.password = "Password is required";
@@ -177,10 +172,6 @@ export default function Register() {
     return valid;
   };
 
-  const [showMobileSection, setShowMobileSection] = useState(false);
-  const [showEmailSection, setShowEmailSection] = useState(false);
-  const [showDepartmentOfficeSection, setShowDepartmentOfficeSection] =
-    useState(false);
   const basicInfoSection = () => {
     return (
       <div>
@@ -253,12 +244,6 @@ export default function Register() {
             <div className="text-danger">{errors.password_confirmation}</div>
           )}
         </div>
-        <button
-          onClick={() => setShowMobileSection(!showMobileSection)}
-          style={{ backgroundColor: "lightblue", borderRadius: "10%",  }}
-        >
-          Next
-        </button>
       </div>
     );
   };
@@ -289,12 +274,6 @@ export default function Register() {
             className="form-control"
           />
         </div>
-        <button
-          onClick={() =>{ console.log(errors.mobile); setShowEmailSection(!showEmailSection)}}
-          style={{ backgroundColor: "lightblue", borderRadius: "10%" }}
-        >
-          Next
-        </button>
       </div>
     );
   };
@@ -328,14 +307,6 @@ export default function Register() {
             className="form-control"
           />
         </div>
-        <button
-          onClick={() =>
-            setShowDepartmentOfficeSection(!showDepartmentOfficeSection)
-          }
-          style={{ backgroundColor: "lightblue", borderRadius: "10%" }}
-        >
-          Next
-        </button>
       </div>
     );
   };
@@ -434,7 +405,27 @@ export default function Register() {
     );
   };
 
+  const [step, setStep] = useState(1);
 
+  const nextStep = () => {
+    if (step === 1) {
+      // Validate basic info fields
+      if (!errors.first_name && !errors.last_name && !errors.email && !errors.password && !errors.password_confirmation) {
+        setStep(step + 1);
+      }
+    } else if (step === 2) {
+      // Validate mobile verification fields
+      if (!errors.mobile) {
+        setStep(step + 1);
+      }
+    } else if (step === 3) {
+      // Validate email verification fields
+      if (!errors.email) {
+        setStep(step + 1);
+      }
+    }
+    // Add similar checks for other steps if needed
+  };
   return (
     <div className="d-flex flex-column my-3 gap-3 align-items-center">
       <div className="d-flex justify-content-center">
@@ -456,12 +447,18 @@ export default function Register() {
           className="d-flex py-3 w-100 flex-column gap-3"
           onSubmit={saveEmployee}
         >
-          {basicInfoSection()}
-          {showMobileSection && !(errors.first_name || errors.last_name ||  errors.password || errors.password_confirmation) && mobileVarificationSection()}
+          {step === 1 && basicInfoSection()}
+          {step === 2 && mobileVarificationSection()}
+          {step === 3 && emailVerificationSection()}
+          {step === 4 && departmentOfficeSection()}
 
-
-          {showEmailSection && !(errors.mobile) && emailVerificationSection()}
-          {showDepartmentOfficeSection && !(errors.email) && departmentOfficeSection()}
+          <div>
+            {step < 4 && (
+              <button type="button" onClick={nextStep}>
+                Next
+              </button>
+            )}
+          </div>
         </form>
       </div>
     </div>
