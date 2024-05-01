@@ -93,10 +93,14 @@ export const register = createAsyncThunk("auth/register", async (userData) => {
             cache: "no-cache",
         });
         const json = await response.json();
+        console.log(json);
         if (response.status !== 200) {
             throw new Error("Bad response", {
                 cause: json,
             });
+        }
+        if (json.hasOwnProperty("errors")) {
+            return json;
         }
         return json.data;
     } catch (error) {
@@ -219,24 +223,59 @@ export const authSlice = createSlice({
 
             //register user
             .addCase(register.pending, (state) => {
+                console.log("register.pending");
                 state.user_loading = true;
                 state.error_message = null;
             })
             .addCase(register.fulfilled, (state, { payload }) => {
-                if (payload.hasOwnProperty("errors")) {
-                    console.log(payload.message);
-                    state.errors = payload.errors;
-                    state.error_message = payload.message;
-                } else {
-                    Cookies.set("token", payload.token);
-                    Cookies.set("user", JSON.stringify(payload.user));
-                    state.user = payload.user;
-                    state.token = payload.token;
-                    state.errors = [];
-                    state.error_message = null;
+                console.log("register.fulfilled");
+                console.log("payload => ", payload);
+                if (payload != undefined) {
+                    if (payload.hasOwnProperty("errors")) {
+                        console.log(payload.message);
+                        state.errors = payload.errors;
+                        state.error_message = payload.message;
+                    } else {
+                        Cookies.set("token", payload.token);
+                        Cookies.set("user", JSON.stringify(payload.user));
+                        state.user = payload.user;
+                        state.token = payload.token;
+                        state.errors = [];
+                        state.error_message = null;
+                    }
                 }
             })
             .addCase(register.rejected, (state, action) => {
+                console.log("register.rejected");
+                state.user_loading = false;
+                state.error_message = action.error.message;
+            })
+
+            .addCase(sendOTP.pending, (state) => {
+                console.log("sendOTP.pending");
+                state.user_loading = true;
+                state.error_message = null;
+            })
+            .addCase(sendOTP.fulfilled, (state, { payload }) => {
+                console.log("sendOTP.fulfilled");
+                console.log("payload => ", payload);
+                if (payload != undefined) {
+                    if (payload.hasOwnProperty("errors")) {
+                        console.log(payload.message);
+                        state.errors = payload.errors;
+                        state.error_message = payload.message;
+                    } else {
+                        Cookies.set("token", payload.token);
+                        Cookies.set("user", JSON.stringify(payload.user));
+                        state.user = payload.user;
+                        state.token = payload.token;
+                        state.errors = [];
+                        state.error_message = null;
+                    }
+                }
+            })
+            .addCase(sendOTP.rejected, (state, action) => {
+                console.log("sendOTP.rejected");
                 state.user_loading = false;
                 state.error_message = action.error.message;
             });
