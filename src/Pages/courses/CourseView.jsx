@@ -239,7 +239,7 @@ function CourseView() {
                                             </li>
                                         )}
                                         <li>Full lifetime access</li>
-                                        <li>Certificate of completion</li>
+                                        <li>Certification of completion</li>
                                     </ul>
                                 </div>
                                 {/* <div className="col-12 mt-4 text-center mb-4">
@@ -302,7 +302,7 @@ function CourseView() {
                                     className="wow fadeInUp"
                                     data-wow-delay="0.1s"
                                 >
-                                    <h4>Course Information</h4>
+                                    <h4>Course Description</h4>
                                     <p className="text-primary">
                                         {
                                             course?.course?.assigned_admin
