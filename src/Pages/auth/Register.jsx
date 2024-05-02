@@ -410,22 +410,24 @@ export default function Register() {
   const nextStep = () => {
     if (step === 1) {
       // Validate basic info fields
-      if (!errors.first_name && !errors.last_name && !errors.email && !errors.password && !errors.password_confirmation) {
-        setStep(step + 1);
+      if (errors.first_name || errors.last_name || errors.password || errors.password_confirmation) {
+        return; // Don't advance to the next step if any error exists
       }
     } else if (step === 2) {
       // Validate mobile verification fields
-      if (!errors.mobile) {
-        setStep(step + 1);
+      if (errors.mobile) {
+        return; // Don't advance to the next step if any error exists
       }
     } else if (step === 3) {
       // Validate email verification fields
-      if (!errors.email) {
-        setStep(step + 1);
+      if (errors.email) {
+        return; // Don't advance to the next step if any error exists
       }
     }
-    // Add similar checks for other steps if needed
+  
+    setStep(step + 1);
   };
+  
   return (
     <div className="d-flex flex-column my-3 gap-3 align-items-center">
       <div className="d-flex justify-content-center">
@@ -454,7 +456,7 @@ export default function Register() {
 
           <div>
             {step < 4 && (
-              <button type="button" onClick={nextStep}>
+              <button type="submit" onClick={nextStep}>
                 Next
               </button>
             )}
