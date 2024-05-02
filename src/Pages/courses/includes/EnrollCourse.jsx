@@ -47,10 +47,8 @@ function EnrollCourse({ course, className, style, course_enrolment_loading }) {
         // console.log("course => ", course);
         if (course?.enrollments?.length === 1) {
             // hasEnrolled(course.enrollments);
-            if (
-                course.enrollments[0].fk_user_id == auth_states.user.id &&
-                course.enrollments[0].status == 1
-            ) {
+            if (course.enrollments[0].fk_user_id == auth_states.user.id) {
+                // course.enrollments[0].status == 1
                 return (
                     <button
                         type="button"
@@ -58,7 +56,11 @@ function EnrollCourse({ course, className, style, course_enrolment_loading }) {
                         style={style || {}}
                         disabled={course_enrolment_loading1}
                     >
-                        {course_enrolment_loading1 ? "Enroling..." : "Enrolled"}
+                        {course_enrolment_loading1
+                            ? "Enroling..."
+                            : course.enrollments[0].status == 0
+                            ? "Pending"
+                            : "Enrolled"}
                     </button>
                 );
             }
