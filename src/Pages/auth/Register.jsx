@@ -1,126 +1,290 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { register } from "@src/features/app/AuthSlice";
-
-const isValidEmail = (email) => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i;
-    console.log("email => ", emailRegex.test(email));
-    return emailRegex.test(email);
-};
-
-// const isValidPassword = (password) => {
-//   const passwordRegex =
-//     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-//   return passwordRegex.test(password);
-// };
-
-const isValidfirst_name = (first_name) => {
-    const first_nameRegex = /^[a-zA-Z\s]+$/;
-    return first_nameRegex.test(first_name);
-};
-
-const isValidlast_name = (last_name) => {
-    const last_nameRegex = /^[a-zA-Z\s]+$/;
-    return last_nameRegex.test(last_name);
-};
+import { Link, useNavigate, useSubmit } from "react-router-dom";
+import Step1 from "./steps/Step1";
+import Step2 from "./steps/Step2";
+import Step3 from "./steps/Step3";
+import Step4 from "./steps/Step4";
+import { useForm } from "react-hook-form";
+import { register as RegisterUser } from "@src/features/app/AuthSlice";
+import { getDepartments } from "@src/features/app/AppSlice";
+import { setMessages } from "@src/features/app/AuthSlice";
+import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 
 export default function Register() {
-    const [first_name, setfirst_name] = useState("");
-    const [last_name, setlast_name] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [password_confirmation, setpassword_confirmation] = useState("");
-
-    const [errors, setErrors] = useState({
-        first_name: "",
-        last_name: "",
-        email: "",
-        password: "",
-        password_confirmation: "",
-    });
-
+    const [user, setUser] = useState({});
+    const user_loading = useSelector((state) => state.auth.user_loading);
     const auth_state = useSelector((state) => state.auth);
+    const [activeStep, setActiveStep] = useState(1);
+
+    const [offices, setOffices] = useState([]);
+    const [selectedOffice, setSelectedOffice] = useState("");
 
     const dispatch = useDispatch();
-
     const navigate = useNavigate();
 
-    const saveEmployee = async (e) => {
-        e.preventDefault();
-        if (validateForm()) {
-            const employee = {
-                first_name,
-                last_name,
-                email,
-                password,
-                password_confirmation,
-            };
+    const { departments } = useSelector((state) => state.app);
 
-            // console.log(employee);
-            let response = await dispatch(register(employee));
-            console.log("response => ", response);
-            console.log("auth_state => ", auth_state);
-            if (auth_state.error_message === "") {
+    // For fetching departments in app slice
+    useEffect(() => {
+        dispatch(getDepartments());
+        dispatch(
+            setMessages({
+                errors: [],
+                success_message: null,
+                error_message: null,
+                user_loading: false,
+                is_otp_set: false,
+            })
+        );
+    }, []);
+
+    const handleChangeDepartment = (e) => {
+        const selectedDepartment = e.target.value;
+        console.log(selectedDepartment);
+
+        const selectedDepartmentObj = departments.find(
+            (department) => department.id === parseInt(selectedDepartment)
+        );
+        console.log(selectedDepartmentObj);
+        setOffices(
+            selectedDepartmentObj == undefined
+                ? []
+                : selectedDepartmentObj.offices
+        );
+        setSelectedOffice("");
+    };
+
+    const handleOfficeChange = (e) => {
+        const selectedOffice = e.target.value;
+        // console.log("office", selectedOffice);
+        setSelectedOffice(selectedOffice);
+    };
+
+    const form_fields = {
+        1: {
+            first_name: "Harshwardhan",
+            last_name: "Sharma",
+            username: "hw.sharma91",
+            password: "password",
+            password_confirmation: "password",
+        },
+        2: {
+            mobile: "7879651192",
+            mobile_otp: "",
+        },
+        3: {
+            email: "",
+            email_otp: "",
+        },
+        4: {
+            fk_department_id: "",
+            fk_office_id: "",
+        },
+    };
+
+    const {
+        register,
+        watch,
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = useForm({
+        defaultValues: {
+            ...form_fields[activeStep],
+        },
+    });
+
+    // useEffect(() => {
+    //     let current_step = localStorage.getItem("current_step");
+    //     if (current_step) {
+    //         if (activeStep == null) {
+    //             setActiveStep(parseInt(current_step));
+    //         }
+    //     } else {
+    //         console.log("current_step");
+    //         setActiveStep(1);
+    //         console.log(activeStep);
+    //         localStorage.setItem("current_step", activeStep);
+    //     }
+    // }, [activeStep]);
+
+    const onSubmit = async (data) => {
+        let extra_data = { step: activeStep };
+        if (user?.id) {
+            extra_data["id"] = user.id;
+        }
+        data = { ...data, ...extra_data };
+        console.log("form1");
+        console.log("errors => ", errors);
+        console.log("data => ", data);
+        let response = await dispatch(RegisterUser(data));
+        if (response.payload.hasOwnProperty("errors")) {
+            console.log(response.payload.errors);
+        } else {
+            console.log("form successfully submitted!");
+            dispatch(
+                setMessages({
+                    errors: [],
+                    success_message: null,
+                    error_message: null,
+                    is_otp_set: false,
+                })
+            );
+            localStorage.setItem(
+                "temp_user",
+                JSON.stringify(response.payload.user)
+            );
+            setUser(response.payload.user);
+            if (activeStep == 4) {
+                localStorage.removeItem("temp_user");
                 navigate("/member");
+            } else {
+                setActiveStep((previous) => previous + 1);
             }
         }
     };
 
-    const validateForm = () => {
-        let valid = true;
-        const errorsCopy = { ...errors };
-
-        if (!email.trim()) {
-            errorsCopy.email = "Email is required";
-            valid = false;
-        } else if (!isValidEmail(email)) {
-            errorsCopy.email = "Email is invalid";
-            valid = false;
-        } else {
-            errorsCopy.email = "";
+    function getStepContent(activeStep) {
+        switch (activeStep) {
+            case 1:
+                return (
+                    <Step1
+                        fields={{
+                            first_name: register("first_name", {
+                                required: "First Name is Required!",
+                                pattern: {
+                                    value: /^[a-zA-Z]+$/,
+                                    message:
+                                        "First name should contain only characters.",
+                                },
+                            }),
+                            last_name: register("last_name", {
+                                required: "Last Name is Required!",
+                                pattern: {
+                                    value: /^[a-zA-Z]+$/,
+                                    message:
+                                        "Last name should contain only characters.",
+                                },
+                            }),
+                            username: register("username", {
+                                required: "Username is Required!",
+                            }),
+                            password: register("password", {
+                                required: "Password is Required!",
+                            }),
+                            password_confirmation: register(
+                                "password_confirmation",
+                                {
+                                    required: "Confirm Password is Required!",
+                                    validate: (val) => {
+                                        if (watch("password") != val) {
+                                            return "Your passwords do no match";
+                                        }
+                                    },
+                                }
+                            ),
+                        }}
+                        errors={errors}
+                        onSubmit={handleSubmit(onSubmit)}
+                        button={setFormButton()}
+                    />
+                );
+            case 2:
+                return (
+                    <Step2
+                        fields={{
+                            mobile: register("mobile", {
+                                required: "Mobile is Required!",
+                            }),
+                            mobile_otp: register("mobile_otp", {
+                                required: "Mobile OTP is Required!",
+                            }),
+                        }}
+                        errors={errors}
+                        user={user}
+                        onSubmit={handleSubmit(onSubmit)}
+                        button={setFormButton()}
+                    />
+                );
+            case 3:
+                return (
+                    <Step3
+                        fields={{
+                            email: register("email", {
+                                required: "Email is Required!",
+                                pattern: {
+                                    value: /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i,
+                                    message: "Not a valid Email!",
+                                },
+                            }),
+                            email_otp: register("email_otp", {
+                                required: "Email OTP is Required!",
+                            }),
+                        }}
+                        errors={errors}
+                        user={user}
+                        onSubmit={handleSubmit(onSubmit)}
+                        button={setFormButton()}
+                    />
+                );
+            case 4:
+                return (
+                    <Step4
+                        fields={{
+                            fk_department_id: register("fk_department_id", {
+                                required: "Department is Required!",
+                            }),
+                            fk_office_id: register("fk_office_id", {
+                                required: "Office is Required!",
+                            }),
+                        }}
+                        errors={errors}
+                        user={user}
+                        handleDepartmentChange={handleChangeDepartment}
+                        handleChangeOffice={handleOfficeChange}
+                        onSubmit={handleSubmit(onSubmit)}
+                        button={setFormButton()}
+                        offices={offices}
+                        departments={departments}
+                        selectedOffice={selectedOffice}
+                    />
+                );
+            default:
+                return "Unknown step";
         }
+    }
 
-        if (!password.trim()) {
-            errorsCopy.password = "Password is required";
-            valid = false;
-        } else {
-            errorsCopy.password = "";
-        }
-
-        if (!first_name.trim()) {
-            errorsCopy.first_name = "First name is required";
-            valid = false;
-        } else if (!isValidfirst_name(first_name)) {
-            errorsCopy.first_name = "First name is invalid";
-            valid = false;
-        } else {
-            errorsCopy.first_name = "";
-        }
-
-        if (!last_name.trim()) {
-            errorsCopy.last_name = "Last name is required";
-            valid = false;
-        } else if (!isValidlast_name(last_name)) {
-            errorsCopy.last_name = "Last name is invalid";
-            valid = false;
-        } else {
-            errorsCopy.last_name = "";
-        }
-
-        if (!password_confirmation.trim()) {
-            errorsCopy.password_confirmation = "Confirm Password is Required";
-            valid = false;
-        } else if (password_confirmation !== password) {
-            errorsCopy.password_confirmation = "password not match";
-            valid = false;
-        } else {
-            errorsCopy.password_confirmation = "";
-        }
-        setErrors(errorsCopy);
-        return valid;
+    const handleResetForm = () => {
+        localStorage.removeItem("temp_user");
+        setActiveStep(1);
     };
 
+    function setFormButton() {
+        if (activeStep === 4) {
+            return (
+                <div className="d-flex gap-2">
+                    <Button variant="primary" type="submit">
+                        Submit
+                    </Button>
+                    <Button
+                        variant="primary"
+                        type="button"
+                        onClick={handleResetForm}
+                    >
+                        Reset
+                    </Button>
+                </div>
+            );
+        } else {
+            return (
+                <Button variant="primary" type="submit">
+                    Next
+                </Button>
+            );
+        }
+    }
     return (
         <div className="d-flex flex-column my-3 gap-3 align-items-center">
             <div className="d-flex justify-content-center">
@@ -133,155 +297,58 @@ export default function Register() {
                     />
                 </Link>
             </div>
-
             <div
                 className="card d-flex align-items-center shadow-sm p-3 bg-white"
                 style={{ borderRadius: "10px", width: "400px" }}
             >
-                {auth_state?.error_message && (
-                    <div className="alert alert-danger alert-block mt-3 ml-3 mr-3">
-                        <strong>{auth_state.error_message}</strong>
+                {auth_state?.success_message && (
+                    <div
+                        className="alert alert-success alert-block"
+                        style={{ marginBottom: "0px" }}
+                    >
+                        <strong>{auth_state.success_message}</strong>
                     </div>
                 )}
-                <form
-                    className="d-flex py-3 w-100 flex-column gap-3"
-                    onSubmit={saveEmployee}
-                >
-                    {/* first name field */}
-                    <div className="d-flex flex-column">
-                        <label htmlFor="first_name" className="form-label ">
-                            First Name
-                        </label>
-                        <input
-                            // required
-                            style={{ borderRadius: "5px" }}
-                            type="text"
-                            className="form-control"
-                            value={first_name}
-                            onChange={(e) => setfirst_name(e.target.value)}
-                        />
-                        {errors.first_name && (
-                            <div className="text-danger">
-                                {errors.first_name}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* last name field */}
-                    <div className="d-flex flex-column">
-                        <label htmlFor="last_name" className="form-label">
-                            Last Name
-                        </label>
-                        <input
-                            // required
-                            style={{ borderRadius: "5px" }}
-                            type="text"
-                            className="form-control"
-                            value={last_name}
-                            onChange={(e) => setlast_name(e.target.value)}
-                        />
-                        {errors.last_name && (
-                            <div className="text-danger">
-                                {errors.last_name}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* email field */}
-                    <div className="d-flex flex-column">
-                        <label htmlFor="email" className="form-label">
-                            Email
-                        </label>
-                        <input
-                            style={{ borderRadius: "5px" }}
-                            type="email"
-                            className="form-control"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        {errors.email && (
-                            <div className="text-danger">{errors.email}</div>
-                        )}
-                    </div>
-
-                    {/*  password field */}
-                    <div className="d-flex flex-column">
-                        <label htmlFor="password" className="form-label">
-                            Password
-                        </label>
-                        <input
-                            style={{ borderRadius: "5px" }}
-                            type="password"
-                            className="form-control"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        {errors.password && (
-                            <div className="text-danger">{errors.password}</div>
-                        )}
-                    </div>
-
-                    {/* confirm password field */}
-                    <div className="d-flex flex-column">
-                        <label htmlFor="password" className="form-label">
-                            Confirm Password
-                        </label>
-                        <input
-                            style={{ borderRadius: "5px" }}
-                            type="password"
-                            className="form-control"
-                            value={password_confirmation}
-                            onChange={(e) =>
-                                setpassword_confirmation(e.target.value)
-                            }
-                        />
-                        {errors.password_confirmation && (
-                            <div className="text-danger">
-                                {errors.password_confirmation}
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="d-flex gap-3 align-items-center justify-content-end">
-                        <Link
-                            to="/auth/login"
-                            style={{ textDecoration: "underline" }}
-                            className="text-dark"
-                        >
-                            <span
-                                onMouseEnter={(e) => {
-                                    e.target.style.color = "blue";
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.target.style.color = "black";
-                                }}
+                {auth_state?.error_message && (
+                    <div
+                        className="alert alert-danger alert-block"
+                        style={{ marginBottom: "0px" }}
+                    >
+                        <strong>{auth_state.error_message}</strong>
+                        {Object.values(auth_state?.errors).map((error, key) => (
+                            <div
+                                className="alert alert-danger alert-block mt-1 ml-3 mr-3"
+                                key={key}
                             >
-                                Already registered?
-                            </span>
-                        </Link>
-                        <button
-                            style={{
-                                borderRadius: "8px",
-                                padding: "8px 12px",
-                                backgroundColor: "black",
-                                color: "white",
-                                transition: "background-color 0.3s, color 0.3s",
-                            }}
-                            className="btn btn-dark text-white"
+                                <strong>{error}</strong>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                {user_loading ? (
+                    <BootstrapSpinner />
+                ) : (
+                    getStepContent(activeStep)
+                )}
+
+                <div className="d-flex gap-3 align-items-center justify-content-end">
+                    <Link
+                        to="/auth/login"
+                        style={{ textDecoration: "underline" }}
+                        className="text-dark"
+                    >
+                        <span
                             onMouseEnter={(e) => {
-                                e.target.style.backgroundColor =
-                                    "rgba(0, 0, 0, 0.8)";
-                                e.target.style.color = "white";
+                                e.target.style.color = "blue";
                             }}
                             onMouseLeave={(e) => {
-                                e.target.style.backgroundColor = "black";
-                                e.target.style.color = "white";
+                                e.target.style.color = "black";
                             }}
                         >
-                            Register
-                        </button>
-                    </div>
-                </form>
+                            Already registered?
+                        </span>
+                    </Link>
+                </div>
             </div>
         </div>
     );

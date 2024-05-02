@@ -98,6 +98,9 @@ export const register = createAsyncThunk("auth/register", async (userData) => {
                 cause: json,
             });
         }
+        if (json.hasOwnProperty("errors")) {
+            return json;
+        }
         return json.data;
     } catch (error) {
         return error.cause;
@@ -105,9 +108,9 @@ export const register = createAsyncThunk("auth/register", async (userData) => {
 });
 
 export const sendOTP = createAsyncThunk("auth/sendOTP", async (userData) => {
-    let api_url = api("auth_send_otp");
+    let api_url = api("auth_send_otp", userData.id);
     try {
-        const response = await fetch(api_url(userData.id), {
+        const response = await fetch(api_url, {
             method: "post",
             headers: {
                 Accept: "application/json",
@@ -122,7 +125,7 @@ export const sendOTP = createAsyncThunk("auth/sendOTP", async (userData) => {
                 cause: json,
             });
         }
-        return json.data;
+        return json;
     } catch (error) {
         return error.cause;
     }
@@ -136,6 +139,7 @@ const initialState = {
     errors: [],
     error_message: null,
     user_loading: false,
+    is_otp_set: false,
     token: Cookies.get("token") == undefined ? null : Cookies.get("token"),
 };
 
@@ -149,6 +153,12 @@ export const authSlice = createSlice({
         //     state.user = null;
         //     state.token = null;
         // },
+        setMessages: (state, action) => {
+            return {
+                ...state,
+                ...action.payload,
+            };
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -223,26 +233,59 @@ export const authSlice = createSlice({
                 state.error_message = null;
             })
             .addCase(register.fulfilled, (state, { payload }) => {
-                if (payload.hasOwnProperty("errors")) {
-                    console.log(payload.message);
-                    state.errors = payload.errors;
-                    state.error_message = payload.message;
-                } else {
-                    Cookies.set("token", payload.token);
-                    Cookies.set("user", JSON.stringify(payload.user));
-                    state.user = payload.user;
-                    state.token = payload.token;
-                    state.errors = [];
-                    state.error_message = null;
+                state.user_loading = false;
+                if (payload != undefined) {
+                    if (payload.hasOwnProperty("errors")) {
+                        console.log(payload.message);
+                        state.errors = payload.errors;
+                        state.error_message = payload.message;
+                    } else {
+                        Cookies.set("token", payload.token);
+                        Cookies.set("user", JSON.stringify(payload.user));
+                        state.user = payload.user;
+                        state.token = payload.token;
+                        state.errors = [];
+                        state.error_message = null;
+                    }
                 }
             })
             .addCase(register.rejected, (state, action) => {
+                state.user_loading = false;
+                state.error_message = action.error.message;
+            })
+
+            .addCase(sendOTP.pending, (state) => {
+                state.is_otp_set = false;
+                console.log("sendOTP.pending");
+                state.user_loading = true;
+                state.error_message = null;
+            })
+            .addCase(sendOTP.fulfilled, (state, { payload }) => {
+                console.log("sendOTP.fulfilled");
+                console.log("payload => ", payload);
+                state.user_loading = false;
+                if (payload != undefined) {
+                    if (payload.hasOwnProperty("errors")) {
+                        console.log(payload.message);
+                        state.errors = payload.errors;
+                        state.error_message = payload.message;
+                    } else {
+                        state.is_otp_set = true;
+                        state.errors = [];
+                        state.error_message = null;
+                        state.success_message = payload.message;
+                    }
+                }
+            })
+            .addCase(sendOTP.rejected, (state, action) => {
+                console.log("sendOTP.rejected");
+                state.is_otp_set = false;
                 state.user_loading = false;
                 state.error_message = action.error.message;
             });
     },
 });
 
-// export const { logout } = authSlice.actions;
+export const { setMessages } = authSlice.actions;
 
 export default authSlice.reducer;
