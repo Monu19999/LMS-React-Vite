@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "@src/features/app/AuthSlice";
+import { setMessages } from "@src/features/app/AuthSlice";
 
 const isValidEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i;
@@ -20,6 +21,11 @@ export default function Login() {
             ? ""
             : "hw.sharma9@mp.gov.in"
     );
+    const auth_state = useSelector((state) => state.auth);
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const [password, setPassword] = useState(
         import.meta.env.VITE_APP_ENV == "production" ? "" : "password"
     );
@@ -28,11 +34,18 @@ export default function Login() {
         password: "",
     });
 
-    const auth_state = useSelector((state) => state.auth);
-
-    const dispatch = useDispatch();
-
-    const navigate = useNavigate();
+    // Resetting error messages
+    useEffect(() => {
+        dispatch(
+            setMessages({
+                errors: [],
+                success_message: null,
+                error_message: null,
+                user_loading: false,
+                is_otp_set: false,
+            })
+        );
+    }, []);
 
     const saveEmployee = async (e) => {
         e.preventDefault();

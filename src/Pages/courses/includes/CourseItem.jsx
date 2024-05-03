@@ -37,11 +37,11 @@ function CourseItem({ course }) {
                     />
                 </div>
             </div>
-            <div className="text-center p-4 pb-0 min-h">
-                <h5 className="mb-2">{course?.course_name_en}</h5>
-                <p style={{ marginTop: "none" }}>
+            <div className="text-center p-4">
+                <h5 className="mb-1">{course?.course_name_en}</h5>
+                {/* <p style={{ marginTop: "none" }}>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                </p>
+                </p> */}
             </div>
             <div className="d-flex border-top">
                 <small className="flex-fill text-center border-end py-2">
