@@ -15,6 +15,7 @@ import Register from "@src/Pages/auth/Register";
 import MyCourses from "@src/Pages/member/MyCourses";
 import MyCertificates from "@src/Pages/member/MyCertificates";
 import AvailableCourses from "@src/Pages/member/AvailableCourses";
+import ForgetPassword from "./Pages/auth/ForgetPassword";
 
 function App() {
     const token = useSelector((state) => state.auth.token);
@@ -68,6 +69,7 @@ function App() {
                                 path="register"
                                 element={<Register />}
                             />
+                            <Route exact path="forget-password" element={<ForgetPassword />} />
                         </Route>
                     </Route>
                     <Route path="*" element={<Home />} />
