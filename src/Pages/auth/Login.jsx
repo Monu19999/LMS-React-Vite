@@ -18,7 +18,7 @@ export default function Login() {
             : {
                   defaultValues: {
                       email: "hw.sharma9@mp.gov.in",
-                      password: "Password",
+                      password: "password",
                   },
               };
     const {
