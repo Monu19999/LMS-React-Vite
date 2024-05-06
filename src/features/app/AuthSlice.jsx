@@ -216,7 +216,6 @@ export const authSlice = createSlice({
                 state.user_loading = true;
             })
             .addCase(logout.fulfilled, (state, { payload }) => {
-                console.log(payload);
                 Cookies.remove("token", "");
                 Cookies.remove("user", "");
                 state.user = null;
@@ -243,10 +242,14 @@ export const authSlice = createSlice({
                         state.errors = payload.errors;
                         state.error_message = payload.message;
                     } else {
-                        Cookies.set("token", payload.token);
-                        Cookies.set("user", JSON.stringify(payload.user));
-                        state.user = payload.user;
-                        state.token = payload.token;
+                        if (payload.hasOwnProperty("token")) {
+                            Cookies.set("token", payload.token);
+                            state.token = payload.token;
+                        }
+                        if (payload.hasOwnProperty("user")) {
+                            Cookies.set("user", JSON.stringify(payload.user));
+                            state.user = payload.user;
+                        }
                         state.errors = [];
                         state.error_message = null;
                     }
@@ -259,13 +262,10 @@ export const authSlice = createSlice({
 
             .addCase(sendOTP.pending, (state) => {
                 state.is_otp_set = false;
-                console.log("sendOTP.pending");
                 state.user_loading = true;
                 state.error_message = null;
             })
             .addCase(sendOTP.fulfilled, (state, { payload }) => {
-                console.log("sendOTP.fulfilled");
-                console.log("payload => ", payload);
                 state.user_loading = false;
                 if (payload != undefined) {
                     if (payload.hasOwnProperty("errors")) {
@@ -281,7 +281,6 @@ export const authSlice = createSlice({
                 }
             })
             .addCase(sendOTP.rejected, (state, action) => {
-                console.log("sendOTP.rejected");
                 state.is_otp_set = false;
                 state.user_loading = false;
                 state.error_message = action.error.message;
