@@ -235,10 +235,10 @@ export default function Home() {
                                         display: "table-cell",
                                     }}
                                 >
-                                    <h1 className="mb-4">
+                                    <h1 className="mb-2">
                                         {homedata.page.title_en}
                                     </h1>
-                                    <div className="mb-4">
+                                    <div className="mb-2">
                                         {parse(homedata.page.description_en)}
                                     </div>
                                     <Link

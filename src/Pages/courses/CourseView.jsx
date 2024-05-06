@@ -95,7 +95,7 @@ function CourseView() {
                 className="container-fluid py-4 mb-4 "
                 style={{
                     backgroundColor: "#343747",
-                    minHeight: 380,
+                    minHeight: 280,
                 }}
             >
                 <div className="container">
