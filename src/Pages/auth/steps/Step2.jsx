@@ -17,6 +17,7 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                 <Form.Control
                     type="text"
                     placeholder="Enter First Name"
+                    aria-describedby="first_nameHelpBlock"
                     {...fields.first_name}
                     className={`${
                         errors?.first_name?.type == "required"
@@ -24,9 +25,11 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                             : ""
                     }`}
                 />
-                {errors?.first_name?.type === "required" && (
-                    <p className="errorMsg">{errors.first_name.message}</p>
-                )}
+                <Form.Text id="first_nameHelpBlock" muted>
+                    {["required", "pattern"].includes(
+                        errors?.first_name?.type
+                    ) && <>{errors.first_name.message}</>}
+                </Form.Text>
             </Form.Group>
 
             {/* Last Name */}
@@ -38,11 +41,14 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                 <Form.Control
                     type="text"
                     placeholder="Enter Last Name"
+                    aria-describedby="last_nameHelpBlock"
                     {...fields.last_name}
                 />
-                {errors?.last_name?.type === "required" && (
-                    <p className="errorMsg">{errors.last_name.message}</p>
-                )}
+                <Form.Text id="last_nameHelpBlock" muted>
+                    {["required", "pattern"].includes(
+                        errors?.last_name?.type
+                    ) && <>{errors.last_name.message}</>}
+                </Form.Text>
             </Form.Group>
 
             {/* Email */}
@@ -54,14 +60,14 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                 <Form.Control
                     type="text"
                     placeholder="Enter Email"
+                    aria-describedby="emailHelpBlock"
                     {...fields.email}
                 />
-                {errors?.email?.type === "required" && (
-                    <p className="errorMsg">{errors.email.message}</p>
-                )}
-                {errors?.email?.type === "pattern" && (
-                    <p className="errorMsg">{errors.email.message}</p>
-                )}
+                <Form.Text id="emailHelpBlock" muted>
+                    {["required", "pattern"].includes(errors?.email?.type) && (
+                        <>{errors.email.message}</>
+                    )}
+                </Form.Text>
             </Form.Group>
 
             {/* Username */}
@@ -73,11 +79,14 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                 <Form.Control
                     type="text"
                     placeholder="Enter Username"
+                    aria-describedby="usernameHelpBlock"
                     {...fields.username}
                 />
-                {errors?.username?.type === "required" && (
-                    <p className="errorMsg">{errors.username.message}</p>
-                )}
+                <Form.Text id="usernameHelpBlock" muted>
+                    {["required", "minLength", "pattern"].includes(
+                        errors?.username?.type
+                    ) && <>{errors.username.message}</>}
+                </Form.Text>
             </Form.Group>
 
             {/* Password */}
@@ -108,18 +117,21 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                 <Form.Control
                     type="password"
                     placeholder="Confirm Password"
+                    aria-describedby="password_confirmationHelpBlock"
                     {...fields.password_confirmation}
                 />
-                {errors?.password_confirmation?.type === "required" && (
-                    <p className="errorMsg">
-                        {errors.password_confirmation.message}
-                    </p>
-                )}
-                {errors?.password_confirmation?.type === "validate" && (
-                    <p className="errorMsg">
-                        {errors.password_confirmation.message}
-                    </p>
-                )}
+                <Form.Text id="password_confirmationHelpBlock" muted>
+                    {errors?.password_confirmation?.type === "required" && (
+                        <p className="errorMsg">
+                            {errors.password_confirmation.message}
+                        </p>
+                    )}
+                    {errors?.password_confirmation?.type === "validate" && (
+                        <p className="errorMsg">
+                            {errors.password_confirmation.message}
+                        </p>
+                    )}
+                </Form.Text>
             </Form.Group>
 
             {/* Department */}
@@ -128,7 +140,10 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                 controlId="formGroupDepartments"
             >
                 <Form.Label>Departments</Form.Label>
-                <Form.Select {...fields.fk_department_id}>
+                <Form.Select
+                    aria-describedby="fk_department_idHelpBlock"
+                    {...fields.fk_department_id}
+                >
                     <option value="">Select Department</option>
                     {props?.departments.map((department) => {
                         return (
@@ -138,11 +153,13 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                         );
                     })}
                 </Form.Select>
-                {errors?.fk_department_id?.type === "required" && (
-                    <p className="errorMsg">
-                        {errors.fk_department_id.message}
-                    </p>
-                )}
+                <Form.Text id="fk_department_idHelpBlock" muted>
+                    {errors?.fk_department_id?.type === "required" && (
+                        <p className="errorMsg">
+                            {errors.fk_department_id.message}
+                        </p>
+                    )}
+                </Form.Text>
             </Form.Group>
 
             {/* Office */}
@@ -151,7 +168,10 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                 controlId="formGroupOffice"
             >
                 <Form.Label>Office</Form.Label>
-                <Form.Select {...fields.fk_office_id}>
+                <Form.Select
+                    aria-describedby="fk_office_idHelpBlock"
+                    {...fields.fk_office_id}
+                >
                     <option value="">Select Office</option>
                     {props?.offices.map((office) => (
                         <option key={office.id} value={office.id}>
@@ -159,9 +179,13 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                         </option>
                     ))}
                 </Form.Select>
-                {errors?.fk_office_id?.type === "required" && (
-                    <p className="errorMsg">{errors.fk_office_id.message}</p>
-                )}
+                <Form.Text id="fk_office_idHelpBlock" muted>
+                    {errors?.fk_office_id?.type === "required" && (
+                        <p className="errorMsg">
+                            {errors.fk_office_id.message}
+                        </p>
+                    )}
+                </Form.Text>
             </Form.Group>
             {button}
         </Form>

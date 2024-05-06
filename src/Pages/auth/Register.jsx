@@ -120,7 +120,7 @@ export default function Register() {
                             first_name: register("first_name", {
                                 required: "First Name is Required!",
                                 pattern: {
-                                    value: /^[a-zA-Z]+$/,
+                                    value: /^[a-zA-Z\s]+$/,
                                     message:
                                         "First name should contain only characters.",
                                 },
@@ -128,7 +128,7 @@ export default function Register() {
                             last_name: register("last_name", {
                                 required: "Last Name is Required!",
                                 pattern: {
-                                    value: /^[a-zA-Z]+$/,
+                                    value: /^[a-zA-Z\s]+$/,
                                     message:
                                         "Last name should contain only characters.",
                                 },
@@ -142,6 +142,11 @@ export default function Register() {
                             }),
                             username: register("username", {
                                 required: "Username is Required!",
+                                pattern: {
+                                    value: /^[A-Za-z0-9_]+$/,
+                                    message:
+                                        "Username must contain alphabets, numbers or an underscore",
+                                },
                             }),
                             password: register("password", {
                                 required: "Password is Required!",
