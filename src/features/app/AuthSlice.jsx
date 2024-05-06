@@ -44,7 +44,7 @@ export const login = createAsyncThunk("auth/login", async (credentials) => {
                 cause: json,
             });
         }
-        return json.data;
+        return json;
     } catch (error) {
         return error.cause;
     }
@@ -108,7 +108,7 @@ export const register = createAsyncThunk("auth/register", async (userData) => {
 });
 
 export const sendOTP = createAsyncThunk("auth/sendOTP", async (userData) => {
-    let api_url = api("auth_send_otp", userData.id);
+    let api_url = api("auth_send_otp");
     try {
         const response = await fetch(api_url, {
             method: "post",
@@ -191,11 +191,13 @@ export const authSlice = createSlice({
                 state.user_loading = true;
             })
             .addCase(login.fulfilled, (state, { payload }) => {
+                state.user_loading = false;
                 if (payload.hasOwnProperty("errors")) {
                     console.log(payload.message);
                     state.errors = payload.errors;
                     state.error_message = payload.message;
                 } else {
+                    payload = payload.data;
                     Cookies.set("token", payload.token);
                     Cookies.set("user", JSON.stringify(payload.user));
                     state.user = payload.user;
@@ -221,6 +223,7 @@ export const authSlice = createSlice({
                 state.token = null;
                 state.errors = [];
                 state.error_message = null;
+                state.user_loading = false;
             })
             .addCase(logout.rejected, (state, { payload }) => {
                 state.error_message = payload;

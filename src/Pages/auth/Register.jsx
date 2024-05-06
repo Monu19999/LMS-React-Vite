@@ -5,7 +5,6 @@ import { Link, useNavigate, useSubmit } from "react-router-dom";
 import Step1 from "./steps/Step1";
 import Step2 from "./steps/Step2";
 import Step3 from "./steps/Step3";
-import Step4 from "./steps/Step4";
 import { useForm } from "react-hook-form";
 import { register as RegisterUser } from "@src/features/app/AuthSlice";
 import { getDepartments } from "@src/features/app/AppSlice";
@@ -42,12 +41,10 @@ export default function Register() {
 
     const handleChangeDepartment = (e) => {
         const selectedDepartment = e.target.value;
-        console.log(selectedDepartment);
 
         const selectedDepartmentObj = departments.find(
             (department) => department.id === parseInt(selectedDepartment)
         );
-        console.log(selectedDepartmentObj);
         setOffices(
             selectedDepartmentObj == undefined
                 ? []
@@ -57,58 +54,15 @@ export default function Register() {
     };
 
     const handleOfficeChange = (e) => {
-        const selectedOffice = e.target.value;
-        // console.log("office", selectedOffice);
-        setSelectedOffice(selectedOffice);
-    };
-
-    const form_fields = {
-        1: {
-            first_name: "Harshwardhan",
-            last_name: "Sharma",
-            username: "hw.sharma91",
-            password: "password",
-            password_confirmation: "password",
-        },
-        2: {
-            mobile: "7879651192",
-            mobile_otp: "",
-        },
-        3: {
-            email: "",
-            email_otp: "",
-        },
-        4: {
-            fk_department_id: "",
-            fk_office_id: "",
-        },
+        setSelectedOffice(e.target.value);
     };
 
     const {
         register,
         watch,
         handleSubmit,
-        setError,
         formState: { errors },
-    } = useForm({
-        defaultValues: {
-            ...form_fields[activeStep],
-        },
-    });
-
-    // useEffect(() => {
-    //     let current_step = localStorage.getItem("current_step");
-    //     if (current_step) {
-    //         if (activeStep == null) {
-    //             setActiveStep(parseInt(current_step));
-    //         }
-    //     } else {
-    //         console.log("current_step");
-    //         setActiveStep(1);
-    //         console.log(activeStep);
-    //         localStorage.setItem("current_step", activeStep);
-    //     }
-    // }, [activeStep]);
+    } = useForm({});
 
     const onSubmit = async (data) => {
         let extra_data = { step: activeStep };
@@ -116,14 +70,14 @@ export default function Register() {
             extra_data["id"] = user.id;
         }
         data = { ...data, ...extra_data };
-        console.log("form1");
-        console.log("errors => ", errors);
-        console.log("data => ", data);
+        // console.log("form1");
+        // console.log("errors => ", errors);
+        // console.log("data => ", data);
         let response = await dispatch(RegisterUser(data));
         if (response.payload.hasOwnProperty("errors")) {
             console.log(response.payload.errors);
         } else {
-            console.log("form successfully submitted!");
+            // console.log("form successfully submitted!");
             dispatch(
                 setMessages({
                     errors: [],
@@ -132,17 +86,17 @@ export default function Register() {
                     is_otp_set: false,
                 })
             );
-            localStorage.setItem(
-                "temp_user",
-                JSON.stringify(response.payload.user)
-            );
-            setUser(response.payload.user);
-            if (activeStep == 4) {
+            if (activeStep == 2) {
                 localStorage.removeItem("temp_user");
-                navigate("/member");
+                // navigate("/member");
             } else {
-                setActiveStep((previous) => previous + 1);
+                setUser(response.payload.user);
+                localStorage.setItem(
+                    "temp_user",
+                    JSON.stringify(response.payload.user)
+                );
             }
+            setActiveStep((previous) => previous + 1);
         }
     };
 
@@ -151,6 +105,23 @@ export default function Register() {
             case 1:
                 return (
                     <Step1
+                        fields={{
+                            mobile: register("mobile", {
+                                required: "Mobile is Required!",
+                            }),
+                            mobile_otp: register("mobile_otp", {
+                                required: "Mobile OTP is Required!",
+                            }),
+                        }}
+                        errors={errors}
+                        user={user}
+                        onSubmit={handleSubmit(onSubmit)}
+                        button={setFormButton()}
+                    />
+                );
+            case 2:
+                return (
+                    <Step2
                         fields={{
                             first_name: register("first_name", {
                                 required: "First Name is Required!",
@@ -166,6 +137,13 @@ export default function Register() {
                                     value: /^[a-zA-Z]+$/,
                                     message:
                                         "Last name should contain only characters.",
+                                },
+                            }),
+                            email: register("email", {
+                                required: "Email is Required!",
+                                pattern: {
+                                    value: /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i,
+                                    message: "Not a valid Email!",
                                 },
                             }),
                             username: register("username", {
@@ -185,65 +163,18 @@ export default function Register() {
                                     },
                                 }
                             ),
-                        }}
-                        errors={errors}
-                        onSubmit={handleSubmit(onSubmit)}
-                        button={setFormButton()}
-                    />
-                );
-            case 2:
-                return (
-                    <Step2
-                        fields={{
-                            mobile: register("mobile", {
-                                required: "Mobile is Required!",
-                            }),
-                            mobile_otp: register("mobile_otp", {
-                                required: "Mobile OTP is Required!",
-                            }),
-                        }}
-                        errors={errors}
-                        user={user}
-                        onSubmit={handleSubmit(onSubmit)}
-                        button={setFormButton()}
-                    />
-                );
-            case 3:
-                return (
-                    <Step3
-                        fields={{
-                            email: register("email", {
-                                required: "Email is Required!",
-                                pattern: {
-                                    value: /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i,
-                                    message: "Not a valid Email!",
-                                },
-                            }),
-                            email_otp: register("email_otp", {
-                                required: "Email OTP is Required!",
-                            }),
-                        }}
-                        errors={errors}
-                        user={user}
-                        onSubmit={handleSubmit(onSubmit)}
-                        button={setFormButton()}
-                    />
-                );
-            case 4:
-                return (
-                    <Step4
-                        fields={{
                             fk_department_id: register("fk_department_id", {
                                 required: "Department is Required!",
+                                onChange: handleChangeDepartment,
                             }),
                             fk_office_id: register("fk_office_id", {
                                 required: "Office is Required!",
+                                onChange: handleOfficeChange,
                             }),
                         }}
                         errors={errors}
-                        user={user}
-                        handleDepartmentChange={handleChangeDepartment}
-                        handleChangeOffice={handleOfficeChange}
+                        // handleDepartmentChange={handleChangeDepartment}
+                        // handleChangeOffice={handleOfficeChange}
                         onSubmit={handleSubmit(onSubmit)}
                         button={setFormButton()}
                         offices={offices}
@@ -251,6 +182,8 @@ export default function Register() {
                         selectedOffice={selectedOffice}
                     />
                 );
+            case 3:
+                return <Step3 />;
             default:
                 return "Unknown step";
         }
@@ -325,30 +258,28 @@ export default function Register() {
                         ))}
                     </div>
                 )}
-                {user_loading ? (
-                    <BootstrapSpinner />
-                ) : (
-                    getStepContent(activeStep)
-                )}
-
-                <div className="d-flex gap-3 align-items-center justify-content-end">
-                    <Link
-                        to="/auth/login"
-                        style={{ textDecoration: "underline" }}
-                        className="text-dark"
-                    >
-                        <span
-                            onMouseEnter={(e) => {
-                                e.target.style.color = "blue";
-                            }}
-                            onMouseLeave={(e) => {
-                                e.target.style.color = "black";
-                            }}
+                {user_loading && <BootstrapSpinner />}
+                {getStepContent(activeStep)}
+                {activeStep == 1 && (
+                    <div className="d-flex gap-3 align-items-center justify-content-end">
+                        <Link
+                            to="/auth/login"
+                            style={{ textDecoration: "underline" }}
+                            className="text-dark"
                         >
-                            Already registered?
-                        </span>
-                    </Link>
-                </div>
+                            <span
+                                onMouseEnter={(e) => {
+                                    e.target.style.color = "blue";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.target.style.color = "black";
+                                }}
+                            >
+                                Already registered?
+                            </span>
+                        </Link>
+                    </div>
+                )}
             </div>
         </div>
     );

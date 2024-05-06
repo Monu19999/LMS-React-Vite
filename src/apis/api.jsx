@@ -20,9 +20,7 @@ const api_urls = {
     auth_login: "/api/auth/login",
     auth_logout: "/api/auth/logout",
     auth_register: "/api/auth/temp-register",
-    auth_send_otp: function (id) {
-        return `/api/auth/send-otp/${id}`;
-    },
+    auth_send_otp: "/api/auth/send-otp",
 
     // Authenticated users urls
     user: "/api/auth/user",
