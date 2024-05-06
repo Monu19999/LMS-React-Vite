@@ -1,33 +1,41 @@
-import React, { useEffect } from "react";
-import { Form } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { login, setMessages } from "@src/features/app/AuthSlice";
-import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import { login } from "@src/features/app/AuthSlice";
+import { setMessages } from "@src/features/app/AuthSlice";
+
+const isValidEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i;
+    return emailRegex.test(email);
+};
+
+// const isValidPassword = (password) => {
+//     const passwordRegex =
+//         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+//     return passwordRegex.test(password);
+// };
 
 export default function Login() {
-    const user_loading = useSelector((state) => state.auth.user_loading);
+    const [email, setEmail] = useState(
+        import.meta.env.VITE_APP_ENV == "production"
+            ? ""
+            : "hw.sharma9@mp.gov.in"
+    );
     const auth_state = useSelector((state) => state.auth);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm({
-        defaultValues: {
-            email:
-                import.meta.env.VITE_APP_ENV == "production"
-                    ? ""
-                    : "hw.sharma9@mp.gov.in",
-            password:
-                import.meta.env.VITE_APP_ENV == "production" ? "" : "password",
-        },
+    const [password, setPassword] = useState(
+        import.meta.env.VITE_APP_ENV == "production" ? "" : "password"
+    );
+    const [errors, setErrors] = useState({
+        email: "",
+        password: "",
     });
 
-    const resetMessages = () => {
+    // Resetting error messages
+    useEffect(() => {
         dispatch(
             setMessages({
                 errors: [],
@@ -37,23 +45,53 @@ export default function Login() {
                 is_otp_set: false,
             })
         );
-    };
-    // Resetting error messages
-    useEffect(() => {
-        resetMessages();
     }, []);
 
-    // Handle user login form submittion
-    const loginUser = async (user) => {
-        let response = await dispatch(login(user));
-        let data = response.payload?.data;
-        if (response.hasOwnProperty("errors")) {
-            return;
-        } else if (data?.status == 200) {
-            resetMessages();
-            navigate("/member");
+    const saveEmployee = async (e) => {
+        e.preventDefault();
+        // console.log(validateForm());
+        if (validateForm()) {
+            const employee = { email, password };
+
+            let response = await dispatch(login(employee));
+            // console.log(response);
+            if (auth_state.error_message == "") {
+                navigate("/member");
+            }
         }
     };
+
+    const validateForm = () => {
+        let valid = true;
+        //const { name, email, password } = formData;
+        const errorsCopy = { ...errors };
+        if (!email.trim()) {
+            errorsCopy.email = "Email is required";
+            valid = false;
+        } else if (isValidEmail(email) == false) {
+            errorsCopy.email = "Email is invalid";
+            valid = false;
+        } else {
+            errorsCopy.email = "";
+        }
+
+        if (!password.trim()) {
+            errorsCopy.password = "Password is required";
+            valid = false;
+        }
+        //  else if (!isValidPassword(password)) {
+        //     errorsCopy.password =
+        //         "Password must be 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character";
+        //     valid = false;
+        // }
+        else {
+            errorsCopy.password = "";
+        }
+
+        setErrors(errorsCopy);
+        return valid;
+    };
+
     return (
         <div className="d-flex flex-column my-3 gap-3 align-items-center">
             <div className="d-flex justify-content-center">
@@ -66,72 +104,58 @@ export default function Login() {
                     />
                 </Link>
             </div>
+
             <div
                 className="card d-flex align-items-center shadow-sm p-3 bg-white"
                 style={{ borderRadius: "10px", width: "400px" }}
             >
-                {user_loading && <BootstrapSpinner />}
                 {auth_state?.error_message && (
                     <div className="alert alert-danger alert-block mt-3 ml-3 mr-3">
                         <strong>{auth_state.error_message}</strong>
                     </div>
                 )}
-                <Form
+                <form
                     className="d-flex py-3 w-100 flex-column gap-3"
-                    onSubmit={handleSubmit(loginUser)}
+                    onSubmit={saveEmployee}
                 >
-                    <Form.Group
-                        className="d-flex flex-column"
-                        controlId="formGroupEmail"
-                    >
-                        <Form.Label className="font-weight-bold">
-                            Email (Accepts only gov.in or nic.in)
-                        </Form.Label>
-                        <Form.Control
+                    <div className="d-flex flex-column">
+                        <label
+                            htmlFor="email"
+                            className="form-label font-weight-bold"
+                        >
+                            Email
+                        </label>
+                        <input
                             style={{ borderRadius: "5px" }}
-                            type="text"
-                            placeholder="Enter Email"
-                            {...register("email", {
-                                required: "Email is Required!",
-                                pattern: {
-                                    value: /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i,
-                                    message: "Not a valid Email!",
-                                },
-                            })}
+                            type="email"
+                            className="form-control"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
-                        {errors?.email?.type === "required" && (
-                            <p className="errorMsg">{errors.email.message}</p>
+                        {errors.email && (
+                            <div className="text-danger">{errors.email}</div>
                         )}
-                        {errors?.email?.type === "pattern" && (
-                            <p className="errorMsg">{errors.email.message}</p>
-                        )}
-                    </Form.Group>
-                    <Form.Group
-                        className="d-flex flex-column"
-                        controlId="formGroupPassword"
-                    >
-                        <Form.Label className="font-weight-bold">
+                    </div>
+                    <div className="d-flex flex-column">
+                        <label htmlFor="password" className="form-label">
                             Password
-                        </Form.Label>
-                        <Form.Control
+                        </label>
+                        <input
                             style={{ borderRadius: "5px" }}
                             type="password"
-                            placeholder="Password"
-                            {...register("password", {
-                                required: "Password is Required!",
-                            })}
+                            className="form-control"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
-                        {errors?.password?.type === "required" && (
-                            <p className="errorMsg">
-                                {errors.password.message}
-                            </p>
+                        {errors.password && (
+                            <div className="text-danger">{errors.password}</div>
                         )}
-                    </Form.Group>
+                    </div>
                     <div className="gap-2 d-flex">
                         <input
                             type="checkbox"
+                            name="remember-me"
                             className="form-check-input"
-                            {...register("remember")}
                         />
                         <span>Remember me</span>
                     </div>
@@ -173,7 +197,6 @@ export default function Login() {
                                 color: "white",
                                 transition: "background-color 0.3s, color 0.3s",
                             }}
-                            disabled={user_loading}
                             className="btn btn-dark text-white"
                             onMouseEnter={(e) => {
                                 e.target.style.backgroundColor =
@@ -188,7 +211,7 @@ export default function Login() {
                             Log in
                         </button>
                     </div>
-                </Form>
+                </form>
             </div>
         </div>
     );

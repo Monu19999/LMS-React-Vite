@@ -44,7 +44,7 @@ export const login = createAsyncThunk("auth/login", async (credentials) => {
                 cause: json,
             });
         }
-        return json.data;
+        return json;
     } catch (error) {
         return error.cause;
     }
@@ -108,7 +108,7 @@ export const register = createAsyncThunk("auth/register", async (userData) => {
 });
 
 export const sendOTP = createAsyncThunk("auth/sendOTP", async (userData) => {
-    let api_url = api("auth_send_otp", userData.id);
+    let api_url = api("auth_send_otp");
     try {
         const response = await fetch(api_url, {
             method: "post",
@@ -191,11 +191,13 @@ export const authSlice = createSlice({
                 state.user_loading = true;
             })
             .addCase(login.fulfilled, (state, { payload }) => {
+                state.user_loading = false;
                 if (payload.hasOwnProperty("errors")) {
                     console.log(payload.message);
                     state.errors = payload.errors;
                     state.error_message = payload.message;
                 } else {
+                    payload = payload.data;
                     Cookies.set("token", payload.token);
                     Cookies.set("user", JSON.stringify(payload.user));
                     state.user = payload.user;
@@ -214,13 +216,13 @@ export const authSlice = createSlice({
                 state.user_loading = true;
             })
             .addCase(logout.fulfilled, (state, { payload }) => {
-                console.log(payload);
                 Cookies.remove("token", "");
                 Cookies.remove("user", "");
                 state.user = null;
                 state.token = null;
                 state.errors = [];
                 state.error_message = null;
+                state.user_loading = false;
             })
             .addCase(logout.rejected, (state, { payload }) => {
                 state.error_message = payload;
@@ -240,10 +242,14 @@ export const authSlice = createSlice({
                         state.errors = payload.errors;
                         state.error_message = payload.message;
                     } else {
-                        Cookies.set("token", payload.token);
-                        Cookies.set("user", JSON.stringify(payload.user));
-                        state.user = payload.user;
-                        state.token = payload.token;
+                        if (payload.hasOwnProperty("token")) {
+                            Cookies.set("token", payload.token);
+                            state.token = payload.token;
+                        }
+                        if (payload.hasOwnProperty("user")) {
+                            Cookies.set("user", JSON.stringify(payload.user));
+                            state.user = payload.user;
+                        }
                         state.errors = [];
                         state.error_message = null;
                     }
@@ -256,13 +262,10 @@ export const authSlice = createSlice({
 
             .addCase(sendOTP.pending, (state) => {
                 state.is_otp_set = false;
-                console.log("sendOTP.pending");
                 state.user_loading = true;
                 state.error_message = null;
             })
             .addCase(sendOTP.fulfilled, (state, { payload }) => {
-                console.log("sendOTP.fulfilled");
-                console.log("payload => ", payload);
                 state.user_loading = false;
                 if (payload != undefined) {
                     if (payload.hasOwnProperty("errors")) {
@@ -278,7 +281,6 @@ export const authSlice = createSlice({
                 }
             })
             .addCase(sendOTP.rejected, (state, action) => {
-                console.log("sendOTP.rejected");
                 state.is_otp_set = false;
                 state.user_loading = false;
                 state.error_message = action.error.message;

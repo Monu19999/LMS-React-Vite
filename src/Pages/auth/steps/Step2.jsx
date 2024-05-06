@@ -1,36 +1,7 @@
-import React, { useRef, useState } from "react";
-import { Button, Form } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { setMessages } from "@src/features/app/AuthSlice";
-import { sendOTP } from "@src/features/app/AuthSlice";
+import React from "react";
+import { Form } from "react-bootstrap";
 
-export default function Step2({ fields, errors, onSubmit, button, user }) {
-    const mobileRef = useRef();
-    const is_otp_set = useSelector((state) => state.auth.is_otp_set);
-    console.log(errors);
-    console.log("user => ", user);
-    const dispatch = useDispatch();
-    const handleSendOTP = async () => {
-        console.log("send otp => ", mobileRef);
-        if (mobileRef.current != "" && mobileRef.current != undefined) {
-            dispatch(
-                setMessages({
-                    errors: [],
-                    success_message: null,
-                    error_message: null,
-                })
-            );
-            const response = await dispatch(
-                sendOTP({
-                    id: user.id,
-                    type: "mobile",
-                    mobile: mobileRef.current,
-                })
-            );
-            // const json = await response.payload;
-            // console.log("send otp response => ", response);
-        }
-    };
+export default function Step2({ fields, errors, onSubmit, button, ...props }) {
     return (
         <Form
             className="d-flex py-3 w-100 flex-column gap-3"
@@ -38,48 +9,142 @@ export default function Step2({ fields, errors, onSubmit, button, user }) {
         >
             <Form.Group
                 className="d-flex flex-column"
-                controlId="formGroupMobile"
+                controlId="formGroupFName"
             >
-                {/* <input type="hidden" name="type" value="mobile" /> */}
-                <Form.Label>Mobile</Form.Label>
-                <div className="d-flex gap-2">
-                    <Form.Control
-                        type="text"
-                        name="mobile"
-                        ref={mobileRef}
-                        onKeyUp={(e) => (mobileRef.current = e.target.value)}
-                        placeholder="Enter Mobile"
-                        {...fields.mobile}
-                    />
-                    <Button
-                        variant="secondary"
-                        type="button"
-                        onClick={handleSendOTP}
-                    >
-                        Send OTP
-                    </Button>
-                </div>
-                {errors?.mobile?.type === "required" && (
-                    <p className="errorMsg">{errors.mobile.message}</p>
+                <Form.Label>First Name</Form.Label>
+
+                <Form.Control
+                    type="text"
+                    placeholder="Enter First Name"
+                    {...fields.first_name}
+                    className={`${
+                        errors?.first_name?.type == "required"
+                            ? "input-error"
+                            : ""
+                    }`}
+                />
+                {errors?.first_name?.type === "required" && (
+                    <p className="errorMsg">{errors.first_name.message}</p>
                 )}
             </Form.Group>
-            {is_otp_set && (
-                <Form.Group
-                    className="d-flex flex-column"
-                    controlId="formGroupOTP"
-                >
-                    <Form.Label>OTP</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="mobile_otp"
-                        placeholder="Enter OTP"
-                        {...fields.mobile_otp}
-                    />
-                    {errors?.mobile_otp?.type === "required" && (
-                        <p className="errorMsg">{errors.mobile_otp.message}</p>
-                    )}
-                </Form.Group>
-            )}
+            <Form.Group
+                className="d-flex flex-column"
+                controlId="formGroupLName"
+            >
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="Enter Last Name"
+                    {...fields.last_name}
+                />
+                {errors?.last_name?.type === "required" && (
+                    <p className="errorMsg">{errors.last_name.message}</p>
+                )}
+            </Form.Group>
+            <Form.Group
+                className="d-flex flex-column"
+                controlId="formGroupEmail"
+            >
+                <Form.Label>Email (Accepts only gov.in or nic.in)</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="Enter Email"
+                    {...fields.email}
+                />
+                {errors?.email?.type === "required" && (
+                    <p className="errorMsg">{errors.email.message}</p>
+                )}
+                {errors?.email?.type === "pattern" && (
+                    <p className="errorMsg">{errors.email.message}</p>
+                )}
+            </Form.Group>
+            <Form.Group
+                className="d-flex flex-column"
+                controlId="formGroupUsername"
+            >
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="Enter Username"
+                    {...fields.username}
+                />
+                {errors?.username?.type === "required" && (
+                    <p className="errorMsg">{errors.username.message}</p>
+                )}
+            </Form.Group>
+            <Form.Group
+                className="d-flex flex-column"
+                controlId="formGroupPassword"
+            >
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    {...fields.password}
+                />
+                {errors?.password?.type === "required" && (
+                    <p className="errorMsg">{errors.password.message}</p>
+                )}
+            </Form.Group>
+            <Form.Group
+                className="d-flex flex-column"
+                controlId="formGroupConfirmPassword"
+            >
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control
+                    type="password"
+                    placeholder="Confirm Password"
+                    {...fields.password_confirmation}
+                />
+                {errors?.password_confirmation?.type === "required" && (
+                    <p className="errorMsg">
+                        {errors.password_confirmation.message}
+                    </p>
+                )}
+                {errors?.password_confirmation?.type === "validate" && (
+                    <p className="errorMsg">
+                        {errors.password_confirmation.message}
+                    </p>
+                )}
+            </Form.Group>
+            <Form.Group
+                className="d-flex flex-column"
+                controlId="formGroupDepartments"
+            >
+                <Form.Label>Departments</Form.Label>
+                <Form.Select {...fields.fk_department_id}>
+                    <option value="">Select Department</option>
+                    {props?.departments.map((department) => {
+                        return (
+                            <option value={department.id} key={department.id}>
+                                {department.title_en}
+                            </option>
+                        );
+                    })}
+                </Form.Select>
+                {errors?.fk_department_id?.type === "required" && (
+                    <p className="errorMsg">
+                        {errors.fk_department_id.message}
+                    </p>
+                )}
+            </Form.Group>
+            <Form.Group
+                className="d-flex flex-column"
+                controlId="formGroupOffice"
+            >
+                <Form.Label>Office</Form.Label>
+                <Form.Select {...fields.fk_office_id}>
+                    <option value="">Select Office</option>
+                    {props?.offices.map((office) => (
+                        <option key={office.id} value={office.id}>
+                            {office.title_en}
+                        </option>
+                    ))}
+                </Form.Select>
+                {errors?.fk_office_id?.type === "required" && (
+                    <p className="errorMsg">{errors.fk_office_id.message}</p>
+                )}
+            </Form.Group>
             {button}
         </Form>
     );
