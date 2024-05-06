@@ -89,11 +89,14 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                 <Form.Control
                     type="password"
                     placeholder="Password"
+                    aria-describedby="passwordHelpBlock"
                     {...fields.password}
                 />
-                {errors?.password?.type === "required" && (
-                    <p className="errorMsg">{errors.password.message}</p>
-                )}
+                <Form.Text id="passwordHelpBlock" muted>
+                    {["required", "minLength", "pattern"].includes(
+                        errors?.password?.type
+                    ) && <>{errors.password.message}</>}
+                </Form.Text>
             </Form.Group>
 
             {/* Confirm Password */}

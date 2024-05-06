@@ -145,6 +145,16 @@ export default function Register() {
                             }),
                             password: register("password", {
                                 required: "Password is Required!",
+                                minLength: {
+                                    value: 8,
+                                    message:
+                                        "Password must be 8 characters long",
+                                },
+                                pattern: {
+                                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+                                    message:
+                                        "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character",
+                                },
                             }),
                             password_confirmation: register(
                                 "password_confirmation",
