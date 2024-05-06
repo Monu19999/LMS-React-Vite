@@ -12,20 +12,20 @@ export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    let default_values =
+        import.meta.env.VITE_APP_ENV == "production"
+            ? {}
+            : {
+                  defaultValues: {
+                      email: "hw.sharma9@mp.gov.in",
+                      password: "Password",
+                  },
+              };
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm({
-        defaultValues: {
-            email:
-                import.meta.env.VITE_APP_ENV == "production"
-                    ? ""
-                    : "hw.sharma9@mp.gov.in",
-            password:
-                import.meta.env.VITE_APP_ENV == "production" ? "" : "password",
-        },
-    });
+    } = useForm(default_values);
 
     const resetMessages = () => {
         dispatch(
