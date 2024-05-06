@@ -1,18 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessages } from "@src/features/app/AuthSlice";
 import { sendOTP } from "@src/features/app/AuthSlice";
 
 export default function Step1({ fields, errors, onSubmit, button }) {
-    console.log(fields);
-    console.log({ ...fields.mobile });
-    const mobileRef = useRef();
     const is_otp_set = useSelector((state) => state.auth.is_otp_set);
-    console.log(errors);
+
+    const mobileRef = useRef();
     const dispatch = useDispatch();
+
     const handleSendOTP = async () => {
-        console.log("send otp => ", mobileRef);
         if (mobileRef.current != "" && mobileRef.current != undefined) {
             dispatch(
                 setMessages({
@@ -27,8 +25,6 @@ export default function Step1({ fields, errors, onSubmit, button }) {
                     mobile: mobileRef.current,
                 })
             );
-            // const json = await response.payload;
-            // console.log("send otp response => ", response);
         }
     };
     return (
@@ -36,11 +32,11 @@ export default function Step1({ fields, errors, onSubmit, button }) {
             className="d-flex py-3 w-100 flex-column gap-3"
             onSubmit={onSubmit}
         >
+            {/* Mobile Number */}
             <Form.Group
                 className="d-flex flex-column"
                 controlId="formGroupMobile"
             >
-                {/* <input type="hidden" name="type" value="mobile" /> */}
                 <Form.Label>Mobile</Form.Label>
                 <div className="d-flex gap-2">
                     <Form.Control
@@ -62,6 +58,8 @@ export default function Step1({ fields, errors, onSubmit, button }) {
                     <p className="errorMsg">{errors.mobile.message}</p>
                 )}
             </Form.Group>
+
+            {/* OTP */}
             {is_otp_set && (
                 <Form.Group
                     className="d-flex flex-column"

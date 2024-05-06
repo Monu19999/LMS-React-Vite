@@ -7,6 +7,7 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
             className="d-flex py-3 w-100 flex-column gap-3"
             onSubmit={onSubmit}
         >
+            {/* First Name */}
             <Form.Group
                 className="d-flex flex-column"
                 controlId="formGroupFName"
@@ -27,6 +28,8 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                     <p className="errorMsg">{errors.first_name.message}</p>
                 )}
             </Form.Group>
+
+            {/* Last Name */}
             <Form.Group
                 className="d-flex flex-column"
                 controlId="formGroupLName"
@@ -41,6 +44,8 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                     <p className="errorMsg">{errors.last_name.message}</p>
                 )}
             </Form.Group>
+
+            {/* Email */}
             <Form.Group
                 className="d-flex flex-column"
                 controlId="formGroupEmail"
@@ -58,6 +63,8 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                     <p className="errorMsg">{errors.email.message}</p>
                 )}
             </Form.Group>
+
+            {/* Username */}
             <Form.Group
                 className="d-flex flex-column"
                 controlId="formGroupUsername"
@@ -72,6 +79,8 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                     <p className="errorMsg">{errors.username.message}</p>
                 )}
             </Form.Group>
+
+            {/* Password */}
             <Form.Group
                 className="d-flex flex-column"
                 controlId="formGroupPassword"
@@ -86,6 +95,8 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                     <p className="errorMsg">{errors.password.message}</p>
                 )}
             </Form.Group>
+
+            {/* Confirm Password */}
             <Form.Group
                 className="d-flex flex-column"
                 controlId="formGroupConfirmPassword"
@@ -107,6 +118,8 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                     </p>
                 )}
             </Form.Group>
+
+            {/* Department */}
             <Form.Group
                 className="d-flex flex-column"
                 controlId="formGroupDepartments"
@@ -128,6 +141,8 @@ export default function Step2({ fields, errors, onSubmit, button, ...props }) {
                     </p>
                 )}
             </Form.Group>
+
+            {/* Office */}
             <Form.Group
                 className="d-flex flex-column"
                 controlId="formGroupOffice"

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useSubmit } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Step1 from "./steps/Step1";
 import Step2 from "./steps/Step2";
 import Step3 from "./steps/Step3";
@@ -12,18 +12,16 @@ import { setMessages } from "@src/features/app/AuthSlice";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 
 export default function Register() {
-    const [user, setUser] = useState({});
-    const user_loading = useSelector((state) => state.auth.user_loading);
-    const auth_state = useSelector((state) => state.auth);
+    const [user_id, setUserId] = useState(0);
     const [activeStep, setActiveStep] = useState(1);
-
     const [offices, setOffices] = useState([]);
     const [selectedOffice, setSelectedOffice] = useState("");
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
+    const user_loading = useSelector((state) => state.auth.user_loading);
+    const auth_state = useSelector((state) => state.auth);
     const { departments } = useSelector((state) => state.app);
+
+    const dispatch = useDispatch();
 
     // For fetching departments in app slice
     useEffect(() => {
@@ -66,18 +64,12 @@ export default function Register() {
 
     const onSubmit = async (data) => {
         let extra_data = { step: activeStep };
-        if (user?.id) {
-            extra_data["id"] = user.id;
+        if (user_id != 0) {
+            extra_data["id"] = user_id;
         }
         data = { ...data, ...extra_data };
-        // console.log("form1");
-        // console.log("errors => ", errors);
-        // console.log("data => ", data);
         let response = await dispatch(RegisterUser(data));
-        if (response.payload.hasOwnProperty("errors")) {
-            console.log(response.payload.errors);
-        } else {
-            // console.log("form successfully submitted!");
+        if (!response.payload.hasOwnProperty("errors")) {
             dispatch(
                 setMessages({
                     errors: [],
@@ -88,13 +80,16 @@ export default function Register() {
             );
             if (activeStep == 2) {
                 localStorage.removeItem("temp_user");
-                // navigate("/member");
             } else {
-                setUser(response.payload.user);
-                localStorage.setItem(
-                    "temp_user",
-                    JSON.stringify(response.payload.user)
-                );
+                if (response.payload.hasOwnProperty("user_id")) {
+                    setUserId(response.payload.user_id);
+                }
+                if (response.payload.hasOwnProperty("user")) {
+                    localStorage.setItem(
+                        "temp_user",
+                        JSON.stringify(response.payload.user)
+                    );
+                }
             }
             setActiveStep((previous) => previous + 1);
         }
@@ -114,7 +109,6 @@ export default function Register() {
                             }),
                         }}
                         errors={errors}
-                        user={user}
                         onSubmit={handleSubmit(onSubmit)}
                         button={setFormButton()}
                     />
@@ -173,8 +167,6 @@ export default function Register() {
                             }),
                         }}
                         errors={errors}
-                        // handleDepartmentChange={handleChangeDepartment}
-                        // handleChangeOffice={handleOfficeChange}
                         onSubmit={handleSubmit(onSubmit)}
                         button={setFormButton()}
                         offices={offices}
@@ -195,7 +187,7 @@ export default function Register() {
     };
 
     function setFormButton() {
-        if (activeStep === 4) {
+        if (activeStep === 2) {
             return (
                 <div className="d-flex gap-2">
                     <Button variant="primary" type="submit">

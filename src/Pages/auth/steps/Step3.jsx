@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import React from "react";
 
-export default function Step3({ fields, errors, onSubmit, button, user }) {
+export default function Step3() {
     return (
         <p>
             Your registration request successfully sent to concern department.
