@@ -16,6 +16,7 @@ import MyCourses from "@src/Pages/member/MyCourses";
 import MyCertificates from "@src/Pages/member/MyCertificates";
 import AvailableCourses from "@src/Pages/member/AvailableCourses";
 import ForgetPassword from "./Pages/auth/ForgetPassword";
+import CourseTopicDetail from "./Pages/courses/CourseTopicDetail";
 
 function App() {
     const token = useSelector((state) => state.auth.token);
@@ -32,6 +33,11 @@ function App() {
                             exact
                             path="course/:course_id/show"
                             element={<CourseView />}
+                        />
+                        <Route
+                            exact
+                            path="course_topic/:topic_id/show"
+                            element={<CourseTopicDetail />}
                         />
 
                         <Route path="member" element={<PrivateRoute />}>
@@ -69,7 +75,11 @@ function App() {
                                 path="register"
                                 element={<Register />}
                             />
-                            <Route exact path="forget-password" element={<ForgetPassword />} />
+                            <Route
+                                exact
+                                path="forget-password"
+                                element={<ForgetPassword />}
+                            />
                         </Route>
                     </Route>
                     <Route path="*" element={<Home />} />

@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form";
 import { register as RegisterUser } from "@src/features/app/AuthSlice";
 import { getDepartments } from "@src/features/app/AppSlice";
 import { setMessages } from "@src/features/app/AuthSlice";
-import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 
 export default function Register() {
     const [user_id, setUserId] = useState(0);
@@ -59,6 +58,7 @@ export default function Register() {
         register,
         watch,
         handleSubmit,
+        trigger,
         formState: { errors },
     } = useForm({});
 
@@ -102,12 +102,25 @@ export default function Register() {
                     <Step1
                         fields={{
                             mobile: register("mobile", {
-                                required: "Mobile is Required!",
+                                required: "Mobile Number is Required!",
+                                minLength: {
+                                    value: 10,
+                                    message:
+                                        "The mobile must be at least 10 characters.",
+                                },
+                                maxLength: {
+                                    value: 10,
+                                    message:
+                                        "The mobile must not be greater than 10 characters.",
+                                },
                             }),
                             mobile_otp: register("mobile_otp", {
                                 required: "Mobile OTP is Required!",
                             }),
                         }}
+                        authState={auth_state}
+                        userLoading={user_loading}
+                        onTrigger={trigger}
                         errors={errors}
                         onSubmit={handleSubmit(onSubmit)}
                         button={setFormButton()}
@@ -187,6 +200,8 @@ export default function Register() {
                         offices={offices}
                         departments={departments}
                         selectedOffice={selectedOffice}
+                        authState={auth_state}
+                        userLoading={user_loading}
                     />
                 );
             case 3:
@@ -204,90 +219,41 @@ export default function Register() {
     function setFormButton() {
         if (activeStep === 2) {
             return (
-                <div className="d-flex gap-2">
-                    <Button variant="primary" type="submit">
-                        Submit
-                    </Button>
-                    <Button
-                        variant="primary"
-                        type="button"
-                        onClick={handleResetForm}
-                    >
-                        Reset
-                    </Button>
+                <div class="row justify-content-center mt-4">
+                    <div class="col-md-2 d-flex gap-2">
+                        <div class="form-group">
+                            <button
+                                className="form-control btn btn-primary submit px-3"
+                                type="submit"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <button
+                                className="form-control btn btn-secondary submit px-3"
+                                type="button"
+                                onClick={handleResetForm}
+                            >
+                                Reset
+                            </button>
+                        </div>
+                    </div>
                 </div>
             );
         } else {
             return (
-                <Button variant="primary" type="submit">
-                    Next
-                </Button>
+                <div className="form-group">
+                    <Button
+                        variant="primary"
+                        type="submit"
+                        className="form-control btn btn-primary submit px-3"
+                    >
+                        Submit
+                    </Button>
+                </div>
             );
         }
     }
-    return (
-        <div className="d-flex flex-column my-3 gap-3 align-items-center">
-            <div className="d-flex justify-content-center">
-                <Link to="/">
-                    <img
-                        height={64}
-                        width={64}
-                        src="assets/img/logo.png"
-                        alt="logo"
-                    />
-                </Link>
-            </div>
-            <div
-                className="card d-flex align-items-center shadow-sm p-3 bg-white"
-                style={{ borderRadius: "10px", width: "400px" }}
-            >
-                {auth_state?.success_message && (
-                    <div
-                        className="alert alert-success alert-block"
-                        style={{ marginBottom: "0px" }}
-                    >
-                        <strong>{auth_state.success_message}</strong>
-                    </div>
-                )}
-                {auth_state?.error_message && (
-                    <div
-                        className="alert alert-danger alert-block"
-                        style={{ marginBottom: "0px" }}
-                    >
-                        <strong>{auth_state.error_message}</strong>
-                        {Object.values(auth_state?.errors).map((error, key) => (
-                            <div
-                                className="alert alert-danger alert-block mt-1 ml-3 mr-3"
-                                key={key}
-                            >
-                                <strong>{error}</strong>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                {user_loading && <BootstrapSpinner />}
-                {getStepContent(activeStep)}
-                {activeStep == 1 && (
-                    <div className="d-flex gap-3 align-items-center justify-content-end">
-                        <Link
-                            to="/auth/login"
-                            style={{ textDecoration: "underline" }}
-                            className="text-dark"
-                        >
-                            <span
-                                onMouseEnter={(e) => {
-                                    e.target.style.color = "blue";
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.target.style.color = "black";
-                                }}
-                            >
-                                Already registered?
-                            </span>
-                        </Link>
-                    </div>
-                )}
-            </div>
-        </div>
-    );
+    return <>{getStepContent(activeStep)}</>;
 }

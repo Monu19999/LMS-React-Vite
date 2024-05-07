@@ -15,12 +15,12 @@ function CourseView() {
     // console.log(course);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    if (course) {
-        if (!course.course) {
-            navigate("/");
-        }
-    }
     useEffect(() => {
+        // if (course) {
+        //     if (!course.course) {
+        //         navigate("/");
+        //     }
+        // }
         if (course_id) {
             dispatch(getCourse(course_id));
         }
@@ -77,6 +77,11 @@ function CourseView() {
                                         >
                                             <div className="accordion-body">
                                                 {parse(topic.summary)}
+                                                <Link
+                                                    to={`/course_topic/${topic.id}/show`}
+                                                >
+                                                    Show
+                                                </Link>
                                             </div>
                                         </div>
                                     </div>

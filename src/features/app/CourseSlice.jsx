@@ -5,12 +5,14 @@ import Cookies from "js-cookie";
 const initialState = {
     courses: [],
     course: {},
+    course_topic: {},
     search: {
         page: null,
         department: "",
         course_name: "",
     },
     course_loading: false,
+    course_topic_loading: false,
     course_enrolment_loading: false,
     isSuccess: false,
     message: "",
@@ -90,6 +92,38 @@ export const getCourse = createAsyncThunk("course/getCourse", async (id) => {
     return json.data;
 });
 
+export const getCourseTopic = createAsyncThunk(
+    "course/getCourseTopic",
+    async (topic_id) => {
+        let api_url = api("auth_course_topic", topic_id);
+        let headers = {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        };
+        const token =
+            Cookies.get("token") == undefined ? null : Cookies.get("token");
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+        }
+        try {
+            const response = await fetch(api_url, {
+                method: "get",
+                headers,
+                cache: "no-cache",
+            });
+            const json = await response.json();
+            if (response.status !== 200) {
+                throw new Error("Bad response", {
+                    cause: json,
+                });
+            }
+            return json;
+        } catch (error) {
+            return error.cause;
+        }
+    }
+);
+
 export const enrollCourse = createAsyncThunk(
     "course/enrollCourse",
     async (course) => {
@@ -132,24 +166,6 @@ export const enrollCourse = createAsyncThunk(
         }
     }
 );
-
-const replaceCourse = (current, course) => {
-    console.log("current", current);
-    let update_courses = { ...current };
-    console.log("current data", update_courses);
-    console.log("current course", course);
-    let index = update_courses.findIndex((c) => c.id == course.id);
-    console.log("index", index);
-    console.log("update_courses.data", update_courses[index]);
-    console.log("course", course);
-    if (index >= 0) {
-        delete update_courses[index];
-        console.log("update_courses 1", update_courses[index]);
-        update_courses[index] = course;
-    }
-    console.log("update_courses", update_courses);
-    return update_courses;
-};
 
 export const courseSlice = createSlice({
     name: "course",
@@ -233,6 +249,28 @@ export const courseSlice = createSlice({
                 state.message = payload;
                 state.course_enrolment_loading = false;
                 state.isSuccess = false;
+            })
+
+            // Get Course topic
+            .addCase(getCourseTopic.pending, (state, { payload }) => {
+                state.course_topic_loading = true;
+            })
+            .addCase(getCourseTopic.fulfilled, (state, { payload }) => {
+                if (payload != undefined) {
+                    let data = payload.data;
+                    if (data.hasOwnProperty("status") && data.status != 200) {
+                        state.error_message = data.message;
+                    } else {
+                        state.course_topic_loading = false;
+                        state.course_topic = data.course_topic;
+                        state.errors = [];
+                        state.error_message = null;
+                    }
+                }
+            })
+            .addCase(getCourseTopic.rejected, (state, { payload }) => {
+                state.message = payload;
+                state.course_topic_loading = false;
             });
     },
 });

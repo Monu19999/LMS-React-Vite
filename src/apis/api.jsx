@@ -31,6 +31,9 @@ const api_urls = {
     auth_course_enroll: function (id) {
         return `/api/auth/courses/${id}/enrollments`;
     },
+    auth_course_topic: function (id) {
+        return `/api/auth/course_topic/${id}`;
+    },
     member_dashboard: "/api/auth/member/dashboard",
     member_courses: "/api/auth/member/courses",
     member_available_courses: "/api/auth/member/available_courses",

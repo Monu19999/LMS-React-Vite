@@ -55,141 +55,121 @@ export default function Login() {
         }
     };
     return (
-        <div className="d-flex flex-column my-3 gap-3 align-items-center">
-            <div className="d-flex justify-content-center">
-                <Link to="/">
-                    <img
-                        height={64}
-                        width={64}
-                        src="assets/img/logo.png"
-                        alt="logo"
-                    />
-                </Link>
-            </div>
-            <div
-                className="card d-flex align-items-center shadow-sm p-3 bg-white"
-                style={{ borderRadius: "10px", width: "400px" }}
-            >
-                {user_loading && <BootstrapSpinner />}
-                {auth_state?.error_message && (
-                    <div className="alert alert-danger alert-block mt-3 ml-3 mr-3">
-                        <strong>{auth_state.error_message}</strong>
-                    </div>
-                )}
-                <Form
-                    className="d-flex py-3 w-100 flex-column gap-3"
-                    onSubmit={handleSubmit(loginUser)}
-                >
-                    <Form.Group
-                        className="d-flex flex-column"
-                        controlId="formGroupEmail"
-                    >
-                        <Form.Label className="font-weight-bold">
-                            Email (Accepts only gov.in or nic.in)
-                        </Form.Label>
-                        <Form.Control
-                            style={{ borderRadius: "5px" }}
-                            type="text"
-                            placeholder="Enter Email"
-                            {...register("email", {
-                                required: "Email is Required!",
-                                pattern: {
-                                    value: /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i,
-                                    message: "Not a valid Email!",
-                                },
-                            })}
-                        />
-                        {errors?.email?.type === "required" && (
-                            <p className="errorMsg">{errors.email.message}</p>
-                        )}
-                        {errors?.email?.type === "pattern" && (
-                            <p className="errorMsg">{errors.email.message}</p>
-                        )}
-                    </Form.Group>
-                    <Form.Group
-                        className="d-flex flex-column"
-                        controlId="formGroupPassword"
-                    >
-                        <Form.Label className="font-weight-bold">
-                            Password
-                        </Form.Label>
-                        <Form.Control
-                            style={{ borderRadius: "5px" }}
-                            type="password"
-                            placeholder="Password"
-                            {...register("password", {
-                                required: "Password is Required!",
-                            })}
-                        />
-                        {errors?.password?.type === "required" && (
-                            <p className="errorMsg">
-                                {errors.password.message}
-                            </p>
-                        )}
-                    </Form.Group>
-                    <div className="gap-2 d-flex">
-                        <input
-                            type="checkbox"
-                            className="form-check-input"
-                            {...register("remember")}
-                        />
-                        <span>Remember me</span>
-                    </div>
-
-                    <div className="d-flex gap-1 align-items-center">
-                        <div
-                            className="d-flex flex-wrap"
-                            style={{ width: "70%", textAlign: "left" }}
-                        >
-                            <Link
-                                to="/auth/forget-password"
-                                style={{ textDecoration: "underline" }}
-                                className="text-dark"
-                            >
-                                <span
-                                    onMouseEnter={(e) => {
-                                        e.target.style.color = "blue";
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.target.style.color = "black";
-                                    }}
-                                >
-                                    Forgot your Password?
-                                </span>
-                            </Link>
-                            <Link
-                                to="/auth/register"
-                                style={{ textDecoration: "underline" }}
-                                className="text-dark"
-                            >
-                                Register a new membership
+        <>
+            <div className="wrap d-md-flex">
+                <div className="text-wrap p-4  text-center d-flex align-items-center order-md-last">
+                    <div className="text w-100">
+                        <div className="d-flex justify-content-center mb-4">
+                            <Link to="/">
+                                <img
+                                    width={80}
+                                    src="assets/img/logo.png"
+                                    alt="logo"
+                                />
                             </Link>
                         </div>
-                        <button
-                            style={{
-                                borderRadius: "8px",
-                                padding: "8px 12px",
-                                backgroundColor: "black",
-                                color: "white",
-                                transition: "background-color 0.3s, color 0.3s",
-                            }}
-                            disabled={user_loading}
-                            className="btn btn-dark text-white"
-                            onMouseEnter={(e) => {
-                                e.target.style.backgroundColor =
-                                    "rgba(0, 0, 0, 0.8)";
-                                e.target.style.color = "white";
-                            }}
-                            onMouseLeave={(e) => {
-                                e.target.style.backgroundColor = "black";
-                                e.target.style.color = "white";
-                            }}
+                        <h2>Welcome to e-Shiksha (LMS)</h2>
+                        <p className="text-white">Don't have an account?</p>
+                        <Link
+                            to="/auth/register"
+                            className="btn btn-white btn-outline-white"
                         >
-                            Log in
-                        </button>
+                            Sign Up
+                        </Link>
                     </div>
-                </Form>
+                </div>
+                <div className="login-wrap p-3 p-lg-5">
+                    <div className="d-flex">
+                        <div className="w-100">
+                            <h3 className="mb-3">Sign In</h3>
+                        </div>
+                    </div>
+                    <Form
+                        action="1/index.html"
+                        className="signin-form"
+                        onSubmit={handleSubmit(loginUser)}
+                    >
+                        {user_loading && <BootstrapSpinner />}
+                        {auth_state?.error_message && (
+                            <div className="alert alert-danger alert-block mt-3 ml-3 mr-3">
+                                <strong>{auth_state.error_message}</strong>
+                            </div>
+                        )}
+                        <Form.Group
+                            className="form-group mb-3"
+                            controlId="formGroupEmail"
+                        >
+                            <Form.Label className="label">
+                                Email (Accepts only gov.in or nic.in)
+                            </Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter Email"
+                                {...register("email", {
+                                    required: "Email is Required!",
+                                    pattern: {
+                                        value: /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i,
+                                        message: "Not a valid Email!",
+                                    },
+                                })}
+                            />
+                            <Form.Text
+                                id="first_nameHelpBlock"
+                                className="text-danger"
+                            >
+                                {["required", "pattern"].includes(
+                                    errors?.email?.type
+                                ) && <>{errors.email.message}</>}
+                            </Form.Text>
+                        </Form.Group>
+                        <Form.Group
+                            className="form-group mb-3"
+                            controlId="formGroupPassword"
+                        >
+                            <Form.Label className="label">Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                placeholder="Password"
+                                {...register("password", {
+                                    required: "Password is Required!",
+                                })}
+                            />
+                            <Form.Text
+                                id="first_nameHelpBlock"
+                                className="text-danger"
+                            >
+                                {["required"].includes(
+                                    errors?.password?.type
+                                ) && <>{errors.password.message}</>}
+                            </Form.Text>
+                        </Form.Group>
+                        <div className="form-group mt-4">
+                            <button
+                                type="submit"
+                                className="form-control btn btn-primary submit px-3"
+                            >
+                                Sign In
+                            </button>
+                        </div>
+                        <div className="form-group d-md-flex">
+                            <div className="w-50 text-left d-flex ">
+                                <input
+                                    type="checkbox"
+                                    {...register("remember")}
+                                />
+                                <label className="checkbox-wrap checkbox-primary mb-0">
+                                    Remember Me{" "}
+                                </label>
+                            </div>
+                            <div className="w-50 text-md-right">
+                                <Link to="/auth/forget-password">
+                                    Forgot Password
+                                </Link>
+                            </div>
+                        </div>
+                    </Form>
+                </div>
             </div>
-        </div>
+        </>
     );
 }
