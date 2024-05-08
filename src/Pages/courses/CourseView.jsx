@@ -16,15 +16,18 @@ function CourseView() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
-        // if (course) {
-        //     if (!course.course) {
-        //         navigate("/");
-        //     }
-        // }
         if (course_id) {
             dispatch(getCourse(course_id));
         }
     }, []);
+
+    useEffect(() => {
+        if (course) {
+            if (!course.course) {
+                navigate("/");
+            }
+        }
+    }, [course]);
 
     let topics = () => {
         if (course?.course?.topics) {

@@ -1,26 +1,92 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getCourseTopic } from "@src/features/app/CourseSlice";
 import parse from "html-react-parser";
+import { Button, Modal } from "react-bootstrap";
+import ReactPlayer from "react-player";
 
 export default function CourseTopicDetail() {
     let { topic_id } = useParams();
+    const [showModal, setShowModal] = useState(false);
+    const videoRef = useRef(ReactPlayer);
 
     const course_topic = useSelector((state) => state.course.course_topic);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // console.log(topic_id);
         if (topic_id) {
             dispatch(getCourseTopic(topic_id));
         }
     }, []);
 
+    function MyVerticallyCenteredModal(props) {
+        return (
+            <Modal
+                {...props}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Video
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <ReactPlayer
+                        url={props.upload.file_path}
+                        playing={false}
+                        controls={true}
+                        pip={false}
+                        onPlay={() => console.log("played")}
+                        onPause={() => console.log("paused")}
+                        onEnded={() => console.log("ended")}
+                        config={{
+                            file: {
+                                attributes: {
+                                    controlsList: "nodownload", // nodownload => disable download, nofullscreen => disable fullscreen, noplaybackrate => disable playback speed
+                                    disablePictureInPicture: true,
+                                },
+                            },
+                        }}
+                        ref={videoRef}
+                        onContextMenu={(e) => e.preventDefault()}
+                        // onProgress={() => {
+                        //     videoRef.current.getCurrentTime() >= played &&
+                        //         setPlayed(videoRef.current.getCurrentTime());
+                        // }}
+                        // onSeek={() => {
+                        //     videoRef.current.getCurrentTime() > played &&
+                        //         videoRef.current.seekTo(played);
+                        // }}
+                    />
+                </Modal.Body>
+                {/* <Modal.Footer>
+                    <Button onClick={props.onHide}>Close</Button>
+                </Modal.Footer> */}
+            </Modal>
+        );
+    }
+
     const checkMimeType = (upload) => {
         if (upload.file_mime_type == "application/video") {
-            return <a href="/">Video</a>;
+            return (
+                <>
+                    <Button
+                        variant="primary"
+                        onClick={() => setShowModal(true)}
+                    >
+                        View Video
+                    </Button>
+                    <MyVerticallyCenteredModal
+                        show={showModal}
+                        onHide={() => setShowModal(false)}
+                        upload={upload}
+                    />
+                </>
+            );
         } else if (upload.file_mime_type == "application/pdf") {
             return <a href="/">PDF</a>;
         }
