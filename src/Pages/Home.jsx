@@ -73,7 +73,7 @@ export default function Home() {
         },
     };
 
-    // console.log(courses.courses?.data);
+    // console.log(courses?.data);
     return (
         <>
             {/* hero slider */}

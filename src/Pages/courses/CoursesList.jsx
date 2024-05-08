@@ -7,13 +7,14 @@ import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import { getDepartments } from "@src/features/app/AppSlice";
 import { setSearch, resetSearch } from "@src/features/app/CourseSlice";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { getSearchCourses } from "@src/features/app/CourseSlice";
 
 function CoursesList() {
     const navigate = useNavigate();
 
     const { departments, app_loading } = useSelector((state) => state.app);
-    // console.log(departments);
-    const { courses, course_loading, search } = useSelector(
+
+    const { search_courses, courses, course_loading, search } = useSelector(
         (state) => state.course
     );
 
@@ -34,12 +35,12 @@ function CoursesList() {
         if (Object.values(search).length > 0) {
             dispatch(setSearch(search));
         }
-        dispatch(getCourses(navigate));
+        dispatch(getSearchCourses(navigate));
     }, []);
 
     let handleFormFilter = (e) => {
         e.preventDefault();
-        dispatch(getCourses(navigate));
+        dispatch(getSearchCourses(navigate));
     };
 
     let handleFormFilterOnChange = (e) => {
@@ -54,8 +55,9 @@ function CoursesList() {
 
     function changePage(data) {
         dispatch(setSearch({ ...search, page: data.page }));
-        dispatch(getCourses(navigate));
+        dispatch(getSearchCourses(navigate));
     }
+
     return (
         <>
             {/* Header Start */}
@@ -228,8 +230,8 @@ function CoursesList() {
                                 {course_loading ? (
                                     <BootstrapSpinner />
                                 ) : (
-                                    courses?.data &&
-                                    courses.data.map((course) => {
+                                    search_courses?.courses?.data &&
+                                    search_courses?.courses?.data.map((course) => {
                                         return (
                                             <div
                                                 className="col-lg-4 col-md-6 mb-4"
