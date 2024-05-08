@@ -3,6 +3,7 @@ import api from "@src/apis/api";
 import Cookies from "js-cookie";
 
 const initialState = {
+    search_courses:[],
     courses: [],
     course: {},
     course_topic: {},
@@ -21,24 +22,14 @@ const initialState = {
     error_message: "",
 };
 
-function removeEmpty(obj) {
-    return Object.entries(obj)
-        .filter(([_, v]) => v != null && v != "")
-        .reduce(
-            (acc, [k, v]) => ({
-                ...acc,
-                [k]: v === Object(v) ? removeEmpty(v) : v,
-            }),
-            {}
-        );
-}
 
-export const getCourses = createAsyncThunk(
-    "courses/getCourses",
+export const getSearchCourses = createAsyncThunk(
+    "courses/getSearchCourses",
     async (navigate, { getState }) => {
         const state = getState();
 
         let search_state = removeEmpty(state.course.search);
+ 
         let query_string =
             Object.keys(search_state).length > 0
                 ? "?" + new URLSearchParams(search_state).toString()
@@ -55,6 +46,47 @@ export const getCourses = createAsyncThunk(
         if (token) {
             headers.Authorization = `Bearer ${token}`;
             api_url = api("auth_category_courses") + query_string;
+        }
+        const response = await fetch(api_url, {
+            mode: "cors",
+            method: "get",
+            headers,
+            cache: "no-cache",
+        });
+        const json = await response.json();
+        if (navigate) {
+            navigate(query_string);
+        }
+        return json.data;
+    }
+);
+function removeEmpty(obj) {
+    return Object.entries(obj)
+        .filter(([_, v]) => v != null && v != "")
+        .reduce(
+            (acc, [k, v]) => ({
+                ...acc,
+                [k]: v === Object(v) ? removeEmpty(v) : v,
+            }),
+            {}
+        );
+}
+
+export const getCourses = createAsyncThunk(
+    "courses/getCourses",
+    async (navigate, { getState }) => {
+     
+        let api_url = api("category_courses");
+
+        let headers = {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        };
+        const token =
+            Cookies.get("token") == undefined ? null : Cookies.get("token");
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+            api_url = api("auth_category_courses")
         }
         const response = await fetch(api_url, {
             mode: "cors",
@@ -180,6 +212,24 @@ export const courseSlice = createSlice({
     },
     extraReducers(builder) {
         builder
+
+        .addCase(getSearchCourses.pending, (state, { payload }) => {
+            state.course_loading = true;
+        })
+            .addCase(getSearchCourses.fulfilled, (state, { payload }) => {
+                state.course_enrolment_loading = false;
+                state.course_loading = false;
+                state.search_courses = payload;
+                state.isSuccess = true;
+            })
+            .addCase(getSearchCourses.rejected, (state, { payload }) => {
+                state.message = payload;
+                state.course_enrolment_loading = false;
+                state.course_loading = false;
+                state.isSuccess = false;
+            })
+
+
             // Getting all courses
             .addCase(getCourses.pending, (state, { payload }) => {
                 state.course_loading = true;
@@ -196,6 +246,7 @@ export const courseSlice = createSlice({
                 state.course_loading = false;
                 state.isSuccess = false;
             })
+
 
             // Getting Course detail
             .addCase(getCourse.pending, (state, { payload }) => {
@@ -224,7 +275,7 @@ export const courseSlice = createSlice({
                 state.course_enrolment_loading = true;
             })
             .addCase(enrollCourse.fulfilled, (state, { payload }) => {
-                console.log("payload => ", payload);
+
                 if (payload.hasOwnProperty("message")) {
                     state.error_message = payload.message;
                 } else {
