@@ -32,8 +32,9 @@ function CoursesList() {
             const [param, value] = entry;
             search[param] = value;
         }
+        // console.log({...search, course_name:"", page:null})
         if (Object.values(search).length > 0) {
-            dispatch(setSearch(search));
+            dispatch(setSearch({...search, course_name:"", page:null}));
         }
         dispatch(getSearchCourses(navigate));
     }, []);
