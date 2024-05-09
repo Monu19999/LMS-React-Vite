@@ -363,16 +363,13 @@ export const courseSlice = createSlice({
 
             // Set Read the course
             .addCase(readCourseTopic.pending, (state, { payload }) => {
-                console.log("readCourseTopic.pending ", payload);
-                state.read_course = true;
+                // console.log("readCourseTopic.pending ", payload);
             })
             .addCase(readCourseTopic.fulfilled, (state, { payload }) => {
-                console.log("readCourseTopic.fulfilled", payload);
-                state.read_course = false;
+                // console.log("readCourseTopic.fulfilled", payload);
             })
             .addCase(readCourseTopic.rejected, (state, { payload }) => {
-                console.log("readCourseTopic.rejected ", payload);
-                state.read_course = false;
+                // console.log("readCourseTopic.rejected ", payload);
             });
     },
 });
