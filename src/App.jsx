@@ -36,7 +36,7 @@ function App() {
                         />
                         <Route
                             exact
-                            path="course_topic/:topic_id/show"
+                            path="course/:course_id/course_topic/:topic_id/show"
                             element={<CourseTopicDetail />}
                         />
 

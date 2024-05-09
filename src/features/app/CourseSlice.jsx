@@ -34,6 +34,40 @@ function removeEmpty(obj) {
         );
 }
 
+export const readCourseTopic = createAsyncThunk(
+    "course/readCourseTopic",
+    async (params) => {
+        let api_url = api("auth_course_topic_read", params);
+
+        let headers = {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        };
+        const token =
+            Cookies.get("token") == undefined ? null : Cookies.get("token");
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+        }
+        try {
+            const response = await fetch(api_url, {
+                mode: "cors",
+                method: "post",
+                headers,
+                cache: "no-cache",
+            });
+            const json = await response.json();
+            if (response.status !== 200) {
+                throw new Error("Bad response", {
+                    cause: json,
+                });
+            }
+            return json;
+        } catch (error) {
+            return error.cause;
+        }
+    }
+);
+
 export const getSearchCourses = createAsyncThunk(
     "courses/getSearchCourses",
     async (navigate, { getState }) => {
@@ -125,8 +159,8 @@ export const getCourse = createAsyncThunk("course/getCourse", async (id) => {
 
 export const getCourseTopic = createAsyncThunk(
     "course/getCourseTopic",
-    async (topic_id) => {
-        let api_url = api("auth_course_topic", topic_id);
+    async (params) => {
+        let api_url = api("auth_course_topic", params);
         let headers = {
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -208,10 +242,16 @@ export const courseSlice = createSlice({
         resetSearch: (state) => {
             state.search = { page: null, department: "", course_name: "" };
         },
+        updateCourse: (state, action) => {
+            state.course = action.payload;
+        },
+        updateTopic: (state, action) => {
+            state.topic = action.payload;
+        },
     },
     extraReducers(builder) {
         builder
-
+            // Search the course
             .addCase(getSearchCourses.pending, (state, { payload }) => {
                 state.course_loading = true;
             })
@@ -251,6 +291,7 @@ export const courseSlice = createSlice({
             })
             .addCase(getCourse.fulfilled, (state, { payload }) => {
                 if (payload.hasOwnProperty("errors")) {
+                    state.course = null;
                     state.errors = payload.errors;
                     state.error_message = payload.message;
                 } else {
@@ -318,10 +359,25 @@ export const courseSlice = createSlice({
             .addCase(getCourseTopic.rejected, (state, { payload }) => {
                 state.message = payload;
                 state.course_topic_loading = false;
+            })
+
+            // Set Read the course
+            .addCase(readCourseTopic.pending, (state, { payload }) => {
+                console.log("readCourseTopic.pending ", payload);
+                state.read_course = true;
+            })
+            .addCase(readCourseTopic.fulfilled, (state, { payload }) => {
+                console.log("readCourseTopic.fulfilled", payload);
+                state.read_course = false;
+            })
+            .addCase(readCourseTopic.rejected, (state, { payload }) => {
+                console.log("readCourseTopic.rejected ", payload);
+                state.read_course = false;
             });
     },
 });
 
-export const { setSearch, resetSearch } = courseSlice.actions;
+export const { setSearch, resetSearch, updateCourse, updateTopic } =
+    courseSlice.actions;
 
 export default courseSlice.reducer;

@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Form, Link, useNavigate, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { getCourse } from "@src/features/app/CourseSlice";
 import EnrollCourse from "./includes/EnrollCourse";
+import { readCourseTopic } from "@src/features/app/CourseSlice";
+import CourseTopicList from "./includes/CourseTopicList";
 
 function CourseView() {
     let { course_id } = useParams();
@@ -11,6 +13,7 @@ function CourseView() {
     const course_enrolment_loading = useSelector(
         (state) => state.course.course_enrolment_loading
     );
+    const auth_user = useSelector((state) => state.auth.user);
     const course = useSelector((state) => state.course.course);
     // console.log(course);
     const dispatch = useDispatch();
@@ -21,78 +24,18 @@ function CourseView() {
         }
     }, []);
 
-    useEffect(() => {
-        if (course) {
-            if (!course.course) {
-                navigate("/");
-            }
-        }
-    }, [course]);
+    // useEffect(() => {
+    //     if (course) {
+    //         if (!course.course) {
+    //             navigate("/");
+    //         }
+    //     }
+    // }, [course]);
 
     let topics = () => {
         if (course?.course?.topics) {
             return (
-                <>
-                    <h4>Course contains:</h4>
-                    <div className="col-lg-8 p-0">
-                        <div className="accordion" id="regularAccordionRobots">
-                            {course.course.topics.map((topic, index) => {
-                                return (
-                                    <div
-                                        className="accordion-item"
-                                        key={topic.id}
-                                    >
-                                        <h2
-                                            id={"regularHeading" + topic.id}
-                                            className="accordion-header"
-                                        >
-                                            <button
-                                                className={
-                                                    "accordion-button " +
-                                                    (index != 0
-                                                        ? "collapsed"
-                                                        : "")
-                                                }
-                                                type="button"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target={
-                                                    "#regularCollapse" +
-                                                    topic.id
-                                                }
-                                                aria-expanded={index != 0}
-                                                aria-controls={
-                                                    "regularCollapse" + topic.id
-                                                }
-                                            >
-                                                {topic.title}
-                                            </button>
-                                        </h2>
-                                        <div
-                                            id={"regularCollapse" + topic.id}
-                                            className={
-                                                "accordion-collapse collapse " +
-                                                (index == 0 ? "show" : "")
-                                            }
-                                            aria-labelledby={
-                                                "regularHeading" + topic.id
-                                            }
-                                            data-bs-parent="#regularAccordionRobots"
-                                        >
-                                            <div className="accordion-body">
-                                                {parse(topic.summary)}
-                                                <Link
-                                                    to={`/course_topic/${topic.id}/show`}
-                                                >
-                                                    Show
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </>
+                <CourseTopicList course={course.course} course_id={course_id} />
             );
         }
     };
