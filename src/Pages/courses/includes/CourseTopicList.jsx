@@ -43,7 +43,8 @@ export default function CourseTopicList({ course, course_id }) {
                                     <ListGroup.Item key={topic.id}>
                                         <div className="d-flex justify-content-between">
                                             <h5>
-                                                {auth_user && enrollments.length > 0  ? (
+                                                {auth_user &&
+                                                enrollments?.length > 0 ? (
                                                     <Link
                                                         to={`/course/${course.encr_id}/course_topic/${topic.encr_id}/show`}
                                                     >
@@ -53,13 +54,13 @@ export default function CourseTopicList({ course, course_id }) {
                                                     topic.title
                                                 )}
                                             </h5>
-                                            {
-                                                auth_user && enrollments.length > 0 &&
-                                            <ShowCheckBox
-                                                topic={topic}
-                                                course_id={course_id}
-                                            />
-                                            }
+                                            {auth_user &&
+                                                enrollments?.length > 0 && (
+                                                    <ShowCheckBox
+                                                        topic={topic}
+                                                        course_id={course_id}
+                                                    />
+                                                )}
                                         </div>
                                     </ListGroup.Item>
                                     // <div
