@@ -28,7 +28,6 @@ function CourseView() {
             navigate("/");
         }
     };
-
     useEffect(() => {
         if (course_id) {
             handleGetCourse();
@@ -36,6 +35,7 @@ function CourseView() {
     }, []);
 
     let topics = () => {
+
         if (course?.course?.topics) {
             return (
                 <CourseTopicList course={course.course} course_id={course_id} />

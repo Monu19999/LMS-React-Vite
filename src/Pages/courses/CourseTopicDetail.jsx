@@ -39,20 +39,26 @@ export default function CourseTopicDetail() {
         }
     }, []);
 
-    function MyVerticallyCenteredModal(props) {
-        return (
-            <Modal
-                {...props}
-                size="lg"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        Video
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+    const [showVideoModal, setShowVideoModal] = useState(false);
+const [showPdfModal, setShowPdfModal] = useState(false);
+
+function MyVerticallyCenteredModal(props) {
+    return (
+        <Modal
+            {...props}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    {props.upload.file_mime_type === "application/video"
+                        ? "Video"
+                        : "PDF"}
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                {props.upload.file_mime_type === "application/video" ? (
                     <ReactPlayer
                         url={props.upload.file_path}
                         playing={false}
@@ -64,80 +70,83 @@ export default function CourseTopicDetail() {
                         config={{
                             file: {
                                 attributes: {
-                                    controlsList: "nodownload", // nodownload => disable download, nofullscreen => disable fullscreen, noplaybackrate => disable playback speed
+                                    controlsList: "nodownload",
                                     disablePictureInPicture: true,
                                 },
                             },
                         }}
-                        ref={videoRef}
-                        // onContextMenu={(e) => e.preventDefault()}
-                        // onProgress={() => {
-                        //     videoRef.current.getCurrentTime() >= played &&
-                        //         setPlayed(videoRef.current.getCurrentTime());
-                        // }}
-                        // onSeek={() => {
-                        //     videoRef.current.getCurrentTime() > played &&
-                        //         videoRef.current.seekTo(played);
-                        // }}
                         width="100%"
                     />
-                </Modal.Body>
-                {/* <Modal.Footer>
-                    <Button onClick={props.onHide}>Close</Button>
-                </Modal.Footer> */}
-            </Modal>
+                ) : (
+                    <embed
+                        src={props.upload.preview_path}
+                        type="application/pdf"
+                        width="100%"
+                        height="500px"
+                    />
+                )}
+            </Modal.Body>
+        </Modal>
+    );
+}
+
+const checkMimeType = (upload) => {
+    if (upload.file_mime_type === "application/video") {
+        return (
+            <>
+                <Button
+                    variant="primary"
+                    onClick={() => setShowVideoModal(true)}
+                >
+                    View Video
+                </Button>
+                <MyVerticallyCenteredModal
+                    show={showVideoModal}
+                    onHide={() => setShowVideoModal(false)}
+                    upload={upload}
+                />
+            </>
+        );
+    } else if (upload.file_mime_type === "application/pdf") {
+        return (
+            <>
+                <Button
+                    variant="primary"
+                    onClick={() => setShowPdfModal(true)}
+                >
+                    View PDF
+                </Button>
+                <MyVerticallyCenteredModal
+                    show={showPdfModal}
+                    onHide={() => setShowPdfModal(false)}
+                    upload={upload}
+                />
+            </>
         );
     }
+};
 
-    const checkMimeType = (upload) => {
-        if (upload.file_mime_type == "application/video") {
-            return (
-                <>
-                    <Button
-                        variant="primary"
-                        onClick={() => setShowModal(true)}
-                    >
-                        View Video
-                    </Button>
-                    <MyVerticallyCenteredModal
-                        show={showModal}
-                        onHide={() => setShowModal(false)}
-                        upload={upload}
-                    />
-                </>
-            );
-        } else if (upload.file_mime_type == "application/pdf") {
-            return (
-                <a
-                    className="btn btn-primary"
-                    href={upload.preview_path}
-                    target="_blank"
-                >
-                    PDF
-                </a>
-            );
-        }
-    };
+const uploadsList = () => {
+    if (course_topic?.uploads) {
+        return (
+            <Nav
+                defaultActiveKey="/home"
+                className="flex-column gap-2"
+                as="ul"
+            >
+                {course_topic.uploads.map((upload) => {
+                    return (
+                        <Nav.Item as="li" key={upload.id}>
+                            {checkMimeType(upload)}
+                        </Nav.Item>
+                    );
+                })}
+            </Nav>
+        );
+    }
+};
 
-    const uploadsList = () => {
-        if (course_topic?.uploads) {
-            return (
-                <Nav
-                    defaultActiveKey="/home"
-                    className="flex-column gap-2"
-                    as="ul"
-                >
-                    {course_topic.uploads.map((upload) => {
-                        return (
-                            <Nav.Item as="li" key={upload.id}>
-                                {checkMimeType(upload)}
-                            </Nav.Item>
-                        );
-                    })}
-                </Nav>
-            );
-        }
-    };
+
     // console.log(course_topic);
     const updated_at = course_topic?.updated_at
         ? new Date(course_topic?.updated_at)
