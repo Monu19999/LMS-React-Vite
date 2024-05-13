@@ -148,13 +148,22 @@ export const getCourse = createAsyncThunk("course/getCourse", async (id) => {
         headers.Authorization = `Bearer ${token}`;
         api_url = api("auth_category_course", id);
     }
-    const response = await fetch(api_url, {
-        method: "get",
-        headers,
-        cache: "no-cache",
-    });
-    const json = await response.json();
-    return json.data;
+    try {
+        const response = await fetch(api_url, {
+            method: "get",
+            headers,
+            cache: "no-cache",
+        });
+        const json = await response.json();
+        if (response.status !== 200) {
+            throw new Error("Bad response", {
+                cause: json,
+            });
+        }
+        return json;
+    } catch (error) {
+        return error.cause;
+    }
 });
 
 export const getCourseTopic = createAsyncThunk(
@@ -290,16 +299,21 @@ export const courseSlice = createSlice({
                 state.course_loading = true;
             })
             .addCase(getCourse.fulfilled, (state, { payload }) => {
-                if (payload.hasOwnProperty("errors")) {
-                    state.course = null;
-                    state.errors = payload.errors;
-                    state.error_message = payload.message;
-                } else {
-                    state.course_loading = false;
-                    state.course = payload.course;
-                    state.isSuccess = true;
-                    state.errors = [];
-                    state.error_message = null;
+                if (payload != undefined) {
+                    if (
+                        payload.hasOwnProperty("status") &&
+                        payload.status !== 200
+                    ) {
+                        state.course = null;
+                        state.error_message = payload.message;
+                    } else {
+                        let data = payload.data;
+                        state.course_loading = false;
+                        state.course = data.course;
+                        state.isSuccess = true;
+                        state.errors = [];
+                        state.error_message = null;
+                    }
                 }
             })
             .addCase(getCourse.rejected, (state, { payload }) => {

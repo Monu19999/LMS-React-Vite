@@ -13,7 +13,7 @@ function CourseItem({ course }) {
                     className="img-fluid"
                     src={
                         course?.course?.upload?.preview_path ??
-                        "assets/img/course-1.jpg"
+                        "assets/img/course-2.jpg"
                     }
                     alt={course?.course?.upload?.original_name}
                 />

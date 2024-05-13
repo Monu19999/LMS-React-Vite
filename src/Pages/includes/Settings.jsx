@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setTheme, updateTheme } from "@src/features/app/AppSlice";
 import { useEffect } from "react";
@@ -9,9 +9,22 @@ function Settings() {
     const user = useSelector((state) => state.auth.user);
     const theme = useSelector((state) => state.app.theme);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleGetUser = async () => {
+        let response = await dispatch(getUser());
+        // console.log(response);
+        let payload = response.payload;
+        if (
+            payload.hasOwnProperty("message") &&
+            payload.message === "Unauthenticated."
+        ) {
+            navigate("/");
+        }
+    };
 
     useEffect(() => {
-        dispatch(getUser());
+        handleGetUser();
         dispatch(setTheme());
         // dispatch(setSize());
     }, []);

@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Form, Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { getCourse } from "@src/features/app/CourseSlice";
-import EnrollCourse from "./includes/EnrollCourse";
-import { readCourseTopic } from "@src/features/app/CourseSlice";
 import CourseTopicList from "./includes/CourseTopicList";
+import Placeholder from "react-bootstrap/Placeholder";
 
 function CourseView() {
     let { course_id } = useParams();
@@ -13,24 +12,28 @@ function CourseView() {
     const course_enrolment_loading = useSelector(
         (state) => state.course.course_enrolment_loading
     );
+    const course_topic_loading = useSelector(
+        (state) => state.course.course_topic_loading
+    );
     const auth_user = useSelector((state) => state.auth.user);
     const course = useSelector((state) => state.course.course);
     // console.log(course);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const handleGetCourse = async () => {
+        let response = await dispatch(getCourse(course_id));
+        let payload = response.payload;
+        if (payload.hasOwnProperty("status") && payload.status == 500) {
+            navigate("/");
+        }
+    };
+
     useEffect(() => {
         if (course_id) {
-            dispatch(getCourse(course_id));
+            handleGetCourse();
         }
     }, []);
-
-    // useEffect(() => {
-    //     if (course) {
-    //         if (!course.course) {
-    //             navigate("/");
-    //         }
-    //     }
-    // }, [course]);
 
     let topics = () => {
         if (course?.course?.topics) {
@@ -53,31 +56,48 @@ function CourseView() {
                     <div className="row justify-content-center">
                         <div className="col-lg-8">
                             <nav aria-label="breadcrumb" className="mb-4">
-                                <ol className="breadcrumb ">
-                                    <li className="breadcrumb-item">
-                                        <Link className="text-white" to="/">
-                                            Home
-                                        </Link>
-                                    </li>
-                                    <li className="breadcrumb-item">
-                                        <Link className="text-white" to="/">
-                                            {
-                                                course?.course?.assigned_admin
-                                                    ?.course_category
-                                                    ?.category_name_en
-                                            }
-                                        </Link>
-                                    </li>
-                                    <li
-                                        className="breadcrumb-item text-white active"
-                                        aria-current="page"
-                                    >
-                                        {
-                                            course?.course?.assigned_admin
-                                                ?.category_course
-                                                ?.course_name_en
-                                        }
-                                    </li>
+                                <ol className="breadcrumb">
+                                    {course_topic_loading ? (
+                                        <Placeholder.Button
+                                            xs={2}
+                                            aria-hidden="true"
+                                        />
+                                    ) : (
+                                        <>
+                                            <li className="breadcrumb-item">
+                                                <Link
+                                                    className="text-white"
+                                                    to="/"
+                                                >
+                                                    Home
+                                                </Link>
+                                            </li>
+                                            <li className="breadcrumb-item">
+                                                <Link
+                                                    className="text-white"
+                                                    to="/"
+                                                >
+                                                    {
+                                                        course?.course
+                                                            ?.assigned_admin
+                                                            ?.course_category
+                                                            ?.category_name_en
+                                                    }
+                                                </Link>
+                                            </li>
+                                            <li
+                                                className="breadcrumb-item text-white active"
+                                                aria-current="page"
+                                            >
+                                                {
+                                                    course?.course
+                                                        ?.assigned_admin
+                                                        ?.category_course
+                                                        ?.course_name_en
+                                                }
+                                            </li>
+                                        </>
+                                    )}
                                 </ol>
                             </nav>
                             <p className="display-6 text-white animated slideInDown mb-4">
@@ -138,7 +158,7 @@ function CourseView() {
                                         src={
                                             course?.course?.upload
                                                 ?.preview_path ??
-                                            "assets/img/course-1.jpg"
+                                            "assets/img/course-2.jpg"
                                         }
                                     />
                                     {/* <div
