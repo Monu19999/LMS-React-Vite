@@ -7,10 +7,15 @@ import { Button, Modal, Nav } from "react-bootstrap";
 import ReactPlayer from "react-player";
 import Placeholder from "react-bootstrap/Placeholder";
 import { updateTopic } from "@src/features/app/CourseSlice";
+import { pdfjs } from "react-pdf";
+import { Document, Page } from "react-pdf";
+import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import PDFReader from "./includes/Pdf/PDFReader";
 
 export default function CourseTopicDetail() {
     let { course_id, topic_id } = useParams();
-    const [showModal, setShowModal] = useState(false);
+    const [showVideoModal, setShowVideoModal] = useState(false);
+    const [showPdfModal, setShowPdfModal] = useState(false);
     const videoRef = useRef(ReactPlayer);
 
     let [previous, setPrevious] = useState(null);
@@ -39,113 +44,137 @@ export default function CourseTopicDetail() {
         }
     }, []);
 
-    const [showVideoModal, setShowVideoModal] = useState(false);
-const [showPdfModal, setShowPdfModal] = useState(false);
-
-function MyVerticallyCenteredModal(props) {
-    return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    {props.upload.file_mime_type === "application/video"
-                        ? "Video"
-                        : "PDF"}
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                {props.upload.file_mime_type === "application/video" ? (
-                    <ReactPlayer
-                        url={props.upload.file_path}
-                        playing={false}
-                        controls={true}
-                        pip={false}
-                        onPlay={() => console.log("played")}
-                        onPause={() => console.log("paused")}
-                        onEnded={() => console.log("ended")}
-                        config={{
-                            file: {
-                                attributes: {
-                                    controlsList: "nodownload",
-                                    disablePictureInPicture: true,
-                                },
-                            },
-                        }}
-                        width="100%"
-                    />
-                ) : (
-                    <embed
-                        src={props.upload.preview_path}
-                        type="application/pdf"
-                        width="100%"
-                        height="500px"
-                    />
-                )}
-            </Modal.Body>
-        </Modal>
-    );
-}
-
-const checkMimeType = (upload) => {
-    if (upload.file_mime_type === "application/video") {
+    function MyVerticallyCenteredModal(props) {
         return (
-            <>
-                <Button
-                    variant="primary"
-                    onClick={() => setShowVideoModal(true)}
-                >
-                    View Video
-                </Button>
-                <MyVerticallyCenteredModal
-                    show={showVideoModal}
-                    onHide={() => setShowVideoModal(false)}
-                    upload={upload}
-                />
-            </>
-        );
-    } else if (upload.file_mime_type === "application/pdf") {
-        return (
-            <>
-                <Button
-                    variant="primary"
-                    onClick={() => setShowPdfModal(true)}
-                >
-                    View PDF
-                </Button>
-                <MyVerticallyCenteredModal
-                    show={showPdfModal}
-                    onHide={() => setShowPdfModal(false)}
-                    upload={upload}
-                />
-            </>
-        );
-    }
-};
-
-const uploadsList = () => {
-    if (course_topic?.uploads) {
-        return (
-            <Nav
-                defaultActiveKey="/home"
-                className="flex-column gap-2"
-                as="ul"
+            <Modal
+                {...props}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
             >
-                {course_topic.uploads.map((upload) => {
-                    return (
-                        <Nav.Item as="li" key={upload.id}>
-                            {checkMimeType(upload)}
-                        </Nav.Item>
-                    );
-                })}
-            </Nav>
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        {props.upload.file_mime_type === "application/video"
+                            ? "Video"
+                            : "PDF"}
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {props.upload.file_mime_type === "application/video" ? (
+                        <ReactPlayer
+                            url={props.upload.file_path}
+                            playing={false}
+                            controls={true}
+                            pip={false}
+                            onPlay={() => console.log("played")}
+                            onPause={() => console.log("paused")}
+                            onEnded={() => console.log("ended")}
+                            config={{
+                                file: {
+                                    attributes: {
+                                        controlsList: "nodownload", // nodownload => disable download, nofullscreen => disable fullscreen, noplaybackrate => disable playback speed
+                                        disablePictureInPicture: true,
+                                    },
+                                },
+                            }}
+                            ref={videoRef}
+                            // onContextMenu={(e) => e.preventDefault()}
+                            // onProgress={() => {
+                            //     videoRef.current.getCurrentTime() >= played &&
+                            //         setPlayed(videoRef.current.getCurrentTime());
+                            // }}
+                            // onSeek={() => {
+                            //     videoRef.current.getCurrentTime() > played &&
+                            //         videoRef.current.seekTo(played);
+                            // }}
+                            width="100%"
+                        />
+                    ) : (
+                        <>
+                            <PDFReader
+                                file_path={
+                                    import.meta.env.VITE_APP_ENV == "production"
+                                        ? props.upload.preview_path
+                                        : "test.pdf"
+                                }
+                                configuration={props.configuration}
+                            />
+                            {/* <Document
+                                file={"test.pdf"}
+                                loading={<BootstrapSpinner />}
+                            >
+                                <Page pageNumber={1} renderTextLayer={false} />
+                            </Document>
+                            <p>
+                                Page {pageNumber} of {numPages}
+                            </p> */}
+                        </>
+                    )}
+                </Modal.Body>
+            </Modal>
         );
     }
-};
 
+    const checkMimeType = (upload, configuration) => {
+        if (upload.file_mime_type === "application/video") {
+            return (
+                <>
+                    <Button
+                        variant="primary"
+                        onClick={() => setShowVideoModal(true)}
+                    >
+                        View Video
+                    </Button>
+                    <MyVerticallyCenteredModal
+                        show={showVideoModal}
+                        onHide={() => setShowVideoModal(false)}
+                        upload={upload}
+                    />
+                </>
+            );
+        } else if (upload.file_mime_type === "application/pdf") {
+            return (
+                <>
+                    <Button
+                        variant="primary"
+                        onClick={() => setShowPdfModal(true)}
+                    >
+                        View PDF
+                    </Button>
+                    <MyVerticallyCenteredModal
+                        show={showPdfModal}
+                        onHide={() => setShowPdfModal(false)}
+                        upload={upload}
+                        configuration={configuration}
+                    />
+                </>
+            );
+        }
+    };
+
+    const uploadsList = () => {
+        if (course_topic?.uploads) {
+            return (
+                <Nav
+                    defaultActiveKey="/home"
+                    className="flex-column gap-2"
+                    as="ul"
+                >
+                    {course_topic.uploads.map((upload) => {
+                        return (
+                            <Nav.Item as="li" key={upload.id}>
+                                {checkMimeType(
+                                    upload,
+                                    course_topic?.course?.assigned_admin
+                                        ?.category_course?.configuration
+                                )}
+                            </Nav.Item>
+                        );
+                    })}
+                </Nav>
+            );
+        }
+    };
 
     // console.log(course_topic);
     const updated_at = course_topic?.updated_at

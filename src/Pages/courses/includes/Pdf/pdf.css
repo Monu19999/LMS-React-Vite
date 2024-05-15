@@ -1,0 +1,17 @@
+.control-panel {
+    font-size: 16px;
+    border-radius: 5px;
+    width: fit-content;
+    background-color: #015478;
+    width: 100%;
+    color: #fff;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.disabled {
+    cursor: not-allowed;
+    color: lightgray;
+}
