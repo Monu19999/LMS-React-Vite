@@ -11,14 +11,18 @@ import { pdfjs } from "react-pdf";
 import { Document, Page } from "react-pdf";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import PDFReader from "./includes/Pdf/PDFReader";
-import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import GoogleDocsViewer from "react-google-docs-viewer";
 
 export default function CourseTopicDetail() {
   let { course_id, topic_id } = useParams();
-  const [showVideoModal, setShowVideoModal] = useState(false);
-  const [showPdfModal, setShowPdfModal] = useState(false);
-  const [showPptModal, setShowPptModal] = useState(false);
+  //   const [showVideoModal, setShowVideoModal] = useState(false);
+  //   const [showPdfModal, setShowPdfModal] = useState(false);
+  //   const [showPptModal, setShowPptModal] = useState(false);
+  const [showModalType, setShowModalType] = useState({
+    video: false,
+    pdf: false,
+    ppt: false,
+  });
   const videoRef = useRef(ReactPlayer);
 
   let [previous, setPrevious] = useState(null);
@@ -47,14 +51,69 @@ export default function CourseTopicDetail() {
     }
   }, []);
 
-  const [activeDocument, setActiveDocument] = useState({
-    uri: "https://sample-videos.com/ppt/Sample-PPT-File-500kb.ppt",
-    fileType: "ppt",
-  });
+  
+  const checkFileMimeType = (FileMimeType) => {
+    return (
+        FileMimeType === "application/video" ||
+        FileMimeType === "application/pdf" ||
+        FileMimeType === "application/vnd.ms-powerpoint" ||
+        FileMimeType === "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    );
+};
 
-  const handleDocumentChange = (document) => {
-    setActiveDocument(document);
-  };
+const setModalBodyContent = (props) => {
+    let content = null;
+    const isSupportedType = checkFileMimeType(props.upload.file_mime_type);
+
+    if (isSupportedType) {
+        if (props.upload.file_mime_type === "application/video") {
+            content = (
+                <ReactPlayer
+                    url={props.upload.file_path}
+                    playing={false}
+                    controls={true}
+                    pip={false}
+                    onPlay={() => console.log("played")}
+                    onPause={() => console.log("paused")}
+                    onEnded={() => console.log("ended")}
+                    config={{
+                        file: {
+                            attributes: {
+                                controlsList: "nodownload",
+                                disablePictureInPicture: true,
+                            },
+                        },
+                    }}
+                    width="100%"
+                />
+            );
+        } else if (props.upload.file_mime_type === "application/pdf") {
+            content = (
+                <PDFReader
+                    file_path={
+                        import.meta.env.VITE_APP_ENV === "production"
+                            ? props.upload.preview_path
+                            : "test.pdf"
+                    }
+                    configuration={props.configuration}
+                />
+            );
+        } else {
+            content = (
+                <GoogleDocsViewer
+                    width="100%"
+                    height="400px"
+                    fileUrl={props.upload.preview_path}
+                />
+            );
+        }
+    } else {
+        content = <p>Unsupported file type</p>;
+    }
+
+    return content;
+};
+
   function MyVerticallyCenteredModal(props) {
     // console.log(props.upload.preview_path);
     return (
@@ -73,54 +132,7 @@ export default function CourseTopicDetail() {
               : "PPT"}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          {props.upload.file_mime_type === "application/video" ? (
-            <ReactPlayer
-              url={props.upload.file_path}
-              playing={false}
-              controls={true}
-              pip={false}
-              onPlay={() => console.log("played")}
-              onPause={() => console.log("paused")}
-              onEnded={() => console.log("ended")}
-              config={{
-                file: {
-                  attributes: {
-                    controlsList: "nodownload",
-                    disablePictureInPicture: true,
-                  },
-                },
-              }}
-              width="100%"
-            />
-          ) : props.upload.file_mime_type === "application/pdf" ? (
-            <>
-              <PDFReader
-                file_path={
-                  import.meta.env.VITE_APP_ENV === "production"
-                    ? props.upload.preview_path
-                    : "test.pdf"
-                }
-                configuration={props.configuration}
-              />
-            </>
-          ) : props.upload.file_mime_type === "application/vnd.ms-powerpoint" ||
-            props.upload.file_mime_type ===
-              "application/vnd.openxmlformats-officedocument.presentationml.presentation" ? (
-            <>
-
-            
-              <GoogleDocsViewer
-                width="100%"
-                height="400px"
-                fileUrl={props.upload.preview_path}
-              />
-              
-            </>
-          ) : (
-            <p>Unsupported file type</p>
-          )}
-        </Modal.Body>
+        <Modal.Body>{setModalBodyContent(props)}</Modal.Body>
       </Modal>
     );
   }
@@ -129,12 +141,15 @@ export default function CourseTopicDetail() {
     if (upload.file_mime_type === "application/video") {
       return (
         <>
-          <Button variant="primary" onClick={() => setShowVideoModal(true)}>
+          <Button
+            variant="primary"
+            onClick={(prev) => setShowModalType({ ...prev, video: true })}
+          >
             View Video
           </Button>
           <MyVerticallyCenteredModal
-            show={showVideoModal}
-            onHide={() => setShowVideoModal(false)}
+            show={showModalType.video}
+            onHide={(prev) => setShowModalType({ ...prev, video: false })}
             upload={upload}
           />
         </>
@@ -142,12 +157,15 @@ export default function CourseTopicDetail() {
     } else if (upload.file_mime_type === "application/pdf") {
       return (
         <>
-          <Button variant="primary" onClick={() => setShowPdfModal(true)}>
+          <Button
+            variant="primary"
+            onClick={(prev) => setShowModalType({ ...prev, pdf: true })}
+          >
             View PDF
           </Button>
           <MyVerticallyCenteredModal
-            show={showPdfModal}
-            onHide={() => setShowPdfModal(false)}
+            show={showModalType.pdf}
+            onHide={(prev) => setShowModalType({ ...prev, pdf: false })}
             upload={upload}
             configuration={configuration}
           />
@@ -160,12 +178,15 @@ export default function CourseTopicDetail() {
     ) {
       return (
         <>
-          <Button variant="primary" onClick={() => setShowPptModal(true)}>
+          <Button
+            variant="primary"
+            onClick={(prev) => setShowModalType({ ...prev, ppt: true })}
+          >
             View PPT
           </Button>
           <MyVerticallyCenteredModal
-            show={showPptModal}
-            onHide={() => setShowPptModal(false)}
+            show={showModalType.ppt}
+            onHide={(prev) => setShowModalType({ ...prev, ppt: false })}
             upload={upload}
           />
         </>
