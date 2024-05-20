@@ -23,6 +23,7 @@ function CoursesList() {
 
     // For fetching departments in app slice
     useEffect(() => {
+        console.log("hello")
         dispatch(getDepartments());
     }, []);
 
@@ -32,9 +33,9 @@ function CoursesList() {
             const [param, value] = entry;
             search[param] = value;
         }
-        // console.log({...search, course_name:"", page:null})
+        // console.log(search)
         if (Object.values(search).length > 0) {
-            dispatch(setSearch({...search, course_name:"", page:null}));
+            dispatch(setSearch({...search, department:search.department, course_name:"", page:null}));
         }
         dispatch(getSearchCourses(navigate));
     }, []);
@@ -45,15 +46,18 @@ function CoursesList() {
     };
 
     let handleFormFilterOnChange = (e) => {
+        
+        const matchedDepartment = departments.find((department) => parseInt(e.target.value) === department.id);
+        // console.log(matchedDepartment.encr_id+"_"+e.target.value)
         dispatch(
             setSearch({
                 ...search,
-                [e.target.name]: e.target.value,
+                [e.target.name]: e.target.name === "department" ? matchedDepartment.encr_id+"_"+e.target.value : e.target.value,
                 page: null,
             })
         );
     };
-
+// console.log(departments)
     function changePage(data) {
         dispatch(setSearch({ ...search, page: data.page }));
         dispatch(getSearchCourses(navigate));
@@ -138,7 +142,7 @@ function CoursesList() {
                                                     onChange={
                                                         handleFormFilterOnChange
                                                     }
-                                                    value={search.department}
+                                                    value={search.department.split("_")[1]}
                                                 >
                                                     <option value="">
                                                         Please Select

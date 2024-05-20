@@ -29,6 +29,7 @@ function CourseView() {
         }
     };
     useEffect(() => {
+        console.log("hello")
         if (course_id) {
             handleGetCourse();
         }

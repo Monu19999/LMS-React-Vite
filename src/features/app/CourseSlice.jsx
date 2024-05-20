@@ -74,11 +74,13 @@ export const getSearchCourses = createAsyncThunk(
         const state = getState();
 
         let search_state = removeEmpty(state.course.search);
-
+        console.log(search_state)
+        let departmentID = {department: search_state.department.split("_")[1]};
         let query_string =
-            Object.keys(search_state).length > 0
-                ? "?" + new URLSearchParams(search_state).toString()
-                : "";
+        Object.keys(search_state).length > 0
+        ? "?" + new URLSearchParams(departmentID).toString()
+        : "";
+        console.log(query_string)
 
         let api_url = api("category_courses") + query_string;
 
@@ -100,7 +102,9 @@ export const getSearchCourses = createAsyncThunk(
         });
         const json = await response.json();
         if (navigate) {
-            navigate(query_string);
+            navigate(Object.keys(search_state).length > 0
+        ? "?" + new URLSearchParams(search_state).toString()
+        : "");
         }
         return json.data;
     }
