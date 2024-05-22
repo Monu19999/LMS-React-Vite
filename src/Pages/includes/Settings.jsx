@@ -13,7 +13,7 @@ function Settings() {
 
     const handleGetUser = async () => {
         let response = await dispatch(getUser());
-        // console.log(response);
+        console.log(response);
         let payload = response.payload;
         if (
             payload.hasOwnProperty("message") &&

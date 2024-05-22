@@ -23,11 +23,10 @@ function CoursesList() {
 
     // For fetching departments in app slice
     useEffect(() => {
-        console.log("hello")
+        
         dispatch(getDepartments());
-    }, []);
 
-    useEffect(() => {
+
         let search = {};
         for (const entry of searchParams.entries()) {
             const [param, value] = entry;
@@ -37,22 +36,34 @@ function CoursesList() {
         if (Object.values(search).length > 0) {
             dispatch(setSearch({...search, department:search.department, course_name:"", page:null}));
         }
+        try {
+            if(course_loading){
+                return <BootstrapSpinner/>
+            }
         dispatch(getSearchCourses(navigate));
+
+        
+    } catch (error) {
+            console.error("something went wrong")
+        }
     }, []);
+
+    useEffect(() => {
+        
+    }, []);
+
 
     let handleFormFilter = (e) => {
         e.preventDefault();
         dispatch(getSearchCourses(navigate));
     };
 
-    let handleFormFilterOnChange = (e) => {
-        
-        const matchedDepartment = departments.find((department) => parseInt(e.target.value) === department.id);
-        // console.log(matchedDepartment.encr_id+"_"+e.target.value)
+  
+    let handleFormFilterOnChange = (e) => {  
         dispatch(
             setSearch({
                 ...search,
-                [e.target.name]: e.target.name === "department" ? matchedDepartment.encr_id+"_"+e.target.value : e.target.value,
+                [e.target.name]: e.target.name === "department" ? e.target[e.target.selectedIndex].getAttribute('data-encr_id')+"_"+e.target.value : e.target.value,
                 page: null,
             })
         );
@@ -152,11 +163,12 @@ function CoursesList() {
                                                             (department) => {
                                                                 return (
                                                                     <option
+                                                                    data-encr_id={department.encr_id}
                                                                         value={
                                                                             department.id
                                                                         }
                                                                         key={
-                                                                            department.id
+                                                                            department.encr_id
                                                                         }
                                                                     >
                                                                         {

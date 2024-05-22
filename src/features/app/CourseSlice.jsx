@@ -75,7 +75,7 @@ export const getSearchCourses = createAsyncThunk(
 
         let search_state = removeEmpty(state.course.search);
         console.log(search_state)
-        let departmentID = {department: search_state.department.split("_")[1]};
+        let departmentID = {department: search_state.department.split("_")[0]};
         let query_string =
         Object.keys(search_state).length > 0
         ? "?" + new URLSearchParams(departmentID).toString()
