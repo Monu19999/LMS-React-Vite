@@ -11,20 +11,20 @@ function Settings() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleGetUser = async () => {
-        let response = await dispatch(getUser());
-        console.log(response);
-        let payload = response.payload;
-        if (
-            payload.hasOwnProperty("message") &&
-            payload.message === "Unauthenticated."
-        ) {
-            navigate("/");
-        }
-    };
+    // const handleGetUser = async () => {
+    //     let response = await dispatch(getUser());
+    //     console.log(response);
+    //     let payload = response.payload;
+    //     if (
+    //         payload.hasOwnProperty("message") &&
+    //         payload.message === "Unauthenticated."
+    //     ) {
+    //         navigate("/");
+    //     }
+    // };
 
     useEffect(() => {
-        handleGetUser();
+        // handleGetUser();
         dispatch(setTheme());
         // dispatch(setSize());
     }, []);
