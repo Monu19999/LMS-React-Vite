@@ -10,268 +10,262 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { getSearchCourses } from "@src/features/app/CourseSlice";
 
 function CoursesList() {
-    const navigate = useNavigate();
-
-    const { departments, app_loading } = useSelector((state) => state.app);
-
     const { search_courses, courses, course_loading, search } = useSelector(
-        (state) => state.course
+      (state) => state.course
     );
+  const navigate = useNavigate();const [officeId, setOfficeId] = useState(0);
 
-    const dispatch = useDispatch();
-    const [searchParams] = useSearchParams();
+  const { departments, app_loading } = useSelector((state) => state.app);
 
-    // For fetching departments in app slice
-    useEffect(() => {
-        
-        dispatch(getDepartments());
-
-
-        let search = {};
-        for (const entry of searchParams.entries()) {
-            const [param, value] = entry;
-            search[param] = value;
-        }
-        // console.log(search)
-        if (Object.values(search).length > 0) {
-            dispatch(setSearch({...search, department:search.department, course_name:"", page:null}));
-        }
-        try {
-            if(course_loading){
-                return <BootstrapSpinner/>
-            }
-        dispatch(getSearchCourses(navigate));
-
-        
-    } catch (error) {
-            console.error("something went wrong")
-        }
-    }, []);
-
-    useEffect(() => {
-        
-    }, []);
-
-
-    let handleFormFilter = (e) => {
-        e.preventDefault();
-        dispatch(getSearchCourses(navigate));
-    };
+  const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
 
   
-    let handleFormFilterOnChange = (e) => {  
-        dispatch(
-            setSearch({
-                ...search,
-                [e.target.name]: e.target.name === "department" ? e.target[e.target.selectedIndex].getAttribute('data-encr_id')+"_"+e.target.value : e.target.value,
-                page: null,
-            })
-        );
-    };
-// console.log(departments)
-    function changePage(data) {
-        dispatch(setSearch({ ...search, page: data.page }));
-        dispatch(getSearchCourses(navigate));
+  useEffect(() => {
+    dispatch(getDepartments());
+
+
+    let search = {};
+    for (const entry of searchParams.entries()) {
+      const [param, value] = entry;
+      search[param] = value;
     }
 
-    return (
-        <>
-            {/* Header Start */}
-            <div className="container-fluid bg-primary py-4 mb-4 page-header">
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-lg-10 text-center">
-                            <h1 className="display-3 text-white animated slideInDown">
-                                Courses
-                            </h1>
-                            <nav aria-label="breadcrumb">
-                                <ol className="breadcrumb justify-content-center">
-                                    <li className="breadcrumb-item">
-                                        <a className="text-white" href="#">
-                                            Home
-                                        </a>
-                                    </li>
-                                    <li className="breadcrumb-item">
-                                        <a className="text-white" href="#">
-                                            Pages
-                                        </a>
-                                    </li>
-                                    <li
-                                        className="breadcrumb-item text-white active"
-                                        aria-current="page"
-                                    >
-                                        Courses
-                                    </li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
+
+    // console.log(search)
+    if (Object.values(search).length > 0) {
+      dispatch(
+        setSearch({
+          ...search,
+          department: search.department || "",
+          office: departments.find((dep) => parseInt(dep.id) === parseInt(search.department.split("_")[1]))?.offices || [],
+          course_name: "",
+          page: null,
+        })
+      );
+    }
+
+        dispatch(getSearchCourses(navigate));
+      
+  
+  }, []);
+
+
+  const handleFormFilterOnChange = (e) => {
+    const { value, name } = e.target;
+    const filteredOffices = name === "department" 
+        ? departments.find((dep) => dep.id === parseInt(value))?.offices || [] 
+        : search.office;
+
+    dispatch(
+        setSearch({
+            ...search,
+            [name]: value,
+            office: filteredOffices,
+            page: null,
+        })
+    );
+};
+
+
+  const handleFormFilter = (e) => {
+    e.preventDefault();
+    dispatch(getSearchCourses(navigate));
+  };
+
+  function changePage(data) {
+    dispatch(setSearch({ ...search, page: data.page }));
+    dispatch(getSearchCourses(navigate));
+  }
+
+  console.log(search.office, officeId)
+  return (
+    <>
+      {/* Header Start */}
+      <div className="container-fluid bg-primary py-4 mb-4 page-header">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-10 text-center">
+              <h1 className="display-3 text-white animated slideInDown">
+                Courses
+              </h1>
+              <nav aria-label="breadcrumb">
+                <ol className="breadcrumb justify-content-center">
+                  <li className="breadcrumb-item">
+                    <a className="text-white" href="#">
+                      Home
+                    </a>
+                  </li>
+                  <li className="breadcrumb-item">
+                    <a className="text-white" href="#">
+                      Pages
+                    </a>
+                  </li>
+                  <li
+                    className="breadcrumb-item text-white active"
+                    aria-current="page"
+                  >
+                    Courses
+                  </li>
+                </ol>
+              </nav>
             </div>
-            {/* Header End */}
-            <div className="container-xxl ">
-                <div className="container">
-                    <div className="row mb-4">
-                        {/* Print Button Start */}
-                        <div className="innertitle d-flex justify-content-end mb-4 p-0">
-                            <a
-                                href="#"
-                                className="btn btn-primary btn-sm pull-right"
-                            >
-                                <span className="fa fa-print"> Print</span>
-                            </a>
-                        </div>
-                        {/* Print Button End */}
-                        {/* Search Form Start */}
-                        <div className="col-12">
-                            <div
-                                className="wow fadeInUp"
-                                data-wow-delay="0.1s"
-                                style={{
-                                    visibility: "visible",
-                                    animationDelay: "0.1s",
-                                    animationName: "fadeInUp",
-                                }}
-                            >
-                                <h4>Search Course</h4>
-                            </div>
-                        </div>
-                        <div
-                            className="col-lg-12 wow fadeInUp"
-                            style={{ backgroundColor: "#06bbcc" }}
+          </div>
+        </div>
+      </div>
+      {/* Header End */}
+      <div className="container-xxl ">
+        <div className="container">
+          <div className="row mb-4">
+            {/* Print Button Start */}
+            <div className="innertitle d-flex justify-content-end mb-4 p-0">
+              <a href="#" className="btn btn-primary btn-sm pull-right">
+                <span className="fa fa-print"> Print</span>
+              </a>
+            </div>
+            {/* Print Button End */}
+            {/* Search Form Start */}
+            <div className="col-12">
+              <div
+                className="wow fadeInUp"
+                data-wow-delay="0.1s"
+                style={{
+                  visibility: "visible",
+                  animationDelay: "0.1s",
+                  animationName: "fadeInUp",
+                }}
+              >
+                <h4>Search Course</h4>
+              </div>
+            </div>
+            <div
+              className="col-lg-12 wow fadeInUp"
+              style={{ backgroundColor: "#06bbcc" }}
+            >
+              <div className="search-title">
+                <form onSubmit={handleFormFilter}>
+                  <div className="row">
+                    <div className="col-md-5">
+                      <div className="form-group">
+                        <label>Department</label>
+                        <select
+                          name="department"
+                          id="department"
+                          className="form-control"
+                          onChange={(e) => {
+                            // setDepartmentId(parseInt(e.target.value));
+                            handleFormFilterOnChange(e);
+                        }}
+                        
+                          value={search.department.split("_")[1]}
                         >
-                            <div className="search-title">
-                                <form onSubmit={handleFormFilter}>
-                                    <div className="row">
-                                        <div className="col-md-5">
-                                            <div className="form-group">
-                                                <label>Department</label>
-                                                <select
-                                                    name="department"
-                                                    id="department"
-                                                    className="form-control"
-                                                    onChange={
-                                                        handleFormFilterOnChange
-                                                    }
-                                                    value={search.department.split("_")[1]}
-                                                >
-                                                    <option value="">
-                                                        Please Select
-                                                    </option>
-                                                    {departments &&
-                                                        departments.map(
-                                                            (department) => {
-                                                                return (
-                                                                    <option
-                                                                    data-encr_id={department.encr_id}
-                                                                        value={
-                                                                            department.id
-                                                                        }
-                                                                        key={
-                                                                            department.encr_id
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            department.title_en
-                                                                        }
-                                                                    </option>
-                                                                );
-                                                            }
-                                                        )}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-4">
-                                            <div className="form-group">
-                                                <label>
-                                                    Search By Course Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="course_name"
-                                                    id="course_name"
-                                                    autoComplete="off"
-                                                    value={search.course_name}
-                                                    onChange={
-                                                        handleFormFilterOnChange
-                                                    }
-                                                    className="form-control"
-                                                    placeholder="Search By Title"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-3">
-                                            <div className="form-group mt-28">
-                                                <br />
-                                                <button
-                                                    className="btn btn-dark py-md-2 px-md-4 animated slideInRight"
-                                                    style={{
-                                                        borderRadius: 40,
-                                                        marginRight: 20,
-                                                    }}
-                                                    type="submit"
-                                                >
-                                                    Search
-                                                </button>
-                                                <button
-                                                    className="btn btn-light py-md-2 px-md-4 animated slideInRight"
-                                                    style={{ borderRadius: 40 }}
-                                                    name="search-all"
-                                                    id="search-all"
-                                                    onClick={() =>
-                                                        dispatch(resetSearch())
-                                                    }
-                                                >
-                                                    <i className="fas fa-refresh" />{" "}
-                                                    Reset
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        {/* Search Form End */}
+                          <option value="">Please Select</option>
+                          {departments &&
+                            departments.map((department) => (
+                              <option
+                                data-encr_id={department.encr_id}
+                                value={department.id}
+                                key={department.encr_id}
+                              >
+                                {department.title_en}
+                              </option>
+                            ))}
+                        </select>
+                      </div>
+                      <div className="form-group">
+                        <label>Office</label>
+                        <select
+                          name="office"
+                          id="office"
+                          className="form-control"
+                        //   onChange={(e) => setOfficeId(e.target.value)}
+                        onChange={handleFormFilterOnChange}
+                          value={officeId}
+                        >
+                          <option value="">Please Select</option>
+                          {search.office?.map((office) => (
+                            <option value={office.id} key={office.id}>
+                              {office.title_en}
+                            </option>
+                          ))}
+                        </select>
+                      </div>{" "}
                     </div>
-
-                    {/* All searched Courses Start */}
-                    <div className="container-xxl py-5">
-                        <div className="container ">
-                            <div
-                                className="text-center wow fadeInUp"
-                                data-wow-delay="0.1s"
-                            >
-                                <h1 className="mb-5">All Courses</h1>
-                            </div>
-                            <div className="row">
-                                {course_loading ? (
-                                    <BootstrapSpinner />
-                                ) : (
-                                    search_courses?.courses?.data &&
-                                    search_courses?.courses?.data.map((course) => {
-                                        return (
-                                            <div
-                                                className="col-lg-4 col-md-6 mb-4"
-                                                key={course.id}
-                                            >
-                                                <CourseItem course={course} />
-                                            </div>
-                                        );
-                                    })
-                                )}
-                            </div>
-                        </div>
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label>Search By Course Name</label>
+                        <input
+                          type="text"
+                          name="course_name"
+                          id="course_name"
+                          autoComplete="off"
+                          value={search.course_name}
+                          onChange={handleFormFilterOnChange}
+                          className="form-control"
+                          placeholder="Search By Title"
+                        />
+                      </div>
                     </div>
-                    {/* All searched Courses Start */}
+                    <div className="col-md-3">
+                      <div className="form-group mt-28">
+                        <br />
+                        <button
+                          className="btn btn-dark py-md-2 px-md-4 animated slideInRight"
+                          style={{
+                            borderRadius: 40,
+                            marginRight: 20,
+                          }}
+                          type="submit"
+                        >
+                          Search
+                        </button>
+                        <button
+                          className="btn btn-light py-md-2 px-md-4 animated slideInRight"
+                          style={{ borderRadius: 40 }}
+                          name="search-all"
+                          id="search-all"
+                          onClick={() => dispatch(resetSearch())}
+                        >
+                          <i className="fas fa-refresh" /> Reset
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            {/* Search Form End */}
+          </div>
 
-                    {/* Searched Courses Pagination Start */}
-                    <div className="row mb-4 ">
-                        <div className="col-12 text-center">
-                            <Pagination
-                                changePage={changePage}
-                                data={courses.courses}
-                            />
-                            {/* <ul className="pagination pagination-lg d-flex justify-content-center">
+          {/* All searched Courses Start */}
+          <div className="container-xxl py-5">
+            <div className="container ">
+              <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 className="mb-5">All Courses</h1>
+              </div>
+              <div className="row">
+                {course_loading ? (
+                  <BootstrapSpinner />
+                ) : (
+                  search_courses?.courses?.data &&
+                  search_courses?.courses?.data.map((course) => {
+                    return (
+                      <div className="col-lg-4 col-md-6 mb-4" key={course.id}>
+                        <CourseItem course={course} />
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          </div>
+          {/* All searched Courses Start */}
+
+          {/* Searched Courses Pagination Start */}
+          <div className="row mb-4 ">
+            <div className="col-12 text-center">
+              <Pagination changePage={changePage} data={courses.courses} />
+              {/* <ul className="pagination pagination-lg d-flex justify-content-center">
                                 <li className="page-item">
                                     <a
                                         className="page-link"
@@ -336,13 +330,13 @@ function CoursesList() {
                                     </a>
                                 </li>
                             </ul> */}
-                        </div>
-                    </div>
-                    {/* Searched Courses Pagination End */}
-                </div>
             </div>
-        </>
-    );
+          </div>
+          {/* Searched Courses Pagination End */}
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default CoursesList;
