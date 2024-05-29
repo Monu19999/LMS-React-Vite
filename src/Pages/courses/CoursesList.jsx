@@ -13,7 +13,8 @@ function CoursesList() {
     const { search_courses, courses, course_loading, search } = useSelector(
       (state) => state.course
     );
-  const navigate = useNavigate();const [officeId, setOfficeId] = useState(0);
+  const navigate = useNavigate();
+  const [officeId, setOfficeId] = useState(0);
 
   const { departments, app_loading } = useSelector((state) => state.app);
 
@@ -60,7 +61,7 @@ function CoursesList() {
     dispatch(
         setSearch({
             ...search,
-            [name]: value,
+             [name]: name === "department" ? e.target[e.target.selectedIndex].getAttribute('data-encr_id')+"_"+e.target.value : e.target.value,
             office: filteredOffices,
             page: null,
         })
@@ -78,7 +79,7 @@ function CoursesList() {
     dispatch(getSearchCourses(navigate));
   }
 
-  console.log(search.office, officeId)
+//   console.log(search.office, officeId)
   return (
     <>
       {/* Header Start */}
@@ -178,8 +179,8 @@ function CoursesList() {
                           name="office"
                           id="office"
                           className="form-control"
-                        //   onChange={(e) => setOfficeId(e.target.value)}
-                        onChange={handleFormFilterOnChange}
+                          onChange={(e) => setOfficeId(e.target.value)}
+                        // onChange={handleFormFilterOnChange}
                           value={officeId}
                         >
                           <option value="">Please Select</option>
