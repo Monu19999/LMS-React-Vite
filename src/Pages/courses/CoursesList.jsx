@@ -58,7 +58,7 @@ function CoursesList() {
         ? departments.find((dep) => dep.id === parseInt(value))?.offices || [] 
         : search.office;
 
-        dispatch(
+    dispatch(
             setSearch({
                 ...search,
                 [name]: name === "department" ? (value == "" ? "" : e.target[e.target.selectedIndex].getAttribute('data-encr_id')+"_"+e.target.value) : e.target.value,
