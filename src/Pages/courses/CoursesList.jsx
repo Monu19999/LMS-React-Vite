@@ -58,19 +58,20 @@ function CoursesList() {
         ? departments.find((dep) => dep.id === parseInt(value))?.offices || [] 
         : search.office;
 
-    dispatch(
-        setSearch({
-            ...search,
-             [name]: name === "department" ? e.target[e.target.selectedIndex].getAttribute('data-encr_id')+"_"+e.target.value : e.target.value,
-            office: filteredOffices,
-            page: null,
-        })
+        dispatch(
+            setSearch({
+                ...search,
+                [name]: name === "department" ? (value == "" ? "" : e.target[e.target.selectedIndex].getAttribute('data-encr_id')+"_"+e.target.value) : e.target.value,
+                office: filteredOffices,
+                page: null,
+     })
     );
 };
 
 
   const handleFormFilter = (e) => {
     e.preventDefault();
+    if(search.department == null) return;
     dispatch(getSearchCourses(navigate));
   };
 
@@ -79,7 +80,7 @@ function CoursesList() {
     dispatch(getSearchCourses(navigate));
   }
 
-//   console.log(search.office, officeId)
+  console.log(search.department)
   return (
     <>
       {/* Header Start */}
@@ -160,7 +161,7 @@ function CoursesList() {
                         
                           value={search.department.split("_")[1]}
                         >
-                          <option value="">Please Select</option>
+                          <option value="" >Please Select</option>
                           {departments &&
                             departments.map((department) => (
                               <option
