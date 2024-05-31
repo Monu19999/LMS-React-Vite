@@ -66,7 +66,6 @@ function CoursesList() {
           e.target.name === "department"
             ? `${encrId}_${departmentId}`
             : e.target.value,
-        office: officeID,
         page: null,
       })
     );
