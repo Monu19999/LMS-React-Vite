@@ -10,7 +10,7 @@ const initialState = {
     search: {
         page: null,
         department: "",
-        office:[],
+        office:"",
         course_name: "",
     },
     course_loading: false,

@@ -1,78 +1,75 @@
 import React, { useEffect, useState } from "react";
 import CourseItem from "@src/Pages/courses/includes/CourseItem";
 import { useSelector, useDispatch } from "react-redux";
-import { getCourses } from "@src/features/app/CourseSlice";
+import { getCourses, getSearchCourses } from "@src/features/app/CourseSlice";
 import Pagination from "@src/Utilities/Pagination";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import { getDepartments } from "@src/features/app/AppSlice";
 import { setSearch, resetSearch } from "@src/features/app/CourseSlice";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getSearchCourses } from "@src/features/app/CourseSlice";
+import { useForm } from "react-hook-form";
 
 function CoursesList() {
-    const { search_courses, courses, course_loading, search } = useSelector(
-      (state) => state.course
-    );
   const navigate = useNavigate();
-  const [officeId, setOfficeId] = useState(0);
+  const [officeID, setOfficeID] = useState(0);
 
   const { departments, app_loading } = useSelector((state) => state.app);
+  const [departmentoffices, setDepartmentoffices] = useState([]);
+  const { courses, course_loading, search } = useSelector(
+    (state) => state.course
+  );
 
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
+  const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm();
 
-  
+  // For fetching departments in app slice
   useEffect(() => {
     dispatch(getDepartments());
+  }, []);
 
-
+  useEffect(() => {
     let search = {};
     for (const entry of searchParams.entries()) {
       const [param, value] = entry;
       search[param] = value;
     }
-
-
-    // console.log(search)
     if (Object.values(search).length > 0) {
-      dispatch(
-        setSearch({
-          ...search,
-          department: search.department || "",
-          office: departments.find((dep) => parseInt(dep.id) === parseInt(search.department.split("_")[1]))?.offices || [],
-          course_name: "",
-          page: null,
-        })
-      );
+      dispatch(setSearch(search));
     }
-
-        dispatch(getSearchCourses(navigate));
-      
-  
+    dispatch(getSearchCourses(navigate));
   }, []);
 
+  let handleFormFilter = (e) => {
+    // e.preventDefault();
+    dispatch(getSearchCourses(navigate));
+  };
 
-  const handleFormFilterOnChange = (e) => {
-    const { value, name } = e.target;
-    const filteredOffices = name === "department" 
-        ? departments.find((dep) => dep.id === parseInt(value))?.offices || [] 
-        : search.office;
+  let handleFormFilterOnChange = (e) => {
+    const encrId = e.target.selectedOptions[0].getAttribute("data-encr_id");
+    const departmentId = e.target.value
+
+    // console.log(encrId, departmentId)
+
+    //filtering offices from department
+    if (e.target.name === "department") {
+      const filteredOffices =
+        departments.find((dep) => dep.id === parseInt(departmentId))?.offices ||
+        [];
+      setDepartmentoffices(filteredOffices);
+    }
 
     dispatch(
-            setSearch({
-                ...search,
-                [name]: name === "department" ? (value == "" ? "" : e.target[e.target.selectedIndex].getAttribute('data-encr_id')+"_"+e.target.value) : e.target.value,
-                office: filteredOffices,
-                page: null,
-     })
+      setSearch({
+        ...search,
+        [e.target.name]:
+          e.target.name === "department"
+            ? `${encrId}_${departmentId}`
+            : e.target.value,
+        office: officeID,
+        page: null,
+      })
     );
-};
-
-
-  const handleFormFilter = (e) => {
-    e.preventDefault();
-    if(search.department == null) return;
-    dispatch(getSearchCourses(navigate));
   };
 
   function changePage(data) {
@@ -80,7 +77,14 @@ function CoursesList() {
     dispatch(getSearchCourses(navigate));
   }
 
-  console.log(search.department)
+  const handleReset = () => {
+    reset(); // Reset the form
+    dispatch(resetSearch()); // Reset the search state
+    dispatch(getSearchCourses(navigate)); // Fetch courses again with reset state
+  };
+
+  // console.log("office => ",officeID);
+
   return (
     <>
       {/* Header Start */}
@@ -145,7 +149,7 @@ function CoursesList() {
               style={{ backgroundColor: "#06bbcc" }}
             >
               <div className="search-title">
-                <form onSubmit={handleFormFilter}>
+                <form onSubmit={handleSubmit(handleFormFilter)}>
                   <div className="row">
                     <div className="col-md-5">
                       <div className="form-group">
@@ -154,25 +158,30 @@ function CoursesList() {
                           name="department"
                           id="department"
                           className="form-control"
-                          onChange={(e) => {
-                            // setDepartmentId(parseInt(e.target.value));
-                            handleFormFilterOnChange(e);
-                        }}
-                        
+                          {...register("department", {
+                            required: "Please select a department",
+                            validate: (value) =>
+                              value !== "null_undefined" ||
+                              "Invalid department selected",
+                            onChange: handleFormFilterOnChange,
+                          })}
                           value={search.department.split("_")[1]}
                         >
-                          <option value="" >Please Select</option>
+                          <option value="">Please Select</option>
                           {departments &&
                             departments.map((department) => (
                               <option
                                 data-encr_id={department.encr_id}
-                                value={department.id}
-                                key={department.encr_id}
+                                value={department.id} // Use both encr_id and id
+                                key={department.id}
                               >
                                 {department.title_en}
                               </option>
                             ))}
                         </select>
+                        {errors?.department && (
+                          <p className="error">{errors.department.message}</p>
+                        )}
                       </div>
                       <div className="form-group">
                         <label>Office</label>
@@ -180,18 +189,31 @@ function CoursesList() {
                           name="office"
                           id="office"
                           className="form-control"
-                          onChange={(e) => setOfficeId(e.target.value)}
-                        // onChange={handleFormFilterOnChange}
-                          value={officeId}
+                          {...register("office",{
+                            onChange:(e) => {
+                              handleFormFilterOnChange(e);
+                              setOfficeID(parseInt(e.target.value));
+                            },
+                            required: "Please select a department",
+                            validate: (value) =>
+                              value !== "" ||
+                            "Invalid office selected",
+                            
+                          })}
+                          defaultValue={officeID}
                         >
                           <option value="">Please Select</option>
-                          {search.office?.map((office) => (
-                            <option value={office.id} key={office.id}>
-                              {office.title_en}
-                            </option>
-                          ))}
+                          {departmentoffices &&
+                            departmentoffices.map((office) => (
+                              <option value={office.id} key={office.id}>
+                                {office.title_en}
+                              </option>
+                            ))}
                         </select>
-                      </div>{" "}
+                        {errors?.office && (
+                          <p className="error">{errors.office.message}</p>
+                        )}
+                      </div>
                     </div>
                     <div className="col-md-4">
                       <div className="form-group">
@@ -201,8 +223,8 @@ function CoursesList() {
                           name="course_name"
                           id="course_name"
                           autoComplete="off"
-                          value={search.course_name}
-                          onChange={handleFormFilterOnChange}
+                          {...register("course_name")}
+                          defaultValue={search.course_name}
                           className="form-control"
                           placeholder="Search By Title"
                         />
@@ -213,10 +235,7 @@ function CoursesList() {
                         <br />
                         <button
                           className="btn btn-dark py-md-2 px-md-4 animated slideInRight"
-                          style={{
-                            borderRadius: 40,
-                            marginRight: 20,
-                          }}
+                          style={{ borderRadius: 40, marginRight: 20 }}
                           type="submit"
                         >
                           Search
@@ -224,9 +243,8 @@ function CoursesList() {
                         <button
                           className="btn btn-light py-md-2 px-md-4 animated slideInRight"
                           style={{ borderRadius: 40 }}
-                          name="search-all"
-                          id="search-all"
-                          onClick={() => dispatch(resetSearch())}
+                          type="button"
+                          onClick={handleReset}
                         >
                           <i className="fas fa-refresh" /> Reset
                         </button>
@@ -249,8 +267,8 @@ function CoursesList() {
                 {course_loading ? (
                   <BootstrapSpinner />
                 ) : (
-                  search_courses?.courses?.data &&
-                  search_courses?.courses?.data.map((course) => {
+                  courses?.data &&
+                  courses.data.map((course) => {
                     return (
                       <div className="col-lg-4 col-md-6 mb-4" key={course.id}>
                         <CourseItem course={course} />
