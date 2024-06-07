@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +13,7 @@ export default function Login() {
     const auth_state = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [isChecked, setIsChecked] = useState(Cookies.get("UserInfo") ? true : false);
 
     const default_values =
         import.meta.env.VITE_APP_ENV === "production"
@@ -28,9 +29,12 @@ export default function Login() {
         register,
         handleSubmit,
         formState: { errors },
-        getValues, // Add this to get form values
-        setValue, // Add this to set form values
+        getValues,
+        setValue,
+        watch,
     } = useForm(default_values);
+
+    const isRememberChecked = watch("remember", false);
 
     const resetMessages = () => {
         dispatch(
@@ -44,23 +48,32 @@ export default function Login() {
         );
     };
 
-    // Resetting error messages
+    // const checkedRemeber = Cookies.get("UserInfo") ? true : false ;
+
     useEffect(() => {
         resetMessages();
-        const savedEmail = Cookies.get("loggedInUserEmail");
-        const encryptedPassword = Cookies.get("loggedInUserPassword");
-        if (savedEmail && encryptedPassword) {
-            const decryptedPassword = CryptoJS.AES.decrypt(encryptedPassword, '8103379969').toString(CryptoJS.enc.Utf8);
-            setValue("email", savedEmail);
-            setValue("password", decryptedPassword);
+        const encryptedUserInfo = Cookies.get("UserInfo");
+        if (encryptedUserInfo) {
+            const decryptedUserInfo = JSON.parse(
+                CryptoJS.AES.decrypt(encryptedUserInfo, '8103379969').toString(CryptoJS.enc.Utf8)
+            );
+            setValue("email", decryptedUserInfo.email);
+            setValue("password", decryptedUserInfo.password);
         }
     }, [setValue]);
+    
 
-    // Handle user login form submission
     const loginUser = async (user) => {
+        const { email, password, remember } = getValues();
+        const userInfo = { email, password };
+        if (remember) {
+            const encryptedUserInfo = CryptoJS.AES.encrypt(JSON.stringify(userInfo), '8103379969').toString();
+            Cookies.set("UserInfo", encryptedUserInfo);
+            console.log(encryptedUserInfo)
+        }
+
         let response = await dispatch(login(user));
         let data = response.payload?.data;
-        // console.log(data);
         if (response.hasOwnProperty("errors")) {
             return;
         } else if (data?.status === 200) {
@@ -69,15 +82,14 @@ export default function Login() {
         }
     };
 
-    // Handle remember me checkbox change
-    const handleRememberMe = () => {
-        const { email, password } = getValues();
-        if (email && password) {
-            const encryptedPassword = CryptoJS.AES.encrypt(password, '8103379969').toString();
-            Cookies.set("loggedInUserEmail", email);
-            Cookies.set("loggedInUserPassword", encryptedPassword);
+    const handleRememberMe = (e) => {
+        console.log(e.target.checked)
+        if (!e.target.checked) {
+            Cookies.remove("UserInfo");
         }
+        setIsChecked(!isChecked);
     };
+
     return (
         <>
             <div className="wrap d-md-flex">
@@ -181,7 +193,7 @@ export default function Login() {
                                     type="checkbox"
                                     {...register("remember")}
                                     onChange={handleRememberMe}
-                                    checked={ Cookies.get('loggedInUserEmail') ? true : false }
+                                    checked={isChecked}
                                 />
                                 <label className="checkbox-wrap checkbox-primary mb-0">
                                     Remember Me{" "}
