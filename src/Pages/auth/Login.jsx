@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { login, setMessages } from "@src/features/app/AuthSlice";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
 
 export default function Login() {
     const user_loading = useSelector((state) => state.auth.user_loading);
@@ -12,8 +14,8 @@ export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    let default_values =
-        import.meta.env.VITE_APP_ENV == "production"
+    const default_values =
+        import.meta.env.VITE_APP_ENV === "production"
             ? {}
             : {
                   defaultValues: {
@@ -21,10 +23,13 @@ export default function Login() {
                       password: "password",
                   },
               };
+
     const {
         register,
         handleSubmit,
         formState: { errors },
+        getValues, // Add this to get form values
+        setValue, // Add this to set form values
     } = useForm(default_values);
 
     const resetMessages = () => {
@@ -38,20 +43,39 @@ export default function Login() {
             })
         );
     };
+
     // Resetting error messages
     useEffect(() => {
         resetMessages();
-    }, []);
+        const savedEmail = Cookies.get("loggedInUserEmail");
+        const encryptedPassword = Cookies.get("loggedInUserPassword");
+        if (savedEmail && encryptedPassword) {
+            const decryptedPassword = CryptoJS.AES.decrypt(encryptedPassword, '8103379969').toString(CryptoJS.enc.Utf8);
+            setValue("email", savedEmail);
+            setValue("password", decryptedPassword);
+        }
+    }, [setValue]);
 
-    // Handle user login form submittion
+    // Handle user login form submission
     const loginUser = async (user) => {
         let response = await dispatch(login(user));
         let data = response.payload?.data;
+        // console.log(data);
         if (response.hasOwnProperty("errors")) {
             return;
-        } else if (data?.status == 200) {
+        } else if (data?.status === 200) {
             resetMessages();
             navigate("/member");
+        }
+    };
+
+    // Handle remember me checkbox change
+    const handleRememberMe = () => {
+        const { email, password } = getValues();
+        if (email && password) {
+            const encryptedPassword = CryptoJS.AES.encrypt(password, '8103379969').toString();
+            Cookies.set("loggedInUserEmail", email);
+            Cookies.set("loggedInUserPassword", encryptedPassword);
         }
     };
     return (
@@ -69,7 +93,7 @@ export default function Login() {
                             </Link>
                         </div>
                         <h2>Welcome to e-Shiksha (LMS)</h2>
-                        <p className="text-white">Don't have an account?</p>
+                        <p className="text-white">Don’t have an account?</p>
                         <Link
                             to="/auth/register"
                             className="btn btn-white btn-outline-white"
@@ -156,6 +180,8 @@ export default function Login() {
                                 <input
                                     type="checkbox"
                                     {...register("remember")}
+                                    onChange={handleRememberMe}
+                                    checked={ Cookies.get('loggedInUserEmail') ? true : false }
                                 />
                                 <label className="checkbox-wrap checkbox-primary mb-0">
                                     Remember Me{" "}
