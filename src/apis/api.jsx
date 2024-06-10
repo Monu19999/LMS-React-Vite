@@ -21,6 +21,9 @@ const api_urls = {
     auth_logout: "/api/auth/logout",
     auth_register: "/api/auth/temp-register",
     auth_send_otp: "/api/auth/send-otp",
+    auth_forgot_password: "/api/auth/forgot-password",
+    auth_verify_reset_password_link: "/api/auth/verify-reset-password",
+    auth_reset_password: "/api/auth/reset-password",
 
     // Authenticated users urls
     user: "/api/auth/user",

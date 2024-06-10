@@ -90,11 +90,15 @@ export default function Login() {
                         onSubmit={handleSubmit(loginUser)}
                     >
                         {user_loading && <BootstrapSpinner />}
-                        {auth_state?.error_message && (
-                            <div className="alert alert-danger alert-block mt-3 ml-3 mr-3">
-                                <strong>{auth_state.error_message}</strong>
+                        <strong>{auth_state.error_message}</strong>
+                        {Object.values(auth_state?.errors).map((error, key) => (
+                            <div
+                                className="alert alert-danger alert-block mt-1 ml-3 mr-3"
+                                key={key}
+                            >
+                                <strong>{error}</strong>
                             </div>
-                        )}
+                        ))}
                         <Form.Group
                             className="form-group mb-3"
                             controlId="formGroupEmail"

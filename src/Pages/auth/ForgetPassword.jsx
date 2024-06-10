@@ -1,20 +1,32 @@
 import { useForm } from "react-hook-form";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Form } from "react-bootstrap";
+import { forgotPassword } from "@src/features/app/AuthSlice";
 
 export default function ForgetPassword() {
     const user_loading = useSelector((state) => state.auth.user_loading);
     const auth_state = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            email: "hw.sharma9@mp.gov.in",
+        },
+    });
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (data) => {
+        let response = await dispatch(forgotPassword(data));
+        let payload = response.payload;
+        if (payload?.status == 200) {
+            navigate("/auth/reset-password-link-sent");
+        }
     };
     return (
         <div className="wrap d-md-flex">
@@ -30,9 +42,6 @@ export default function ForgetPassword() {
                         </Link>
                     </div>
                     <h2>Welcome to e-Shiksha (LMS)</h2>
-                    {/* <p className="text-white">
-                                                Don't have an account?
-                                            </p> */}
                     <Link
                         to="/auth/login"
                         className="btn btn-white btn-outline-white"
@@ -75,35 +84,38 @@ export default function ForgetPassword() {
                 {user_loading ? (
                     <BootstrapSpinner />
                 ) : (
-                    <form
+                    <Form
                         onSubmit={handleSubmit(onSubmit)}
                         style={{ width: "100%" }}
                     >
+                        <Form.Group
+                            className="form-group mb-3"
+                            controlId="formGroupEmail"
+                        >
+                            <Form.Label className="label">
+                                Email (ACCEPTS ONLY GOV.IN OR NIC.IN)
+                            </Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter Email"
+                                {...register("email", {
+                                    required: "Email is Required!",
+                                    pattern: {
+                                        value: /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i,
+                                        message: "Not a valid Email!",
+                                    },
+                                })}
+                            />
+                            <Form.Text
+                                id="first_nameHelpBlock"
+                                className="text-danger"
+                            >
+                                {["required", "pattern"].includes(
+                                    errors?.email?.type
+                                ) && <>{errors.email.message}</>}
+                            </Form.Text>
+                        </Form.Group>
                         <div className="d-flex flex-column my-4 ">
-                            <div>
-                                <label htmlFor="email"> Email</label>
-                            </div>
-
-                            <div>
-                                <input
-                                    placeholder="Enter email"
-                                    className="form-control my-3 p-2"
-                                    type="email"
-                                    {...register("forget_password", {
-                                        required: "Email is Required!",
-                                        pattern: {
-                                            value: /^[a-zA-Z0-9._%+-]+@(mp\.gov\.in|mp\.nic\.in)$/i,
-                                            message: "Not a valid Email!",
-                                        },
-                                    })}
-                                />
-                            </div>
-                            {errors?.forget_password && (
-                                <p className="errorMsg">
-                                    {errors.forget_password.message}
-                                </p>
-                            )}
-
                             <div>
                                 <Button
                                     variant="primary"
@@ -116,7 +128,7 @@ export default function ForgetPassword() {
                                 </Button>
                             </div>
                         </div>
-                    </form>
+                    </Form>
                 )}
             </div>
         </div>

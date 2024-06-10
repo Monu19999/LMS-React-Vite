@@ -2,6 +2,89 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import api from "@src/apis/api";
 import Cookies from "js-cookie";
 
+export const forgotPassword = createAsyncThunk(
+    "user/forgotPassword",
+    async (credentials) => {
+        let api_url = api("auth_forgot_password");
+        try {
+            const response = await fetch(api_url, {
+                method: "post",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(credentials),
+                cache: "no-cache",
+            });
+            const json = await response.json();
+            if (response.status !== 200) {
+                throw new Error("Bad response", {
+                    cause: json,
+                });
+            }
+            return json;
+        } catch (error) {
+            return error.cause;
+        }
+    }
+);
+
+export const resetPassword = createAsyncThunk(
+    "user/resetPassword",
+    async (credentials) => {
+        console.log("credentials => ", credentials);
+        let api_url = api("auth_reset_password");
+        try {
+            const response = await fetch(api_url, {
+                method: "post",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(credentials),
+                cache: "no-cache",
+            });
+            const json = await response.json();
+            if (response.status !== 200) {
+                throw new Error("Bad response", {
+                    cause: json,
+                });
+            }
+            return json;
+        } catch (error) {
+            return error.cause;
+        }
+    }
+);
+
+export const verifyResetPasswordLink = createAsyncThunk(
+    "user/verifyResetPasswordLink",
+    async (credentials) => {
+        console.log("credentials => ", credentials);
+        let api_url = api("auth_verify_reset_password_link");
+        try {
+            const response = await fetch(api_url, {
+                method: "post",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(credentials),
+                cache: "no-cache",
+            });
+            const json = await response.json();
+            if (response.status !== 200) {
+                throw new Error("Bad response", {
+                    cause: json,
+                });
+            }
+            return json;
+        } catch (error) {
+            return error.cause;
+        }
+    }
+);
+
 export const getUser = createAsyncThunk(
     "user/getUser",
     async (args, { getState }) => {
@@ -284,6 +367,75 @@ export const authSlice = createSlice({
                 state.is_otp_set = false;
                 state.user_loading = false;
                 state.error_message = action.error.message;
+            })
+
+            // Forgot Password
+            .addCase(forgotPassword.pending, (state, { payload }) => {
+                state.user_loading = true;
+            })
+            .addCase(forgotPassword.fulfilled, (state, { payload }) => {
+                state.user_loading = false;
+                if (
+                    payload.hasOwnProperty("status") &&
+                    payload.status !== 200
+                ) {
+                    state.errors = payload.errors;
+                    state.error_message = payload.message;
+                } else {
+                    state.errors = [];
+                    state.error_message = null;
+                }
+            })
+            .addCase(forgotPassword.rejected, (state, { payload }) => {
+                state.error_message = payload;
+                state.user_loading = false;
+            })
+
+            // Reset Password
+            .addCase(resetPassword.pending, (state, { payload }) => {
+                state.user_loading = true;
+            })
+            .addCase(resetPassword.fulfilled, (state, { payload }) => {
+                state.user_loading = false;
+                if (
+                    payload.hasOwnProperty("status") &&
+                    payload.status !== 200
+                ) {
+                    state.errors = payload.errors;
+                    state.error_message = payload.message;
+                } else {
+                    state.errors = [];
+                    state.error_message = null;
+                }
+            })
+            .addCase(resetPassword.rejected, (state, { payload }) => {
+                state.error_message = payload;
+                state.user_loading = false;
+            })
+
+            // Verify Reset Password Link
+            .addCase(verifyResetPasswordLink.pending, (state, { payload }) => {
+                state.user_loading = true;
+            })
+            .addCase(
+                verifyResetPasswordLink.fulfilled,
+                (state, { payload }) => {
+                    state.user_loading = false;
+                    if (
+                        payload.hasOwnProperty("status") &&
+                        payload.status !== 200
+                    ) {
+                        state.errors = payload.errors;
+                        state.error_message = payload.message;
+                    } else {
+                        state.errors = [];
+                        state.error_message = null;
+                    }
+                }
+            )
+            .addCase(verifyResetPasswordLink.rejected, (state, { payload }) => {
+                state.error_message = payload;
+                state.user_loading = false;
             });
     },
 });

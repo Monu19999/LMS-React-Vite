@@ -17,6 +17,8 @@ import MyCertificates from "@src/Pages/member/MyCertificates";
 import AvailableCourses from "@src/Pages/member/AvailableCourses";
 import ForgetPassword from "./Pages/auth/ForgetPassword";
 import CourseTopicDetail from "./Pages/courses/CourseTopicDetail";
+import ResetPasswordLinkSent from "./Pages/auth/ResetPasswordLinkSent";
+import ResetPassword from "./Pages/auth/ResetPassword";
 
 function App() {
     const token = useSelector((state) => state.auth.token);
@@ -70,6 +72,16 @@ function App() {
                         <Route element={<GuestLayout />}>
                             <Route index element={<Login />} />
                             <Route exact path="login" element={<Login />} />
+                            <Route
+                                exact
+                                path="reset-password/:token/:email"
+                                element={<ResetPassword />}
+                            />
+                            <Route
+                                exact
+                                path="reset-password-link-sent"
+                                element={<ResetPasswordLinkSent />}
+                            />
                             <Route
                                 exact
                                 path="register"
