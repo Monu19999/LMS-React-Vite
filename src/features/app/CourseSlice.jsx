@@ -10,6 +10,7 @@ const initialState = {
     search: {
         page: null,
         department: "",
+        office:"",
         course_name: "",
     },
     course_loading: false,
@@ -74,11 +75,13 @@ export const getSearchCourses = createAsyncThunk(
         const state = getState();
 
         let search_state = removeEmpty(state.course.search);
-
+        // console.log(search_state)
+        let departmentID = {department: search_state.department.split("_")[0]};
         let query_string =
-            Object.keys(search_state).length > 0
-                ? "?" + new URLSearchParams(search_state).toString()
-                : "";
+        Object.keys(search_state).length > 0
+        ? "?" + new URLSearchParams(departmentID).toString()
+        : "";
+        // console.log(query_string)
 
         let api_url = api("category_courses") + query_string;
 
@@ -86,12 +89,15 @@ export const getSearchCourses = createAsyncThunk(
             Accept: "application/json",
             "Content-Type": "application/json",
         };
+
+        
         const token =
             Cookies.get("token") == undefined ? null : Cookies.get("token");
         if (token) {
             headers.Authorization = `Bearer ${token}`;
             api_url = api("auth_category_courses") + query_string;
         }
+
         const response = await fetch(api_url, {
             mode: "cors",
             method: "get",
@@ -100,8 +106,11 @@ export const getSearchCourses = createAsyncThunk(
         });
         const json = await response.json();
         if (navigate) {
-            navigate(query_string);
+            navigate(Object.keys(search_state).length > 0
+        ? "?" + new URLSearchParams(search_state).toString()
+        : "");
         }
+        // console.log("json data=>",json.data);
         return json.data;
     }
 );

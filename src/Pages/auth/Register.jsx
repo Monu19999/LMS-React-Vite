@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Step1 from "./steps/Step1";
 import Step2 from "./steps/Step2";
 import Step3 from "./steps/Step3";
@@ -11,6 +11,7 @@ import { getDepartments } from "@src/features/app/AppSlice";
 import { setMessages } from "@src/features/app/AuthSlice";
 
 export default function Register() {
+    const navigate = useNavigate();
     const [user_id, setUserId] = useState(0);
     const [activeStep, setActiveStep] = useState(1);
     const [offices, setOffices] = useState([]);
@@ -59,6 +60,7 @@ export default function Register() {
         watch,
         handleSubmit,
         trigger,
+        reset,
         formState: { errors },
     } = useForm({});
 
@@ -213,23 +215,39 @@ export default function Register() {
 
     const handleResetForm = () => {
         localStorage.removeItem("temp_user");
-        setActiveStep(1);
+        reset();
+       
     };
+
+    const handlePreviousStep = () => {
+        localStorage.removeItem("temp_user");
+        reset(); 
+        setActiveStep(1);
+    }
 
     function setFormButton() {
         if (activeStep === 2) {
             return (
-                <div class="row justify-content-center mt-4">
-                    <div class="col-md-2 d-flex gap-2">
-                        <div class="form-group">
+                <div className="row justify-content-center mt-4">
+                    <div className="col-md-3 d-flex gap-2">
+                    <div className="form-group">
                             <button
-                                className="form-control btn btn-primary submit px-3"
+                                className="form-control btn btn-secondary submit px-3"
+                                type="submit"
+                                onClick={handlePreviousStep}
+                            >
+                                Back
+                            </button>
+                        </div>
+                        <div className="form-group">
+                            <button
+                                className="form-control btn btn-primary submit px-4"
                                 type="submit"
                             >
                                 Submit
                             </button>
                         </div>
-                        <div class="form-group">
+                        <div className="form-group">
                             <button
                                 className="form-control btn btn-secondary submit px-3"
                                 type="button"

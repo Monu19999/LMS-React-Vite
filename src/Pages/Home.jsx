@@ -73,7 +73,7 @@ export default function Home() {
         },
     };
 
-    // console.log(courses?.data);
+    // console.log(homedata.onboarded_departments[0].encr_id);
     return (
         <>
             {/* hero slider */}
@@ -294,8 +294,10 @@ export default function Home() {
                                                             height: "70px",
                                                         }}
                                                     />
+                                                   
+                                                    
                                                     <Link
-                                                        to={`/courses?department=${onboarded_department.id}`}
+                                                        to={`/courses?department=${onboarded_department.encr_id}_${onboarded_department.id}`}
                                                     >
                                                         <h4 className="mt-2">
                                                             {

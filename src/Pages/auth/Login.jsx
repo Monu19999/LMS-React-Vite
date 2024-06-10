@@ -1,19 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { login, setMessages } from "@src/features/app/AuthSlice";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
 
 export default function Login() {
     const user_loading = useSelector((state) => state.auth.user_loading);
     const auth_state = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [isChecked, setIsChecked] = useState(Cookies.get("UserInfo") ? true : false);
 
-    let default_values =
-        import.meta.env.VITE_APP_ENV == "production"
+    const default_values =
+        import.meta.env.VITE_APP_ENV === "production"
             ? {}
             : {
                   defaultValues: {
@@ -21,11 +24,17 @@ export default function Login() {
                       password: "password",
                   },
               };
+
     const {
         register,
         handleSubmit,
         formState: { errors },
+        getValues,
+        setValue,
+        watch,
     } = useForm(default_values);
+
+    const isRememberChecked = watch("remember", false);
 
     const resetMessages = () => {
         dispatch(
@@ -38,22 +47,49 @@ export default function Login() {
             })
         );
     };
-    // Resetting error messages
+
+    // const checkedRemeber = Cookies.get("UserInfo") ? true : false ;
+
     useEffect(() => {
         resetMessages();
-    }, []);
+        const encryptedUserInfo = Cookies.get("UserInfo");
+        if (encryptedUserInfo) {
+            const decryptedUserInfo = JSON.parse(
+                CryptoJS.AES.decrypt(encryptedUserInfo, '8103379969').toString(CryptoJS.enc.Utf8)
+            );
+            setValue("email", decryptedUserInfo.email);
+            setValue("password", decryptedUserInfo.password);
+        }
+    }, [setValue]);
+    
 
-    // Handle user login form submittion
     const loginUser = async (user) => {
+        const { email, password, remember } = getValues();
+        const userInfo = { email, password };
+        if (remember) {
+            const encryptedUserInfo = CryptoJS.AES.encrypt(JSON.stringify(userInfo), '8103379969').toString();
+            Cookies.set("UserInfo", encryptedUserInfo);
+            console.log(encryptedUserInfo)
+        }
+
         let response = await dispatch(login(user));
         let data = response.payload?.data;
         if (response.hasOwnProperty("errors")) {
             return;
-        } else if (data?.status == 200) {
+        } else if (data?.status === 200) {
             resetMessages();
             navigate("/member");
         }
     };
+
+    const handleRememberMe = (e) => {
+        console.log(e.target.checked)
+        if (!e.target.checked) {
+            Cookies.remove("UserInfo");
+        }
+        setIsChecked(!isChecked);
+    };
+
     return (
         <>
             <div className="wrap d-md-flex">
@@ -69,7 +105,7 @@ export default function Login() {
                             </Link>
                         </div>
                         <h2>Welcome to e-Shiksha (LMS)</h2>
-                        <p className="text-white">Don't have an account?</p>
+                        <p className="text-white">Don’t have an account?</p>
                         <Link
                             to="/auth/register"
                             className="btn btn-white btn-outline-white"
@@ -160,6 +196,8 @@ export default function Login() {
                                 <input
                                     type="checkbox"
                                     {...register("remember")}
+                                    onChange={handleRememberMe}
+                                    checked={isChecked}
                                 />
                                 <label className="checkbox-wrap checkbox-primary mb-0">
                                     Remember Me{" "}
