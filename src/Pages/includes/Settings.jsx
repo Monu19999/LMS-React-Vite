@@ -4,6 +4,7 @@ import { setTheme, updateTheme } from "@src/features/app/AppSlice";
 import { useEffect } from "react";
 import { getUser } from "@src/features/app/AuthSlice";
 import { Logout } from "@src/Pages/auth/Logout";
+import { changeFontSize } from "@src/features/app/AppSlice";
 
 function Settings() {
     const user = useSelector((state) => state.auth.user);
@@ -61,7 +62,7 @@ function Settings() {
                                 data-toggle="tooltip"
                                 data-placement="bottom"
                                 data-original-title="A-"
-                                // onClick={() => dispatch(changeFontSize(-1))}
+                                onClick={() => dispatch(changeFontSize(-1))}
                             >
                                 A-
                             </Link>
@@ -74,7 +75,7 @@ function Settings() {
                                 data-toggle="tooltip"
                                 data-placement="bottom"
                                 data-original-title="A"
-                                // onClick={() => dispatch(changeFontSize(0))}
+                                onClick={() => dispatch(changeFontSize(0))}
                             >
                                 A
                             </Link>
@@ -87,7 +88,7 @@ function Settings() {
                                 data-toggle="tooltip"
                                 data-placement="bottom"
                                 data-original-title="A+"
-                                // onClick={() => dispatch(changeFontSize(1))}
+                                onClick={() => dispatch(changeFontSize(1))}
                             >
                                 A+
                             </Link>
