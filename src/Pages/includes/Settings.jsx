@@ -4,9 +4,10 @@ import { setTheme, updateTheme } from "@src/features/app/AppSlice";
 import { useEffect } from "react";
 import { getUser } from "@src/features/app/AuthSlice";
 import { Logout } from "@src/Pages/auth/Logout";
+import $ from "jquery";
+import LoginMenu from "@src/Pages/member/includes/LoginMenu";
 
 function Settings() {
-    const user = useSelector((state) => state.auth.user);
     const theme = useSelector((state) => state.app.theme);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -27,7 +28,31 @@ function Settings() {
         // handleGetUser();
         dispatch(setTheme());
         // dispatch(setSize());
+
+        let affectedElements = $("p, h1, h2, h3, h4, h5, h6, li, a");
+        affectedElements.each(function () {
+            var $this = $(this);
+            $this.data("orig-size", $this.css("font-size"));
+        });
     }, []);
+
+    const handleChangeFontSize = (value) => {
+        let affectedElements = $("p, h1, h2, h3, h4, h5, h6, li, a");
+        if (value == 0) {
+            affectedElements.each(function () {
+                var $this = $(this);
+                $this.css("font-size", $this.data("orig-size"));
+            });
+        } else {
+            affectedElements.each(function () {
+                var $this = $(this);
+                $this.css(
+                    "font-size",
+                    parseInt($this.css("font-size")) + value
+                );
+            });
+        }
+    };
 
     return (
         <div id="topbar">
@@ -61,7 +86,7 @@ function Settings() {
                                 data-toggle="tooltip"
                                 data-placement="bottom"
                                 data-original-title="A-"
-                                // onClick={() => dispatch(changeFontSize(-1))}
+                                onClick={() => handleChangeFontSize(-1)}
                             >
                                 A-
                             </Link>
@@ -74,7 +99,7 @@ function Settings() {
                                 data-toggle="tooltip"
                                 data-placement="bottom"
                                 data-original-title="A"
-                                // onClick={() => dispatch(changeFontSize(0))}
+                                onClick={() => handleChangeFontSize(0)}
                             >
                                 A
                             </Link>
@@ -87,7 +112,7 @@ function Settings() {
                                 data-toggle="tooltip"
                                 data-placement="bottom"
                                 data-original-title="A+"
-                                // onClick={() => dispatch(changeFontSize(1))}
+                                onClick={() => handleChangeFontSize(+1)}
                             >
                                 A+
                             </Link>
@@ -98,61 +123,34 @@ function Settings() {
                             <i className="fa fa-book px-2" />
                             <span className="d-none-head">Screen Reader</span>
                         </Link>
-                        <Link to="#" className="d-sm-hide">
+                        <a
+                            href="#"
+                            onClick={() => {
+                                const section =
+                                    document.querySelector("#quickInformation");
+                                window.scrollTo(
+                                    section.offsetLeft,
+                                    section.offsetTop - 250
+                                );
+                                // section.scrollIntoView({
+                                //     behavior: "smooth",
+                                //     block: "start",
+                                // });
+                            }}
+                            className="d-sm-hide"
+                        >
                             <i className="fa fa-fast-forward font-13 px-2" />
                             <span className="d-none-head">
                                 Skip to Nav Content
                             </span>
-                        </Link>
+                        </a>
                         <Link to="#" className="d-sm-hide">
                             <i className="fa fa-fast-forward font-13 px-2" />
                             <span className="d-none-head">
                                 Skip to Main Content
                             </span>
                         </Link>
-                        <a
-                            href="#"
-                            className="d-sm-hide dropdown-toggle"
-                            data-bs-toggle="dropdown"
-                        >
-                            <i className="fa fa-user font-13 px-2" />
-                            <span className="d-none-head">Login</span>
-                        </a>
-                        <ul className="dropdown-menu">
-                            {user ? (
-                                <>
-                                    <li>
-                                        <Link
-                                            className="dropdown-item"
-                                            to="/member"
-                                        >
-                                            Welcome {user.first_name}
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Logout className="dropdown-item">
-                                            Logout
-                                        </Logout>
-                                    </li>
-                                </>
-                            ) : (
-                                <>
-                                    <li>
-                                        <Link
-                                            className="dropdown-item"
-                                            to="/auth/login"
-                                        >
-                                            Student Login
-                                        </Link>
-                                    </li>
-                                </>
-                            )}
-                            {/* <li>
-                                <Link className="dropdown-item" to="#">
-                                    Department Login
-                                </Link>
-                            </li> */}
-                        </ul>
+                        <LoginMenu />
                     </div>
                 </div>
             </div>

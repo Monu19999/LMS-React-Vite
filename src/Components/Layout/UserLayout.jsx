@@ -1,17 +1,52 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import "@public/assets/dashboard/css/style.css";
 // import "@public/assets/dashboard/css/font-awesome.min.css";
+import { getAppData } from "@src/features/app/AppSlice";
+import Navbar from "@src/Pages/includes/Navbar";
+import FooterMenu from "@src/Pages/includes/FooterMenu";
+import LoginMenu from "@src/Pages/member/includes/LoginMenu";
 
 function UserLayout() {
-    const navigate = useNavigate();
-
     const member = useSelector((state) => state.member);
     const auth_state = useSelector((state) => state.auth);
+    const app_state = useSelector((state) => state.app);
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getAppData());
+    }, []);
+
+    let navbar_menu = () => {
+        if (app_state?.data?.top_menus) {
+            return <Navbar menus={app_state.data.top_menus} />;
+        }
+    };
+
+    let footer_menu = () => {
+        if (app_state?.data?.bottom_menus) {
+            return <FooterMenu menus={app_state.data.bottom_menus} />;
+        }
+    };
 
     return (
         <>
+            <div id="topbar">
+                <div className="d-flex align-items-center ">
+                    <div className="container-fluid d-flex justify-content-end">
+                        <div
+                            className="contact-info d-flex align-items-center"
+                            style={{ padding: "15px 0" }}
+                        >
+                            <LoginMenu />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {navbar_menu()}
             <div className="container-fluid py-5" id="dashboard-layout">
                 <div className="wrapper d-flex align-items-stretch">
                     <nav id="sidebar">

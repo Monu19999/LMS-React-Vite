@@ -41,31 +41,30 @@ function App() {
                             path="course/:course_id/course_topic/:topic_id/show"
                             element={<CourseTopicDetail />}
                         />
-
-                        <Route path="member" element={<PrivateRoute />}>
-                            <Route element={<UserLayout />}>
-                                <Route index element={<UserDashboard />} />
-                                <Route
-                                    exact
-                                    path="member"
-                                    element={<UserDashboard />}
-                                />
-                                <Route
-                                    exact
-                                    path="courses"
-                                    element={<MyCourses />}
-                                ></Route>
-                                <Route
-                                    exact
-                                    path="certificates"
-                                    element={<MyCertificates />}
-                                ></Route>
-                                <Route
-                                    exact
-                                    path="available_courses"
-                                    element={<AvailableCourses />}
-                                ></Route>
-                            </Route>
+                    </Route>
+                    <Route path="member" element={<PrivateRoute />}>
+                        <Route element={<UserLayout />}>
+                            <Route index element={<UserDashboard />} />
+                            <Route
+                                exact
+                                path="member"
+                                element={<UserDashboard />}
+                            />
+                            <Route
+                                exact
+                                path="courses"
+                                element={<MyCourses />}
+                            ></Route>
+                            <Route
+                                exact
+                                path="certificates"
+                                element={<MyCertificates />}
+                            ></Route>
+                            <Route
+                                exact
+                                path="available_courses"
+                                element={<AvailableCourses />}
+                            ></Route>
                         </Route>
                     </Route>
                     <Route path="auth" element={<PublicRoute />}>

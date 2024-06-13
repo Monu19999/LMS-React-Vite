@@ -5,6 +5,7 @@ import parse from "html-react-parser";
 import { getCourse } from "@src/features/app/CourseSlice";
 import CourseTopicList from "./includes/CourseTopicList";
 import Placeholder from "react-bootstrap/Placeholder";
+import CourseBradeCrumb from "./includes/CourseBradeCrumb";
 
 function CourseView() {
     let { course_id } = useParams();
@@ -29,14 +30,13 @@ function CourseView() {
         }
     };
     useEffect(() => {
-        console.log("hello")
+        console.log("hello");
         if (course_id) {
             handleGetCourse();
         }
     }, []);
 
     let topics = () => {
-
         if (course?.course?.topics) {
             return (
                 <CourseTopicList course={course.course} course_id={course_id} />
@@ -56,51 +56,10 @@ function CourseView() {
                 <div className="container">
                     <div className="row justify-content-center">
                         <div className="col-lg-8">
-                            <nav aria-label="breadcrumb" className="mb-4">
-                                <ol className="breadcrumb">
-                                    {course_topic_loading ? (
-                                        <Placeholder.Button
-                                            xs={2}
-                                            aria-hidden="true"
-                                        />
-                                    ) : (
-                                        <>
-                                            <li className="breadcrumb-item">
-                                                <Link
-                                                    className="text-white"
-                                                    to="/"
-                                                >
-                                                    Home
-                                                </Link>
-                                            </li>
-                                            <li className="breadcrumb-item">
-                                                <Link
-                                                    className="text-white"
-                                                    to="/"
-                                                >
-                                                    {
-                                                        course?.course
-                                                            ?.assigned_admin
-                                                            ?.course_category
-                                                            ?.category_name_en
-                                                    }
-                                                </Link>
-                                            </li>
-                                            <li
-                                                className="breadcrumb-item text-white active"
-                                                aria-current="page"
-                                            >
-                                                {
-                                                    course?.course
-                                                        ?.assigned_admin
-                                                        ?.category_course
-                                                        ?.course_name_en
-                                                }
-                                            </li>
-                                        </>
-                                    )}
-                                </ol>
-                            </nav>
+                            <CourseBradeCrumb
+                                course={course}
+                                course_topic_loading={course_topic_loading}
+                            />
                             <p className="display-6 text-white animated slideInDown mb-4">
                                 {
                                     course?.course?.assigned_admin
@@ -153,7 +112,7 @@ function CourseView() {
                             style={{ position: "relative" }}
                         >
                             <div className="view-course-right-column">
-                                <div className="position-relative overflow-hidden">
+                                <div className="position-relative overflow-hidden p-4">
                                     <img
                                         className="img-fluid"
                                         src={

@@ -7,10 +7,10 @@ function Navbar(props) {
     const dispatch = useDispatch();
     function createLink(item) {
         if (item.menu_type == 1) {
-            return item.page ? "page/" + item.page.slug : "/";
+            return item.page ? "/page/" + item.page.slug : "/";
         } else if (item.menu_type == 2) {
             return item.db_controller_route
-                ? item.db_controller_route.route
+                ? "/" + item.db_controller_route.route
                 : "/";
         } else if (item.menu_type == 3) {
             return item.custom_url;

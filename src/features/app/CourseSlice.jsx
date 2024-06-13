@@ -9,9 +9,9 @@ const initialState = {
     course_topic: {},
     search: {
         page: null,
-        department: "",
-        office:"",
-        course_name: "",
+        department: null,
+        office: null,
+        course_name: null,
     },
     course_loading: false,
     course_topic_loading: false,
@@ -73,14 +73,21 @@ export const getSearchCourses = createAsyncThunk(
     "courses/getSearchCourses",
     async (navigate, { getState }) => {
         const state = getState();
-
-        let search_state = removeEmpty(state.course.search);
-        // console.log(search_state)
-        let departmentID = {department: search_state.department.split("_")[0]};
+        let original_search_state = removeEmpty(state.course.search);
+        let copy_search_state = { ...original_search_state };
+        let search_state = removeEmpty(copy_search_state);
+        if (search_state.hasOwnProperty("department")) {
+            search_state["department"] =
+                search_state["department"].split("_")[0];
+        }
+        if (search_state.hasOwnProperty("office")) {
+            search_state["office"] = search_state["office"].split("_")[0];
+        }
+        // console.log("search_state => ", search_state);
         let query_string =
-        Object.keys(search_state).length > 0
-        ? "?" + new URLSearchParams(departmentID).toString()
-        : "";
+            Object.keys(search_state).length > 0
+                ? "?" + new URLSearchParams(search_state).toString()
+                : "";
         // console.log(query_string)
 
         let api_url = api("category_courses") + query_string;
@@ -90,7 +97,6 @@ export const getSearchCourses = createAsyncThunk(
             "Content-Type": "application/json",
         };
 
-        
         const token =
             Cookies.get("token") == undefined ? null : Cookies.get("token");
         if (token) {
@@ -106,9 +112,12 @@ export const getSearchCourses = createAsyncThunk(
         });
         const json = await response.json();
         if (navigate) {
-            navigate(Object.keys(search_state).length > 0
-        ? "?" + new URLSearchParams(search_state).toString()
-        : "");
+            navigate(
+                Object.keys(original_search_state).length > 0
+                    ? "?" +
+                          new URLSearchParams(original_search_state).toString()
+                    : ""
+            );
         }
         // console.log("json data=>",json.data);
         return json.data;
@@ -220,10 +229,11 @@ export const enrollCourse = createAsyncThunk(
             if (token) {
                 headers.Authorization = `Bearer ${token}`;
             }
+            //course.course_hierarchy.fk_department_id
+            //course.course_hierarchy.fk_office_id
             let data = JSON.stringify({
-                fk_department_id:
-                    course.course.assigned_admin.course_category
-                        .fk_department_id,
+                fk_department_id: course.course_hierarchy.fk_department_id,
+                fk_office_id: course.course_hierarchy.fk_office_id,
             });
             const response = await fetch(
                 api(
@@ -258,7 +268,12 @@ export const courseSlice = createSlice({
             state.search = action.payload;
         },
         resetSearch: (state) => {
-            state.search = { page: null, department: "", course_name: "" };
+            state.search = {
+                page: null,
+                department: null,
+                office: null,
+                course_name: null,
+            };
         },
         updateCourse: (state, action) => {
             state.course = action.payload;
@@ -276,7 +291,7 @@ export const courseSlice = createSlice({
             .addCase(getSearchCourses.fulfilled, (state, { payload }) => {
                 state.course_enrolment_loading = false;
                 state.course_loading = false;
-                state.search_courses = payload;
+                state.search_courses = payload.courses;
                 state.isSuccess = true;
             })
             .addCase(getSearchCourses.rejected, (state, { payload }) => {

@@ -89,7 +89,7 @@ export default function Layout() {
 
             {/* Back to Top */}
             <button
-                onClick={()=>window.scrollTo(0,0)}
+                onClick={() => window.scrollTo(0, 0)}
                 className="btn btn-lg btn-primary btn-lg-square back-to-top"
             >
                 <i className="bi bi-arrow-up" />

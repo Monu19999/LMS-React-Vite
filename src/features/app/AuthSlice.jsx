@@ -223,6 +223,7 @@ const initialState = {
     error_message: null,
     user_loading: false,
     is_otp_set: false,
+    reset_password_url: "",
     token: Cookies.get("token") == undefined ? null : Cookies.get("token"),
 };
 
@@ -384,6 +385,7 @@ export const authSlice = createSlice({
                 } else {
                     state.errors = [];
                     state.error_message = null;
+                    state.reset_password_url = payload.data.url;
                 }
             })
             .addCase(forgotPassword.rejected, (state, { payload }) => {
