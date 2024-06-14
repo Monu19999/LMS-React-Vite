@@ -18,7 +18,7 @@ function CourseView() {
     );
     const auth_user = useSelector((state) => state.auth.user);
     const course = useSelector((state) => state.course.course);
-    // console.log(course);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -30,7 +30,6 @@ function CourseView() {
         }
     };
     useEffect(() => {
-        console.log("hello");
         if (course_id) {
             handleGetCourse();
         }

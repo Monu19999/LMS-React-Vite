@@ -6,7 +6,10 @@ export default function CourseBradeCrumb({ course, course_topic_loading }) {
     const makeBC = (hierarchies) => {
         return hierarchies.map((hierarchy) => {
             return (
-                <li className="breadcrumb-item text-white active">
+                <li
+                    className="breadcrumb-item text-white active"
+                    key={hierarchy.id}
+                >
                     {hierarchy.title_en}
                 </li>
             );
@@ -20,7 +23,7 @@ export default function CourseBradeCrumb({ course, course_topic_loading }) {
                 return resetHierarchyLevel(hierarchy.parent, hierarchy_html);
             }
         }
-        return hierarchy_html;
+        return hierarchy_html.reverse();
     };
 
     return (
