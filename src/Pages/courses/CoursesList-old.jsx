@@ -1,101 +1,94 @@
 import React, { useEffect, useState } from "react";
 import CourseItem from "@src/Pages/courses/includes/CourseItem";
 import { useSelector, useDispatch } from "react-redux";
-import { getSearchCourses } from "@src/features/app/CourseSlice";
+import { getCourses, getSearchCourses } from "@src/features/app/CourseSlice";
 import Pagination from "@src/Utilities/Pagination";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import { getDepartments } from "@src/features/app/AppSlice";
-import { setSearch } from "@src/features/app/CourseSlice";
-import { useSearchParams } from "react-router-dom";
+import { setSearch, resetSearch } from "@src/features/app/CourseSlice";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 function CoursesList() {
-    const { departments } = useSelector((state) => state.app);
-    const { course_loading, search, search_courses } = useSelector(
+    const navigate = useNavigate();
+    const [officeID, setOfficeID] = useState(0);
+
+    const { departments, app_loading } = useSelector((state) => state.app);
+    const [departmentoffices, setDepartmentoffices] = useState([]);
+    const { courses, course_loading, search } = useSelector(
         (state) => state.course
     );
 
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
-
     const {
         register,
         handleSubmit,
         setValue,
         reset,
         formState: { errors },
-    } = useForm({
-        defaultValues: search,
-    });
+    } = useForm();
 
     // For fetching departments in app slice
     useEffect(() => {
         dispatch(getDepartments());
+    }, []);
 
-        let search_params = {};
+    useEffect(() => {
+        let search = {};
         for (const entry of searchParams.entries()) {
             const [param, value] = entry;
-            search_params[param] = value;
+            search[param] = value;
         }
-        if (Object.values(search_params).length > 0) {
-            dispatch(setSearch({ ...search, ...search_params }));
-            reset({ ...search, ...search_params });
+        if (Object.values(search).length > 0) {
+            dispatch(setSearch(search));
         }
-        // console.log("search_params => ", search_params);
-        // if (search.hasOwnProperty("department")) {
-        //     let id = search.department.split("_")[1];
-        //     const filteredOffices =
-        //         departments.find((dep) => dep.id === parseInt(id))?.offices ||
-        //         [];
-        //     console.log("filteredOffices => ", filteredOffices);
-        //     setDepartmentoffices(filteredOffices);
-        // }
-        dispatch(getSearchCourses());
+        dispatch(getSearchCourses(navigate));
     }, []);
 
     let handleFormFilter = (e) => {
         // e.preventDefault();
-        dispatch(getSearchCourses());
+        dispatch(getSearchCourses(navigate));
     };
 
     let handleFormFilterOnChange = (e) => {
-        let value = "";
-        if (e.target.name === "department" || e.target.name === "office") {
-            const encrId =
-                e.target.selectedOptions[0].getAttribute("data-encr_id");
-            const departmentId = e.target.value;
-            if (encrId) {
-                value = encrId + "_" + departmentId;
-            } else {
-                value = null;
-            }
-        } else {
-            value = e.target.value;
+        const encrId = e.target.selectedOptions[0].getAttribute("data-encr_id");
+        const departmentId = e.target.value;
+
+        // console.log(encrId, departmentId)
+
+        //filtering offices from department
+        if (e.target.name === "department") {
+            const filteredOffices =
+                departments.find((dep) => dep.id === parseInt(departmentId))
+                    ?.offices || [];
+            setDepartmentoffices(filteredOffices);
         }
 
-        let updated_search = {
-            ...search,
-            [e.target.name]: value,
-            page: null,
-        };
-
-        dispatch(setSearch(updated_search));
+        dispatch(
+            setSearch({
+                ...search,
+                [e.target.name]:
+                    e.target.name === "department"
+                        ? `${encrId}_${departmentId}`
+                        : e.target.value,
+                page: null,
+            })
+        );
     };
 
     function changePage(data) {
         dispatch(setSearch({ ...search, page: data.page }));
-        dispatch(getSearchCourses());
+        dispatch(getSearchCourses(navigate));
     }
 
-    function handleResetSearch() {
-        const copy_search = { ...search };
-        Object.keys(copy_search).forEach(
-            (value) => (copy_search[value] = null)
-        );
-        dispatch(setSearch(copy_search));
-        reset(copy_search);
-        dispatch(getSearchCourses());
-    }
+    const handleReset = () => {
+        reset(); // Reset the form
+        dispatch(resetSearch()); // Reset the search state
+        dispatch(getSearchCourses(navigate)); // Fetch courses again with reset state
+    };
+
+    // console.log("office => ",officeID);
 
     return (
         <>
@@ -132,9 +125,17 @@ function CoursesList() {
                 </div>
             </div>
             {/* Header End */}
-            <div className="container-xxl">
+            <div className="container-xxl ">
                 <div className="container">
                     <div className="row mb-4">
+                        {/* Print Button Start */}
+                        {/* <div className="innertitle d-flex justify-content-end mb-4 p-0">
+              <a href="#" className="btn btn-primary btn-sm pull-right">
+                <span className="fa fa-print"> Print</span>
+              </a>
+            </div> */}
+                        {/* Print Button End */}
+                        {/* Search Form Start */}
                         <div className="col-12">
                             <div
                                 className="wow fadeInUp"
@@ -153,30 +154,26 @@ function CoursesList() {
                             style={{ backgroundColor: "#06bbcc" }}
                         >
                             <div className="search-title">
-                                {/* Search Form Start */}
                                 <form onSubmit={handleSubmit(handleFormFilter)}>
                                     <div className="row justify-content-center">
                                         <div className="col-md-6 mb-2">
                                             <div className="form-group">
                                                 <label>Department</label>
                                                 <select
+                                                    name="department"
+                                                    id="department"
                                                     className="form-control"
                                                     {...register("department", {
                                                         onChange:
                                                             handleFormFilterOnChange,
                                                     })}
                                                     value={
-                                                        search.department
-                                                            ? search.department.split(
-                                                                  "_"
-                                                              )[1]
-                                                            : null
+                                                        search.department.split(
+                                                            "_"
+                                                        )[1]
                                                     }
                                                 >
-                                                    <option
-                                                        value={null}
-                                                        data-encr_id={null}
-                                                    >
+                                                    <option value="">
                                                         Please Select
                                                     </option>
                                                     {departments &&
@@ -188,7 +185,7 @@ function CoursesList() {
                                                                     }
                                                                     value={
                                                                         department.id
-                                                                    }
+                                                                    } // Use both encr_id and id
                                                                     key={
                                                                         department.id
                                                                     }
@@ -200,69 +197,64 @@ function CoursesList() {
                                                             )
                                                         )}
                                                 </select>
+                                                {errors?.department && (
+                                                    <p className="error">
+                                                        {
+                                                            errors.department
+                                                                .message
+                                                        }
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
                                         <div className="col-md-6">
                                             <div className="form-group">
                                                 <label>Office</label>
                                                 <select
+                                                    name="office"
+                                                    id="office"
                                                     className="form-control"
                                                     {...register("office", {
                                                         onChange: (e) => {
                                                             handleFormFilterOnChange(
                                                                 e
                                                             );
+                                                            setOfficeID(
+                                                                parseInt(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            );
                                                         },
                                                     })}
-                                                    value={
-                                                        search.office &&
-                                                        search.office.split(
-                                                            "_"
-                                                        )[1]
-                                                    }
+                                                    defaultValue={officeID}
                                                 >
-                                                    <option
-                                                        value={null}
-                                                        data-encr_id={null}
-                                                    >
+                                                    <option value="">
                                                         Please Select
                                                     </option>
-                                                    {search.department &&
-                                                        departments
-                                                            .find(
-                                                                (
-                                                                    department
-                                                                ) => {
-                                                                    return (
-                                                                        department.id ===
-                                                                        parseInt(
-                                                                            search.department.split(
-                                                                                "_"
-                                                                            )[1]
-                                                                        )
-                                                                    );
-                                                                }
+                                                    {departmentoffices &&
+                                                        departmentoffices.map(
+                                                            (office) => (
+                                                                <option
+                                                                    value={
+                                                                        office.id
+                                                                    }
+                                                                    key={
+                                                                        office.id
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        office.title_en
+                                                                    }
+                                                                </option>
                                                             )
-                                                            ?.offices.map(
-                                                                (office) => (
-                                                                    <option
-                                                                        data-encr_id={
-                                                                            office.encr_id
-                                                                        }
-                                                                        value={
-                                                                            office.id
-                                                                        }
-                                                                        key={
-                                                                            office.id
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            office.title_en
-                                                                        }
-                                                                    </option>
-                                                                )
-                                                            )}
+                                                        )}
                                                 </select>
+                                                {errors?.office && (
+                                                    <p className="error">
+                                                        {errors.office.message}
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
                                         <div className="col-md-6 mb-2">
@@ -272,17 +264,13 @@ function CoursesList() {
                                                 </label>
                                                 <input
                                                     type="text"
+                                                    name="course_name"
+                                                    id="course_name"
                                                     autoComplete="off"
-                                                    {...register(
-                                                        "course_name",
-                                                        {
-                                                            onChange: (e) => {
-                                                                handleFormFilterOnChange(
-                                                                    e
-                                                                );
-                                                            },
-                                                        }
-                                                    )}
+                                                    {...register("course_name")}
+                                                    defaultValue={
+                                                        search.course_name
+                                                    }
                                                     className="form-control"
                                                     placeholder="Search By Title"
                                                 />
@@ -304,7 +292,7 @@ function CoursesList() {
                                                     className="btn btn-light py-md-2 px-md-4 animated slideInRight"
                                                     style={{ borderRadius: 40 }}
                                                     type="button"
-                                                    onClick={handleResetSearch}
+                                                    onClick={handleReset}
                                                 >
                                                     <i className="fas fa-refresh" />{" "}
                                                     Reset
@@ -313,9 +301,9 @@ function CoursesList() {
                                         </div>
                                     </div>
                                 </form>
-                                {/* Search Form End */}
                             </div>
                         </div>
+                        {/* Search Form End */}
                     </div>
 
                     {/* All searched Courses Start */}
@@ -331,8 +319,8 @@ function CoursesList() {
                                 {course_loading ? (
                                     <BootstrapSpinner />
                                 ) : (
-                                    search_courses?.data &&
-                                    search_courses.data.map((course) => {
+                                    courses?.data &&
+                                    courses.data.map((course) => {
                                         return (
                                             <div
                                                 className="col-lg-4 col-md-6 mb-4"
@@ -353,8 +341,73 @@ function CoursesList() {
                         <div className="col-12 text-center">
                             <Pagination
                                 changePage={changePage}
-                                data={search_courses}
+                                data={courses.courses}
                             />
+                            {/* <ul className="pagination pagination-lg d-flex justify-content-center">
+                                <li className="page-item">
+                                    <a
+                                        className="page-link"
+                                        href="#"
+                                        aria-label="Previous"
+                                    >
+                                        «
+                                    </a>
+                                </li>
+                                <li className="page-item">
+                                    <a className="page-link" href="#">
+                                        1
+                                    </a>
+                                </li>
+                                <li className="page-item">
+                                    <a className="page-link " href="#">
+                                        2
+                                    </a>
+                                </li>
+                                <li className="page-item">
+                                    <a className="page-link" href="#">
+                                        3
+                                    </a>
+                                </li>
+                                <li className="page-item">
+                                    <a className="page-link" href="#">
+                                        4
+                                    </a>
+                                </li>
+                                <li className="page-item">
+                                    <a className="page-link" href="#">
+                                        5
+                                    </a>
+                                </li>
+                                <li className="page-item">
+                                    <a className="page-link" href="#">
+                                        6
+                                    </a>
+                                </li>
+                                <li className="page-item">
+                                    <a className="page-link" href="#">
+                                        7
+                                    </a>
+                                </li>
+                                <li className="page-item">
+                                    <a className="page-link" href="#">
+                                        8
+                                    </a>
+                                </li>
+                                <li className="page-item">
+                                    <a className="page-link" href="#">
+                                        9
+                                    </a>
+                                </li>
+                                <li className="page-item">
+                                    <a
+                                        className="page-link"
+                                        href="#"
+                                        aria-label="Next"
+                                    >
+                                        »
+                                    </a>
+                                </li>
+                            </ul> */}
                         </div>
                     </div>
                     {/* Searched Courses Pagination End */}

@@ -1,16 +1,15 @@
 import React, { useEffect } from "react";
-import OwlCarousel from "react-owl-carousel";
-import FooterSlider from "@src/Pages/includes/FooterSlider";
-import api from "@src/apis/api";
-import useFetch from "@src/Hooks/useFetch";
-import BootstrapSpinner from "@src/Components/BootstrapSpinner";
-import ShowImage from "@src/Utilities/ShowImage";
-import { Link } from "react-router-dom";
-import CourseItem from "@src/Pages/courses/includes/CourseItem";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getCourses } from "@src/features/app/CourseSlice";
 import { getHomeData } from "@src/features/app/HomeSlice";
+import { resetSearch } from "@src/features/app/CourseSlice";
 import parse from "html-react-parser";
+import OwlCarousel from "react-owl-carousel";
+import FooterSlider from "@src/Components/Layout/includes/FooterSlider";
+import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import ShowImage from "@src/Utilities/ShowImage";
+import CourseItem from "@src/Pages/courses/includes/CourseItem";
 
 export default function Home() {
     const { homedata, home_loading } = useSelector((state) => state.home);
@@ -18,6 +17,7 @@ export default function Home() {
 
     //   console.log(courses);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(getHomeData());
@@ -73,7 +73,6 @@ export default function Home() {
         },
     };
 
-    // console.log(homedata.onboarded_departments[0].encr_id);
     return (
         <>
             {/* hero slider */}
@@ -149,7 +148,7 @@ export default function Home() {
                 </div>
             )}
             {/* Carousel End */}
-            <div className="container mb-4">
+            <div className="container mb-4" id="quickInformation">
                 <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
                     <h1>Quick Information</h1>
                 </div>
@@ -241,17 +240,23 @@ export default function Home() {
                                     <div className="mb-2">
                                         {parse(homedata.page.description_en)}
                                     </div>
-                                    <Link
+                                    <a
                                         className="btn btn-primary py-2 px-4 mt-2"
-                                        to={"page/" + homedata.page.slug}
+                                        href="#"
                                         style={{ borderRadius: 40 }}
+                                        onClick={() => {
+                                            resetSearch();
+                                            navigate(
+                                                "page/" + homedata.page.slug
+                                            );
+                                        }}
                                     >
                                         Find out more
                                         <i
                                             className="fas fa-arrow-alt-circle-right"
                                             style={{ marginLeft: 10 }}
                                         />
-                                    </Link>
+                                    </a>
                                 </div>
                             </div>
                         )}
@@ -294,8 +299,7 @@ export default function Home() {
                                                             height: "70px",
                                                         }}
                                                     />
-                                                   
-                                                    
+
                                                     <Link
                                                         to={`/courses?department=${onboarded_department.encr_id}_${onboarded_department.id}`}
                                                     >

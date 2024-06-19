@@ -215,22 +215,39 @@ export default function Register() {
 
     const handleResetForm = () => {
         localStorage.removeItem("temp_user");
-        reset();
-       
+        reset({
+            first_name: "",
+            last_name: "",
+            email: "",
+            username: "",
+            password: "",
+            password_confirmation: "",
+            fk_department_id: "",
+            fk_office_id: "",
+        });
     };
 
     const handlePreviousStep = () => {
         localStorage.removeItem("temp_user");
-        reset(); 
+        reset({
+            first_name: "",
+            last_name: "",
+            email: "",
+            username: "",
+            password: "",
+            password_confirmation: "",
+            fk_department_id: "",
+            fk_office_id: "",
+        });
         setActiveStep(1);
-    }
+    };
 
     function setFormButton() {
         if (activeStep === 2) {
             return (
                 <div className="row justify-content-center mt-4">
                     <div className="col-md-3 d-flex gap-2">
-                    <div className="form-group">
+                        <div className="form-group">
                             <button
                                 className="form-control btn btn-secondary submit px-3"
                                 type="submit"

@@ -1,4 +1,3 @@
-import React from "react";
 import { ListGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -9,7 +8,6 @@ export default function CourseTopicList({ course, course_id }) {
     const course_loading = useSelector((state) => state.course.course_loading);
     const auth_user = useSelector((state) => state.auth.user);
     const enrollments = useSelector((state) => state.course.course.enrollments);
-    // console.log("enrolled => ", enrollments.length)
     return (
         <>
             <h4>Course contains:</h4>

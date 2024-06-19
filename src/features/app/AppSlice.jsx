@@ -1,17 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import $ from "jquery";
 import api from "@src/apis/api";
-var $affectedElements = $("p, h1, h2, h3, h4, h5, h6, li, a");
+
 function setDefaultTheme(theme) {
-  // console.log("theme", theme);
-  if (theme) {
-    document.documentElement.classList.add("theme-dark");
-    localStorage.setItem("theme", "dark");
-  } else {
-    document.documentElement.classList.remove("theme-dark");
-    localStorage.removeItem("theme");
-  }
-  document.getElementById("themeSwitchToggle").checked = theme ? true : false;
+    if (theme) {
+        document.documentElement.classList.add("theme-dark");
+        localStorage.setItem("theme", "dark");
+    } else {
+        document.documentElement.classList.remove("theme-dark");
+        localStorage.removeItem("theme");
+    }
+    document.getElementById("themeSwitchToggle").checked = theme ? true : false;
 }
 
 export const getAppData = createAsyncThunk("app/getAppData", async () => {
@@ -72,12 +70,25 @@ export const appSlice = createSlice({
       setDefaultTheme(themeSwitch.checked);
       state.theme = window.localStorage.getItem("theme") ? null : "dark";
     },
-
-    setSize: (state, action) => {
-      $("p, h1, h2, h3, h4, h5, h6, li, a").each(function (e, node) {
-        var $this = $(this);
-        $this.data("orig-size", $this.css("font-size"));
-      });
+    reducers: {
+        setTheme: (state, action) => {
+            let theme = localStorage.getItem("theme");
+            setDefaultTheme(theme);
+            state.theme = theme;
+        },
+        updateLang: (state, action) => {
+            state.lang = action.payload;
+        },
+        updateTheme: (state, action) => {
+            let themeSwitch = document.getElementById("themeSwitchToggle");
+            setDefaultTheme(themeSwitch.checked);
+            state.theme = window.localStorage.getItem("theme") ? null : "dark";
+        },
+        mobileNavToggle: (state, action) => {
+            document.body.classList.contains("is-nav-open")
+                ? document.body.classList.remove("is-nav-open")
+                : document.body.classList.add("is-nav-open");
+        },
     },
     changeFontSize: (state, action) => {
       if (action.payload === 0) {
@@ -143,13 +154,11 @@ export const appSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
-  updateLang,
-  updateTheme,
-  changeFontSize,
-  setTheme,
-  setSize,
-  mobileNavToggle,
-  departments,
+    updateLang,
+    updateTheme,
+    setTheme,
+    mobileNavToggle,
+    departments,
 } = appSlice.actions;
 
 export default appSlice.reducer;
