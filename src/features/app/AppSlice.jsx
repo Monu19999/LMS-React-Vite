@@ -74,11 +74,7 @@ export const appSlice = createSlice({
     },
 
     setSize: (state, action) => {
-      // console.log("setSize");
-      // state.affectedElements.push();
       $("p, h1, h2, h3, h4, h5, h6, li, a").each(function (e, node) {
-        // console.log(node);
-        // state.affectedElements.push($(this));
         var $this = $(this);
         $this.data("orig-size", $this.css("font-size"));
       });
@@ -100,7 +96,6 @@ export const appSlice = createSlice({
           if (!$this.data("orig-size")) {
             $this.data("orig-size", $this.css("font-size"));
           }
-
           var newSize = parseInt($this.css("font-size")) + action.payload;
           $this.css("font-size", newSize + "px");
         });

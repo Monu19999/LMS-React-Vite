@@ -158,7 +158,7 @@ export default function Register() {
                             username: register("username", {
                                 required: "Username is Required!",
                                 pattern: {
-                                    value: /^[A-Za-z0-9_]+$/,
+                                    value: /^(?!.*([a-zA-Z0-9_])\1\1\1)[a-zA-Z0-9_]{4,}$/,
                                     message:
                                         "Username must contain alphabets, numbers or an underscore",
                                 },
