@@ -1,9 +1,18 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const PublicRoute = () => {
     const token = useSelector((state) => state.auth.token);
-    return token != null ? <Navigate to="/member" /> : <Outlet />;
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (token != null) {
+            navigate("/member");
+        }
+    }, [token]);
+
+    return <Outlet />;
 };
 
 export default PublicRoute;

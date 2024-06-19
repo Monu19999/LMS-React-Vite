@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { mobileNavToggle } from "@src/features/app/AppSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function Navbar(props) {
+    const [menus, setMenus] = useState("");
+    const [isSearchBoxOpen, setIsSearchBoxOpen] = useState("none");
+    const top_menus = useSelector((state) => state.app.data.top_menus);
+
     const dispatch = useDispatch();
     function createLink(item) {
         if (item.menu_type == 1) {
@@ -87,16 +91,11 @@ function Navbar(props) {
             return <ul className={ul_classes}>{loopMenuObj(menus, deep)}</ul>;
         }
     }
-    const [menus, setMenus] = useState("");
-    useEffect(() => {
-        let menu_tree = props.menus ? makeMenuTree(props.menus) : "";
-        setMenus(menu_tree);
-    }, []);
 
     useEffect(() => {
         BEGlobal.Init();
         FEGlobal.Init();
-    }, [menus]);
+    }, [top_menus]);
 
     return (
         <>
@@ -113,7 +112,7 @@ function Navbar(props) {
                             >
                                 <div className="c-navbar__links js-navbar-links">
                                     {/* js-navbar-links */}
-                                    {menus}
+                                    {top_menus && makeMenuTree(top_menus)}
                                 </div>
                                 <div className="c-navbar__menu-container">
                                     <button
@@ -150,17 +149,26 @@ function Navbar(props) {
                                     </Link>
                                 </div>
                                 <div className="navbar-3 c-navbar__buttons ">
-                                    <Link
+                                    <span
                                         className="btn btn-primary py-2 px-4 fa-search-toggle"
-                                        to="#"
+                                        onClick={() =>
+                                            setIsSearchBoxOpen(
+                                                isSearchBoxOpen == "none"
+                                                    ? "block"
+                                                    : "none"
+                                            )
+                                        }
                                         style={{ borderRadius: 40 }}
                                     >
                                         <span className="d-none-head">
                                             Search
                                         </span>{" "}
                                         <i className="fas fa-search" />
-                                    </Link>
-                                    <div className="search-box">
+                                    </span>
+                                    <div
+                                        className="search-box"
+                                        style={{ display: isSearchBoxOpen }}
+                                    >
                                         <input type="text" name="search" />
                                         <input
                                             type="button"

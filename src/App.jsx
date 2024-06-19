@@ -1,14 +1,13 @@
 import { Route, Routes } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Home from "@src/Pages/Home";
 import Page from "@src/Pages/Page";
 import CoursesList from "@src/Pages/courses/CoursesList";
-import Layout from "@src/Components/Layout/Layout";
+import PublicLayout from "@src/Components/Layout/Public/PublicLayout";
 import CourseView from "@src/Pages/courses/CourseView";
-import GuestLayout from "@src/Components/Layout/GuestLayout";
+import GuestLayout from "@src/Components/Layout/Guest/GuestLayout";
 import Login from "@src/Pages/auth/Login";
-import { useSelector } from "react-redux";
 import UserDashboard from "@src/Pages/member/UserDashboard";
-import UserLayout from "@src/Components/Layout/UserLayout";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
 import Register from "@src/Pages/auth/Register";
@@ -19,6 +18,7 @@ import ForgetPassword from "./Pages/auth/ForgetPassword";
 import CourseTopicDetail from "./Pages/courses/CourseTopicDetail";
 import ResetPasswordLinkSent from "./Pages/auth/ResetPasswordLinkSent";
 import ResetPassword from "./Pages/auth/ResetPassword";
+import StudentLayout from "@src/Components/Layout/Student/StudentLayout";
 
 function App() {
     const token = useSelector((state) => state.auth.token);
@@ -26,7 +26,7 @@ function App() {
         <>
             <Routes>
                 <Route path="/">
-                    <Route element={<Layout />}>
+                    <Route element={<PublicLayout />}>
                         <Route index element={<Home />} />
                         <Route exact path="dashboard" element={<Home />} />
                         <Route exact path="page/:page" element={<Page />} />
@@ -36,14 +36,16 @@ function App() {
                             path="course/:course_id/show"
                             element={<CourseView />}
                         />
-                        <Route
-                            exact
-                            path="course/:course_id/course_topic/:topic_id/show"
-                            element={<CourseTopicDetail />}
-                        />
+                        <Route element={<PrivateRoute />}>
+                            <Route
+                                exact
+                                path="course/:course_id/course_topic/:topic_id/show"
+                                element={<CourseTopicDetail />}
+                            />
+                        </Route>
                     </Route>
                     <Route path="member" element={<PrivateRoute />}>
-                        <Route element={<UserLayout />}>
+                        <Route element={<StudentLayout />}>
                             <Route index element={<UserDashboard />} />
                             <Route
                                 exact

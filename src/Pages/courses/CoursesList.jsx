@@ -5,16 +5,13 @@ import { getSearchCourses } from "@src/features/app/CourseSlice";
 import Pagination from "@src/Utilities/Pagination";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import { getDepartments } from "@src/features/app/AppSlice";
-import { setSearch, resetSearch } from "@src/features/app/CourseSlice";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { setSearch } from "@src/features/app/CourseSlice";
+import { useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 function CoursesList() {
-    const navigate = useNavigate();
-
-    const [departmentoffices, setDepartmentoffices] = useState([]);
-    const { departments, app_loading } = useSelector((state) => state.app);
-    const { courses, course_loading, search, search_courses } = useSelector(
+    const { departments } = useSelector((state) => state.app);
+    const { course_loading, search, search_courses } = useSelector(
         (state) => state.course
     );
 
@@ -53,12 +50,12 @@ function CoursesList() {
         //     console.log("filteredOffices => ", filteredOffices);
         //     setDepartmentoffices(filteredOffices);
         // }
-        dispatch(getSearchCourses(navigate));
+        dispatch(getSearchCourses());
     }, []);
 
     let handleFormFilter = (e) => {
         // e.preventDefault();
-        dispatch(getSearchCourses(navigate));
+        dispatch(getSearchCourses());
     };
 
     let handleFormFilterOnChange = (e) => {
@@ -87,7 +84,7 @@ function CoursesList() {
 
     function changePage(data) {
         dispatch(setSearch({ ...search, page: data.page }));
-        dispatch(getSearchCourses(navigate));
+        dispatch(getSearchCourses());
     }
 
     function handleResetSearch() {
@@ -97,7 +94,7 @@ function CoursesList() {
         );
         dispatch(setSearch(copy_search));
         reset(copy_search);
-        dispatch(getSearchCourses(navigate));
+        dispatch(getSearchCourses());
     }
 
     return (
@@ -163,7 +160,6 @@ function CoursesList() {
                                             <div className="form-group">
                                                 <label>Department</label>
                                                 <select
-                                                    id="department"
                                                     className="form-control"
                                                     {...register("department", {
                                                         onChange:
@@ -210,7 +206,6 @@ function CoursesList() {
                                             <div className="form-group">
                                                 <label>Office</label>
                                                 <select
-                                                    id="office"
                                                     className="form-control"
                                                     {...register("office", {
                                                         onChange: (e) => {
@@ -277,7 +272,6 @@ function CoursesList() {
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    id="course_name"
                                                     autoComplete="off"
                                                     {...register(
                                                         "course_name",

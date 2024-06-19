@@ -5,8 +5,8 @@ import Cookies from "js-cookie";
 const initialState = {
     search_courses: [],
     courses: [],
-    course: {},
-    course_topic: {},
+    course: null,
+    course_topic: null,
     search: {
         page: null,
         department: null,
@@ -71,7 +71,7 @@ export const readCourseTopic = createAsyncThunk(
 
 export const getSearchCourses = createAsyncThunk(
     "courses/getSearchCourses",
-    async (navigate, { getState }) => {
+    async (args, { navigate, getState }) => {
         const state = getState();
         let original_search_state = removeEmpty(state.course.search);
         let copy_search_state = { ...original_search_state };
@@ -186,7 +186,7 @@ export const getCourse = createAsyncThunk("course/getCourse", async (id) => {
 
 export const getCourseTopic = createAsyncThunk(
     "course/getCourseTopic",
-    async (params) => {
+    async (params, { navigate }) => {
         let api_url = api("auth_course_topic", params);
         let headers = {
             Accept: "application/json",
@@ -204,8 +204,12 @@ export const getCourseTopic = createAsyncThunk(
                 cache: "no-cache",
             });
             const json = await response.json();
+            // if (response.status === 401) {
+            //     navigate("/auth/login");
+            // }
             if (response.status !== 200) {
                 throw new Error("Bad response", {
+                    error_status: response.status,
                     cause: json,
                 });
             }
@@ -382,15 +386,17 @@ export const courseSlice = createSlice({
                 state.course_topic_loading = true;
             })
             .addCase(getCourseTopic.fulfilled, (state, { payload }) => {
+                state.course_topic_loading = false;
                 if (payload != undefined) {
                     let data = payload.data;
-                    if (data.hasOwnProperty("status") && data.status != 200) {
-                        state.error_message = data.message;
-                    } else {
-                        state.course_topic_loading = false;
+                    if (payload.status == 200) {
                         state.course_topic = data.course_topic;
                         state.errors = [];
                         state.error_message = null;
+                    } else if (payload.status == 401) {
+                        state.error_message = payload.message;
+                    } else {
+                        // state.error_message = data.message;
                     }
                 }
             })

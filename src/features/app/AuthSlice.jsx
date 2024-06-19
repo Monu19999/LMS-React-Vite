@@ -58,7 +58,7 @@ export const resetPassword = createAsyncThunk(
 );
 
 export const verifyResetPasswordLink = createAsyncThunk(
-    "user/verifyResetPasswordLink",
+    "auth/verifyResetPasswordLink",
     async (credentials) => {
         console.log("credentials => ", credentials);
         let api_url = api("auth_verify_reset_password_link");
@@ -86,7 +86,7 @@ export const verifyResetPasswordLink = createAsyncThunk(
 );
 
 export const getUser = createAsyncThunk(
-    "user/getUser",
+    "auth/getUser",
     async (args, { getState }) => {
         let api_url = api("user");
         const state = getState();
@@ -135,7 +135,7 @@ export const login = createAsyncThunk("auth/login", async (credentials) => {
 
 export const logout = createAsyncThunk(
     "auth/logout",
-    async (args, { getState }) => {
+    async (args, { dispatch, getState }) => {
         let api_url = api("auth_logout");
         try {
             const state = getState();

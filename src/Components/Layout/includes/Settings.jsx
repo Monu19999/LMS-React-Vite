@@ -10,7 +10,6 @@ import LoginMenu from "@src/Pages/member/includes/LoginMenu";
 function Settings() {
     const theme = useSelector((state) => state.app.theme);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     // const handleGetUser = async () => {
     //     let response = await dispatch(getUser());
@@ -29,11 +28,19 @@ function Settings() {
         dispatch(setTheme());
         // dispatch(setSize());
 
-        let affectedElements = $("p, h1, h2, h3, h4, h5, h6, li, a");
-        affectedElements.each(function () {
-            var $this = $(this);
-            $this.data("orig-size", $this.css("font-size"));
-        });
+        const addFontSize = () => {
+            let affectedElements = $("p, h1, h2, h3, h4, h5, h6, li, a");
+            affectedElements.each(function () {
+                var $this = $(this);
+                $this.data("orig-size", $this.css("font-size"));
+            });
+        };
+        if (document.readyState === "complete") {
+            addFontSize();
+        } else {
+            window.addEventListener("load", addFontSize);
+            return () => document.removeEventListener("load", addFontSize);
+        }
     }, []);
 
     const handleChangeFontSize = (value) => {

@@ -23,15 +23,15 @@ $(document).ready(function () {
     //     });
     // });
 
-    function changeFontSize(direction) {
-        $affectedElements.each(function () {
-            var $this = $(this);
-            $this.css(
-                "font-size",
-                parseInt($this.css("font-size")) + direction
-            );
-        });
-    }
+    // function changeFontSize(direction) {
+    //     $affectedElements.each(function () {
+    //         var $this = $(this);
+    //         $this.css(
+    //             "font-size",
+    //             parseInt($this.css("font-size")) + direction
+    //         );
+    //     });
+    // }
 
     // theme change js code start
     // theme change js start
@@ -98,14 +98,14 @@ $(document).ready(function () {
     // theme change js code end here
 });
 // Spinner
-var spinner = function () {
-    setTimeout(function () {
-        if ($("#spinner").length > 0) {
-            $("#spinner").removeClass("show");
-        }
-    }, 1000);
-};
-spinner();
+// var spinner = function () {
+//     setTimeout(function () {
+//         if ($("#spinner").length > 0) {
+//             $("#spinner").removeClass("show");
+//         }
+//     }, 1000);
+// };
+// spinner();
 
 // Initiate the wowjs
 new WOW().init();
@@ -151,12 +151,12 @@ $(window).scroll(function () {
 //     });
 // });
 
-$(document).ready(function () {
-    $(document).on("click", ".fa-search-toggle", function () {
-        $(".search-box").toggle();
-        $("input[type='text']").focus();
-    });
-});
+// $(document).ready(function () {
+//     $(document).on("click", ".fa-search-toggle", function () {
+//         $(".search-box").toggle();
+//         $("input[type='text']").focus();
+//     });
+// });
 
 $(window).scroll(function () {
     if ($(this).scrollTop() > 120) {
@@ -174,14 +174,14 @@ $(window).scroll(function () {
         $(".back-to-top").fadeOut("slow");
     }
 });
-$(".back-to-top").click(function () {
-    $("html, body").animate(
-        { scrollTop: 0 },
-        1500,
-        "easeInOutExpo"
-    );
-    return false;
-});
+// $(".back-to-top").click(function () {
+//     $("html, body").animate(
+//         { scrollTop: 0 },
+//         1500,
+//         "easeInOutExpo"
+//     );
+//     return false;
+// });
 
 (function ($) {
     "use strict";
@@ -195,10 +195,6 @@ $(".back-to-top").click(function () {
 
     };
     fullHeight();
-
-    $(document).on('click', '#sidebarCollapse', function () {
-        $('#sidebar').toggleClass('active');
-    });
 
 })(jQuery);
 

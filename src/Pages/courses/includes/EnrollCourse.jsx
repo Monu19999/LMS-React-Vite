@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { enrollCourse, getCourses } from "@src/features/app/CourseSlice";
-import BootstrapSpinner from "@src/Components/BootstrapSpinner";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { availableCourses } from "@src/features/member/MemberSlice";
 
 function EnrollCourse({ course, className, style, course_enrolment_loading }) {
