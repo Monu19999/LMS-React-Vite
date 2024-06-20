@@ -98,7 +98,7 @@ export default function Register() {
         }
     };
 
-    console.log(getValues())
+    // console.log(getValues())
     function getStepContent(activeStep) {
         switch (activeStep) {
             case 1:
