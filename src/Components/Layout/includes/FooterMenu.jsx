@@ -13,6 +13,8 @@ function FooterMenu() {
                 : "/";
         } else if (item.menu_type == 3) {
             return item.custom_url;
+        } else if (item.menu_type == 5) {
+            return item.custom_url;
         } else {
             return "#";
         }
