@@ -160,13 +160,30 @@ export default function Register() {
                             username: register("username", {
                                 minLength: {
                                     value: 4,
-                                    message: "Username must be at least 4 characters long",
-                                  },
+                                    message:
+                                        "Username must be at least 4 characters long",
+                                },
                                 required: "Username is Required!",
-                                pattern: {
-                                    value: /^[a-zA-Z](?!.*([a-zA-Z0-9_])\1\1)[a-zA-Z0-9_]{3,}$/,
-                                    message: 
-                                      "Username must contain alphabets, numbers or an underscore and start with an alphabet" ,
+                                // pattern: {
+                                //     value: /^[a-zA-Z](?!.*([a-zA-Z0-9_])\1\1)[a-zA-Z0-9_]{3,}$/,
+                                //     message:
+                                //         "Username must contain alphabets, numbers or underscore and start with an alphabet",
+                                // },
+                                validate: {
+                                    startWithAlphabet: (username) => {
+                                        let regularExpression =
+                                            /^[A-Za-z]+[A-Za-z0-9_]+$/;
+                                        if (!regularExpression.test(username)) {
+                                            return "Username must start with alphabet";
+                                        }
+                                    },
+                                    // repetedChar: (username) => {
+                                    //     let regularExpression =
+                                    //         /^[a-zA-Z]+[a-zA-Z0-9_]{3,}$/;
+                                    //     if (!regularExpression.test(username)) {
+                                    //         return "Username must not contain more than 3 consecutive characters";
+                                    //     }
+                                    // },
                                 },
                             }),
                             password: register("password", {
