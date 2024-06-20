@@ -38,7 +38,7 @@ function App() {
                         <Route exact path="page/:page" element={<Page />} />
                         <Route exact path="courses" element={<CoursesList />} />
                         <Route exact path="feedback" element={<Feedback />} />
-                        <Route exact path="faq" element={<FAQ />} />
+                        <Route exact path="faq" element={<FAQ />}/>
                         <Route
                             exact
                             path="course/:course_id/show"
