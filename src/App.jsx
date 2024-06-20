@@ -22,6 +22,7 @@ import StudentLayout from "@src/Components/Layout/Student/StudentLayout";
 import Download from "./Pages/Download";
 import Video from "./Pages/Video";
 import Feedback from "./Pages/Feedback";
+import FAQ from "./Pages/FAQ";
 
 function App() {
     const token = useSelector((state) => state.auth.token);
@@ -37,6 +38,7 @@ function App() {
                         <Route exact path="page/:page" element={<Page />} />
                         <Route exact path="courses" element={<CoursesList />} />
                         <Route exact path="feedback" element={<Feedback />} />
+                        <Route exact path="faq" element={<FAQ />} />
                         <Route
                             exact
                             path="course/:course_id/show"
