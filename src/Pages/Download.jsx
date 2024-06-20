@@ -34,7 +34,6 @@ function Download() {
     reset();
     setFilteredContent(downloadContent);
   };
-
   return (
     <>
       {/* Header Start */}
@@ -124,7 +123,7 @@ function Download() {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <i  className="bi bi-cloud-arrow-down"></i>
+                              <i  className="bi bi-cloud-arrow-down fa-lg"></i>
                             </a>
                           </td>
                         </tr>
