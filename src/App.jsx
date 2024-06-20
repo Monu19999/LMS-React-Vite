@@ -19,6 +19,8 @@ import CourseTopicDetail from "./Pages/courses/CourseTopicDetail";
 import ResetPasswordLinkSent from "./Pages/auth/ResetPasswordLinkSent";
 import ResetPassword from "./Pages/auth/ResetPassword";
 import StudentLayout from "@src/Components/Layout/Student/StudentLayout";
+import Download from "./Pages/Download";
+import Video from "./Pages/Video";
 
 function App() {
     const token = useSelector((state) => state.auth.token);
@@ -29,6 +31,8 @@ function App() {
                     <Route element={<PublicLayout />}>
                         <Route index element={<Home />} />
                         <Route exact path="dashboard" element={<Home />} />
+                        <Route exact path="download" element={<Download />} />
+                        <Route exact path="video" element={<Video />} />
                         <Route exact path="page/:page" element={<Page />} />
                         <Route exact path="courses" element={<CoursesList />} />
                         <Route

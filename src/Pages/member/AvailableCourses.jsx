@@ -34,7 +34,9 @@ const AvailableCourses = () => {
                                 <Accordion key={category.id}>
                                     <AccordionItem>
                                         <AccordionButton>
-                                            {category.category_name_en}
+                                            {category.fk_department_id +
+                                                " => " +
+                                                category.fk_office_id}
                                         </AccordionButton>
                                         <AccordionBody>
                                             <div className="row">

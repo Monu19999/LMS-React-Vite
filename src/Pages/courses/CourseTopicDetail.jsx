@@ -24,6 +24,7 @@ export default function CourseTopicDetail() {
 
     let [previous, setPrevious] = useState(null);
     let [next, setNext] = useState(null);
+    let [fileLoading, setFileLoading] = useState(false);
 
     const course_topic_loading = useSelector(
         (state) => state.course.course_topic_loading
@@ -48,6 +49,27 @@ export default function CourseTopicDetail() {
             handleGetCourseTopic({ course_id, topic_id });
         }
     }, []);
+
+    const fetchFile = async (file) => {
+        setFileLoading(true);
+        const response = await fetch(file, {
+            mode: "cors",
+            method: "GET",
+            headers: {
+                "access-control-allow-origin": "*",
+                "Content-type": "application/json; charset=UTF-8",
+            },
+            cache: "no-cache",
+        });
+        if (response.status == 200) {
+            setFileLoading(false);
+        }
+    };
+
+    // useEffect(() => {
+    //     console.log("here");
+    //     fetchFile("test.xlsx");
+    // }, []);
 
     const checkFileMimeType = (FileMimeType) => {
         const mime_types = [
@@ -113,7 +135,9 @@ export default function CourseTopicDetail() {
                     />
                 );
             } else {
-                content = (
+                content = fileLoading ? (
+                    <BootstrapSpinner />
+                ) : (
                     <GoogleDocsViewer
                         width="100%"
                         height="400px"
@@ -196,9 +220,9 @@ export default function CourseTopicDetail() {
                 <>
                     <Button
                         variant="primary"
-                        onClick={(prev) =>
-                            setShowModalType({ ...prev, ppt: true })
-                        }
+                        onClick={(prev) => {
+                            setShowModalType({ ...prev, ppt: true });
+                        }}
                     >
                         View PPT
                     </Button>
@@ -253,6 +277,11 @@ export default function CourseTopicDetail() {
     };
 
     const RenderTopicDetail = () => {
+        if (course_topic?.uploads) {
+            course_topic.uploads.map((upload) => {
+                console.log("upload");
+            });
+        }
         return (
             <>
                 <div
