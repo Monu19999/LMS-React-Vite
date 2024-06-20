@@ -62,6 +62,7 @@ export default function Register() {
         trigger,
         reset,
         formState: { errors },
+        getValues,
     } = useForm({});
 
     const onSubmit = async (data) => {
@@ -97,6 +98,7 @@ export default function Register() {
         }
     };
 
+    // console.log(getValues())
     function getStepContent(activeStep) {
         switch (activeStep) {
             case 1:
@@ -156,11 +158,15 @@ export default function Register() {
                                 },
                             }),
                             username: register("username", {
+                                minLength: {
+                                    value: 4,
+                                    message: "Username must be at least 4 characters long",
+                                  },
                                 required: "Username is Required!",
                                 pattern: {
-                                    value: /^[A-Za-z0-9_]+$/,
-                                    message:
-                                        "Username must contain alphabets, numbers or an underscore",
+                                    value: /^[a-zA-Z](?!.*([a-zA-Z0-9_])\1\1)[a-zA-Z0-9_]{3,}$/,
+                                    message: 
+                                      "Username must contain alphabets, numbers or an underscore and start with an alphabet" ,
                                 },
                             }),
                             password: register("password", {
