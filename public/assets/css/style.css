@@ -2585,3 +2585,15 @@ body.is-video-popup div[data-global-resource-path*="partials/header"] {
 .react-pdf__Page__canvas {
     width: 100% !important;
 }
+
+.accordion-button ol.breadcrumb .breadcrumb-item {
+    color: #000 !important;
+}
+
+.accordion-button ol.breadcrumb .breadcrumb-item::before {
+    color: #000 !important;
+}
+
+.course-detail-bc ol.breadcrumb .breadcrumb-item {
+    color: #fff !important;
+}

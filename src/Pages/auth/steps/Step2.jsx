@@ -163,7 +163,9 @@ export default function Step2({
                                     {[
                                         "required",
                                         "minLength",
-                                        "pattern",
+                                        // "pattern",
+                                        "startWithAlphabet",
+                                        "repetedChar",
                                     ].includes(errors?.username?.type) && (
                                         <>{errors.username.message}</>
                                     )}

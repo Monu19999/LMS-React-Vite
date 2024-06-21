@@ -10,6 +10,7 @@ import {
     AccordionButton,
     AccordionItem,
 } from "react-bootstrap";
+import RenderCourseHierarchyBC from "../courses/includes/RenderCourseHierarchyBC";
 
 const AvailableCourses = () => {
     const dispatch = useDispatch();
@@ -34,9 +35,20 @@ const AvailableCourses = () => {
                                 <Accordion key={category.id}>
                                     <AccordionItem>
                                         <AccordionButton>
-                                            {category.fk_department_id +
-                                                " => " +
-                                                category.fk_office_id}
+                                            {category?.category_courses.length >
+                                                0 && (
+                                                <nav aria-label="breadcrumb">
+                                                    <ol className="breadcrumb">
+                                                        <RenderCourseHierarchyBC
+                                                            course_hierarchy={
+                                                                category
+                                                                    .category_courses[0]
+                                                                    .course_hierarchy
+                                                            }
+                                                        />
+                                                    </ol>
+                                                </nav>
+                                            )}
                                         </AccordionButton>
                                         <AccordionBody>
                                             <div className="row">

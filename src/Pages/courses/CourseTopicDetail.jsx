@@ -293,7 +293,7 @@ export default function CourseTopicDetail() {
                 >
                     <div className="container">
                         <div className="row justify-content-center">
-                            <div className="col-lg-12">
+                            <div className="col-lg-12 course-detail-bc">
                                 <nav aria-label="breadcrumb" className="mb-4">
                                     <ol className="breadcrumb">
                                         {/* <Placeholder

@@ -9,6 +9,7 @@ import {
     AccordionItem,
 } from "react-bootstrap";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import RenderCourseHierarchyBC from "../courses/includes/RenderCourseHierarchyBC";
 
 const MyCourses = () => {
     const dispatch = useDispatch();
@@ -32,7 +33,20 @@ const MyCourses = () => {
                             <Accordion key={category.id}>
                                 <AccordionItem>
                                     <AccordionButton>
-                                        {category.category_name_en}
+                                        {category?.category_courses.length >
+                                            0 && (
+                                            <nav aria-label="breadcrumb">
+                                                <ol className="breadcrumb">
+                                                    <RenderCourseHierarchyBC
+                                                        course_hierarchy={
+                                                            category
+                                                                .category_courses[0]
+                                                                .course_hierarchy
+                                                        }
+                                                    />
+                                                </ol>
+                                            </nav>
+                                        )}
                                     </AccordionButton>
                                     <AccordionBody>
                                         <div className="row">
