@@ -164,6 +164,7 @@ export default function Step2({
                                         "required",
                                         "minLength",
                                         // "pattern",
+                                        "verifyInputs",
                                         "startWithAlphabet",
                                         "repetedChar",
                                     ].includes(errors?.username?.type) && (

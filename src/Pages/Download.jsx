@@ -38,14 +38,25 @@ function Download() {
     };
 
     const fetchVideoContents = async () => {
-        await fetch(api("download_contents"))
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-                // setDownloadContent(data);
-                // setFilteredContent(data);
-            })
-            .catch((error) => console.error(error));
+        try {
+            const res = await fetch(api("download_contents"), {
+                mode: "cors",
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            const data = await res.json();
+            // console.log(data.data.video_content);
+            setVideos(data);
+            setFilteredContent(data.data.video_content);
+            // console.log(filteredContent)
+        } catch (error) {
+            console.error("Failed to fetch video contents:", error);
+        }
     };
 
     useEffect(() => {

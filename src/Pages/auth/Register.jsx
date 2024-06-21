@@ -158,32 +158,39 @@ export default function Register() {
                                 },
                             }),
                             username: register("username", {
+                                required: "Username is Required!",
                                 minLength: {
                                     value: 4,
                                     message:
                                         "Username must be at least 4 characters long",
                                 },
-                                required: "Username is Required!",
                                 // pattern: {
                                 //     value: /^[a-zA-Z](?!.*([a-zA-Z0-9_])\1\1)[a-zA-Z0-9_]{3,}$/,
                                 //     message:
                                 //         "Username must contain alphabets, numbers or underscore and start with an alphabet",
                                 // },
                                 validate: {
-                                    startWithAlphabet: (username) => {
+                                    verifyInputs: (username) => {
                                         let regularExpression =
-                                            /^[A-Za-z]+[A-Za-z0-9_]+$/;
+                                            /^[A-Za-z0-9_]+$/;
                                         if (!regularExpression.test(username)) {
-                                            return "Username must start with alphabet";
+                                            return "Username may contain alphabets, numbers or underscore only.";
                                         }
                                     },
-                                    // repetedChar: (username) => {
-                                    //     let regularExpression =
-                                    //         /^[a-zA-Z]+[a-zA-Z0-9_]{3,}$/;
-                                    //     if (!regularExpression.test(username)) {
-                                    //         return "Username must not contain more than 3 consecutive characters";
-                                    //     }
-                                    // },
+                                    startWithAlphabet: (username) => {
+                                        let regularExpression = /^[A-Za-z]+/;
+                                        if (!regularExpression.test(username)) {
+                                            return "Username must start with alphabet.";
+                                        }
+                                    },
+                                    repetedChar: (username) => {
+                                        if (
+                                            username.match(/(.)\1{2,}/g)
+                                                ?.length > 0
+                                        ) {
+                                            return "Username must not contain 3 or more consecutive characters.";
+                                        }
+                                    },
                                 },
                             }),
                             password: register("password", {
