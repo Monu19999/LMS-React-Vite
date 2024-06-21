@@ -1,18 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import api from "@src/apis/api";
 
 function Video() {
-    const [downloadContent, setDownloadContent] = useState([
-        { sno: 1, name: "download",  },
-        { sno: 2, name: "download2",  },
-        { sno: 3, name: "download3",  },
-        { sno: 4, name: "download4",  },
-        { sno: 5, name: "download5",  },
-        { sno: 6, name: "download6",  },
-      ]);
     
-      const [filteredContent, setFilteredContent] = useState(downloadContent);
+      const [filteredContent, setFilteredContent] = useState([]);
+      const [videos, setVideos] = useState([]);
+
+      const fetchVideosLink = async () => {
+        try {
+          const res = await fetch(api('video_contents'), {
+            mode: "cors",
+            method: 'get',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          const data = await res.json();
+          console.log(data.data.video_content); 
+          setVideos(data);
+          setFilteredContent(data.data.video_content)
+          console.log(filteredContent)
+
+        } catch (error) {
+          console.error("Failed to fetch video contents:", error);
+        }
+      };
     
+      useEffect(() => {
+        fetchVideosLink();
+      }, []);
+
       const {
         register,
         handleSubmit,
@@ -23,15 +44,16 @@ function Video() {
     
       const handleFormFilter = () => {
         const title = getValues().title.toLowerCase();
-        const updatedContent = downloadContent.filter((item) =>
-          item.name.toLowerCase().includes(title)
+        const updatedContent = videos.data.video_content.filter((item) =>
+          item.title_en.toLowerCase().includes(title)
         );
         setFilteredContent(updatedContent);
+        // console.log(filteredContent)
       };
     
       const handleResetSearch = () => {
         reset();
-        setFilteredContent(downloadContent);
+        setFilteredContent([]);
       };
     
       return (
@@ -65,11 +87,15 @@ function Video() {
                             <input
                               type="text"
                               autoComplete="off"
-                              {...register("title")}
+                              {...register("title",{
+                                required: "Title is required.",
+                              })}
                               className="form-control"
                               placeholder="Search By Title"
+                            
                             />
                           </div>
+                          {errors.title && <p className="errorMsg">{errors.title.message}</p>}
                         </div>
                         <div className="col-md-6 mb-2">
                           <div className="form-group mt-4">
@@ -115,14 +141,14 @@ function Video() {
                         <tbody>
                           {filteredContent?.map((item, index) => (
                             <tr key={index}>
-                              <th scope="row">{item.sno}</th>
+                              <th scope="row">{item.id}</th>
                               <td>
                                 <a
-                                  href="https://www.youtube.com/"
+                                  href={item.video_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
-                                  {item.name}
+                                  {item.title_en}
                                 </a>
                               </td>
                             </tr>
