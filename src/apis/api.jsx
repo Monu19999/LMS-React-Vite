@@ -15,6 +15,7 @@ const api_urls = {
     course: function (id) {
         return `/api/courses/${id}`;
     },
+    video_contents: "/api/video_contents",
 
     download_contents: "/api/download_contents",
 
@@ -49,11 +50,12 @@ const api_urls = {
 
 export default function api(api_name, param = null) {
     // Get API domain based on the current app environment
+    // console.log(api_name)
     let url =
         env.VITE_APP_ENV == "production"
             ? env.VITE_PROD_APP_URL
             : env.VITE_DEV_APP_URL;
-    // console.log(typeof api_urls[api_name]);
+    // console.log(typeof api_urls[api_name], api_urls[api_name]);
     return (
         url +
         (typeof api_urls[api_name] == "function"
