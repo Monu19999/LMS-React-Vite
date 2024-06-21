@@ -23,6 +23,7 @@ import Download from "./Pages/Download";
 import Video from "./Pages/Video";
 import Feedback from "./Pages/Feedback";
 import FAQ from "./Pages/FAQ";
+import ChangePassword from "./Pages/member/ChangePassword";
 
 function App() {
     const token = useSelector((state) => state.auth.token);
@@ -55,6 +56,7 @@ function App() {
                     <Route path="member" element={<PrivateRoute />}>
                         <Route element={<StudentLayout />}>
                             <Route index element={<UserDashboard />} />
+                            <Route path="change-password" element={<ChangePassword />} />
                             <Route
                                 exact
                                 path="member"

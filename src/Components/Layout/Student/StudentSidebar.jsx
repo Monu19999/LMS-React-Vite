@@ -57,6 +57,12 @@ function StudentSidebar() {
                         Certificate
                     </Link>
                 </li>
+                <li>
+                    <Link to="/member/change-password">
+                        <span className="fas fa-user-graduate mr-3" /> {" "}
+                        Change Password
+                    </Link>
+                </li>
             </ul>
         </nav>
     );
