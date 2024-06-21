@@ -1,6 +1,7 @@
 import { Placeholder } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import RenderCourseHierarchyBC from "./RenderCourseHierarchyBC";
 
 export default function CourseBradeCrumb({
     category_course,
@@ -10,50 +11,17 @@ export default function CourseBradeCrumb({
         (state) => state.course.course_topic_loading
     );
 
-    const resetHierarchyLevel = (hierarchy, hierarchy_html = []) => {
-        if (hierarchy?.hierarchy_level) {
-            hierarchy_html.push(hierarchy?.hierarchy_level);
-            if (hierarchy?.parent) {
-                return resetHierarchyLevel(hierarchy.parent, hierarchy_html);
-            }
-        }
-        return hierarchy_html.reverse();
-    };
-
-    const MakeBC = ({ course_hierarchies }) => {
-        return course_hierarchies.map((hierarchy) => {
-            return (
-                <li
-                    className="breadcrumb-item text-white active"
-                    key={hierarchy.id}
-                >
-                    {hierarchy.title_en}
-                </li>
-            );
-        });
-    };
-
     const RenderHomeBC = () => {
         return (
-            <li className="breadcrumb-item">
-                <Link className="text-white" to="/">
-                    Home
-                </Link>
+            <li className="breadcrumb-item active">
+                <Link to="/">Home</Link>
             </li>
         );
     };
 
-    const RenderCourseHierarchyBC = () => {
-        const course_hierarchies = resetHierarchyLevel(course_hierarchy);
-        return <MakeBC course_hierarchies={course_hierarchies} />;
-    };
-
     const RenderCourseNameBC = () => {
         return (
-            <li
-                className="breadcrumb-item text-white active"
-                aria-current="page"
-            >
+            <li className="breadcrumb-item active" aria-current="page">
                 {category_course?.course_name_en}
             </li>
         );
@@ -67,7 +35,9 @@ export default function CourseBradeCrumb({
                 ) : (
                     <>
                         <RenderHomeBC />
-                        <RenderCourseHierarchyBC />
+                        <RenderCourseHierarchyBC
+                            course_hierarchy={course_hierarchy}
+                        />
                         <RenderCourseNameBC />
                     </>
                 )}
