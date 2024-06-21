@@ -15,7 +15,6 @@ const api_urls = {
     course: function (id) {
         return `/api/courses/${id}`;
     },
-    video_contents: "/api/video_contents",
 
     download_contents: "/api/download_contents",
     video_contents: "/api/video_contents",
