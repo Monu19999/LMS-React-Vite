@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Button, Form, Container, Row, Col } from "react-bootstrap";
+import api from "@src/apis/api";
 
 function Feedback() {
   const {
@@ -10,11 +11,36 @@ function Feedback() {
     reset,
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    reset(); 
-  };
 
+  const onSubmit = async (data) => {
+    let api_url = api("user_feedback");
+    let headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    
+    try {
+      const response = await fetch(api_url, {
+        mode: "cors",
+        method: "POST",
+        headers,
+      });
+  
+      const json = await response.json();
+      if (response.status !== 200) {
+        throw new Error("Bad response", {
+          cause: json,
+        });
+      }
+      // console.log(json);
+      reset();
+    } catch (error) {
+      console.warn(error);
+    }
+  
+    console.log(data);
+  };
+  
   return (
     <Container className="mt-5">
       <div className="wrap d-md-flex">
@@ -26,7 +52,10 @@ function Feedback() {
             <Row>
               {/* Name */}
               <Col md={6}>
-                <Form.Group className="form-group mb-3" controlId="formGroupFName">
+                <Form.Group
+                  className="form-group mb-3"
+                  controlId="formGroupFName"
+                >
                   <Form.Label className="label">Name</Form.Label>
                   <Form.Control
                     className="mb-2"
@@ -44,10 +73,11 @@ function Feedback() {
 
               {/* Email */}
               <Col md={6}>
-                <Form.Group className="form-group mb-3" controlId="formGroupEmail">
-                  <Form.Label className="label">
-                    Email
-                  </Form.Label>
+                <Form.Group
+                  className="form-group mb-3"
+                  controlId="formGroupEmail"
+                >
+                  <Form.Label className="label">Email</Form.Label>
                   <Form.Control
                     className="mb-2"
                     type="email"
@@ -56,7 +86,8 @@ function Feedback() {
                     {...register("email", {
                       required: "Email is required",
                       pattern: {
-                        value: /^[a-zA-Z0-9._%+-]+@(gov\.in|nic\.in)$/,
+                        value:
+                          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                         message: "Invalid email address",
                       },
                     })}
@@ -70,7 +101,10 @@ function Feedback() {
 
               {/* Mobile */}
               <Col md={6}>
-                <Form.Group className="form-group mb-3" controlId="formGroupMobile">
+                <Form.Group
+                  className="form-group mb-3"
+                  controlId="formGroupMobile"
+                >
                   <Form.Label className="label">Mobile</Form.Label>
                   <Form.Control
                     className="mb-2"
@@ -94,14 +128,19 @@ function Feedback() {
 
               {/* Subject */}
               <Col md={6}>
-                <Form.Group className="form-group mb-3" controlId="formGroupSubject">
+                <Form.Group
+                  className="form-group mb-3"
+                  controlId="formGroupSubject"
+                >
                   <Form.Label className="label">Subject</Form.Label>
                   <Form.Control
                     className="mb-2"
                     type="text"
                     placeholder="Enter Subject"
                     aria-describedby="subjectHelpBlock"
-                    {...register("subject", { required: "Subject is required" })}
+                    {...register("subject", {
+                      required: "Subject is required",
+                    })}
                     isInvalid={!!errors.subject}
                   />
                   <Form.Control.Feedback type="invalid">
@@ -112,7 +151,10 @@ function Feedback() {
 
               {/* Message */}
               <Col md={6}>
-                <Form.Group className="form-group mb-3" controlId="formGroupMessage">
+                <Form.Group
+                  className="form-group mb-3"
+                  controlId="formGroupMessage"
+                >
                   <Form.Label className="label">Message</Form.Label>
                   <Form.Control
                     className="mb-2"
@@ -120,7 +162,9 @@ function Feedback() {
                     placeholder="Enter Message"
                     aria-describedby="messageHelpBlock"
                     rows={3}
-                    {...register("message", { required: "Message is required" })}
+                    {...register("message", {
+                      required: "Message is required",
+                    })}
                     isInvalid={!!errors.message}
                   />
                   <Form.Control.Feedback type="invalid">
@@ -131,7 +175,10 @@ function Feedback() {
             </Row>
             <Row className="justify-content-center mt-4">
               <Col md={3} className="d-flex gap-2">
-                <Button type="submit" className="form-control btn btn-primary  px-4">
+                <Button
+                  type="submit"
+                  className="form-control btn btn-primary  px-4"
+                >
                   Submit
                 </Button>
                 <Button

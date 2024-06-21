@@ -20,10 +20,10 @@ function Video() {
             throw new Error(`HTTP error! status: ${res.status}`);
           }
           const data = await res.json();
-          console.log(data.data.video_content); 
+          // console.log(data.data.video_content); 
           setVideos(data);
           setFilteredContent(data.data.video_content)
-          console.log(filteredContent)
+          // console.log(filteredContent)
 
         } catch (error) {
           console.error("Failed to fetch video contents:", error);
@@ -95,7 +95,7 @@ function Video() {
                             
                             />
                           </div>
-                          {errors.title && <p className="errorMsg">{errors.title.message}</p>}
+                          {errors.title && <p className="text-danger">{errors.title.message}</p>}
                         </div>
                         <div className="col-md-6 mb-2">
                           <div className="form-group mt-4">

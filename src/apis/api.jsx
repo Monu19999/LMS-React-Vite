@@ -16,6 +16,7 @@ const api_urls = {
         return `/api/courses/${id}`;
     },
     video_contents:"/api/video_contents",
+    user_feedback: "/api/user_feedback",
 
     // Authentication
     auth_login: "/api/auth/login",
