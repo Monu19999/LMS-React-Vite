@@ -16,6 +16,8 @@ const api_urls = {
         return `/api/courses/${id}`;
     },
 
+    download_contents: "/api/download_contents",
+
     // Authentication
     auth_login: "/api/auth/login",
     auth_logout: "/api/auth/logout",
