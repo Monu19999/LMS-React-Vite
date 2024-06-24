@@ -2,19 +2,27 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import api from "@src/apis/api";
-// import { FaCloudDownloadAlt } from "react-icons/fa";
+import PageHeader from "@src/Pages/includes/PageHeader";
+import { useLoaderData } from "react-router-dom";
 
-function Download() {
-    const [downloadContent, setDownloadContent] = useState([
-        { sno: 1, name: "download", download: "https://www.youtube.com/" },
-        { sno: 2, name: "download2", download: "https://www.youtube.com/" },
-        { sno: 3, name: "download3", download: "https://www.youtube.com/" },
-        { sno: 4, name: "download4", download: "https://www.youtube.com/" },
-        { sno: 5, name: "download5", download: "https://www.youtube.com/" },
-        { sno: 6, name: "download6", download: "https://www.youtube.com/" },
-    ]);
+export async function loader() {
+    const res = await fetch(api("download_contents"), {
+        mode: "cors",
+        method: "get",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    const downloads = await res.json();
+    return { downloads };
+}
 
+export function Download() {
     const [filteredContent, setFilteredContent] = useState([]);
+    const { downloads } = useLoaderData();
 
     const {
         register,
@@ -25,16 +33,16 @@ function Download() {
     } = useForm();
 
     const handleFormFilter = () => {
-        const title = getValues().title.toLowerCase();
-        const updatedContent = downloadContent.filter((item) =>
-            item.name.toLowerCase().includes(title)
+        const title = getValues().title.toLowerCase().trim();
+        const updatedContent = downloads.data.download_content.filter((item) =>
+            item.title_en.toLowerCase().includes(title)
         );
         setFilteredContent(updatedContent);
     };
 
     const handleResetSearch = () => {
         reset();
-        setFilteredContent(downloadContent);
+        setFilteredContent(downloads.data.download_content);
     };
 
     const fetchVideoContents = async () => {
@@ -49,10 +57,9 @@ function Download() {
             if (!res.ok) {
                 throw new Error(`HTTP error! status: ${res.status}`);
             }
-            const data = await res.json();
-            // console.log(data.data.video_content);
-            setVideos(data);
-            setFilteredContent(data.data.video_content);
+            const json = await res.json();
+            setFilteredContent(json.data.download_content);
+            setDownloads(json.data.download_content);
             // console.log(filteredContent)
         } catch (error) {
             console.error("Failed to fetch video contents:", error);
@@ -60,23 +67,12 @@ function Download() {
     };
 
     useEffect(() => {
-        fetchVideoContents();
-    }, []);
+        setFilteredContent(downloads.data.download_content);
+        // setDownloads(downloads.data.download_content);
+    }, [downloads]);
     return (
         <>
-            {/* Header Start */}
-            <div className="container-fluid bg-primary py-4 mb-4 page-header">
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-lg-10 text-center">
-                            <h1 className="display-3 text-white animated slideInDown">
-                                Download
-                            </h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* Header End */}
+            <PageHeader title="Download" />
             <div className="container-xxl">
                 <div className="container">
                     <div className="row mb-4">
@@ -140,7 +136,7 @@ function Download() {
                                                     scope="col"
                                                     className="px-5"
                                                 >
-                                                    Name
+                                                    Title
                                                 </th>
                                                 <th scope="col">Download</th>
                                             </tr>
@@ -150,15 +146,16 @@ function Download() {
                                                 (item, index) => (
                                                     <tr key={index}>
                                                         <th scope="row">
-                                                            {item.sno}
+                                                            {index + 1}
                                                         </th>
                                                         <td className="px-5">
-                                                            {item.name}
+                                                            {item.title_en}
                                                         </td>
                                                         <td>
                                                             <a
                                                                 href={
-                                                                    item.download
+                                                                    item?.upload
+                                                                        .download_path
                                                                 }
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"

@@ -4,6 +4,7 @@ import useFetch from "@src/Hooks/useFetch";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import parse from "html-react-parser";
 import api from "@src/apis/api";
+import PageHeader from "./includes/PageHeader";
 
 function Page() {
     let { page } = useParams();
@@ -15,45 +16,30 @@ function Page() {
     return (
         <>
             {isLoading && <BootstrapSpinner />}
-            {apiData?.data ? (
+            {!isLoading && apiData?.data && (
                 <>
-                    <div className="container-fluid bg-primary py-4 mb-5 page-header">
-                        <div className="container">
-                            <div className="row justify-content-center">
-                                <div className="col-lg-10 text-center">
-                                    <h1 className="display-3 text-white animated slideInDown">
-                                        {apiData?.data.page.title_en}
-                                    </h1>
-                                    <nav aria-label="breadcrumb">
-                                        <ol className="breadcrumb justify-content-center">
-                                            <li className="breadcrumb-item">
-                                                <Link
-                                                    className="text-white"
-                                                    to="/"
-                                                >
-                                                    Home
-                                                </Link>
-                                            </li>
-                                            <li className="breadcrumb-item">
-                                                <Link
-                                                    className="text-white"
-                                                    to="/"
-                                                >
-                                                    Pages
-                                                </Link>
-                                            </li>
-                                            <li
-                                                className="breadcrumb-item text-white active"
-                                                aria-current="page"
-                                            >
-                                                {apiData?.data.page.title_en}
-                                            </li>
-                                        </ol>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <PageHeader title={apiData?.data.page.title_en}>
+                        <nav aria-label="breadcrumb">
+                            <ol className="breadcrumb justify-content-center">
+                                <li className="breadcrumb-item">
+                                    <Link className="text-white" to="/">
+                                        Home
+                                    </Link>
+                                </li>
+                                <li className="breadcrumb-item">
+                                    <Link className="text-white" to="/">
+                                        Pages
+                                    </Link>
+                                </li>
+                                <li
+                                    className="breadcrumb-item text-white active"
+                                    aria-current="page"
+                                >
+                                    {apiData?.data.page.title_en}
+                                </li>
+                            </ol>
+                        </nav>
+                    </PageHeader>
 
                     <div className="container-xxl py-5">
                         <div className="container">
@@ -88,12 +74,11 @@ function Page() {
                                         </h6>
                                         {/* <h1 className="mb-4">Welcome to e-Shiksha</h1> */}
                                         <p className="mb-4">
-                                            {apiData?.data
-                                                ? parse(
-                                                      apiData.data.page
-                                                          .description_en
-                                                  )
-                                                : ""}
+                                            {apiData?.data &&
+                                                parse(
+                                                    apiData.data.page
+                                                        .description_en
+                                                )}
                                         </p>
                                     </div>
                                 </div>
@@ -101,8 +86,6 @@ function Page() {
                         </div>
                     </div>
                 </>
-            ) : (
-                ""
             )}
         </>
     );

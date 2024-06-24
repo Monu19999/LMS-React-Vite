@@ -11,9 +11,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
-        <Router>
-            <App />
-        </Router>
+        <App />
     </Provider>
 );
 //         <React.StrictMode>

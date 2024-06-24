@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
 import Accordion from "react-bootstrap/Accordion";
+import PageHeader from "@src/Pages/includes/PageHeader";
+
 export default function FAQ() {
     const [accordionContent, setAccordionContent] = useState([
         {
@@ -46,19 +48,7 @@ export default function FAQ() {
     ]);
     return (
         <>
-            {/* Header Start */}
-            <div className="container-fluid bg-primary py-4 mb-4 page-header">
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-lg-10 text-center">
-                            <h1 className="display-3 text-white animated slideInDown">
-                                FAQs
-                            </h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* Header End */}
+            <PageHeader title="FAQs" />
             <div className="container">
                 <Accordion>
                     {accordionContent?.map((item, index) => (
