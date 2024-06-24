@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import api from "@src/apis/api";
 import PageHeader from "@src/Pages/includes/PageHeader";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 
 export const loader = async () => {
     try {
@@ -59,7 +59,22 @@ function Video() {
 
     return (
         <>
-            <PageHeader title="Video" />
+            <PageHeader title="Video">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb justify-content-center">
+                        <li className="breadcrumb-item">
+                            <Link className="text-white" to="/">
+                                Home
+                            </Link>
+                        </li>
+                        <li className="breadcrumb-item">
+                            <Link className="text-white" to="/download">
+                                Videos
+                            </Link>
+                        </li>
+                    </ol>
+                </nav>
+            </PageHeader>
             <div className="container-xxl py-5">
                 <div className="container">
                     <div

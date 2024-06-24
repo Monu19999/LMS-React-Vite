@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import api from "@src/apis/api";
 import PageHeader from "@src/Pages/includes/PageHeader";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 
 export async function loader() {
     const res = await fetch(api("download_contents"), {
@@ -72,7 +72,22 @@ export function Download() {
     }, [downloads]);
     return (
         <>
-            <PageHeader title="Download" />
+            <PageHeader title="Download">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb justify-content-center">
+                        <li className="breadcrumb-item">
+                            <Link className="text-white" to="/">
+                                Home
+                            </Link>
+                        </li>
+                        <li className="breadcrumb-item">
+                            <Link className="text-white" to="/download">
+                                Downloads
+                            </Link>
+                        </li>
+                    </ol>
+                </nav>
+            </PageHeader>
             <div className="container-xxl">
                 <div className="container">
                     <div className="row mb-4">
