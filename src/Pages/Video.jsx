@@ -30,7 +30,6 @@ export const loader = async () => {
 function Video() {
     const [filteredContent, setFilteredContent] = useState([]);
     const { videos } = useLoaderData();
-    // const [videos, setVideos] = useState([]);
 
     const {
         register,

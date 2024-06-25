@@ -27,7 +27,7 @@ import StudentLayout from "@src/Components/Layout/Student/StudentLayout";
 import Download, { loader as downloadLoader } from "./Pages/Download";
 import Video, { loader as videoLoader } from "./Pages/Video";
 import Feedback from "./Pages/Feedback";
-import FAQ from "./Pages/FAQ";
+import FAQ, { loader as faqLoader } from "./Pages/FAQ";
 import ChangePassword from "./Pages/member/ChangePassword";
 
 const router = createHashRouter(
@@ -51,7 +51,7 @@ const router = createHashRouter(
                 <Route exact path="page/:page" element={<Page />} />
                 <Route exact path="courses" element={<CoursesList />} />
                 <Route exact path="feedback" element={<Feedback />} />
-                <Route exact path="faq" element={<FAQ />} />
+                <Route exact path="faq" element={<FAQ />} loader={faqLoader} />
                 <Route
                     exact
                     path="course/:course_id/show"

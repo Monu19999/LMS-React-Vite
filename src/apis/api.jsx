@@ -18,6 +18,7 @@ const api_urls = {
 
     download_contents: "/api/download_contents",
     video_contents: "/api/video_contents",
+    faq_contents: "/api/faq_contents",
     user_feedback: "/api/user_feedback",
 
     // Authentication
