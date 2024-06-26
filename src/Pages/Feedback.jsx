@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Button, Form, Container, Row, Col } from "react-bootstrap";
 import api from "@src/apis/api";
 import PageHeader from "@src/Pages/includes/PageHeader";
+import { Link, useLoaderData } from "react-router-dom";
 
 function Feedback() {
     const {
@@ -43,12 +44,34 @@ function Feedback() {
 
     return (
         <>
-            <PageHeader title="Feedback" />
-            <Container className="mt-5">
-                <div className="wrap d-md-flex">
+            
+            <PageHeader title="Feedback">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb justify-content-center">
+                        <li className="breadcrumb-item">
+                            <Link className="text-white" to="/home">
+                                Home
+                            </Link>
+                        </li>
+                        <li className="breadcrumb-item">
+                            <Link className="text-white" to="/feedback">
+                            Feedback
+                            </Link>
+                        </li>
+                    </ol>
+                </nav>
+            </PageHeader>
+            <div className="container-xxl ">
+                <div className="container shadow inner-page-container-mb">
+                <div className="row">
+                    <div className="text-center wow fadeInUp" data-wow-delay="0.1s" >
+                        <h1 >Send us your feedback!</h1>
+                        <p>fill the form below</p>
+                    </div>
+                    
                     <div className="col-md-12 bg-white p-lg-5">
                         <Form
-                            className="d-flex py-3 w-100 flex-column gap-3"
+                            className="d-flex  w-100 flex-column gap-3"
                             onSubmit={handleSubmit(onSubmit)}
                         >
                             <Row>
@@ -191,7 +214,18 @@ function Feedback() {
                             </Row>
                             <Row className="justify-content-center mt-4">
                                 <Col md={3} className="d-flex gap-2">
-                                    <Button
+                                <div className="col-12 text-center">
+                                <Link type="submit" className="btn btn-primary py-2 px-4 " style={{ borderRadius: 40, marginRight:"10px" }} >
+                                        Submit{" "}
+                                        
+                                    </Link>
+                                    <Link type="button" className="btn btn-secondary py-2 px-4 " style={{ borderRadius: 40, color:"#fff" }} >
+                                        Reset{""}
+                                        
+                                    </Link>
+                                </div>
+                                
+                                    {/* <Button
                                         type="submit"
                                         className="form-control btn btn-primary  px-4"
                                     >
@@ -203,13 +237,15 @@ function Feedback() {
                                         onClick={() => reset()}
                                     >
                                         Reset
-                                    </Button>
+                                    </Button> */}
                                 </Col>
                             </Row>
                         </Form>
                     </div>
                 </div>
-            </Container>
+                </div>
+            </div>    
+            
         </>
     );
 }

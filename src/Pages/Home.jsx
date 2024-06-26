@@ -333,8 +333,7 @@ export default function Home() {
                     ) : (
                         <OwlCarousel
                             className="owl-carousel courses-carousel position-relative"
-                            {...course_options}
-                        >
+                            {...course_options} >
                             {courses?.data &&
                                 courses.data.length >= 0 &&
                                 courses.data.map((course) => {

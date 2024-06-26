@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Button, Form, Container, Row, Col } from "react-bootstrap";
+import { Link, useLoaderData } from "react-router-dom";
 
 function ChangePassword() {
     const {
@@ -17,16 +18,18 @@ function ChangePassword() {
     };
 
     return (
-        <Container className="mt-5">
-            <div className="wrap d-md-flex">
-                <div className="col-md-12 bg-white p-lg-5">
+        <div className="container ">
+            <div className="row justify-content-center mt-4">
+                <div className="col-md-6 shadow inner-page-container-mb">
+                    <div className="row justify-content-center">
+                    <div className="col-md-12 bg-white p-lg-5 ">
                     <Form
                         className="d-flex py-3 w-100 flex-column gap-3"
                         onSubmit={handleSubmit(onSubmit)}
                     >
                         <Row>
                             {/* Current Password */}
-                            <Col md={6}>
+                            <Col md={12}>
                                 <Form.Group
                                     className="form-group mb-3"
                                     controlId="formGroupCurrentPassword"
@@ -60,10 +63,9 @@ function ChangePassword() {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
-                        </Row>
-                        <Row>
+                        
                             {/* New Password */}
-                            <Col md={6}>
+                            <Col md={12}>
                                 <Form.Group
                                     className="form-group mb-3"
                                     controlId="formGroupNewPassword"
@@ -105,10 +107,9 @@ function ChangePassword() {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
-                        </Row>
-                        <Row>
+                        
                             {/* Confirm Password */}
-                            <Col md={6}>
+                            <Col md={12}>
                                 <Form.Group
                                     className="form-group mb-3"
                                     controlId="formGroupConfirmPassword"
@@ -139,10 +140,18 @@ function ChangePassword() {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
-                        </Row>
-                        <Row className="justify-content-center mt-4">
-                            <Col md={3} className="d-flex gap-2">
-                                <Button
+
+                            <Col md={12} className="d-flex gap-2">
+
+                            <Link type="submit" className="btn btn-primary py-2 px-4 " style={{ borderRadius: 40, marginRight:"10px" }} >
+                            Change Password{" "}
+                                        
+                                    </Link>
+                                    <Link type="button" className="btn btn-secondary py-2 px-4 " style={{ borderRadius: 40, color:"#fff" }} >
+                                        Reset{""}
+                                        
+                                    </Link>
+                                {/* <Button
                                     type="submit"
                                     className="form-control btn btn-primary px-4"
                                 >
@@ -154,13 +163,16 @@ function ChangePassword() {
                                     onClick={() => reset()}
                                 >
                                     Reset
-                                </Button>
+                                </Button> */}
                             </Col>
                         </Row>
+                        
                     </Form>
                 </div>
+                    </div>
+                </div>
             </div>
-        </Container>
+        </div>
     );
 }
 

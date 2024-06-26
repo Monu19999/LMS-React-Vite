@@ -89,17 +89,17 @@ export function Download() {
                 </nav>
             </PageHeader>
             <div className="container-xxl">
-                <div className="container">
+                <div className="container shadow inner-page-container-mb">
                     <div className="row mb-4">
                         <div
-                            className="col-lg-12 wow fadeInUp"
+                            className="col-lg-12 wow fadeInUp mb-4"
                             style={{ backgroundColor: "#06bbcc" }}
                         >
                             <div className="search-title">
                                 {/* Search Form Start */}
                                 <form onSubmit={handleSubmit(handleFormFilter)}>
                                     <div className="row justify-content-center">
-                                        <div className="col-md-6 row mt-3">
+                                        <div className="col-lg-8 col-md-6 mt-3">
                                             <div className="form-group">
                                                 <input
                                                     type="text"
@@ -110,7 +110,7 @@ export function Download() {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="col-md-6 mb-2">
+                                        <div className="col-lg-4 col-md-6 mb-2">
                                             <div className="form-group mt-4">
                                                 <button
                                                     className="btn btn-dark py-md-2 px-md-4 animated slideInRight"
@@ -143,6 +143,7 @@ export function Download() {
                         <div className="container">
                             <div className="row">
                                 <div className="col-12">
+                                    <div className="table-responsive">
                                     <table className="table table-striped align-items-center justify-content-center">
                                         <thead>
                                             <tr>
@@ -183,6 +184,7 @@ export function Download() {
                                             )}
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>

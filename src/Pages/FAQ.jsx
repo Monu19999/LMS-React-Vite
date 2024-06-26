@@ -40,8 +40,10 @@ export default function FAQ() {
                     </ol>
                 </nav>
             </PageHeader>
-            <div className="container">
-                <Accordion>
+            <div className="container shadow inner-page-container-mb">
+                <div className="row">
+                    <div className="col-md-12 p-lg-5">
+                    <Accordion>
                     {faq_contents.data?.faq_contents?.map((category, index) => (
                         <div key={index}>
                             <Accordion.Item eventKey={index}>
@@ -75,6 +77,9 @@ export default function FAQ() {
                         </div>
                     ))}
                 </Accordion>
+                    </div>
+                </div>
+                
             </div>
         </>
     );
