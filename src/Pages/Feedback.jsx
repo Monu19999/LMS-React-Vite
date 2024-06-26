@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Form, Container, Row, Col } from "react-bootstrap";
 import api from "@src/apis/api";
 import PageHeader from "@src/Pages/includes/PageHeader";
+import axios from "axios";
+import ServerErrors from "@src/Components/ServerErrors";
+import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import { Link } from "react-router-dom";
+import BootstrapToast from "@src/Components/BootstrapToast";
 
 function Feedback() {
+    const [loading, setLoader] = useState(false);
+    const [serverErrors, setServerErrors] = useState([]);
     const {
         register,
         handleSubmit,
@@ -14,43 +21,87 @@ function Feedback() {
 
     const onSubmit = async (data) => {
         let api_url = api("user_feedback");
+
         let headers = {
             Accept: "application/json",
             "Content-Type": "application/json",
         };
+        setLoader(true);
 
-        try {
-            const response = await fetch(api_url, {
-                mode: "cors",
-                method: "POST",
+        axios
+            .post(api_url, data, {
                 headers,
+            })
+            .then((response) => {
+                setLoader(false);
+                if (response.status == 200) {
+                    console.log(response.data.message);
+                }
+                reset();
+            })
+            .catch((error) => {
+                setLoader(false);
+                let response = error.response;
+                console.log("error => ");
+                console.log(error);
+                console.log(response);
+                if (response.status == 422) {
+                    setServerErrors(response.data.errors);
+                }
             });
 
-            const json = await response.json();
-            if (response.status !== 200) {
-                throw new Error("Bad response", {
-                    cause: json,
-                });
-            }
-            // console.log(json);
-            reset();
-        } catch (error) {
-            console.warn(error);
-        }
+        // try {
+        //     const response = await fetch(api_url, {
+        //         mode: "cors",
+        //         // body: JSON.stringify(data),
+        //         method: "POST",
+        //         headers,
+        //     });
 
-        console.log(data);
+        //     const json = await response.json();
+        //     console.log(response);
+        //     if (json.status !== 200) {
+        //         throw new Error("Bad response", {
+        //             cause: json,
+        //         });
+        //     }
+        //     return json;
+        //     // console.log(json);
+        //     // reset();
+        // } catch (error) {
+        //     console.warn(error);
+        // }
     };
 
     return (
         <>
-            <PageHeader title="Feedback" />
-            <Container className="mt-5">
+            <PageHeader title="Feedback">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb justify-content-center">
+                        <li className="breadcrumb-item">
+                            <Link className="text-white" to="/">
+                                Home
+                            </Link>
+                        </li>
+                        <li className="breadcrumb-item">
+                            <Link className="text-white" to="/download">
+                                Feedback
+                            </Link>
+                        </li>
+                    </ol>
+                </nav>
+            </PageHeader>
+            <Container className="my-5">
                 <div className="wrap d-md-flex">
-                    <div className="col-md-12 bg-white p-lg-5">
+                    <div className="col-md-12 bg-white">
                         <Form
-                            className="d-flex py-3 w-100 flex-column gap-3"
+                            className="d-flex w-100 flex-column gap-3"
                             onSubmit={handleSubmit(onSubmit)}
                         >
+                            {loading && <BootstrapSpinner />}
+                            {serverErrors.length > 0 && (
+                                <ServerErrors errors={serverErrors} />
+                            )}
                             <Row>
                                 {/* Name */}
                                 <Col md={6}>
@@ -93,11 +144,11 @@ function Feedback() {
                                             aria-describedby="emailHelpBlock"
                                             {...register("email", {
                                                 required: "Email is required",
-                                                pattern: {
-                                                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                                                    message:
-                                                        "Invalid email address",
-                                                },
+                                                // pattern: {
+                                                //     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                                //     message:
+                                                //         "Invalid email address",
+                                                // },
                                             })}
                                             isInvalid={!!errors.email}
                                         />

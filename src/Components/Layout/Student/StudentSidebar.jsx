@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function StudentSidebar() {
     const [isSidebarActive, SetSidebarActive] = useState(false);
@@ -37,31 +37,56 @@ function StudentSidebar() {
             </div>
             <ul className="list-unstyled components mb-5">
                 <li className="active">
-                    <Link to="/member">
+                    <NavLink
+                        to="/member"
+                        className={({ isActive, isPending }) =>
+                            isPending ? "pending" : isActive ? "active" : ""
+                        }
+                    >
                         <span className="fa fa-home mr-3" /> Dashboard
-                    </Link>
+                    </NavLink>
                 </li>
                 <li>
-                    <Link to="/member/available_courses">
+                    <NavLink
+                        to="/member/available_courses"
+                        className={({ isActive, isPending }) =>
+                            isPending ? "pending" : isActive ? "active" : ""
+                        }
+                    >
                         <span className="fa fa-gift mr-3" /> Available Courses
-                    </Link>
+                    </NavLink>
                 </li>
                 <li>
-                    <Link to="/member/courses">
+                    <NavLink
+                        to="/member/courses"
+                        className={({ isActive, isPending }) =>
+                            isPending ? "pending" : isActive ? "active" : ""
+                        }
+                    >
                         <span className="fas fa-book mr-3" /> My Courses
-                    </Link>
+                    </NavLink>
                 </li>
                 <li>
-                    <Link to="/member/certificates">
+                    <NavLink
+                        to="/member/certificates"
+                        className={({ isActive, isPending }) =>
+                            isPending ? "pending" : isActive ? "active" : ""
+                        }
+                    >
                         <span className="fas fa-user-graduate mr-3" /> My
                         Certificate
-                    </Link>
+                    </NavLink>
                 </li>
                 <li>
-                    <Link to="/member/change-password">
-                        <span className="fas fa-user-graduate mr-3" /> {" "}
-                        Change Password
-                    </Link>
+                    <NavLink
+                        to="/member/change-password"
+                        className={({ isActive, isPending }) =>
+                            isPending ? "pending" : isActive ? "active" : ""
+                        }
+                    >
+                        <span className="fas fa-user-graduate mr-3" /> Change
+                        Password
+                    </NavLink>
                 </li>
             </ul>
         </nav>

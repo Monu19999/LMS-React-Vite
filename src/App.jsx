@@ -7,7 +7,7 @@ import {
 import { useSelector } from "react-redux";
 import Home from "@src/Pages/Home";
 import Page from "@src/Pages/Page";
-import CoursesList from "@src/Pages/courses/CoursesList";
+import Courses from "@src/Pages/courses/Courses";
 import PublicLayout from "@src/Components/Layout/Public/PublicLayout";
 import CourseView from "@src/Pages/courses/CourseView";
 import GuestLayout from "@src/Components/Layout/Guest/GuestLayout";
@@ -49,7 +49,7 @@ const router = createHashRouter(
                     loader={videoLoader}
                 />
                 <Route exact path="page/:page" element={<Page />} />
-                <Route exact path="courses" element={<CoursesList />} />
+                <Route exact path="courses" element={<Courses />} />
                 <Route exact path="feedback" element={<Feedback />} />
                 <Route exact path="faq" element={<FAQ />} loader={faqLoader} />
                 <Route

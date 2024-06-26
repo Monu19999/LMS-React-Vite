@@ -60,7 +60,6 @@ export const resetPassword = createAsyncThunk(
 export const verifyResetPasswordLink = createAsyncThunk(
     "auth/verifyResetPasswordLink",
     async (credentials) => {
-        console.log("credentials => ", credentials);
         let api_url = api("auth_verify_reset_password_link");
         try {
             const response = await fetch(api_url, {

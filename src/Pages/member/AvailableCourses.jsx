@@ -2,14 +2,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { availableCourses } from "@src/features/member/MemberSlice";
 import CourseItem from "@src/Pages/courses/includes/CourseItem";
-import { Link } from "react-router-dom";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
-import {
-    Accordion,
-    AccordionBody,
-    AccordionButton,
-    AccordionItem,
-} from "react-bootstrap";
+import { Accordion, AccordionBody, AccordionItem } from "react-bootstrap";
 import RenderCourseHierarchyBC from "../courses/includes/RenderCourseHierarchyBC";
 
 const AvailableCourses = () => {
@@ -31,10 +25,13 @@ const AvailableCourses = () => {
                 <>
                     {member?.available_courses?.available_courses.length > 0 ? (
                         member?.available_courses?.available_courses.map(
-                            (category) => (
-                                <Accordion key={category.id}>
-                                    <AccordionItem>
-                                        <AccordionButton>
+                            (category, index) => (
+                                <Accordion
+                                    key={category.id}
+                                    defaultActiveKey="0"
+                                >
+                                    <Accordion.Item>
+                                        <Accordion.Header>
                                             {category?.category_courses.length >
                                                 0 && (
                                                 <nav aria-label="breadcrumb">
@@ -49,8 +46,8 @@ const AvailableCourses = () => {
                                                     </ol>
                                                 </nav>
                                             )}
-                                        </AccordionButton>
-                                        <AccordionBody>
+                                        </Accordion.Header>
+                                        <Accordion.Body>
                                             <div className="row">
                                                 {category.category_courses.map(
                                                     (course) => {
@@ -69,8 +66,8 @@ const AvailableCourses = () => {
                                                     }
                                                 )}
                                             </div>
-                                        </AccordionBody>
-                                    </AccordionItem>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
                                 </Accordion>
                             )
                         )
