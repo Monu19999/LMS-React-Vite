@@ -29,6 +29,7 @@ import Video, { loader as videoLoader } from "./Pages/Video";
 import Feedback from "./Pages/Feedback";
 import FAQ, { loader as faqLoader } from "./Pages/FAQ";
 import ChangePassword from "./Pages/member/ChangePassword";
+import Profile from "./Pages/member/Profile";
 
 const router = createHashRouter(
     createRoutesFromElements(
@@ -68,6 +69,7 @@ const router = createHashRouter(
             <Route path="member" element={<PrivateRoute />}>
                 <Route element={<StudentLayout />}>
                     <Route index element={<UserDashboard />} />
+                    <Route path="profile" element={<Profile />} />
                     <Route
                         path="change-password"
                         element={<ChangePassword />}

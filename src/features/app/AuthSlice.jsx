@@ -249,20 +249,37 @@ export const authSlice = createSlice({
                 state.user_loading = true;
             })
             .addCase(getUser.fulfilled, (state, { payload }) => {
-                let current_state = current(state);
-                if (
-                    current_state.token &&
-                    payload.message == "Unauthenticated."
-                ) {
-                    Cookies.remove("token", "");
-                    Cookies.remove("user", "");
-                    state.user = null;
-                    state.token = null;
-                } else {
-                    state.user_loading = false;
-                    state.user =
-                        payload.message == "Unauthenticated." ? null : payload;
+                console.log("payload => ", payload);
+                if (payload.status === 401) {
+                    state.message = payload.message;
+                    toast(payload.message);
                 }
+                if (payload.status === 422) {
+                    state.message = payload.message;
+                    state.errors = payload.errors;
+                    toast(payload.message);
+                }
+                if (payload.status === 200) {
+                    Cookies.remove("user", "");
+                    state.user = payload?.data?.user;
+                    Cookies.set("user", JSON.stringify(payload?.data?.user));
+                }
+                // let current_state = current(state);
+                // if (
+                //     current_state.token &&
+                //     payload.message == "Unauthenticated."
+                // ) {
+                //     Cookies.remove("token", "");
+                //     Cookies.remove("user", "");
+                //     state.user = null;
+                //     state.token = null;
+                // } else {
+                //     Cookies.remove("user", "");
+                //     state.user_loading = false;
+                //     state.user =
+                //         payload.message == "Unauthenticated." ? null : payload;
+                //     Cookies.set("user", JSON.stringify(payload.user));
+                // }
             })
             .addCase(getUser.rejected, (state, { payload }) => {
                 state.error_message = payload;

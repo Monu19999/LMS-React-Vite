@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
 import Step1 from "./steps/Step1";
 import Step2 from "./steps/Step2";
 import Step3 from "./steps/Step3";
@@ -11,7 +10,6 @@ import { getDepartments } from "@src/features/app/AppSlice";
 import { setMessages } from "@src/features/app/AuthSlice";
 
 export default function Register() {
-    const navigate = useNavigate();
     const [user_id, setUserId] = useState(0);
     const [activeStep, setActiveStep] = useState(1);
     const [offices, setOffices] = useState([]);
@@ -174,13 +172,13 @@ export default function Register() {
                                         let regularExpression =
                                             /^[A-Za-z0-9_]+$/;
                                         if (!regularExpression.test(username)) {
-                                            return "Username may contain alphabets, numbers or underscore only.";
+                                            return "Username may contain alphabets, numbers or underscores only.";
                                         }
                                     },
                                     startWithAlphabet: (username) => {
                                         let regularExpression = /^[A-Za-z]+/;
                                         if (!regularExpression.test(username)) {
-                                            return "Username must start with alphabet.";
+                                            return "Username must start with the alphabet.";
                                         }
                                     },
                                     repetedChar: (username) => {

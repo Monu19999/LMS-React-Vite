@@ -7,6 +7,7 @@ import Settings from "@src/Components/Layout/includes/Settings";
 import Navbar from "@src/Components/Layout/includes/Navbar";
 import ScrollToTop from "@src/Components/Layout/includes/ScrollToTop";
 import FooterCopyright from "@src/Components/Layout/includes/FooterCopyright";
+import Toaster from "@src/Components/Toaster";
 
 // Load css
 // import "@public/assets/css/bootstrap.min.css";
@@ -44,6 +45,7 @@ function PublicLayout() {
             {/* Footer End */}
 
             <ScrollToTop />
+            <Toaster />
         </>
     );
 }

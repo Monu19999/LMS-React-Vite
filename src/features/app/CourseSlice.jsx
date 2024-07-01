@@ -1,6 +1,9 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import api from "@src/apis/api";
+import axios from "axios";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import { HTTP_HEADERS } from "@src/app/contents";
 
 const initialState = {
     search_courses: [],
@@ -222,44 +225,27 @@ export const getCourseTopic = createAsyncThunk(
 
 export const enrollCourse = createAsyncThunk(
     "course/enrollCourse",
-    async (course) => {
+    async ({ id, fk_department_id, fk_office_id }, { rejectWithValue }) => {
+        let headers = HTTP_HEADERS;
+        const token =
+            Cookies.get("token") == undefined ? null : Cookies.get("token");
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+        }
         try {
-            let headers = {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            };
-            const token =
-                Cookies.get("token") == undefined ? null : Cookies.get("token");
-            if (token) {
-                headers.Authorization = `Bearer ${token}`;
-            }
-            //course.course_hierarchy.fk_department_id
-            //course.course_hierarchy.fk_office_id
-            let data = JSON.stringify({
-                fk_department_id: course.course_hierarchy.fk_department_id,
-                fk_office_id: course.course_hierarchy.fk_office_id,
-            });
-            const response = await fetch(
-                api(
-                    "auth_course_enroll",
-                    course.course.assigned_admin.category_course.id
-                ),
+            const { data } = await axios.post(
+                api("auth_course_enroll", id),
                 {
-                    method: "post",
+                    fk_department_id,
+                    fk_office_id,
+                },
+                {
                     headers,
-                    body: data,
                 }
             );
-            const json = await response.json();
-            if (response.status !== 200) {
-                throw new Error("Bad response", {
-                    cause: json,
-                });
-            }
-            return json.data;
-            // return course;
+            return data;
         } catch (error) {
-            return error.cause;
+            return rejectWithValue(error.response.data);
         }
     }
 );
@@ -351,34 +337,43 @@ export const courseSlice = createSlice({
             })
 
             // Course enroll
-            .addCase(enrollCourse.pending, (state, { payload }) => {
+            .addCase(enrollCourse.pending, (state) => {
                 state.course_enrolment_loading = true;
             })
             .addCase(enrollCourse.fulfilled, (state, { payload }) => {
-                if (payload.hasOwnProperty("message")) {
-                    state.error_message = payload.message;
-                } else {
-                    state.course_enrolment_loading = false;
+                // console.log("Payload => ", payload);
+                state.course_enrolment_loading = false;
+                if (payload.status == 200) {
                     state.course = payload.course;
                     state.isSuccess = true;
                     state.errors = [];
                     state.error_message = null;
-                    // console.log(current(state));
-                    // let current_state = current(state);
-                    // console.log(
-                    //     "replaceCourse => ",
-                    //     replaceCourse(
-                    //         current_state.courses.data,
-                    //         current_state.course
-                    //     )
-                    // );
-                    // state.courses = current_state;
+                    toast(payload.message);
                 }
+                // if (payload.hasOwnProperty("message")) {
+                //     state.error_message = payload.message;
+                // } else {
+                //     state.course_enrolment_loading = false;
+                //     state.course = payload.course;
+                //     state.isSuccess = true;
+                //     state.errors = [];
+                //     state.error_message = null;
+                // }
             })
             .addCase(enrollCourse.rejected, (state, { payload }) => {
-                state.message = payload;
+                // console.log("Rejected => ");
+                // console.log(payload);
                 state.course_enrolment_loading = false;
                 state.isSuccess = false;
+                if (payload.status === 401) {
+                    state.message = payload.message;
+                    toast(payload.message);
+                }
+                if (payload.status === 422) {
+                    state.message = payload.message;
+                    state.errors = payload.errors;
+                    toast(payload.message);
+                }
             })
 
             // Get Course topic

@@ -130,7 +130,7 @@ function Settings() {
                             <i className="fa fa-book px-2" />
                             <span className="d-none-head">Screen Reader</span>
                         </Link>
-                        <a
+                        {/* <a
                             href="#"
                             onClick={() => {
                                 const section =
@@ -150,7 +150,7 @@ function Settings() {
                             <span className="d-none-head">
                                 Skip to Nav Content
                             </span>
-                        </a>
+                        </a> */}
                         <Link to="#" className="d-sm-hide">
                             <i className="fa fa-fast-forward font-13 px-2" />
                             <span className="d-none-head">

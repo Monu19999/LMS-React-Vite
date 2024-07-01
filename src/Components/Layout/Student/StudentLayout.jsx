@@ -10,6 +10,7 @@ import LoginMenu from "@src/Pages/member/includes/LoginMenu";
 import FooterCopyright from "@src/Components/Layout/includes/FooterCopyright";
 import StudentSidebar from "./StudentSidebar";
 import ScrollToTop from "@src/Components/Layout/includes/ScrollToTop";
+import Toaster from "@src/Components/Toaster";
 
 const StudentLayout = () => {
     const member = useSelector((state) => state.member);
@@ -57,6 +58,7 @@ const StudentLayout = () => {
             {/* Footer End */}
 
             <ScrollToTop />
+            <Toaster />
         </>
     );
 };

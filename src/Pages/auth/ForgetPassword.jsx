@@ -17,7 +17,7 @@ export default function ForgetPassword() {
         formState: { errors },
     } = useForm({
         defaultValues: {
-            email: "hw.sharma9@mp.gov.in",
+            email: "",
         },
     });
 
@@ -110,9 +110,7 @@ export default function ForgetPassword() {
                                 id="first_nameHelpBlock"
                                 className="text-danger"
                             >
-                                {["required", "pattern"].includes(
-                                    errors?.email?.type
-                                ) && <>{errors.email.message}</>}
+                                {errors.email?.message}
                             </Form.Text>
                         </Form.Group>
                         <div className="d-flex flex-column my-4 ">

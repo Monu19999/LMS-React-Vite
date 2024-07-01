@@ -42,7 +42,7 @@ function Page() {
                     </PageHeader>
 
                     <div className="container-xxl py-5">
-                        <div className="container">
+                        <div className="container ">
                             <div className="row g-5">
                                 <div
                                     className="col-lg-6 wow fadeInUp"

@@ -29,6 +29,12 @@ const api_urls = {
     auth_forgot_password: "/api/auth/forgot-password",
     auth_verify_reset_password_link: "/api/auth/verify-reset-password",
     auth_reset_password: "/api/auth/reset-password",
+    auth_change_password: function (params) {
+        return `/api/auth/member/${params.user_id}/update-password`;
+    },
+    auth_update_profile_image: function (params) {
+        return `/api/auth/member/${params.id}/edit-profile-image`;
+    },
 
     // Authenticated users urls
     user: "/api/auth/user",

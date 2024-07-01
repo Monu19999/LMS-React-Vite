@@ -347,7 +347,12 @@ export default function Home() {
                                                 className="wow fadeInUp"
                                                 data-wow-delay="0.1s"
                                             >
-                                                <CourseItem course={course} />
+                                                <CourseItem
+                                                    course={course}
+                                                    upload={
+                                                        course.course.upload
+                                                    }
+                                                />
                                             </div>
                                         </div>
                                     );

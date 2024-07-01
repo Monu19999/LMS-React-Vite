@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import ProfileImage from "./ProfileImage";
 
 function StudentSidebar() {
     const [isSidebarActive, SetSidebarActive] = useState(false);
@@ -25,13 +26,7 @@ function StudentSidebar() {
                 }}
             >
                 <div className="user-logo">
-                    <div
-                        className="img"
-                        style={{
-                            backgroundImage:
-                                "url(assets/img/dashboard/logo.jpg)",
-                        }}
-                    />
+                    <ProfileImage upload={user?.upload} className="img" />
                     <h3>{user?.name}</h3>
                 </div>
             </div>
@@ -86,6 +81,16 @@ function StudentSidebar() {
                     >
                         <span className="fas fa-user-graduate mr-3" /> Change
                         Password
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink
+                        to="/member/profile"
+                        className={({ isActive, isPending }) =>
+                            isPending ? "pending" : isActive ? "active" : ""
+                        }
+                    >
+                        <span className="fas fa-user-graduate mr-3" /> Profile
                     </NavLink>
                 </li>
             </ul>

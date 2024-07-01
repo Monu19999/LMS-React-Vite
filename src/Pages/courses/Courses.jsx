@@ -14,6 +14,7 @@ function Courses() {
     const { course_loading, search, search_courses } = useSelector(
         (state) => state.course
     );
+    console.log(search_courses);
 
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
@@ -337,7 +338,12 @@ function Courses() {
                                                 className="col-lg-4 col-md-6 mb-4"
                                                 key={course.id}
                                             >
-                                                <CourseItem course={course} />
+                                                <CourseItem
+                                                    course={course}
+                                                    upload={
+                                                        course.course.upload
+                                                    }
+                                                />
                                             </div>
                                         );
                                     })

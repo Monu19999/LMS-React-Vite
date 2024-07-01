@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import EnrollCourse from "./EnrollCourse";
 import { useSelector } from "react-redux";
 
-function CourseItem({ course }) {
+function CourseItem({ course, upload }) {
     const course_enrolment_loading = useSelector(
         (state) => state.course.course_enrolment_loading
     );
@@ -11,11 +11,8 @@ function CourseItem({ course }) {
             <div className="position-relative overflow-hidden">
                 <img
                     className="img-fluid"
-                    src={
-                        course?.course?.upload?.preview_path ??
-                        "assets/img/course-2.jpg"
-                    }
-                    alt={course?.course?.upload?.original_name}
+                    src={upload?.preview_path ?? "assets/img/course-2.jpg"}
+                    alt={upload?.original_name}
                 />
                 <div className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
                     <Link

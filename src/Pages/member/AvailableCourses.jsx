@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { availableCourses } from "@src/features/member/MemberSlice";
 import CourseItem from "@src/Pages/courses/includes/CourseItem";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
-import { Accordion, AccordionBody, AccordionItem } from "react-bootstrap";
+import { Accordion } from "react-bootstrap";
 import RenderCourseHierarchyBC from "../courses/includes/RenderCourseHierarchyBC";
 
 const AvailableCourses = () => {
@@ -18,28 +18,29 @@ const AvailableCourses = () => {
 
     return (
         <>
-            <h2 className="mb-4">Available Courses</h2>
+            <h4 className="mb-4 heading-bg">Available Courses</h4>
             {Memberloading ? (
                 <BootstrapSpinner />
             ) : (
                 <>
                     {member?.available_courses?.available_courses.length > 0 ? (
                         member?.available_courses?.available_courses.map(
-                            (category, index) => (
+                            (available_course, index) => (
                                 <Accordion
-                                    key={category.id}
+                                    key={available_course.id}
                                     defaultActiveKey="0"
                                 >
-                                    <Accordion.Item>
+                                    <Accordion.Item eventKey={String(index)}>
                                         <Accordion.Header>
-                                            {category?.category_courses.length >
-                                                0 && (
+                                            {available_course
+                                                ?.active_category_courses
+                                                .length > 0 && (
                                                 <nav aria-label="breadcrumb">
                                                     <ol className="breadcrumb">
                                                         <RenderCourseHierarchyBC
                                                             course_hierarchy={
-                                                                category
-                                                                    .category_courses[0]
+                                                                available_course
+                                                                    .active_category_courses[0]
                                                                     .course_hierarchy
                                                             }
                                                         />
@@ -49,7 +50,7 @@ const AvailableCourses = () => {
                                         </Accordion.Header>
                                         <Accordion.Body>
                                             <div className="row">
-                                                {category.category_courses.map(
+                                                {available_course.active_category_courses.map(
                                                     (course) => {
                                                         return (
                                                             <div
@@ -59,6 +60,11 @@ const AvailableCourses = () => {
                                                                 <CourseItem
                                                                     course={
                                                                         course
+                                                                    }
+                                                                    upload={
+                                                                        course
+                                                                            .course
+                                                                            .upload
                                                                     }
                                                                 />
                                                             </div>

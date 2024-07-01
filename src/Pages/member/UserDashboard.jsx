@@ -19,7 +19,7 @@ function UserDashboard() {
     }, []);
     return (
         <>
-            <h2 className="mb-4">Dashboard</h2>
+            <h4 className="mb-4 heading-bg">Dashboard</h4>
             <div className="row">
                 {Memberloading ? (
                     <BootstrapSpinner />

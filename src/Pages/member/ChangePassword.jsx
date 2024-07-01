@@ -1,148 +1,243 @@
-import React from "react";
+import { toast } from "react-toastify";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button, Form, Container, Row, Col } from "react-bootstrap";
+import { Form, Row, Col, Button } from "react-bootstrap";
+import axios from "axios";
+import ServerErrors from "@src/Components/ServerErrors";
+import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import { HTTP_HEADERS } from "@src/app/contents";
+import Cookies from "js-cookie";
+import api from "@src/apis/api";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 function ChangePassword() {
+    const [loading, setLoader] = useState(false);
+    const [errorsMessage, setErrorsMessage] = useState("");
+    const [serverErrors, setServerErrors] = useState({});
+    const user = useSelector((state) => state.auth.user);
     const {
         register,
         handleSubmit,
-        formState: { errors },
         reset,
         watch,
-    } = useForm();
+        formState: { errors, isDirty, isValid, isSubmitSuccessful },
+    } = useForm({});
 
-    const onSubmit = (data) => {
-        console.log(data);
-        reset();
+    const onSubmit = async (credentials) => {
+        setLoader(true);
+        try {
+            let headers = HTTP_HEADERS;
+            const token =
+                Cookies.get("token") == undefined ? null : Cookies.get("token");
+            if (token) {
+                headers.Authorization = `Bearer ${token}`;
+            }
+            const { data } = await axios.patch(
+                api("auth_change_password", { user_id: user.id }),
+                credentials,
+                { headers }
+            );
+            if (data.status == 200) {
+                toast(data.message);
+            }
+        } catch (error) {
+            const { response } = error;
+            if (response.status == 404) {
+                setErrorsMessage(response.data.message);
+            }
+            if (response.status == 422) {
+                setServerErrors(response.data.errors);
+            }
+        }
+        setLoader(false);
     };
 
+    useEffect(() => {
+        if (isSubmitSuccessful) {
+            reset();
+        }
+    }, [isSubmitSuccessful, reset]);
+
     return (
-        <Container className="mt-5">
-            <div className="wrap d-md-flex">
-                <div className="col-md-12 bg-white p-lg-5">
-                    <Form
-                        className="d-flex py-3 w-100 flex-column gap-3"
-                        onSubmit={handleSubmit(onSubmit)}
-                    >
-                        <Row>
-                            {/* Current Password */}
-                            <Col md={6}>
-                                <Form.Group
-                                    className="form-group mb-3"
-                                    controlId="formGroupCurrentPassword"
-                                >
-                                    <Form.Label className="label">
-                                        Current Password
-                                    </Form.Label>
-                                    <Form.Control
-                                        className="mb-2"
-                                        type="password"
-                                        placeholder="Enter Current Password"
-                                        aria-describedby="currentPasswordHelpBlock"
-                                        {...register("currentPassword", {
-                                            required:
-                                                "Current password is required",
-                                            minLength: {
-                                                value: 8,
-                                                message:
-                                                    "Password must be at least 8 characters long",
-                                            },
-                                            pattern: {
-                                                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
-                                                message:
-                                                    "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character",
-                                            },
-                                        })}
-                                        isInvalid={!!errors.currentPassword}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.currentPassword?.message}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row>
-                            {/* New Password */}
-                            <Col md={6}>
-                                <Form.Group
-                                    className="form-group mb-3"
-                                    controlId="formGroupNewPassword"
-                                >
-                                    <Form.Label className="label">
-                                        New Password
-                                    </Form.Label>
-                                    <Form.Control
-                                        className="mb-2"
-                                        type="password"
-                                        placeholder="Enter New Password"
-                                        aria-describedby="newPasswordHelpBlock"
-                                        {...register("newPassword", {
-                                            required:
-                                                "New password is required",
-                                            minLength: {
-                                                value: 8,
-                                                message:
-                                                    "Password must be at least 8 characters long",
-                                            },
-                                            pattern: {
-                                                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
-                                                message:
-                                                    "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character",
-                                            },
-                                            validate: (val) => {
-                                                if (
-                                                    watch("currentPassword") ===
-                                                    val
-                                                ) {
-                                                    return "New password should be different from the current password";
+        <>
+            <h4 className="mb-4 heading-bg">Change Password</h4>
+            <div className="row justify-content-center">
+                <div className="col-xl-6">
+                    {/* Account details card*/}
+                    <div className="card mb-4" style={{ height: "100%" }}>
+                        <div className="card-header">Change Password</div>
+                        <div className="card-body">
+                            <Form
+                                className="d-flex py-3 w-100 flex-column gap-3"
+                                onSubmit={handleSubmit(onSubmit)}
+                            >
+                                {loading && <BootstrapSpinner />}
+                                {errorsMessage && (
+                                    <div
+                                        className="alert alert-danger alert-block"
+                                        style={{
+                                            marginBottom: "0px",
+                                        }}
+                                    >
+                                        <strong>{errorsMessage}</strong>
+                                    </div>
+                                )}
+                                {Object.values(serverErrors).length > 0 && (
+                                    <ServerErrors errors={serverErrors} />
+                                )}
+                                <Row>
+                                    {/* Current Password */}
+                                    <Col md={12}>
+                                        <Form.Group
+                                            className="form-group mb-3"
+                                            controlId="formGroupCurrentPassword"
+                                        >
+                                            <Form.Label className="label">
+                                                Current Password
+                                            </Form.Label>
+                                            <Form.Control
+                                                className="mb-2"
+                                                type="password"
+                                                placeholder="Enter Current Password"
+                                                aria-describedby="currentPasswordHelpBlock"
+                                                {...register(
+                                                    "current_password",
+                                                    {
+                                                        required:
+                                                            "Current password is required",
+                                                        minLength: {
+                                                            value: 8,
+                                                            message:
+                                                                "Password must be at least 8 characters long",
+                                                        },
+                                                        pattern: {
+                                                            value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+                                                            message:
+                                                                "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character",
+                                                        },
+                                                    }
+                                                )}
+                                                isInvalid={
+                                                    !!errors.current_password
                                                 }
-                                            },
-                                        })}
-                                        isInvalid={!!errors.newPassword}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.newPassword?.message}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row>
-                            {/* Confirm Password */}
-                            <Col md={6}>
-                                <Form.Group
-                                    className="form-group mb-3"
-                                    controlId="formGroupConfirmPassword"
-                                >
-                                    <Form.Label className="label">
-                                        Confirm Password
-                                    </Form.Label>
-                                    <Form.Control
-                                        className="mb-2"
-                                        type="password"
-                                        placeholder="Confirm New Password"
-                                        aria-describedby="confirmPasswordHelpBlock"
-                                        {...register("confirmPassword", {
-                                            required:
-                                                "Confirm password is required",
-                                            validate: (val) => {
-                                                if (
-                                                    watch("newPassword") !== val
-                                                ) {
-                                                    return "Passwords do not match";
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {
+                                                    errors.current_password
+                                                        ?.message
                                                 }
-                                            },
-                                        })}
-                                        isInvalid={!!errors.confirmPassword}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.confirmPassword?.message}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row className="justify-content-center mt-4">
-                            <Col md={3} className="d-flex gap-2">
-                                <Button
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+                                    </Col>
+
+                                    {/* New Password */}
+                                    <Col md={12}>
+                                        <Form.Group
+                                            className="form-group mb-3"
+                                            controlId="formGroupNewPassword"
+                                        >
+                                            <Form.Label className="label">
+                                                New Password
+                                            </Form.Label>
+                                            <Form.Control
+                                                className="mb-2"
+                                                type="password"
+                                                placeholder="Enter New Password"
+                                                aria-describedby="newPasswordHelpBlock"
+                                                {...register("password", {
+                                                    required:
+                                                        "New password is required",
+                                                    minLength: {
+                                                        value: 8,
+                                                        message:
+                                                            "Password must be at least 8 characters long",
+                                                    },
+                                                    pattern: {
+                                                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+                                                        message:
+                                                            "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character",
+                                                    },
+                                                    validate: (val) => {
+                                                        if (
+                                                            watch(
+                                                                "password_confirmation"
+                                                            ) !== val
+                                                        ) {
+                                                            return "Passwords do not match";
+                                                        }
+                                                    },
+                                                })}
+                                                isInvalid={!!errors.password}
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.password?.message}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+                                    </Col>
+
+                                    {/* Confirm Password */}
+                                    <Col md={12}>
+                                        <Form.Group
+                                            className="form-group mb-3"
+                                            controlId="formGroupConfirmPassword"
+                                        >
+                                            <Form.Label className="label">
+                                                Confirm Password
+                                            </Form.Label>
+                                            <Form.Control
+                                                className="mb-2"
+                                                type="password"
+                                                placeholder="Confirm New Password"
+                                                aria-describedby="confirmPasswordHelpBlock"
+                                                {...register(
+                                                    "password_confirmation",
+                                                    {
+                                                        required:
+                                                            "Confirm password is required",
+                                                    }
+                                                )}
+                                                isInvalid={
+                                                    !!errors.password_confirmation
+                                                }
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {
+                                                    errors.password_confirmation
+                                                        ?.message
+                                                }
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+                                    </Col>
+
+                                    <Col md={12} className="d-flex gap-2">
+                                        <Button
+                                            type="submit"
+                                            className="btn btn-primary py-2 px-4 "
+                                            style={{
+                                                borderRadius: 40,
+                                                marginRight: "10px",
+                                            }}
+                                            disabled={
+                                                !isDirty ||
+                                                !isValid ||
+                                                isSubmitSuccessful
+                                            }
+                                        >
+                                            Change Password{" "}
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            className="btn btn-secondary py-2 px-4 "
+                                            style={{
+                                                borderRadius: 40,
+                                                color: "#fff",
+                                            }}
+                                            onClick={() => reset()}
+                                        >
+                                            Reset{""}
+                                        </Button>
+                                        {/* <Button
                                     type="submit"
                                     className="form-control btn btn-primary px-4"
                                 >
@@ -154,13 +249,15 @@ function ChangePassword() {
                                     onClick={() => reset()}
                                 >
                                     Reset
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Form>
+                                </Button> */}
+                                    </Col>
+                                </Row>
+                            </Form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </Container>
+        </>
     );
 }
 
