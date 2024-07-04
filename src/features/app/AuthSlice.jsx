@@ -1,6 +1,26 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import api from "@src/apis/api";
 import Cookies from "js-cookie";
+import { HTTP_HEADERS } from "@src/app/contents";
+import axios from "axios";
+
+export const getAuthHeaders = (has_file = false) => {
+    let headers = HTTP_HEADERS;
+    console.log("headers => ", headers);
+    const token =
+        Cookies.get("token") == undefined ? null : Cookies.get("token");
+    console.log("Cookie Token => ", token);
+    // If user is logged in use Bearer token
+    if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    // If uploading file change "Content-Type"
+    if (has_file) {
+        headers["Content-Type"] = "multipart/form-data";
+    }
+    return headers;
+};
 
 export const forgotPassword = createAsyncThunk(
     "user/forgotPassword",
@@ -9,10 +29,7 @@ export const forgotPassword = createAsyncThunk(
         try {
             const response = await fetch(api_url, {
                 method: "post",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
+                headers: HTTP_HEADERS,
                 body: JSON.stringify(credentials),
                 cache: "no-cache",
             });
@@ -32,15 +49,11 @@ export const forgotPassword = createAsyncThunk(
 export const resetPassword = createAsyncThunk(
     "user/resetPassword",
     async (credentials) => {
-        console.log("credentials => ", credentials);
         let api_url = api("auth_reset_password");
         try {
             const response = await fetch(api_url, {
                 method: "post",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
+                headers: HTTP_HEADERS,
                 body: JSON.stringify(credentials),
                 cache: "no-cache",
             });
@@ -64,10 +77,7 @@ export const verifyResetPasswordLink = createAsyncThunk(
         try {
             const response = await fetch(api_url, {
                 method: "post",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
+                headers: HTTP_HEADERS,
                 body: JSON.stringify(credentials),
                 cache: "no-cache",
             });
@@ -94,13 +104,10 @@ export const getUser = createAsyncThunk(
         if (!token) {
             return { message: "Unauthenticated." };
         }
+        const headers = getAuthHeaders();
         const response = await fetch(api_url, {
             method: "get",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
+            headers: headers,
             cache: "no-cache",
         });
         const json = await response.json();
@@ -108,69 +115,45 @@ export const getUser = createAsyncThunk(
     }
 );
 
-export const login = createAsyncThunk("auth/login", async (credentials) => {
-    let api_url = api("auth_login");
-    try {
-        const response = await fetch(api_url, {
-            method: "post",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(credentials),
-            cache: "no-cache",
-        });
-        const json = await response.json();
-        if (response.status !== 200) {
-            throw new Error("Bad response", {
-                cause: json,
+export const login = createAsyncThunk(
+    "auth/login",
+    async (credentials, { rejectWithValue }) => {
+        let api_url = api("auth_login");
+        try {
+            const headers = getAuthHeaders();
+            const { data } = await axios.post(api_url, credentials, {
+                headers,
+                withCredentials: true,
             });
+            return data;
+        } catch (error) {
+            const { response } = error;
+            return rejectWithValue(response);
         }
-        return json;
-    } catch (error) {
-        return error.cause;
     }
-});
+);
 
 export const logout = createAsyncThunk(
     "auth/logout",
-    async (args, { dispatch, getState }) => {
+    async (args, { navigate }) => {
         let api_url = api("auth_logout");
         try {
-            const state = getState();
-            const token = state.auth.token;
-            const response = await fetch(api_url, {
-                method: "delete",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                cache: "no-cache",
-            });
-            const json = await response.json();
-            if (response.status !== 200) {
-                throw new Error("Bad response", {
-                    cause: json,
-                });
-            }
-            return json;
+            const headers = getAuthHeaders();
+            const { data } = await axios.delete(api_url, { headers });
+            return data;
         } catch (error) {
-            return error.cause;
+            const { response } = error;
+            return rejectWithValue(response.data);
         }
     }
 );
 
 export const register = createAsyncThunk("auth/register", async (userData) => {
-    // console.log(userData);
     let api_url = api("auth_register");
     try {
         const response = await fetch(api_url, {
             method: "post",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
+            headers: HTTP_HEADERS,
             body: JSON.stringify(userData),
             cache: "no-cache",
         });
@@ -194,10 +177,7 @@ export const sendOTP = createAsyncThunk("auth/sendOTP", async (userData) => {
     try {
         const response = await fetch(api_url, {
             method: "post",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
+            headers: HTTP_HEADERS,
             body: JSON.stringify(userData),
             cache: "no-cache",
         });
@@ -218,24 +198,19 @@ const initialState = {
         Cookies.get("user") == undefined
             ? null
             : JSON.parse(Cookies.get("user")),
+    token: Cookies.get("token") == undefined ? null : Cookies.get("token"),
+    user_loading: false,
+
     errors: [],
     error_message: null,
-    user_loading: false,
     is_otp_set: false,
     reset_password_url: "",
-    token: Cookies.get("token") == undefined ? null : Cookies.get("token"),
 };
 
 export const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        // logout: (state) => {
-        //     Cookies.remove("token", "");
-        //     Cookies.remove("user", "");
-        //     state.user = null;
-        //     state.token = null;
-        // },
         setMessages: (state, action) => {
             return {
                 ...state,
@@ -245,11 +220,10 @@ export const authSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getUser.pending, (state, { payload }) => {
+            .addCase(getUser.pending, (state) => {
                 state.user_loading = true;
             })
             .addCase(getUser.fulfilled, (state, { payload }) => {
-                console.log("payload => ", payload);
                 if (payload.status === 401) {
                     state.message = payload.message;
                     toast(payload.message);
@@ -264,22 +238,6 @@ export const authSlice = createSlice({
                     state.user = payload?.data?.user;
                     Cookies.set("user", JSON.stringify(payload?.data?.user));
                 }
-                // let current_state = current(state);
-                // if (
-                //     current_state.token &&
-                //     payload.message == "Unauthenticated."
-                // ) {
-                //     Cookies.remove("token", "");
-                //     Cookies.remove("user", "");
-                //     state.user = null;
-                //     state.token = null;
-                // } else {
-                //     Cookies.remove("user", "");
-                //     state.user_loading = false;
-                //     state.user =
-                //         payload.message == "Unauthenticated." ? null : payload;
-                //     Cookies.set("user", JSON.stringify(payload.user));
-                // }
             })
             .addCase(getUser.rejected, (state, { payload }) => {
                 state.error_message = payload;
@@ -287,46 +245,46 @@ export const authSlice = createSlice({
             })
 
             // Login User
-            .addCase(login.pending, (state, { payload }) => {
+            .addCase(login.pending, (state) => {
                 state.user_loading = true;
             })
             .addCase(login.fulfilled, (state, { payload }) => {
                 state.user_loading = false;
-                if (payload.hasOwnProperty("errors")) {
-                    console.log(payload.message);
-                    state.errors = payload.errors;
-                    state.error_message = payload.message;
-                } else {
-                    payload = payload.data;
-                    Cookies.set("token", payload.token);
-                    Cookies.set("user", JSON.stringify(payload.user));
-                    state.user = payload.user;
-                    state.token = payload.token;
+                if (payload.status == 200) {
+                    Cookies.set("token", payload.data.token);
+                    Cookies.set("user", JSON.stringify(payload.data.user));
+                    // payload = payload.data;
+                    state.user = payload.data.user;
+                    state.token = payload.data.token;
                     state.errors = [];
                     state.error_message = null;
                 }
             })
             .addCase(login.rejected, (state, { payload }) => {
-                state.error_message = payload;
                 state.user_loading = false;
+                if (payload.status == 422) {
+                    state.errors = payload.data.errors;
+                }
             })
 
             // Logout User
-            .addCase(logout.pending, (state, { payload }) => {
+            .addCase(logout.pending, (state) => {
                 state.user_loading = true;
             })
             .addCase(logout.fulfilled, (state, { payload }) => {
-                Cookies.remove("token", "");
-                Cookies.remove("user", "");
-                state.user = null;
-                state.token = null;
-                state.errors = [];
-                state.error_message = null;
                 state.user_loading = false;
+                if (payload.status == 200) {
+                    Cookies.remove("token", "");
+                    Cookies.remove("user", "");
+                    state.user = null;
+                    state.token = null;
+                    state.errors = [];
+                    state.error_message = null;
+                }
             })
             .addCase(logout.rejected, (state, { payload }) => {
-                state.error_message = payload;
                 state.user_loading = false;
+                state.error_message = payload.data.message;
             })
 
             //register user

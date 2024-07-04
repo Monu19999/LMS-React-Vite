@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, json, useParams, useRouteError } from "react-router-dom";
 import { getCourseTopic } from "@src/features/app/CourseSlice";
 import parse from "html-react-parser";
 import { Button, Nav } from "react-bootstrap";
@@ -13,6 +13,48 @@ import DateFormat from "@src/Utilities/DateFormat";
 import BootstrapModal from "@src/Components/BootstrapModal";
 import CourseBradeCrumb from "@src/Pages/courses/includes/CourseBradeCrumb";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import { getAuthHeaders } from "@src/features/app/AuthSlice";
+import { updateState } from "@src/features/app/CourseSlice";
+import api from "@src/apis/api";
+import axios from "axios";
+import { logout } from "@src/features/app/AuthSlice";
+
+// export async function loader({ params }) {
+//     const dispatch = useDispatch();
+//     let api_url = api("auth_course_topic", params);
+//     try {
+//         const headers = getAuthHeaders();
+//         const data = await axios.get(api_url, {}, { headers: headers });
+//         if (data.status !== 200) {
+//             dispatch(
+//                 updateState({
+//                     course_topic: data.course_topic,
+//                     errors: [],
+//                     error_message: null,
+//                 })
+//             );
+//         }
+//         return headers;
+//     } catch (error) {
+//         const { response } = error;
+//         throw json(response.data, { status: response.status });
+//     }
+// }
+
+// export function ErrorData() {
+//     const error = useRouteError();
+//     console.log(error);
+
+//     return (
+//         <div id="error-page">
+//             <h1>Oops!</h1>
+//             <p>Sorry, an unexpected error has occurred.</p>
+//             <p>
+//                 <i>{error.data.message}</i>
+//             </p>
+//         </div>
+//     );
+// }
 
 export default function CourseTopicDetail() {
     let { course_id, topic_id } = useParams();
@@ -36,7 +78,7 @@ export default function CourseTopicDetail() {
     const handleGetCourseTopic = async (params) => {
         let response = await dispatch(getCourseTopic(params));
         const payload = response.payload;
-        // console.log("handleGetCourseTopic => ", payload);
+        console.log("handleGetCourseTopic => ", payload);
         if (payload?.status == 200) {
             const data = payload.data;
             setPrevious(data.previous);
@@ -65,11 +107,6 @@ export default function CourseTopicDetail() {
             setFileLoading(false);
         }
     };
-
-    // useEffect(() => {
-    //     console.log("here");
-    //     fetchFile("test.xlsx");
-    // }, []);
 
     const checkFileMimeType = (FileMimeType) => {
         const mime_types = [
@@ -294,38 +331,28 @@ export default function CourseTopicDetail() {
                     <div className="container">
                         <div className="row justify-content-center">
                             <div className="col-lg-12 course-detail-bc">
-                                <nav aria-label="breadcrumb" className="mb-4">
-                                    <ol className="breadcrumb">
-                                        {/* <Placeholder
+                                {course_topic_loading ? (
+                                    <Placeholder.Button
                                         xs={2}
-                                        bg="light"
-                                        size="lg"
                                         aria-hidden="true"
-                                    /> */}
-                                        {course_topic_loading ? (
-                                            <Placeholder.Button
-                                                xs={2}
-                                                aria-hidden="true"
-                                            />
-                                        ) : (
-                                            <>
-                                                <CourseBradeCrumb
-                                                    category_course={
-                                                        course_topic?.course
-                                                            ?.assigned_admin
-                                                            ?.category_course
-                                                    }
-                                                    course_hierarchy={
-                                                        course_topic?.course
-                                                            ?.assigned_admin
-                                                            ?.category_course
-                                                            ?.course_hierarchy
-                                                    }
-                                                />
-                                            </>
-                                        )}
-                                    </ol>
-                                </nav>
+                                    />
+                                ) : (
+                                    <>
+                                        <CourseBradeCrumb
+                                            category_course={
+                                                course_topic?.course
+                                                    ?.assigned_admin
+                                                    ?.category_course
+                                            }
+                                            course_hierarchy={
+                                                course_topic?.course
+                                                    ?.assigned_admin
+                                                    ?.category_course
+                                                    ?.course_hierarchy
+                                            }
+                                        />
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -337,7 +364,10 @@ export default function CourseTopicDetail() {
                     <div className="container mt-4 mb-4">
                         <div className="row align-items-start mb-4">
                             <div className="col-lg-8 ">
-                                <div className="col-12  p-4 shadow">
+                                <div
+                                    className="col-12  p-4 shadow"
+                                    style={{ minHeight: "350px" }}
+                                >
                                     <article className="article">
                                         <div className="article-title mb-2">
                                             {course_topic_loading ? (
@@ -347,12 +377,12 @@ export default function CourseTopicDetail() {
                                                 />
                                             ) : (
                                                 <>
-                                                    <h2>
+                                                    <h3>
                                                         {course_topic?.title}
-                                                    </h2>
+                                                    </h3>
                                                     <div className="media">
                                                         <div
-                                                            className="media-body"
+                                                            className="media-body pb-2"
                                                             style={{
                                                                 borderBottom:
                                                                     "1px solid #dedede",
@@ -462,7 +492,10 @@ export default function CourseTopicDetail() {
                                 </div>
                             </div>
                             <div className="col-lg-4 blog-aside">
-                                <div className="p-4 col-12 shadow">
+                                <div
+                                    className="p-4 col-12 shadow"
+                                    style={{ minHeight: "350px" }}
+                                >
                                     {/* Author */}
                                     {/* <div className="widget widget-author">
                                 <div className="widget-title">
@@ -487,9 +520,11 @@ export default function CourseTopicDetail() {
                                                 marginBottom: "10px",
                                             }}
                                         >
-                                            <h3>Related Documents</h3>
+                                            <h3 className="mb-4">
+                                                Related Documents
+                                            </h3>
                                         </div>
-                                        <div className="widget-body">
+                                        <div className="widget-body mt-4">
                                             {uploadsList()}
                                         </div>
                                     </div>

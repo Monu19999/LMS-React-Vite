@@ -40,12 +40,12 @@ function CourseItem({ course, upload }) {
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 </p> */}
             </div>
-            <div className="d-flex border-top">
+            {/* <div className="d-flex border-top">
                 <small className="flex-fill text-center border-end py-2">
                     <i className="fa fa-clock text-primary me-2" /> Duration -
                     10 Hrs
                 </small>
-            </div>
+            </div> */}
         </div>
     );
 }

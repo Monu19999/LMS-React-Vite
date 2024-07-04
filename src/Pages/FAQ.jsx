@@ -42,44 +42,59 @@ export default function FAQ() {
             </PageHeader>
             <div className="container shadow inner-page-container-mb">
                 <div className="row">
+                    <div
+                        className="text-center wow fadeInUp"
+                        data-wow-delay="0.1s"
+                    >
+                        <h1 className="pt-4">Frequently Asked Questions</h1>
+                    </div>
                     <div className="col-md-12 p-lg-5">
-                    <Accordion>
-                    {faq_contents.data?.faq_contents?.map((category, index) => (
-                        <div key={index}>
-                            <Accordion.Item eventKey={index}>
-                                <Accordion.Header>
-                                    {category.title_en}
-                                </Accordion.Header>
-                                <Accordion.Body>
-                                    {category?.faq_contents.map(
-                                        (faq_content, index) => (
-                                            <div
-                                                key={index}
-                                                style={{
-                                                    border: "2px dashed skyblue",
-                                                }}
-                                                className="p-2 rounded-3 mb-2"
-                                            >
-                                                <div className="d-flex gap-2 ">
-                                                    <i className="bi bi-question-circle fa-lg"></i>{" "}
-                                                    <h4>
-                                                        {faq_content.question}
-                                                    </h4>
-                                                </div>
-                                                <div>
-                                                    <p>{faq_content.answer}</p>
-                                                </div>
-                                            </div>
-                                        )
-                                    )}
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </div>
-                    ))}
-                </Accordion>
+                        <Accordion defaultActiveKey="0">
+                            {faq_contents.data?.faq_contents?.map(
+                                (category, index) => (
+                                    <div key={index}>
+                                        <Accordion.Item
+                                            eventKey={String(index)}
+                                        >
+                                            <Accordion.Header>
+                                                {category.title_en}
+                                            </Accordion.Header>
+                                            <Accordion.Body>
+                                                {category?.faq_contents.map(
+                                                    (faq_content, index) => (
+                                                        <div
+                                                            key={index}
+                                                            style={{
+                                                                border: "2px dashed skyblue",
+                                                            }}
+                                                            className="p-2 rounded-3 mb-2"
+                                                        >
+                                                            <div className="d-flex gap-2 ">
+                                                                <i className="bi bi-question-circle fa-lg"></i>{" "}
+                                                                <h4>
+                                                                    {
+                                                                        faq_content.question
+                                                                    }
+                                                                </h4>
+                                                            </div>
+                                                            <div>
+                                                                <p>
+                                                                    {
+                                                                        faq_content.answer
+                                                                    }
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                )}
+                                            </Accordion.Body>
+                                        </Accordion.Item>
+                                    </div>
+                                )
+                            )}
+                        </Accordion>
                     </div>
                 </div>
-                
             </div>
         </>
     );

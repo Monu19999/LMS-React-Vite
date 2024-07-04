@@ -2339,7 +2339,7 @@ body.is-video-popup div[data-global-resource-path*="partials/header"] {
 
 #login-form .form-control {
     height: 48px;
-    background: rgba(52, 55, 71, 0.2);
+    background: #e8f0fe;
     color: #000;
     font-size: 16px;
     border-radius: 50px;
@@ -2563,8 +2563,8 @@ body.is-video-popup div[data-global-resource-path*="partials/header"] {
 
 #login-form .form-select {
     height: 48px;
-    background-color: #d6d7da;
-    color: #abacae;
+    background-color: #e8f0fe;
+    color: #000;
     font-size: 16px;
     border-radius: 50px;
     -webkit-box-shadow: none;

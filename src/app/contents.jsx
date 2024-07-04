@@ -5,6 +5,7 @@ export const HTTP_STATUS = Object.freeze({
 });
 
 export const HTTP_HEADERS = {
+    "access-control-allow-origin": "*",
     "Content-Type": "application/json",
-    Accept: "application/json",
+    Accept: "application/json; charset=UTF-8",
 };

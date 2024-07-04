@@ -31,8 +31,9 @@ function StudentSidebar() {
                 </div>
             </div>
             <ul className="list-unstyled components mb-5">
-                <li className="active">
+                <li>
                     <NavLink
+                        end
                         to="/member"
                         className={({ isActive, isPending }) =>
                             isPending ? "pending" : isActive ? "active" : ""
@@ -43,6 +44,7 @@ function StudentSidebar() {
                 </li>
                 <li>
                     <NavLink
+                        end
                         to="/member/available_courses"
                         className={({ isActive, isPending }) =>
                             isPending ? "pending" : isActive ? "active" : ""
@@ -53,6 +55,7 @@ function StudentSidebar() {
                 </li>
                 <li>
                     <NavLink
+                        end
                         to="/member/courses"
                         className={({ isActive, isPending }) =>
                             isPending ? "pending" : isActive ? "active" : ""
@@ -63,6 +66,7 @@ function StudentSidebar() {
                 </li>
                 <li>
                     <NavLink
+                        end
                         to="/member/certificates"
                         className={({ isActive, isPending }) =>
                             isPending ? "pending" : isActive ? "active" : ""
@@ -74,6 +78,7 @@ function StudentSidebar() {
                 </li>
                 <li>
                     <NavLink
+                        end
                         to="/member/change-password"
                         className={({ isActive, isPending }) =>
                             isPending ? "pending" : isActive ? "active" : ""
@@ -85,6 +90,7 @@ function StudentSidebar() {
                 </li>
                 <li>
                     <NavLink
+                        end
                         to="/member/profile"
                         className={({ isActive, isPending }) =>
                             isPending ? "pending" : isActive ? "active" : ""

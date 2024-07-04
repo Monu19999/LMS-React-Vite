@@ -5,11 +5,11 @@ import { Form, Row, Col, Button } from "react-bootstrap";
 import axios from "axios";
 import ServerErrors from "@src/Components/ServerErrors";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
-import { HTTP_HEADERS } from "@src/app/contents";
-import Cookies from "js-cookie";
 import api from "@src/apis/api";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import { DevTool } from "@hookform/devtools";
+import { getAuthHeaders } from "@src/features/app/AuthSlice";
 
 function ChangePassword() {
     const [loading, setLoader] = useState(false);
@@ -21,18 +21,16 @@ function ChangePassword() {
         handleSubmit,
         reset,
         watch,
+        control,
         formState: { errors, isDirty, isValid, isSubmitSuccessful },
-    } = useForm({});
+    } = useForm({
+        mode: "all",
+    });
 
-    const onSubmit = async (credentials) => {
+    const handleFormSubmit = async (credentials) => {
         setLoader(true);
         try {
-            let headers = HTTP_HEADERS;
-            const token =
-                Cookies.get("token") == undefined ? null : Cookies.get("token");
-            if (token) {
-                headers.Authorization = `Bearer ${token}`;
-            }
+            let headers = getAuthHeaders();
             const { data } = await axios.patch(
                 api("auth_change_password", { user_id: user.id }),
                 credentials,
@@ -70,7 +68,7 @@ function ChangePassword() {
                         <div className="card-body">
                             <Form
                                 className="d-flex py-3 w-100 flex-column gap-3"
-                                onSubmit={handleSubmit(onSubmit)}
+                                onSubmit={handleSubmit(handleFormSubmit)}
                             >
                                 {loading && <BootstrapSpinner />}
                                 {errorsMessage && (
@@ -106,28 +104,21 @@ function ChangePassword() {
                                                     {
                                                         required:
                                                             "Current password is required",
-                                                        minLength: {
-                                                            value: 8,
-                                                            message:
-                                                                "Password must be at least 8 characters long",
-                                                        },
-                                                        pattern: {
-                                                            value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
-                                                            message:
-                                                                "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character",
-                                                        },
                                                     }
                                                 )}
-                                                isInvalid={
-                                                    !!errors.current_password
-                                                }
+                                                // isInvalid={
+                                                //     !!errors.current_password
+                                                // }
                                             />
-                                            <Form.Control.Feedback type="invalid">
+                                            <Form.Text
+                                                id="currentPasswordHelpBlock"
+                                                className="text-danger"
+                                            >
                                                 {
                                                     errors.current_password
                                                         ?.message
                                                 }
-                                            </Form.Control.Feedback>
+                                            </Form.Text>
                                         </Form.Group>
                                     </Col>
 
@@ -158,21 +149,15 @@ function ChangePassword() {
                                                         message:
                                                             "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character",
                                                     },
-                                                    validate: (val) => {
-                                                        if (
-                                                            watch(
-                                                                "password_confirmation"
-                                                            ) !== val
-                                                        ) {
-                                                            return "Passwords do not match";
-                                                        }
-                                                    },
                                                 })}
-                                                isInvalid={!!errors.password}
+                                                // isInvalid={!!errors.password}
                                             />
-                                            <Form.Control.Feedback type="invalid">
+                                            <Form.Text
+                                                id="newPasswordHelpBlock"
+                                                className="text-danger"
+                                            >
                                                 {errors.password?.message}
-                                            </Form.Control.Feedback>
+                                            </Form.Text>
                                         </Form.Group>
                                     </Col>
 
@@ -195,18 +180,30 @@ function ChangePassword() {
                                                     {
                                                         required:
                                                             "Confirm password is required",
+                                                        validate: (val) => {
+                                                            if (
+                                                                watch(
+                                                                    "password"
+                                                                ) !== val
+                                                            ) {
+                                                                return "Passwords do not match";
+                                                            }
+                                                        },
                                                     }
                                                 )}
-                                                isInvalid={
-                                                    !!errors.password_confirmation
-                                                }
+                                                // isInvalid={
+                                                //     !!errors.password_confirmation
+                                                // }
                                             />
-                                            <Form.Control.Feedback type="invalid">
+                                            <Form.Text
+                                                id="confirmPasswordHelpBlock"
+                                                className="text-danger"
+                                            >
                                                 {
                                                     errors.password_confirmation
                                                         ?.message
                                                 }
-                                            </Form.Control.Feedback>
+                                            </Form.Text>
                                         </Form.Group>
                                     </Col>
 
@@ -253,6 +250,7 @@ function ChangePassword() {
                                     </Col>
                                 </Row>
                             </Form>
+                            <DevTool control={control} />
                         </div>
                     </div>
                 </div>

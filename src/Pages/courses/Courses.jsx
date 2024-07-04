@@ -6,7 +6,7 @@ import Pagination from "@src/Utilities/Pagination";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import { getDepartments } from "@src/features/app/AppSlice";
 import { setSearch } from "@src/features/app/CourseSlice";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 function Courses() {
@@ -14,9 +14,8 @@ function Courses() {
     const { course_loading, search, search_courses } = useSelector(
         (state) => state.course
     );
-    console.log(search_courses);
-
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
 
     const {
@@ -50,12 +49,12 @@ function Courses() {
         //     console.log("filteredOffices => ", filteredOffices);
         //     setDepartmentoffices(filteredOffices);
         // }
-        dispatch(getSearchCourses());
+        dispatch(getSearchCourses(navigate));
     }, []);
 
     let handleFormFilter = (e) => {
         // e.preventDefault();
-        dispatch(getSearchCourses());
+        dispatch(getSearchCourses(navigate));
     };
 
     let handleFormFilterOnChange = (e) => {
@@ -84,7 +83,7 @@ function Courses() {
 
     function changePage(data) {
         dispatch(setSearch({ ...search, page: data.page }));
-        dispatch(getSearchCourses());
+        dispatch(getSearchCourses(navigate));
     }
 
     function handleResetSearch() {
@@ -94,7 +93,7 @@ function Courses() {
         );
         dispatch(setSearch(copy_search));
         reset(copy_search);
-        dispatch(getSearchCourses());
+        dispatch(getSearchCourses(navigate));
     }
 
     return (

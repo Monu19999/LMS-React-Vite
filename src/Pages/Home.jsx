@@ -198,7 +198,7 @@ export default function Home() {
                     >
                         <div className="counter-box">
                             {" "}
-                            <span className="counter">350</span>
+                            <span className="counter">0</span>
                             <p>Total Certification Courses</p>
                         </div>
                     </div>

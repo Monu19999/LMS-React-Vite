@@ -4,6 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { HTTP_HEADERS } from "@src/app/contents";
+import { getAuthHeaders } from "./AuthSlice";
 
 const initialState = {
     search_courses: [],
@@ -74,7 +75,7 @@ export const readCourseTopic = createAsyncThunk(
 
 export const getSearchCourses = createAsyncThunk(
     "courses/getSearchCourses",
-    async (args, { navigate, getState }) => {
+    async (navigate, { getState }) => {
         const state = getState();
         let original_search_state = removeEmpty(state.course.search);
         let copy_search_state = { ...original_search_state };
@@ -127,98 +128,76 @@ export const getSearchCourses = createAsyncThunk(
     }
 );
 
-export const getCourses = createAsyncThunk(
-    "courses/getCourses",
-    async (navigate, { getState }) => {
-        let api_url = api("category_courses");
-
-        let headers = {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        };
+export const getCourses = createAsyncThunk("courses/getCourses", async () => {
+    let api_url = api("category_courses");
+    try {
+        const headers = getAuthHeaders();
         const token =
             Cookies.get("token") == undefined ? null : Cookies.get("token");
         if (token) {
-            headers.Authorization = `Bearer ${token}`;
             api_url = api("auth_category_courses");
         }
-        const response = await fetch(api_url, {
-            mode: "cors",
-            method: "get",
-            headers,
-            cache: "no-cache",
-        });
-        const json = await response.json();
-        if (navigate) {
-            navigate(query_string);
+        const { data } = await axios.get(api_url, { headers });
+        return data;
+    } catch (error) {
+        const { response } = error;
+        return rejectWithValue(response.data);
+    }
+
+    // let headers = {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    // };
+    // const token =
+    //     Cookies.get("token") == undefined ? null : Cookies.get("token");
+    // if (token) {
+    //     headers.Authorization = `Bearer ${token}`;
+    //     api_url = api("auth_category_courses");
+    // }
+    // const response = await fetch(api_url, {
+    //     mode: "cors",
+    //     method: "get",
+    //     headers,
+    //     cache: "no-cache",
+    // });
+    // const json = await response.json();
+    // if (navigate) {
+    //     navigate(query_string);
+    // }
+    // return json.data;
+});
+
+export const getCourse = createAsyncThunk(
+    "course/getCourse",
+    async (id, { rejectWithValue }) => {
+        let api_url = api("category_course", id);
+        try {
+            const headers = getAuthHeaders();
+            const token =
+                Cookies.get("token") == undefined ? null : Cookies.get("token");
+            if (token) {
+                api_url = api("auth_category_course", id);
+            }
+            const { data } = await axios.get(api_url, { headers });
+            return data;
+        } catch (error) {
+            const { response } = error;
+            return rejectWithValue(response.data);
         }
-        return json.data;
     }
 );
 
-export const getCourse = createAsyncThunk("course/getCourse", async (id) => {
-    let api_url = api("category_course", id);
-
-    let headers = {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-    };
-    const token =
-        Cookies.get("token") == undefined ? null : Cookies.get("token");
-    if (token) {
-        headers.Authorization = `Bearer ${token}`;
-        api_url = api("auth_category_course", id);
-    }
-    try {
-        const response = await fetch(api_url, {
-            method: "get",
-            headers,
-            cache: "no-cache",
-        });
-        const json = await response.json();
-        if (response.status !== 200) {
-            throw new Error("Bad response", {
-                cause: json,
-            });
-        }
-        return json;
-    } catch (error) {
-        return error.cause;
-    }
-});
-
 export const getCourseTopic = createAsyncThunk(
     "course/getCourseTopic",
-    async (params, { navigate }) => {
+    async (params, { rejectWithValue }) => {
         let api_url = api("auth_course_topic", params);
-        let headers = {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        };
-        const token =
-            Cookies.get("token") == undefined ? null : Cookies.get("token");
-        if (token) {
-            headers.Authorization = `Bearer ${token}`;
-        }
         try {
-            const response = await fetch(api_url, {
-                method: "get",
-                headers,
-                cache: "no-cache",
-            });
-            const json = await response.json();
-            // if (response.status === 401) {
-            //     navigate("/auth/login");
-            // }
-            if (response.status !== 200) {
-                throw new Error("Bad response", {
-                    error_status: response.status,
-                    cause: json,
-                });
-            }
-            return json;
+            const headers = getAuthHeaders();
+            const { data } = await axios.get(api_url, { headers });
+            return data;
         } catch (error) {
-            return error.cause;
+            const { response } = error;
+            return rejectWithValue(response.data);
         }
     }
 );
@@ -226,13 +205,8 @@ export const getCourseTopic = createAsyncThunk(
 export const enrollCourse = createAsyncThunk(
     "course/enrollCourse",
     async ({ id, fk_department_id, fk_office_id }, { rejectWithValue }) => {
-        let headers = HTTP_HEADERS;
-        const token =
-            Cookies.get("token") == undefined ? null : Cookies.get("token");
-        if (token) {
-            headers.Authorization = `Bearer ${token}`;
-        }
         try {
+            const headers = getAuthHeaders();
             const { data } = await axios.post(
                 api("auth_course_enroll", id),
                 {
@@ -245,7 +219,8 @@ export const enrollCourse = createAsyncThunk(
             );
             return data;
         } catch (error) {
-            return rejectWithValue(error.response.data);
+            const { response } = error;
+            return rejectWithValue(response.data);
         }
     }
 );
@@ -270,6 +245,11 @@ export const courseSlice = createSlice({
         },
         updateTopic: (state, action) => {
             state.topic = action.payload;
+        },
+        updateState: (state, action) => {
+            action.payload.map((item) => {
+                state[item.key] = item.value;
+            });
         },
     },
     extraReducers(builder) {
@@ -298,42 +278,47 @@ export const courseSlice = createSlice({
             .addCase(getCourses.fulfilled, (state, { payload }) => {
                 state.course_enrolment_loading = false;
                 state.course_loading = false;
-                state.courses = payload.courses;
                 state.isSuccess = true;
+                if (payload.status == 200) {
+                    state.courses = payload.data.courses;
+                }
             })
             .addCase(getCourses.rejected, (state, { payload }) => {
-                state.message = payload;
                 state.course_enrolment_loading = false;
                 state.course_loading = false;
                 state.isSuccess = false;
+                if (payload.status === 401) {
+                    state.message = payload.message;
+                }
+                if (payload.status === 422) {
+                    state.message = payload.message;
+                    state.errors = payload.errors;
+                }
             })
 
             // Getting Course detail
-            .addCase(getCourse.pending, (state, { payload }) => {
+            .addCase(getCourse.pending, (state) => {
                 state.course_loading = true;
             })
             .addCase(getCourse.fulfilled, (state, { payload }) => {
-                if (payload != undefined) {
-                    if (
-                        payload.hasOwnProperty("status") &&
-                        payload.status !== 200
-                    ) {
-                        state.course = null;
-                        state.error_message = payload.message;
-                    } else {
-                        let data = payload.data;
-                        state.course_loading = false;
-                        state.course = data.course;
-                        state.isSuccess = true;
-                        state.errors = [];
-                        state.error_message = null;
-                    }
+                state.course_loading = false;
+                state.isSuccess = true;
+                if (payload.status == 200) {
+                    state.course = payload.data.course;
+                    state.errors = [];
+                    state.error_message = null;
                 }
             })
             .addCase(getCourse.rejected, (state, { payload }) => {
-                state.message = payload;
                 state.course_loading = false;
                 state.isSuccess = false;
+                if (payload.status === 401) {
+                    state.message = payload.message;
+                }
+                if (payload.status === 422) {
+                    state.message = payload.message;
+                    state.errors = payload.errors;
+                }
             })
 
             // Course enroll
@@ -341,7 +326,7 @@ export const courseSlice = createSlice({
                 state.course_enrolment_loading = true;
             })
             .addCase(enrollCourse.fulfilled, (state, { payload }) => {
-                // console.log("Payload => ", payload);
+                console.log("Payload => ", payload);
                 state.course_enrolment_loading = false;
                 if (payload.status == 200) {
                     state.course = payload.course;
@@ -350,15 +335,6 @@ export const courseSlice = createSlice({
                     state.error_message = null;
                     toast(payload.message);
                 }
-                // if (payload.hasOwnProperty("message")) {
-                //     state.error_message = payload.message;
-                // } else {
-                //     state.course_enrolment_loading = false;
-                //     state.course = payload.course;
-                //     state.isSuccess = true;
-                //     state.errors = [];
-                //     state.error_message = null;
-                // }
             })
             .addCase(enrollCourse.rejected, (state, { payload }) => {
                 // console.log("Rejected => ");
@@ -377,26 +353,19 @@ export const courseSlice = createSlice({
             })
 
             // Get Course topic
-            .addCase(getCourseTopic.pending, (state, { payload }) => {
+            .addCase(getCourseTopic.pending, (state) => {
                 state.course_topic_loading = true;
             })
             .addCase(getCourseTopic.fulfilled, (state, { payload }) => {
                 state.course_topic_loading = false;
-                if (payload != undefined) {
-                    let data = payload.data;
-                    if (payload.status == 200) {
-                        state.course_topic = data.course_topic;
-                        state.errors = [];
-                        state.error_message = null;
-                    } else if (payload.status == 401) {
-                        state.error_message = payload.message;
-                    } else {
-                        // state.error_message = data.message;
-                    }
+                if (payload.status == 200) {
+                    state.course_topic = payload.data.course_topic;
+                    state.errors = [];
+                    state.error_message = null;
                 }
             })
             .addCase(getCourseTopic.rejected, (state, { payload }) => {
-                state.message = payload;
+                // state.message = payload;
                 state.course_topic_loading = false;
             })
 
@@ -413,7 +382,12 @@ export const courseSlice = createSlice({
     },
 });
 
-export const { setSearch, resetSearch, updateCourse, updateTopic } =
-    courseSlice.actions;
+export const {
+    setSearch,
+    resetSearch,
+    updateCourse,
+    updateTopic,
+    updateState,
+} = courseSlice.actions;
 
 export default courseSlice.reducer;

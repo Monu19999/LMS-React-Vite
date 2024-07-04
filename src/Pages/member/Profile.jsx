@@ -3,9 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import api from "@src/apis/api";
-import { HTTP_HEADERS } from "@src/app/contents";
 import Cookies from "js-cookie";
-import { getUser } from "@src/features/app/AuthSlice";
+import { getUser, getAuthHeaders } from "@src/features/app/AuthSlice";
 import { toast } from "react-toastify";
 import ProfileImage from "@src/Components/Layout/Student/ProfileImage";
 
@@ -25,13 +24,7 @@ export default function Profile() {
     const submitUploadFile = async (data, event) => {
         let form_data = new FormData();
         form_data.append("image", image);
-        let headers = HTTP_HEADERS;
-        const token =
-            Cookies.get("token") == undefined ? null : Cookies.get("token");
-        if (token) {
-            headers["Content-Type"] = "multipart/form-data";
-            headers["Authorization"] = `Bearer ${token}`;
-        }
+        let headers = getAuthHeaders(true);
 
         let response = await axios.post(
             api("auth_update_profile_image", user),
@@ -159,7 +152,7 @@ export default function Profile() {
                                     type="submit"
                                     disabled={!image || isSubmitSuccessful}
                                 >
-                                    Upload new image
+                                    Save
                                 </button>
                             </form>
                         </div>
@@ -301,7 +294,7 @@ export default function Profile() {
                                             id="inputMobile"
                                             type="text"
                                             placeholder="Enter your mobile number"
-                                            defaultValue={user.mobile}
+                                            defaultValue={user?.mobile}
                                         />
                                     </div>
                                     {/* Form Group (birthday)*/}

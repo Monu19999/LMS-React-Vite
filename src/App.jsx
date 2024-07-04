@@ -3,6 +3,8 @@ import {
     RouterProvider,
     createHashRouter,
     createRoutesFromElements,
+    isRouteErrorResponse,
+    useRouteError,
 } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Home from "@src/Pages/Home";
@@ -30,7 +32,30 @@ import Feedback from "./Pages/Feedback";
 import FAQ, { loader as faqLoader } from "./Pages/FAQ";
 import ChangePassword from "./Pages/member/ChangePassword";
 import Profile from "./Pages/member/Profile";
+function RootBoundary() {
+    const error = useRouteError();
+    console.log(error);
 
+    if (isRouteErrorResponse(error)) {
+        if (error.status === 404) {
+            return <div>This page doesn't exist!</div>;
+        }
+
+        if (error.status === 401) {
+            return <div>You aren't authorized to see this</div>;
+        }
+
+        if (error.status === 503) {
+            return <div>Looks like our API is down</div>;
+        }
+
+        if (error.status === 418) {
+            return <div>🫖</div>;
+        }
+    }
+
+    return <div>Something went wrong</div>;
+}
 const router = createHashRouter(
     createRoutesFromElements(
         <Route path="/">
@@ -63,6 +88,8 @@ const router = createHashRouter(
                         exact
                         path="course/:course_id/course_topic/:topic_id/show"
                         element={<CourseTopicDetail />}
+                        // loader={courseTopicLoader}
+                        // errorElement={<ErrorData />}
                     />
                 </Route>
             </Route>

@@ -4,12 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 export const Logout = (props) => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const handleLogout = async (e) => {
         e.preventDefault();
-        await dispatch(logout());
-        navigate("/auth/login");
+        dispatch(logout());
     };
 
     return (

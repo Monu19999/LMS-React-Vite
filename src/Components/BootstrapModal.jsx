@@ -1,12 +1,13 @@
-import React from "react";
 import { Modal } from "react-bootstrap";
+import "./BootstrapModal.css";
 
 function BootstrapModal(props) {
     return (
         <Modal
             {...props}
-            size="lg"
+            // size="xl"
             aria-labelledby="contained-modal-title-vcenter"
+            dialogClassName="modal-90w"
             centered
         >
             <Modal.Header closeButton>
