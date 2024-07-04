@@ -129,25 +129,36 @@ export default function Profile() {
                                         >
                                             Upload
                                         </label>
-                                        <span style={{position: "absolute", right:"90px", top:"60px", zIndex:"999"}}
-                                            type="button"
-                                            
-                                            onClick={() => {
-                                                handleRemove();
-                                            }}
-                                            disabled={!image}>
-                                                <i class="fa fa-trash mr-3" style={{color: "red"}} ></i>
+                                        {image && (
+                                            <span
+                                                style={{
+                                                    position: "absolute",
+                                                    right: "90px",
+                                                    top: "60px",
+                                                    zIndex: "999",
+                                                }}
+                                                type="button"
+                                                onClick={() => {
+                                                    handleRemove();
+                                                }}
+                                                disabled={!image}
+                                            >
+                                                <i
+                                                    class="fa fa-trash mr-3"
+                                                    style={{ color: "red" }}
+                                                ></i>
                                             </span>
-                                            
-                                       
+                                        )}
 
                                         <button
-                                    className="btn btn-primary"
-                                    type="submit"
-                                    disabled={!image || isSubmitSuccessful}
-                                >
-                                    Save
-                                </button>
+                                            className="btn btn-primary"
+                                            type="submit"
+                                            disabled={
+                                                !image || isSubmitSuccessful
+                                            }
+                                        >
+                                            Save
+                                        </button>
                                     </div>
                                 </div>
 
@@ -156,7 +167,6 @@ export default function Profile() {
                                     {errors.file?.message}
                                 </div>
                                 {/* Profile picture upload button*/}
-                                
                             </form>
                         </div>
                     </div>
@@ -173,8 +183,7 @@ export default function Profile() {
                                         className="small mb-1"
                                         htmlFor="inputUsername"
                                     >
-                                        Username (how your name will appear to
-                                        other users on the site)
+                                        Username
                                     </label>
                                     <input
                                         className="form-control"
