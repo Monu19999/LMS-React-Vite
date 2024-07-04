@@ -2611,7 +2611,15 @@ body.is-video-popup div[data-global-resource-path*="partials/header"] {
 }
 
 h4.heading-bg {
-    padding: 10px;
+    padding: 10px 20px;
     margin-top: 20px;
-    background-color: #d3eef1;
+    background-color: #06bbcc;
+    color: #fff;
+}
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    justify-content: center !important;
+    margin-bottom: 30px !important;
 }

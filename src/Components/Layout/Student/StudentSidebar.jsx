@@ -84,7 +84,7 @@ function StudentSidebar() {
                             isPending ? "pending" : isActive ? "active" : ""
                         }
                     >
-                        <span className="fas fa-user-graduate mr-3" /> Change
+                        <span className="fas fa-lock mr-3" /> Change
                         Password
                     </NavLink>
                 </li>
@@ -96,7 +96,7 @@ function StudentSidebar() {
                             isPending ? "pending" : isActive ? "active" : ""
                         }
                     >
-                        <span className="fas fa-user-graduate mr-3" /> Profile
+                        <span className="fas fa-user mr-3" /> Profile
                     </NavLink>
                 </li>
             </ul>

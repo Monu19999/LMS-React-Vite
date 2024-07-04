@@ -144,14 +144,14 @@ export function Download() {
                             <div className="row">
                                 <div className="col-12 mb-4">
                                     <div className="table-responsive">
-                                    <table className="table table-bordered align-items-center justify-content-center">
+                                    <table className="table table-striped table-bordered table-hover align-items-center justify-content-center">
                                         <thead class="thead-dark">
                                             <tr>
-                                                <th >S No.</th>
-                                                <th >
+                                                <th style={{width:"5%"}}>S No.</th>
+                                                <th style={{width:"75%"}}>
                                                     Title
                                                 </th>
-                                                <th >Download</th>
+                                                <th style={{width:"20%"}}>Download</th>
                                             </tr>
                                         </thead>
                                         <tbody>

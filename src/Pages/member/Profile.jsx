@@ -129,16 +129,25 @@ export default function Profile() {
                                         >
                                             Upload
                                         </label>
-                                        <button
+                                        <span style={{position: "absolute", right:"90px", top:"60px", zIndex:"999"}}
                                             type="button"
-                                            className="btn btn-secondary"
+                                            
                                             onClick={() => {
                                                 handleRemove();
                                             }}
-                                            disabled={!image}
-                                        >
-                                            Remove
-                                        </button>
+                                            disabled={!image}>
+                                                <i class="fa fa-trash mr-3" style={{color: "red"}} ></i>
+                                            </span>
+                                            
+                                       
+
+                                        <button
+                                    className="btn btn-primary"
+                                    type="submit"
+                                    disabled={!image || isSubmitSuccessful}
+                                >
+                                    Save
+                                </button>
                                     </div>
                                 </div>
 
@@ -147,13 +156,7 @@ export default function Profile() {
                                     {errors.file?.message}
                                 </div>
                                 {/* Profile picture upload button*/}
-                                <button
-                                    className="btn btn-primary"
-                                    type="submit"
-                                    disabled={!image || isSubmitSuccessful}
-                                >
-                                    Save
-                                </button>
+                                
                             </form>
                         </div>
                     </div>
