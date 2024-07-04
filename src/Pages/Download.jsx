@@ -88,8 +88,8 @@ export function Download() {
                     </ol>
                 </nav>
             </PageHeader>
-            <div className="container-xxl">
-                <div className="container shadow inner-page-container-mb">
+            <div className="container-xxl" style={{ minHeight:"450px"}}>
+                <div className="container shadow inner-page-container-mb " >
                     <div className="row mb-4">
                         <div
                             className="col-lg-12 wow fadeInUp mb-4"
@@ -140,21 +140,18 @@ export function Download() {
                         </div>
                     </div>
                     <div>
-                        <div className="container">
+                        <div className="container mb-4">
                             <div className="row">
-                                <div className="col-12">
+                                <div className="col-12 mb-4">
                                     <div className="table-responsive">
-                                    <table className="table table-striped align-items-center justify-content-center">
-                                        <thead>
+                                    <table className="table table-bordered align-items-center justify-content-center">
+                                        <thead class="thead-dark">
                                             <tr>
-                                                <th scope="col">S.No</th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-5"
-                                                >
+                                                <th >S No.</th>
+                                                <th >
                                                     Title
                                                 </th>
-                                                <th scope="col">Download</th>
+                                                <th >Download</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -164,7 +161,7 @@ export function Download() {
                                                         <th scope="row">
                                                             {index + 1}
                                                         </th>
-                                                        <td className="px-5">
+                                                        <td >
                                                             {item.title_en}
                                                         </td>
                                                         <td>
@@ -173,6 +170,7 @@ export function Download() {
                                                                     item?.upload
                                                                         .download_path
                                                                 }
+                                                                download={true}
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
                                                             >
