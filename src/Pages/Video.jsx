@@ -74,10 +74,10 @@ function Video() {
                     </ol>
                 </nav>
             </PageHeader>
-            <div className="container-xxl ">
-                <div className="container shadow inner-page-container-mb">
-                    <div
-                        className="col-lg-12 wow fadeInUp"
+            <div className="container-xxl " style={{ minHeight:"450px"}}>
+                <div className="container shadow inner-page-container-mb ">
+                   <div className="row mb-4">
+                   <div className="col-lg-12 wow fadeInUp"
                         style={{ backgroundColor: "#06bbcc" }}
                     >
                         <div className="search-title">
@@ -131,16 +131,17 @@ function Video() {
                             {/* Search Form End */}
                         </div>
                     </div>
+                   </div>
 
                     <div className="container">
                     <div className="row">
-                        <div className="col-12">
+                        <div className="col-12 mb-4">
                             <div className="table-responsive">
-                            <table className="table table-striped align-items-center justify-content-center">
-                                <thead>
+                            <table className="table table-bordered align-items-center justify-content-center">
+                                <thead class="thead-dark">
                                     <tr>
-                                        <th scope="col">S.No</th>
-                                        <th scope="col" className="px-5">
+                                        <th >S.No</th>
+                                        <th >
                                             Title
                                         </th>
                                     </tr>
