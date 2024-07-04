@@ -9,8 +9,8 @@ import FooterMenu from "@src/Components/Layout/includes/FooterMenu";
 import LoginMenu from "@src/Pages/member/includes/LoginMenu";
 import FooterCopyright from "@src/Components/Layout/includes/FooterCopyright";
 import StudentSidebar from "./StudentSidebar";
-import ScrollToTop from "@src/Components/Layout/includes/ScrollToTop";
-import { ToastContainer } from "react-toastify";
+import Toaster from "@src/Components/Toaster";
+import ScrollToTop from "../includes/ScrollToTop";
 
 const StudentLayout = () => {
     const member = useSelector((state) => state.member);
@@ -58,7 +58,7 @@ const StudentLayout = () => {
             {/* Footer End */}
 
             <ScrollToTop />
-            <ToastContainer />
+            <Toaster />
         </>
     );
 };

@@ -267,7 +267,6 @@ function Feedback() {
                                             }}
                                             onClick={() => {
                                                 reset();
-                                                toast("working");
                                             }}
                                         >
                                             Reset{""}
