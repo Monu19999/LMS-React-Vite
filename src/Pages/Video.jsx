@@ -137,7 +137,7 @@ function Video() {
                     <div className="row">
                         <div className="col-12 mb-4">
                             <div className="table-responsive">
-                            <table className="table table-bordered align-items-center justify-content-center">
+                            <table className="table table-striped table-bordered table-hover align-items-center justify-content-center">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th >S.No</th>

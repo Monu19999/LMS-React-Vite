@@ -131,24 +131,16 @@ function Courses() {
                 </div>
             </div>
             {/* Header End */}
-            <div className="container-xxl">
-                <div className="container">
+            <div className="container-xxl mb-4 pb-4">
+                <div className="container shadow">
                     <div className="row mb-4">
-                        <div className="col-12">
-                            <div
-                                className="wow fadeInUp"
-                                data-wow-delay="0.1s"
-                                style={{
-                                    visibility: "visible",
-                                    animationDelay: "0.1s",
-                                    animationName: "fadeInUp",
-                                }}
-                            >
+                        {/* <div className="col-12" style={{ backgroundColor: "#06bbcc" }}>
+                            <div className="d-flex justify-content-center pt-4">
                                 <h4>Search Course</h4>
                             </div>
-                        </div>
+                        </div> */}
                         <div
-                            className="col-lg-12 wow fadeInUp"
+                            className="col-lg-12 wow fadeInUp inner-page-container-mb"
                             style={{ backgroundColor: "#06bbcc" }}
                         >
                             <div className="search-title">
@@ -175,6 +167,7 @@ function Courses() {
                                                     <option
                                                         value={null}
                                                         data-encr_id={null}
+                                                        selected
                                                     >
                                                         Please Select
                                                     </option>
@@ -353,8 +346,8 @@ function Courses() {
                     {/* All searched Courses Start */}
 
                     {/* Searched Courses Pagination Start */}
-                    <div className="row mb-4 ">
-                        <div className="col-12 text-center">
+                    <div className="row justify-content-center mb-4 ">
+                        <div className="col-md-12 text-center">
                             <Pagination
                                 changePage={changePage}
                                 data={search_courses}

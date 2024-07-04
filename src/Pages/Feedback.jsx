@@ -89,14 +89,17 @@ function Feedback() {
                 </nav>
             </PageHeader>
             <div className="container shadow inner-page-container-mb">
-                <div className="row">
-                    <div
+                <div className="row justify-content-center" style={{ backgroundColor: "#06bbcc", color:"#fff" }}>
+                <div
                         className="text-center wow fadeInUp"
                         data-wow-delay="0.1s"
                     >
-                        <h1 className="pt-4">Send us your feedback!</h1>
+                        <h1 className="pt-4 text-white">Send us your feedback!</h1>
                         <p>fill the form below</p>
                     </div>
+                </div>
+                <div className="row">
+                    
 
                     <div className="col-md-12 bg-white p-lg-5">
                         <Form

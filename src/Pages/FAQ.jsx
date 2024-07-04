@@ -41,13 +41,16 @@ export default function FAQ() {
                 </nav>
             </PageHeader>
             <div className="container shadow inner-page-container-mb">
-                <div className="row">
-                    <div
-                        className="text-center wow fadeInUp"
+            <div className="row justify-content-center" style={{ backgroundColor: "#06bbcc", color:"#fff" }}>
+                <div className="text-center wow fadeInUp mb-4"
                         data-wow-delay="0.1s"
                     >
-                        <h1 className="pt-4">Frequently Asked Questions</h1>
+                        <h1 className="pt-4 text-white">Frequently Asked Questions</h1>
+                       
                     </div>
+                </div>
+                <div className="row">
+                    
                     <div className="col-md-12 p-lg-5">
                         <Accordion defaultActiveKey="0">
                             {faq_contents.data?.faq_contents?.map(
@@ -65,7 +68,7 @@ export default function FAQ() {
                                                         <div
                                                             key={index}
                                                             style={{
-                                                                border: "2px dashed skyblue",
+                                                                border: "1px dashed #ccc",
                                                             }}
                                                             className="p-2 rounded-3 mb-2"
                                                         >
