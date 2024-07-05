@@ -7,7 +7,7 @@ function BootstrapModal(props) {
             {...props}
             size="xl"
             aria-labelledby="contained-modal-title-vcenter"
-            // dialogClassName="modal-90w"
+            dialogClassName="modal-70w"
             centered
         >
             <Modal.Header closeButton>

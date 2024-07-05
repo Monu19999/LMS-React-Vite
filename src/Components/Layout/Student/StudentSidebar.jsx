@@ -21,9 +21,7 @@ function StudentSidebar() {
             </div>
             <div
                 className="img bg-wrap text-center py-4"
-                style={{
-                    backgroundImage: "url(assets/img/dashboard/bg_1.jpg)",
-                }}
+                
             >
                 <div className="user-logo">
                     <ProfileImage upload={user?.upload} className="img" />

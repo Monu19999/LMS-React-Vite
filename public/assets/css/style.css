@@ -2623,3 +2623,13 @@ h4.heading-bg {
     justify-content: center !important;
     margin-bottom: 30px !important;
 }
+
+@media (max-width: 991.98px) {
+    #sidebar.active {
+        margin-left: 0;
+        position: absolute;
+        z-index: 999;
+    }
+}
+
+
