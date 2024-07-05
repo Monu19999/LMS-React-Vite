@@ -193,13 +193,7 @@ export default function CourseTopicDetail() {
     function MyVerticallyCenteredModal(props) {
         return (
             <BootstrapModal
-                title={
-                    props.upload.file_mime_type === "application/video"
-                        ? "Video"
-                        : props.upload.file_mime_type === "application/pdf"
-                        ? "PDF"
-                        : "PPT"
-                }
+                title={course_topic?.title}
                 body={setModalBodyContent(props)}
                 {...props}
             />
@@ -314,11 +308,6 @@ export default function CourseTopicDetail() {
     };
 
     const RenderTopicDetail = () => {
-        if (course_topic?.uploads) {
-            course_topic.uploads.map((upload) => {
-                console.log("upload");
-            });
-        }
         return (
             <>
                 <div

@@ -18,7 +18,7 @@ export default function Profile() {
         register,
         handleSubmit,
         reset,
-        formState: { errors, isSubmitSuccessful },
+        formState: { errors, isSubmitSuccessful, isSubmitting },
     } = useForm();
 
     const submitUploadFile = async (data, event) => {
@@ -68,7 +68,6 @@ export default function Profile() {
 
     useEffect(() => {
         if (isSubmitSuccessful) {
-            console.log("isSubmitSuccessful => ", isSubmitSuccessful);
             setImage("");
             reset();
         }
@@ -123,42 +122,46 @@ export default function Profile() {
                                         hidden
                                     />
                                     <div className="d-flex justify-content-center gap-2">
-                                        <label
-                                            className="btn btn-success btn-block"
-                                            htmlFor="customFile"
-                                        >
-                                            Upload
-                                        </label>
                                         {image && (
-                                            <span
-                                                style={{
-                                                    position: "absolute",
-                                                    right: "90px",
-                                                    top: "60px",
-                                                    zIndex: "999",
-                                                }}
-                                                type="button"
-                                                onClick={() => {
-                                                    handleRemove();
-                                                }}
-                                                disabled={!image}
-                                            >
-                                                <i
-                                                    class="fa fa-trash mr-3"
-                                                    style={{ color: "red" }}
-                                                ></i>
-                                            </span>
+                                            <>
+                                                <span
+                                                    style={{
+                                                        position: "absolute",
+                                                        right: "90px",
+                                                        top: "60px",
+                                                        zIndex: "999",
+                                                    }}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        handleRemove();
+                                                    }}
+                                                    disabled={!image}
+                                                >
+                                                    <i
+                                                        class="fa fa-trash mr-3"
+                                                        style={{ color: "red" }}
+                                                    ></i>
+                                                </span>
+                                                <button
+                                                    className="btn btn-success"
+                                                    type="submit"
+                                                    disabled={
+                                                        !image ||
+                                                        isSubmitSuccessful
+                                                    }
+                                                >
+                                                    Save
+                                                </button>
+                                            </>
                                         )}
-
-                                        <button
-                                            className="btn btn-primary"
-                                            type="submit"
-                                            disabled={
-                                                !image || isSubmitSuccessful
-                                            }
-                                        >
-                                            Save
-                                        </button>
+                                        {!image && (
+                                            <label
+                                                className="btn btn-info btn-block"
+                                                htmlFor="customFile"
+                                            >
+                                                Upload
+                                            </label>
+                                        )}
                                     </div>
                                 </div>
 

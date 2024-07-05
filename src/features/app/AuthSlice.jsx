@@ -6,10 +6,10 @@ import axios from "axios";
 
 export const getAuthHeaders = (has_file = false) => {
     let headers = HTTP_HEADERS;
-    console.log("headers => ", headers);
+    // console.log("headers => ", headers);
     const token =
         Cookies.get("token") == undefined ? null : Cookies.get("token");
-    console.log("Cookie Token => ", token);
+    // console.log("Cookie Token => ", token);
     // If user is logged in use Bearer token
     if (token) {
         headers["Authorization"] = `Bearer ${token}`;
