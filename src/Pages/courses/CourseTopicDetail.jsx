@@ -167,7 +167,7 @@ export default function CourseTopicDetail() {
             } else if (upload.file_mime_type === "application/pdf") {
                 content = (
                     <PDFReader
-                        file_path={upload.preview_path}
+                        file_path={"test.pdf"}
                         configuration={configuration}
                     />
                 );
@@ -210,13 +210,14 @@ export default function CourseTopicDetail() {
         if (upload.file_mime_type === "application/video") {
             return (
                 <>
+                    <span>Watch video</span>
                     <Button
                         variant="primary"
                         onClick={(prev) =>
                             setShowModalType({ ...prev, video: true })
                         }
                     >
-                        View Video
+                        <i class="bi bi-play" style={{fontSize:"24px"}}></i>
                     </Button>
                     <MyVerticallyCenteredModal
                         show={showModalType.video}
@@ -230,13 +231,14 @@ export default function CourseTopicDetail() {
         } else if (upload.file_mime_type === "application/pdf") {
             return (
                 <>
+                    <span>View PDF </span>
                     <Button
                         variant="primary"
                         onClick={(prev) =>
                             setShowModalType({ ...prev, pdf: true })
                         }
                     >
-                        View PDF
+                        <i class="bi bi-eye" style={{fontSize:"24px"}}></i>
                     </Button>
                     <MyVerticallyCenteredModal
                         show={showModalType.pdf}
@@ -255,13 +257,14 @@ export default function CourseTopicDetail() {
         ) {
             return (
                 <>
+                <span>View PPT </span>
                     <Button
                         variant="primary"
                         onClick={(prev) => {
                             setShowModalType({ ...prev, ppt: true });
                         }}
                     >
-                        View PPT
+                        <i class="bi bi-eye" style={{fontSize:"24px"}}></i>
                     </Button>
                     <MyVerticallyCenteredModal
                         show={showModalType.ppt}
@@ -285,7 +288,7 @@ export default function CourseTopicDetail() {
                 >
                     {course_topic.uploads.map((upload) => {
                         return (
-                            <Nav.Item as="li" key={upload.id}>
+                            <Nav.Item as="li" style={{display:"flex", justifyContent:"space-between", borderBottom: "1px dashed #ccc", marginBottom:"10px", paddingBottom:"10px"}} key={upload.id}>
                                 <RenderUploadsButton
                                     upload={upload}
                                     configuration={
