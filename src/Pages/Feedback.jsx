@@ -89,18 +89,21 @@ function Feedback() {
                 </nav>
             </PageHeader>
             <div className="container shadow inner-page-container-mb">
-                <div className="row justify-content-center" style={{ backgroundColor: "#06bbcc", color:"#fff" }}>
                 <div
+                    className="row justify-content-center"
+                    style={{ backgroundColor: "#06bbcc", color: "#fff" }}
+                >
+                    <div
                         className="text-center wow fadeInUp"
                         data-wow-delay="0.1s"
                     >
-                        <h1 className="pt-4 text-white">Send us your feedback!</h1>
-                        <p>fill the form below</p>
+                        <h1 className="pt-4 text-white">
+                            Send us your feedback!
+                        </h1>
+                        <p>Fill the form below</p>
                     </div>
                 </div>
                 <div className="row">
-                    
-
                     <div className="col-md-12 bg-white p-lg-5">
                         <Form
                             className="d-flex  w-100 flex-column gap-3"
@@ -239,6 +242,11 @@ function Feedback() {
                                             rows={3}
                                             {...register("message", {
                                                 required: "Message is required",
+                                                maxLength: {
+                                                    value: 300,
+                                                    message:
+                                                        "Message cannot exceed 300 characters",
+                                                },
                                             })}
                                             isInvalid={!!errors.message}
                                         />
