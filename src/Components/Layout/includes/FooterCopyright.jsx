@@ -11,7 +11,7 @@ function FooterCopyright() {
                         , All Right Reserved.
                     </div>
                     <div className="col-md-4 col-lg-4 text-center">
-                        Last Update On : 03 Nov 2023, 15:50
+                        {/* Last Update On : 03 Nov 2023, 15:50 */}
                     </div>
                     <div className="col-md-4 col-lg-4 text-center text-md-end">
                         <div className="footer-menu">

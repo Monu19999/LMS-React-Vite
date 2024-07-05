@@ -167,7 +167,7 @@ export default function CourseTopicDetail() {
             } else if (upload.file_mime_type === "application/pdf") {
                 content = (
                     <PDFReader
-                        file_path={"test.pdf"}
+                        file_path={upload.preview_path}
                         configuration={configuration}
                     />
                 );
@@ -217,7 +217,7 @@ export default function CourseTopicDetail() {
                             setShowModalType({ ...prev, video: true })
                         }
                     >
-                        <i class="bi bi-play" style={{fontSize:"24px"}}></i>
+                        <i class="bi bi-play" style={{ fontSize: "24px" }}></i>
                     </Button>
                     <MyVerticallyCenteredModal
                         show={showModalType.video}
@@ -238,7 +238,7 @@ export default function CourseTopicDetail() {
                             setShowModalType({ ...prev, pdf: true })
                         }
                     >
-                        <i class="bi bi-eye" style={{fontSize:"24px"}}></i>
+                        <i class="bi bi-eye" style={{ fontSize: "24px" }}></i>
                     </Button>
                     <MyVerticallyCenteredModal
                         show={showModalType.pdf}
@@ -257,14 +257,14 @@ export default function CourseTopicDetail() {
         ) {
             return (
                 <>
-                <span>View PPT </span>
+                    <span>View PPT </span>
                     <Button
                         variant="primary"
                         onClick={(prev) => {
                             setShowModalType({ ...prev, ppt: true });
                         }}
                     >
-                        <i class="bi bi-eye" style={{fontSize:"24px"}}></i>
+                        <i class="bi bi-eye" style={{ fontSize: "24px" }}></i>
                     </Button>
                     <MyVerticallyCenteredModal
                         show={showModalType.ppt}
@@ -288,7 +288,17 @@ export default function CourseTopicDetail() {
                 >
                     {course_topic.uploads.map((upload) => {
                         return (
-                            <Nav.Item as="li" style={{display:"flex", justifyContent:"space-between", borderBottom: "1px dashed #ccc", marginBottom:"10px", paddingBottom:"10px"}} key={upload.id}>
+                            <Nav.Item
+                                as="li"
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    borderBottom: "1px dashed #ccc",
+                                    marginBottom: "10px",
+                                    paddingBottom: "10px",
+                                }}
+                                key={upload.id}
+                            >
                                 <RenderUploadsButton
                                     upload={upload}
                                     configuration={
