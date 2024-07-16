@@ -6,7 +6,7 @@ import parse from "html-react-parser";
 import { Button, Nav } from "react-bootstrap";
 import ReactPlayer from "react-player";
 import Placeholder from "react-bootstrap/Placeholder";
-import { updateTopic } from "@src/features/app/CourseSlice";
+import { setTopic } from "@src/features/app/CourseSlice";
 import PDFReader from "./includes/Pdf/PDFReader";
 import GoogleDocsViewer from "react-google-docs-viewer";
 import DateFormat from "@src/Utilities/DateFormat";
@@ -78,12 +78,11 @@ export default function CourseTopicDetail() {
     const handleGetCourseTopic = async (params) => {
         let response = await dispatch(getCourseTopic(params));
         const payload = response.payload;
-        console.log("handleGetCourseTopic => ", payload);
         if (payload?.status == 200) {
             const data = payload.data;
             setPrevious(data.previous);
             setNext(data.next);
-            dispatch(updateTopic(data.current));
+            dispatch(setTopic(data.current));
         }
     };
     useEffect(() => {
@@ -211,7 +210,10 @@ export default function CourseTopicDetail() {
                             setShowModalType({ ...prev, video: true })
                         }
                     >
-                        <i class="bi bi-play" style={{ fontSize: "24px" }}></i>
+                        <i
+                            className="bi bi-play"
+                            style={{ fontSize: "24px" }}
+                        ></i>
                     </Button>
                     <MyVerticallyCenteredModal
                         show={showModalType.video}
@@ -232,7 +234,10 @@ export default function CourseTopicDetail() {
                             setShowModalType({ ...prev, pdf: true })
                         }
                     >
-                        <i class="bi bi-eye" style={{ fontSize: "24px" }}></i>
+                        <i
+                            className="bi bi-eye"
+                            style={{ fontSize: "24px" }}
+                        ></i>
                     </Button>
                     <MyVerticallyCenteredModal
                         show={showModalType.pdf}
@@ -258,7 +263,10 @@ export default function CourseTopicDetail() {
                             setShowModalType({ ...prev, ppt: true });
                         }}
                     >
-                        <i class="bi bi-eye" style={{ fontSize: "24px" }}></i>
+                        <i
+                            className="bi bi-eye"
+                            style={{ fontSize: "24px" }}
+                        ></i>
                     </Button>
                     <MyVerticallyCenteredModal
                         show={showModalType.ppt}

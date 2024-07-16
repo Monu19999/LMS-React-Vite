@@ -7,35 +7,41 @@ import Cookies from "js-cookie";
 import { getUser, getAuthHeaders } from "@src/features/app/AuthSlice";
 import { toast } from "react-toastify";
 import ProfileImage from "@src/Components/Layout/Student/ProfileImage";
+import ServerErrors from "@src/Components/ServerErrors";
 
 export default function Profile() {
     const [image, setImage] = useState("");
     const user = useSelector((state) => state.auth.user);
     const [upload, setUpload] = useState();
+    const [server_errors, setServerErrors] = useState(null);
 
     const dispatch = useDispatch();
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors, isSubmitSuccessful, isSubmitting },
+        formState: { errors, isSubmitSuccessful },
     } = useForm();
 
     const submitUploadFile = async (data, event) => {
         let form_data = new FormData();
         form_data.append("image", image);
         let headers = getAuthHeaders(true);
-
-        let response = await axios.post(
-            api("auth_update_profile_image", user),
-            form_data,
-            {
-                headers,
+        try {
+            let response = await axios.post(
+                api("auth_update_profile_image", user),
+                form_data,
+                {
+                    headers,
+                }
+            );
+            if (response.data.status == 200) {
+                toast(response.data.message);
+                dispatch(getUser());
             }
-        );
-        if (response.data.status == 200) {
-            toast(response.data.message);
-            dispatch(getUser());
+        } catch (error) {
+            const { response } = error;
+            setServerErrors(response.data);
         }
     };
 
@@ -54,6 +60,7 @@ export default function Profile() {
     }, [user, upload]);
 
     const handleUploadedFile = (event) => {
+        setServerErrors(null);
         const file = event.target.files[0];
         setImage(file);
         const urlImage = URL.createObjectURL(file);
@@ -88,6 +95,11 @@ export default function Profile() {
                                 encType="multipart/form-data"
                                 onSubmit={handleSubmit(submitUploadFile)}
                             >
+                                {server_errors?.errors && (
+                                    <ServerErrors
+                                        errors={server_errors.errors}
+                                    />
+                                )}
                                 {/* Profile picture image*/}
                                 <ProfileImage
                                     upload={upload}
@@ -95,24 +107,24 @@ export default function Profile() {
                                     style={{ height: "150px", width: "150px" }}
                                 />
                                 <div>
-                                    <input
+                                    {/* <input
                                         type="file"
                                         id="customFile"
                                         {...register("image", {
                                             required: "Please upload an image",
                                             validate: {
                                                 // If you want other file format, then add them to the array
-                                                // fileType: (file) => {
-                                                //     console.log(file);
-                                                //     return (
-                                                //         ["jpg", "png"].includes(
-                                                //             file[0].type
-                                                //                 .split("/")[1]
-                                                //                 .toLowerCase()
-                                                //         ) ||
-                                                //         "The file type should be jpg or png."
-                                                //     );
-                                                // },
+                                                fileType: (file) => {
+                                                    console.log(file);
+                                                    return (
+                                                        ["jpg", "png"].includes(
+                                                            file[0].type
+                                                                .split("/")[1]
+                                                                .toLowerCase()
+                                                        ) ||
+                                                        "The file type should be jpg or png."
+                                                    );
+                                                },
                                                 //Add other validation if you want. For example, checking for file size
                                                 //fileSize:file =>  file[0].size/(1024*1024)<5 || "The file size should be less than 5MB"
                                             },
@@ -120,7 +132,7 @@ export default function Profile() {
                                         accept="image/jpg, image/png"
                                         onChange={handleUploadedFile}
                                         hidden
-                                    />
+                                    /> */}
                                     <div className="d-flex justify-content-center gap-2">
                                         {image && (
                                             <>
@@ -138,7 +150,7 @@ export default function Profile() {
                                                     disabled={!image}
                                                 >
                                                     <i
-                                                        class="fa fa-trash mr-3"
+                                                        className="fa fa-trash mr-3"
                                                         style={{ color: "red" }}
                                                     ></i>
                                                 </span>
@@ -155,12 +167,43 @@ export default function Profile() {
                                             </>
                                         )}
                                         {!image && (
-                                            <label
+                                            // <label
+                                            //     className="btn btn-info btn-block"
+                                            //     htmlFor="customFile"
+                                            // >
+                                            //     Upload
+                                            // </label>
+                                            <input
+                                                type="file"
+                                                id="customFile"
                                                 className="btn btn-info btn-block"
-                                                htmlFor="customFile"
-                                            >
-                                                Upload
-                                            </label>
+                                                {...register("image", {
+                                                    required:
+                                                        "Please upload an image",
+                                                    validate: {
+                                                        // If you want other file format, then add them to the array
+                                                        fileType: (file) => {
+                                                            return (
+                                                                [
+                                                                    "jpg",
+                                                                    "png",
+                                                                ].includes(
+                                                                    file[0].type
+                                                                        .split(
+                                                                            "/"
+                                                                        )[1]
+                                                                        .toLowerCase()
+                                                                ) ||
+                                                                "The file type should be jpg or png."
+                                                            );
+                                                        },
+                                                        //Add other validation if you want. For example, checking for file size
+                                                        //fileSize:file =>  file[0].size/(1024*1024)<5 || "The file size should be less than 5MB"
+                                                    },
+                                                })}
+                                                accept=".jpg, .png"
+                                                onChange={handleUploadedFile}
+                                            />
                                         )}
                                     </div>
                                 </div>
@@ -312,32 +355,7 @@ export default function Profile() {
                                             defaultValue={user?.mobile}
                                         />
                                     </div>
-                                    {/* Form Group (birthday)*/}
-                                    {/* <div className="col-md-6">
-                                        <label
-                                            className="small mb-1"
-                                            htmlFor="inputBirthday"
-                                        >
-                                            Birthday
-                                        </label>
-                                        <input
-                                            className="form-control"
-                                            disabled
-                                            id="inputBirthday"
-                                            type="text"
-                                            name="birthday"
-                                            placeholder="Enter your birthday"
-                                            defaultValue="06/10/1988"
-                                        />
-                                    </div> */}
                                 </div>
-                                {/* Save changes button*/}
-                                {/* <button
-                                    className="btn btn-primary"
-                                    type="button"
-                                >
-                                    Save changes
-                                </button> */}
                             </form>
                         </div>
                     </div>

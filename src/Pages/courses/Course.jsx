@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { getCourse } from "@src/features/app/CourseSlice";
-import CourseTopicList from "./includes/CourseTopicList";
+import CourseTopicList from "./topics/CourseTopicList";
 import CourseBradeCrumb from "./includes/CourseBradeCrumb";
 import DateFormat from "@src/Utilities/DateFormat";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
-import { updateCourse } from "@src/features/app/CourseSlice";
+import { setCourse } from "@src/features/app/CourseSlice";
 
-function CourseView() {
+function Course() {
     const course = useSelector((state) => state.course.course);
     let { course_id } = useParams();
 
@@ -27,7 +27,7 @@ function CourseView() {
     };
 
     useEffect(() => {
-        dispatch(updateCourse(null));
+        dispatch(setCourse(null));
         if (course_id) {
             handleGetCourse();
         }
@@ -38,7 +38,7 @@ function CourseView() {
         return <DateFormat date={created_at} format="DD/YYYY" />;
     };
 
-    const RenderCourseView = () => {
+    const RenderCourse = () => {
         return (
             <>
                 <div
@@ -58,7 +58,7 @@ function CourseView() {
                                     }
                                     course_hierarchy={course?.course_hierarchy}
                                 />
-                                <p className="display-6 text-white animated slideInDown mb-4">
+                                <p className="display-6 text-white mb-4">
                                     {
                                         course?.course?.assigned_admin
                                             ?.category_course?.course_name_en
@@ -187,7 +187,8 @@ function CourseView() {
                     </div>
                 </div>
 
-                <div
+                {/* Course Preview Modal Start */}
+                {/* <div
                     className="modal fade"
                     id="myModal"
                     tabIndex={-1}
@@ -215,7 +216,8 @@ function CourseView() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
+                {/* Course Preview Modal End */}
 
                 <div className="container-xxl">
                     <div className="container p-0">
@@ -228,10 +230,7 @@ function CourseView() {
                                         padding: "2.4rem 0",
                                     }}
                                 >
-                                    <div
-                                        className="wow fadeInUp"
-                                        data-wow-delay="0.1s"
-                                    >
+                                    <div className="wow">
                                         <h4>Course Description</h4>
                                         <p className="text-primary">
                                             {
@@ -289,7 +288,7 @@ function CourseView() {
         );
     };
 
-    return course !== null ? <RenderCourseView /> : <BootstrapSpinner />;
+    return course !== null ? <RenderCourse /> : <BootstrapSpinner />;
 }
 
-export default CourseView;
+export default Course;

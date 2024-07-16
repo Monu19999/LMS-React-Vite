@@ -1,7 +1,7 @@
 import { ListGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import ShowCheckBox from "./ShowCheckBox";
+import ReadCheckBox from "./includes/ReadCheckBox";
 import Placeholder from "react-bootstrap/Placeholder";
 
 export default function CourseTopicList({ course, course_id }) {
@@ -36,7 +36,7 @@ export default function CourseTopicList({ course, course_id }) {
                         </ListGroup>
                     ) : (
                         <ListGroup>
-                            {course.topics.map((topic, index) => {
+                            {course.topics.map((topic) => {
                                 return (
                                     <ListGroup.Item key={topic.id}>
                                         <div className="d-flex justify-content-between">
@@ -44,7 +44,7 @@ export default function CourseTopicList({ course, course_id }) {
                                                 {auth_user &&
                                                 enrollments?.length > 0 ? (
                                                     <Link
-                                                        to={`/course/${course.encr_id}/course_topic/${topic.encr_id}/show`}
+                                                        to={`/course/${course.encr_id}/topic/${topic.encr_id}/show`}
                                                     >
                                                         {topic.title}
                                                     </Link>
@@ -54,7 +54,7 @@ export default function CourseTopicList({ course, course_id }) {
                                             </h5>
                                             {auth_user &&
                                                 enrollments?.length > 0 && (
-                                                    <ShowCheckBox
+                                                    <ReadCheckBox
                                                         topic={topic}
                                                         course_id={course_id}
                                                     />

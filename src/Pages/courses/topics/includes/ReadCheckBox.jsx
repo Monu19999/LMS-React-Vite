@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { readCourseTopic } from "@src/features/app/CourseSlice";
 import Spinner from "react-bootstrap/Spinner";
-import { updateCourse } from "@src/features/app/CourseSlice";
+import { setCourse } from "@src/features/app/CourseSlice";
 
-export default function ShowCheckBox({ topic, course_id }) {
+export default function ReadCheckBox({ topic, course_id }) {
     const dispatch = useDispatch();
     const auth_user = useSelector((state) => state.auth.user);
     const course = useSelector((state) => state.course.course);
 
     const [read_course, setReadCourse] = useState(false);
 
-    const updateCourseState = (course_copy) => {
+    const setCourseState = (course_copy) => {
         let topic_index = course_copy.course.topics.findIndex(
             (course_topic) => course_topic.id == topic.id
         );
@@ -25,8 +25,8 @@ export default function ShowCheckBox({ topic, course_id }) {
         const payload = response.payload;
         if (payload.status == 200) {
             let course_copy = JSON.parse(JSON.stringify(course));
-            let updated_course_copy = updateCourseState(course_copy);
-            dispatch(updateCourse(updated_course_copy));
+            let updated_course_copy = setCourseState(course_copy);
+            dispatch(setCourse(updated_course_copy));
         }
         setReadCourse(false);
     };

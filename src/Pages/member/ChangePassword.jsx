@@ -8,7 +8,6 @@ import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import api from "@src/apis/api";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import { DevTool } from "@hookform/devtools";
 import { getAuthHeaders } from "@src/features/app/AuthSlice";
 
 function ChangePassword() {
@@ -21,7 +20,6 @@ function ChangePassword() {
         handleSubmit,
         reset,
         watch,
-        control,
         formState: { errors, isDirty, isValid, isSubmitSuccessful },
     } = useForm({
         mode: "all",
@@ -234,23 +232,9 @@ function ChangePassword() {
                                         >
                                             Reset{""}
                                         </Button>
-                                        {/* <Button
-                                    type="submit"
-                                    className="form-control btn btn-primary px-4"
-                                >
-                                    Change Password
-                                </Button>
-                                <Button
-                                    type="button"
-                                    className="form-control btn btn-secondary"
-                                    onClick={() => reset()}
-                                >
-                                    Reset
-                                </Button> */}
                                     </Col>
                                 </Row>
                             </Form>
-                            <DevTool control={control} />
                         </div>
                     </div>
                 </div>

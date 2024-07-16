@@ -58,7 +58,7 @@ export default function Home() {
         center: true,
         margin: 24,
         dots: true,
-        loop: false,
+        loop: true,
         nav: false,
         responsive: {
             0: {
@@ -66,9 +66,11 @@ export default function Home() {
             },
             768: {
                 items: 2,
+                startPosition: 1,
             },
             992: {
                 items: 3,
+                startPosition: 1,
             },
         },
     };

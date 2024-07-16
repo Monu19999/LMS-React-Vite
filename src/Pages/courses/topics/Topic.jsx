@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-import { getCourseTopic } from "@src/features/app/CourseSlice";
+import { useParams } from "react-router-dom";
+import { getCourseTopic, setTopic } from "@src/features/app/CourseSlice";
 import parse from "html-react-parser";
 import { Button, Nav } from "react-bootstrap";
 import ReactPlayer from "react-player";
 import Placeholder from "react-bootstrap/Placeholder";
-import { updateTopic } from "@src/features/app/CourseSlice";
 import PDFReader from "@src/Pages/courses/includes/Pdf/PDFReader";
 import GoogleDocsViewer from "react-google-docs-viewer";
 import DateFormat from "@src/Utilities/DateFormat";
@@ -36,12 +35,11 @@ export default function Topic() {
     const handleGetCourseTopic = async (params) => {
         let response = await dispatch(getCourseTopic(params));
         const payload = response.payload;
-        // console.log("handleGetCourseTopic => ", payload);
         if (payload?.status == 200) {
             const data = payload.data;
             setPrevious(data.previous);
             setNext(data.next);
-            dispatch(updateTopic(data.current));
+            dispatch(setTopic(data.current));
         }
     };
     useEffect(() => {
@@ -65,11 +63,6 @@ export default function Topic() {
             setFileLoading(false);
         }
     };
-
-    // useEffect(() => {
-    //     console.log("here");
-    //     fetchFile("test.xlsx");
-    // }, []);
 
     const checkFileMimeType = (FileMimeType) => {
         const mime_types = [
@@ -156,13 +149,7 @@ export default function Topic() {
     function MyVerticallyCenteredModal(props) {
         return (
             <BootstrapModal
-                title={
-                    props.upload.file_mime_type === "application/video"
-                        ? "Video"
-                        : props.upload.file_mime_type === "application/pdf"
-                        ? "PDF"
-                        : "PPT"
-                }
+                title={course_topic?.title}
                 body={setModalBodyContent(props)}
                 {...props}
             />
@@ -173,13 +160,17 @@ export default function Topic() {
         if (upload.file_mime_type === "application/video") {
             return (
                 <>
+                    <span>Watch video</span>
                     <Button
                         variant="primary"
                         onClick={(prev) =>
                             setShowModalType({ ...prev, video: true })
                         }
                     >
-                        View Video
+                        <i
+                            className="bi bi-play"
+                            style={{ fontSize: "24px" }}
+                        ></i>
                     </Button>
                     <MyVerticallyCenteredModal
                         show={showModalType.video}
@@ -193,13 +184,17 @@ export default function Topic() {
         } else if (upload.file_mime_type === "application/pdf") {
             return (
                 <>
+                    <span>View PDF </span>
                     <Button
                         variant="primary"
                         onClick={(prev) =>
                             setShowModalType({ ...prev, pdf: true })
                         }
                     >
-                        View PDF
+                        <i
+                            className="bi bi-eye"
+                            style={{ fontSize: "24px" }}
+                        ></i>
                     </Button>
                     <MyVerticallyCenteredModal
                         show={showModalType.pdf}
@@ -218,13 +213,17 @@ export default function Topic() {
         ) {
             return (
                 <>
+                    <span>View PPT </span>
                     <Button
                         variant="primary"
                         onClick={(prev) => {
                             setShowModalType({ ...prev, ppt: true });
                         }}
                     >
-                        View PPT
+                        <i
+                            className="bi bi-eye"
+                            style={{ fontSize: "24px" }}
+                        ></i>
                     </Button>
                     <MyVerticallyCenteredModal
                         show={showModalType.ppt}
@@ -248,7 +247,17 @@ export default function Topic() {
                 >
                     {course_topic.uploads.map((upload) => {
                         return (
-                            <Nav.Item as="li" key={upload.id}>
+                            <Nav.Item
+                                as="li"
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    borderBottom: "1px dashed #ccc",
+                                    marginBottom: "10px",
+                                    paddingBottom: "10px",
+                                }}
+                                key={upload.id}
+                            >
                                 <RenderUploadsButton
                                     upload={upload}
                                     configuration={
@@ -276,12 +285,7 @@ export default function Topic() {
         return <DateFormat date={date} format="DD MMM YYYY" />;
     };
 
-    const RenderTopicDetail = () => {
-        if (course_topic?.uploads) {
-            course_topic.uploads.map((upload) => {
-                console.log("upload");
-            });
-        }
+    const RenderTopic = () => {
         return (
             <>
                 <div
@@ -294,38 +298,28 @@ export default function Topic() {
                     <div className="container">
                         <div className="row justify-content-center">
                             <div className="col-lg-12 course-detail-bc">
-                                <nav aria-label="breadcrumb" className="mb-4">
-                                    <ol className="breadcrumb">
-                                        {/* <Placeholder
+                                {course_topic_loading ? (
+                                    <Placeholder.Button
                                         xs={2}
-                                        bg="light"
-                                        size="lg"
                                         aria-hidden="true"
-                                    /> */}
-                                        {course_topic_loading ? (
-                                            <Placeholder.Button
-                                                xs={2}
-                                                aria-hidden="true"
-                                            />
-                                        ) : (
-                                            <>
-                                                <CourseBradeCrumb
-                                                    category_course={
-                                                        course_topic?.course
-                                                            ?.assigned_admin
-                                                            ?.category_course
-                                                    }
-                                                    course_hierarchy={
-                                                        course_topic?.course
-                                                            ?.assigned_admin
-                                                            ?.category_course
-                                                            ?.course_hierarchy
-                                                    }
-                                                />
-                                            </>
-                                        )}
-                                    </ol>
-                                </nav>
+                                    />
+                                ) : (
+                                    <>
+                                        <CourseBradeCrumb
+                                            category_course={
+                                                course_topic?.course
+                                                    ?.assigned_admin
+                                                    ?.category_course
+                                            }
+                                            course_hierarchy={
+                                                course_topic?.course
+                                                    ?.assigned_admin
+                                                    ?.category_course
+                                                    ?.course_hierarchy
+                                            }
+                                        />
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -337,7 +331,10 @@ export default function Topic() {
                     <div className="container mt-4 mb-4">
                         <div className="row align-items-start mb-4">
                             <div className="col-lg-8 ">
-                                <div className="col-12  p-4 shadow">
+                                <div
+                                    className="col-12 p-4 shadow"
+                                    style={{ minHeight: "350px" }}
+                                >
                                     <article className="article">
                                         <div className="article-title mb-2">
                                             {course_topic_loading ? (
@@ -347,12 +344,12 @@ export default function Topic() {
                                                 />
                                             ) : (
                                                 <>
-                                                    <h2>
+                                                    <h3>
                                                         {course_topic?.title}
-                                                    </h2>
+                                                    </h3>
                                                     <div className="media">
                                                         <div
-                                                            className="media-body"
+                                                            className="media-body pb-2"
                                                             style={{
                                                                 borderBottom:
                                                                     "1px solid #dedede",
@@ -462,21 +459,10 @@ export default function Topic() {
                                 </div>
                             </div>
                             <div className="col-lg-4 blog-aside">
-                                <div className="p-4 col-12 shadow">
-                                    {/* Author */}
-                                    {/* <div className="widget widget-author">
-                                <div className="widget-title">
-                                    <h3>Author</h3>
-                                </div>
-                                <div className="widget-body">
-                                    <div className="media align-items-center">
-                                        <div className="media-body">
-                                            <h6>Rachel Roth</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> */}
-                                    {/* End Author */}
+                                <div
+                                    className="p-4 col-12 shadow"
+                                    style={{ minHeight: "350px" }}
+                                >
                                     {/* widget Tags */}
                                     <div className="widget widget-tags">
                                         <div
@@ -487,10 +473,29 @@ export default function Topic() {
                                                 marginBottom: "10px",
                                             }}
                                         >
-                                            <h3>Related Documents</h3>
+                                            <h3 className="mb-4">
+                                                Related Documents
+                                            </h3>
                                         </div>
-                                        <div className="widget-body">
-                                            {uploadsList()}
+                                        <div className="widget-body mt-4">
+                                            {course_topic_loading ? (
+                                                <>
+                                                    <Placeholder.Button
+                                                        xs={10}
+                                                        aria-hidden="true"
+                                                    />
+                                                    <Placeholder.Button
+                                                        xs={10}
+                                                        aria-hidden="true"
+                                                    />
+                                                    <Placeholder.Button
+                                                        xs={10}
+                                                        aria-hidden="true"
+                                                    />
+                                                </>
+                                            ) : (
+                                                uploadsList()
+                                            )}
                                         </div>
                                     </div>
                                     {/* End widget Tags */}
@@ -503,5 +508,5 @@ export default function Topic() {
         );
     };
 
-    return course_topic_loading ? <BootstrapSpinner /> : <RenderTopicDetail />;
+    return <RenderTopic />;
 }

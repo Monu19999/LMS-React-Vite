@@ -128,44 +128,25 @@ export const getSearchCourses = createAsyncThunk(
     }
 );
 
-export const getCourses = createAsyncThunk("courses/getCourses", async () => {
-    let api_url = api("category_courses");
-    try {
-        const headers = getAuthHeaders();
-        const token =
-            Cookies.get("token") == undefined ? null : Cookies.get("token");
-        if (token) {
-            api_url = api("auth_category_courses");
+export const getCourses = createAsyncThunk(
+    "courses/getCourses",
+    async (data, { rejectWithValue }) => {
+        let api_url = api("category_courses");
+        try {
+            const headers = getAuthHeaders();
+            const token =
+                Cookies.get("token") == undefined ? null : Cookies.get("token");
+            if (token) {
+                api_url = api("auth_category_courses");
+            }
+            const { data } = await axios.get(api_url, { headers });
+            return data;
+        } catch (error) {
+            const { response } = error;
+            return rejectWithValue(response);
         }
-        const { data } = await axios.get(api_url, { headers });
-        return data;
-    } catch (error) {
-        const { response } = error;
-        return rejectWithValue(response.data);
     }
-
-    // let headers = {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json",
-    // };
-    // const token =
-    //     Cookies.get("token") == undefined ? null : Cookies.get("token");
-    // if (token) {
-    //     headers.Authorization = `Bearer ${token}`;
-    //     api_url = api("auth_category_courses");
-    // }
-    // const response = await fetch(api_url, {
-    //     mode: "cors",
-    //     method: "get",
-    //     headers,
-    //     cache: "no-cache",
-    // });
-    // const json = await response.json();
-    // if (navigate) {
-    //     navigate(query_string);
-    // }
-    // return json.data;
-});
+);
 
 export const getCourse = createAsyncThunk(
     "course/getCourse",
@@ -182,7 +163,8 @@ export const getCourse = createAsyncThunk(
             return data;
         } catch (error) {
             const { response } = error;
-            return rejectWithValue(response.data);
+            // console.log("getcourse => ", response);
+            return rejectWithValue(response);
         }
     }
 );
@@ -197,7 +179,7 @@ export const getCourseTopic = createAsyncThunk(
             return data;
         } catch (error) {
             const { response } = error;
-            return rejectWithValue(response.data);
+            return rejectWithValue(response);
         }
     }
 );
@@ -220,7 +202,7 @@ export const enrollCourse = createAsyncThunk(
             return data;
         } catch (error) {
             const { response } = error;
-            return rejectWithValue(response.data);
+            return rejectWithValue(response);
         }
     }
 );
@@ -240,10 +222,10 @@ export const courseSlice = createSlice({
                 course_name: null,
             };
         },
-        updateCourse: (state, action) => {
+        setCourse: (state, action) => {
             state.course = action.payload;
         },
-        updateTopic: (state, action) => {
+        setTopic: (state, action) => {
             state.topic = action.payload;
         },
         updateState: (state, action) => {
@@ -382,12 +364,7 @@ export const courseSlice = createSlice({
     },
 });
 
-export const {
-    setSearch,
-    resetSearch,
-    updateCourse,
-    updateTopic,
-    updateState,
-} = courseSlice.actions;
+export const { setSearch, resetSearch, setCourse, setTopic, updateState } =
+    courseSlice.actions;
 
 export default courseSlice.reducer;

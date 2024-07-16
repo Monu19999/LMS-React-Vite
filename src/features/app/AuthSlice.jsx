@@ -133,20 +133,17 @@ export const login = createAsyncThunk(
     }
 );
 
-export const logout = createAsyncThunk(
-    "auth/logout",
-    async (args, { navigate }) => {
-        let api_url = api("auth_logout");
-        try {
-            const headers = getAuthHeaders();
-            const { data } = await axios.delete(api_url, { headers });
-            return data;
-        } catch (error) {
-            const { response } = error;
-            return rejectWithValue(response.data);
-        }
+export const logout = createAsyncThunk("auth/logout", async () => {
+    let api_url = api("auth_logout");
+    try {
+        const headers = getAuthHeaders();
+        const { data } = await axios.delete(api_url, { headers });
+        return data;
+    } catch (error) {
+        const { response } = error;
+        return rejectWithValue(response);
     }
-);
+});
 
 export const register = createAsyncThunk("auth/register", async (userData) => {
     let api_url = api("auth_register");
@@ -284,7 +281,7 @@ export const authSlice = createSlice({
             })
             .addCase(logout.rejected, (state, { payload }) => {
                 state.user_loading = false;
-                state.error_message = payload.data.message;
+                // state.error_message = payload.data.message;
             })
 
             //register user

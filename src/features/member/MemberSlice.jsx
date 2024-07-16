@@ -8,39 +8,45 @@ const initialState = {
     pages: {},
 };
 
-export const getDashboard = createAsyncThunk("member/getDasboard", async () => {
-    let api_url = api("member_dashboard");
-    try {
-        const headers = getAuthHeaders();
-        const { data } = await axios.get(api_url, {
-            headers,
-            withCredentials: true,
-        });
-        return data;
-    } catch (error) {
-        const { response } = error;
-        return rejectWithValue(response);
+export const getDashboard = createAsyncThunk(
+    "member/getDasboard",
+    async (data, { rejectWithValue }) => {
+        let api_url = api("member_dashboard");
+        try {
+            const headers = getAuthHeaders();
+            const { data } = await axios.get(api_url, {
+                headers,
+                withCredentials: true,
+            });
+            return data;
+        } catch (error) {
+            const { response } = error;
+            return rejectWithValue(response);
+        }
     }
-});
+);
 
-export const myCourses = createAsyncThunk("member/myCourses", async () => {
-    let api_url = api("member_courses");
-    try {
-        const headers = getAuthHeaders();
-        const { data } = await axios.get(api_url, {
-            headers,
-            withCredentials: true,
-        });
-        return data;
-    } catch (error) {
-        const { response } = error;
-        return rejectWithValue(response);
+export const myCourses = createAsyncThunk(
+    "member/myCourses",
+    async (data, { rejectWithValue }) => {
+        let api_url = api("member_courses");
+        try {
+            const headers = getAuthHeaders();
+            const { data } = await axios.get(api_url, {
+                headers,
+                withCredentials: true,
+            });
+            return data;
+        } catch (error) {
+            const { response } = error;
+            return rejectWithValue(response);
+        }
     }
-});
+);
 
 export const availableCourses = createAsyncThunk(
     "member/availableCourses",
-    async () => {
+    async (data, { rejectWithValue }) => {
         let api_url = api("member_available_courses");
         try {
             const headers = getAuthHeaders();
@@ -103,9 +109,11 @@ export const memberSlice = createSlice({
                     state.pages.available_courses = payload.data;
                 }
             })
-            .addCase(availableCourses.rejected, (state, action) => {
+            .addCase(availableCourses.rejected, (state, { payload }) => {
+                // console.log(payload);
                 state.member_loading = false;
-                state.error = action.error;
+                state.error = payload.data;
+                // throw new Response("Bad Request", payload.data);
             });
     },
 });

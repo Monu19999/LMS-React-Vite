@@ -11,7 +11,7 @@ import Home from "@src/Pages/Home";
 import Page from "@src/Pages/Page";
 import Courses from "@src/Pages/courses/Courses";
 import PublicLayout from "@src/Components/Layout/Public/PublicLayout";
-import CourseView from "@src/Pages/courses/CourseView";
+import Course from "@src/Pages/courses/Course";
 import GuestLayout from "@src/Components/Layout/Guest/GuestLayout";
 import Login from "@src/Pages/auth/Login";
 import UserDashboard from "@src/Pages/member/UserDashboard";
@@ -22,7 +22,6 @@ import MyCourses from "@src/Pages/member/MyCourses";
 import MyCertificates from "@src/Pages/member/MyCertificates";
 import AvailableCourses from "@src/Pages/member/AvailableCourses";
 import ForgetPassword from "./Pages/auth/ForgetPassword";
-import CourseTopicDetail from "./Pages/courses/CourseTopicDetail";
 import ResetPasswordLinkSent from "./Pages/auth/ResetPasswordLinkSent";
 import ResetPassword from "./Pages/auth/ResetPassword";
 import StudentLayout from "@src/Components/Layout/Student/StudentLayout";
@@ -32,30 +31,8 @@ import Feedback from "./Pages/Feedback";
 import FAQ, { loader as faqLoader } from "./Pages/FAQ";
 import ChangePassword from "./Pages/member/ChangePassword";
 import Profile from "./Pages/member/Profile";
-function RootBoundary() {
-    const error = useRouteError();
-    console.log(error);
+import Topic from "./Pages/courses/topics/Topic";
 
-    if (isRouteErrorResponse(error)) {
-        if (error.status === 404) {
-            return <div>This page doesn't exist!</div>;
-        }
-
-        if (error.status === 401) {
-            return <div>You aren't authorized to see this</div>;
-        }
-
-        if (error.status === 503) {
-            return <div>Looks like our API is down</div>;
-        }
-
-        if (error.status === 418) {
-            return <div>🫖</div>;
-        }
-    }
-
-    return <div>Something went wrong</div>;
-}
 const router = createHashRouter(
     createRoutesFromElements(
         <Route path="/">
@@ -81,15 +58,13 @@ const router = createHashRouter(
                 <Route
                     exact
                     path="course/:course_id/show"
-                    element={<CourseView />}
+                    element={<Course />}
                 />
                 <Route element={<PrivateRoute />}>
                     <Route
                         exact
-                        path="course/:course_id/course_topic/:topic_id/show"
-                        element={<CourseTopicDetail />}
-                        // loader={courseTopicLoader}
-                        // errorElement={<ErrorData />}
+                        path="course/:course_id/topic/:topic_id/show"
+                        element={<Topic />}
                     />
                 </Route>
             </Route>

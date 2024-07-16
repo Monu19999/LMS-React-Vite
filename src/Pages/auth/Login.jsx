@@ -17,15 +17,8 @@ export default function Login() {
         Cookies.get("UserInfo") ? true : false
     );
 
-    const default_values =
-        import.meta.env.VITE_APP_ENV === "production"
-            ? {}
-            : {
-                  defaultValues: {
-                      email: "hw.sharma9@mp.gov.in",
-                      password: "password",
-                  },
-              };
+    // const default_values =
+    //     import.meta.env.VITE_APP_ENV === "production" ? {} : {};
 
     const {
         register,
@@ -34,7 +27,7 @@ export default function Login() {
         setValue,
         watch,
         formState: { errors, isDirty, isValid },
-    } = useForm(default_values);
+    } = useForm({});
 
     const isRememberChecked = watch("remember", false);
 
@@ -79,13 +72,13 @@ export default function Login() {
         }
 
         let response = await dispatch(login(user));
-        let data = response.payload?.data;
-        if (response.hasOwnProperty("errors")) {
-            return;
-        } else if (data?.status === 200) {
-            resetMessages();
-            navigate("/member");
-        }
+        // let data = response.payload?.data;
+        // if (response.hasOwnProperty("errors")) {
+        //     return;
+        // } else if (data?.status === 200) {
+        //     resetMessages();
+        //     navigate("/member");
+        // }
     };
 
     const handleRememberMe = (e) => {
@@ -151,6 +144,7 @@ export default function Login() {
                             <Form.Control
                                 type="text"
                                 placeholder="Enter Email"
+                                autoComplete="off"
                                 {...register("email", {
                                     required: "Email is Required!",
                                     pattern: {

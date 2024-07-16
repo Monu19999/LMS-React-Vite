@@ -46,28 +46,6 @@ function Feedback() {
                     setServerErrors(response.data.errors);
                 }
             });
-
-        // try {
-        //     const response = await fetch(api_url, {
-        //         mode: "cors",
-        //         // body: JSON.stringify(data),
-        //         method: "POST",
-        //         headers,
-        //     });
-
-        //     const json = await response.json();
-        //     console.log(response);
-        //     if (json.status !== 200) {
-        //         throw new Error("Bad response", {
-        //             cause: json,
-        //         });
-        //     }
-        //     return json;
-        //     // console.log(json);
-        //     // reset();
-        // } catch (error) {
-        //     console.warn(error);
-        // }
     };
 
     return (
