@@ -13,6 +13,7 @@ import DateFormat from "@src/Utilities/DateFormat";
 import BootstrapModal from "@src/Components/BootstrapModal";
 import CourseBradeCrumb from "@src/Pages/courses/includes/CourseBradeCrumb";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import PaginatedHtml from "@src/Utilities/PaginatedHtml";
 
 export default function CourseTopicDetail() {
     let { course_id, topic_id } = useParams();
@@ -138,12 +139,17 @@ export default function CourseTopicDetail() {
                 content = fileLoading ? (
                     <BootstrapSpinner />
                 ) : (
-                    <GoogleDocsViewer
-                        width="100%"
-                        height="400px"
-                        fileUrl={upload.preview_path}
-                        onClick={() => checkFIleLoad(upload.preview_path)}
+                    // <GoogleDocsViewer
+                    //     width="100%"
+                    //     height="400px"
+                    //     fileUrl={upload.preview_path}
+                    //     onClick={() => checkFIleLoad(upload.preview_path)}
+                    // />
+                    <PDFReader
+                        file_path={`input.pdf`}
+                        configuration={configuration}
                     />
+                    // <PaginatedHtml />
                 );
             }
         } else {
@@ -163,6 +169,7 @@ export default function CourseTopicDetail() {
                         ? "PDF"
                         : "PPT"
                 }
+                style={{backgroundColor:"rgba(0,0,255,0.3)",width:"100%"}}
                 body={setModalBodyContent(props)}
                 {...props}
             />
