@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "@src/apis/api";
+import { getAuthHeaders } from "../app/AuthSlice";
+import axios from "axios";
 
 const initialState = {
     member_loading: false,
@@ -8,87 +10,54 @@ const initialState = {
 
 export const getDashboard = createAsyncThunk(
     "member/getDasboard",
-    async (args, { getState }) => {
+    async (data, { rejectWithValue }) => {
         let api_url = api("member_dashboard");
         try {
-            const state = getState();
-            const token = state.auth.token;
-            const response = await fetch(api_url, {
-                method: "get",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                cache: "no-cache",
+            const headers = getAuthHeaders();
+            const { data } = await axios.get(api_url, {
+                headers,
+                withCredentials: true,
             });
-            const json = await response.json();
-            if (response.status !== 200) {
-                throw new Error("Bad response", {
-                    cause: json,
-                });
-            }
-            return json.data;
+            return data;
         } catch (error) {
-            return error.cause;
+            const { response } = error;
+            return rejectWithValue(response);
         }
     }
 );
 
 export const myCourses = createAsyncThunk(
     "member/myCourses",
-    async (args, { getState }) => {
+    async (data, { rejectWithValue }) => {
         let api_url = api("member_courses");
         try {
-            const state = getState();
-            const token = state.auth.token;
-            const response = await fetch(api_url, {
-                method: "get",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                cache: "no-cache",
+            const headers = getAuthHeaders();
+            const { data } = await axios.get(api_url, {
+                headers,
+                withCredentials: true,
             });
-            const json = await response.json();
-            if (response.status !== 200) {
-                throw new Error("Bad response", {
-                    cause: json,
-                });
-            }
-            return json.data;
+            return data;
         } catch (error) {
-            return error.cause;
+            const { response } = error;
+            return rejectWithValue(response);
         }
     }
 );
 
 export const availableCourses = createAsyncThunk(
     "member/availableCourses",
-    async (args, { getState }) => {
+    async (data, { rejectWithValue }) => {
         let api_url = api("member_available_courses");
         try {
-            const state = getState();
-            const token = state.auth.token;
-            const response = await fetch(api_url, {
-                method: "get",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                cache: "no-cache",
+            const headers = getAuthHeaders();
+            const { data } = await axios.get(api_url, {
+                headers,
+                withCredentials: true,
             });
-            const json = await response.json();
-            if (response.status !== 200) {
-                throw new Error("Bad response", {
-                    cause: json,
-                });
-            }
-            return json.data;
+            return data;
         } catch (error) {
-            return error.cause;
+            const { response } = error;
+            return rejectWithValue(response);
         }
     }
 );
@@ -104,11 +73,13 @@ export const memberSlice = createSlice({
             })
             .addCase(getDashboard.fulfilled, (state, { payload }) => {
                 state.member_loading = false;
-                state.pages.dashboard = payload;
+                if (payload.status == 200) {
+                    state.pages.dashboard = payload.data;
+                }
             })
-            .addCase(getDashboard.rejected, (state, action) => {
+            .addCase(getDashboard.rejected, (state, { payload }) => {
                 state.member_loading = false;
-                state.error = action.error;
+                // state.error = payload.error;
             })
 
             // Get My Courses
@@ -117,7 +88,10 @@ export const memberSlice = createSlice({
             })
             .addCase(myCourses.fulfilled, (state, { payload }) => {
                 state.member_loading = false;
-                state.pages.my_courses = payload;
+                // state.pages.my_courses = payload;
+                if (payload.status == 200) {
+                    state.pages.my_courses = payload.data;
+                }
             })
             .addCase(myCourses.rejected, (state, action) => {
                 state.member_loading = false;
@@ -130,11 +104,16 @@ export const memberSlice = createSlice({
             })
             .addCase(availableCourses.fulfilled, (state, { payload }) => {
                 state.member_loading = false;
-                state.pages.available_courses = payload;
+                // state.pages.available_courses = payload;
+                if (payload.status == 200) {
+                    state.pages.available_courses = payload.data;
+                }
             })
-            .addCase(availableCourses.rejected, (state, action) => {
+            .addCase(availableCourses.rejected, (state, { payload }) => {
+                // console.log(payload);
                 state.member_loading = false;
-                state.error = action.error;
+                state.error = payload.data;
+                // throw new Response("Bad Request", payload.data);
             });
     },
 });

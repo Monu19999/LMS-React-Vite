@@ -1,25 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDashboard } from "@src/features/member/MemberSlice";
 import { Link } from "react-router-dom";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
-import ReactPlayer from "react-player";
 
 function UserDashboard() {
-    const videoRef = useRef(ReactPlayer);
-    const [played, setPlayed] = useState(0);
-
-    const dispatch = useDispatch();
-
     const Memberloading = useSelector((state) => state.member.member_loading);
     const member = useSelector((state) => state.member.pages);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getDashboard());
     }, []);
     return (
         <>
-            <h2 className="mb-4">Dashboard</h2>
+            <h4 className="mb-4 heading-bg">Dashboard</h4>
             <div className="row">
                 {Memberloading ? (
                     <BootstrapSpinner />
@@ -97,39 +93,6 @@ function UserDashboard() {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div>
-                            {/* <ReactPlayer
-                                url="/public/test.mp4"
-                                playing={true}
-                                controls={true}
-                                pip={false}
-                                onPlay={() => console.log("played")}
-                                onPause={() => console.log("paused")}
-                                onEnded={() => console.log("ended")}
-                                config={{
-                                    file: {
-                                        attributes: {
-                                            controlsList: "nodownload", // nodownload => disable download, nofullscreen => disable fullscreen, noplaybackrate => disable playback speed
-                                            disablePictureInPicture: true,
-                                        },
-                                    },
-                                }}
-                                ref={videoRef}
-                                onContextMenu={(e) => e.preventDefault()}
-                                onProgress={() => {
-                                    videoRef.current.getCurrentTime() >=
-                                        played &&
-                                        setPlayed(
-                                            videoRef.current.getCurrentTime()
-                                        );
-                                }}
-                                onSeek={() => {
-                                    videoRef.current.getCurrentTime() >
-                                        played &&
-                                        videoRef.current.seekTo(played);
-                                }}
-                            /> */}
                         </div>
                     </>
                 )}

@@ -58,7 +58,7 @@ export default function Home() {
         center: true,
         margin: 24,
         dots: true,
-        loop: false,
+        loop: true,
         nav: false,
         responsive: {
             0: {
@@ -66,9 +66,11 @@ export default function Home() {
             },
             768: {
                 items: 2,
+                startPosition: 1,
             },
             992: {
                 items: 3,
+                startPosition: 1,
             },
         },
     };
@@ -198,7 +200,7 @@ export default function Home() {
                     >
                         <div className="counter-box">
                             {" "}
-                            <span className="counter">350</span>
+                            <span className="counter">0</span>
                             <p>Total Certification Courses</p>
                         </div>
                     </div>
@@ -347,7 +349,12 @@ export default function Home() {
                                                 className="wow fadeInUp"
                                                 data-wow-delay="0.1s"
                                             >
-                                                <CourseItem course={course} />
+                                                <CourseItem
+                                                    course={course}
+                                                    upload={
+                                                        course.course.upload
+                                                    }
+                                                />
                                             </div>
                                         </div>
                                     );

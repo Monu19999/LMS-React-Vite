@@ -4,16 +4,13 @@ import { useSelector } from "react-redux";
 export default function ResetPasswordLinkSent() {
     const auth_state = useSelector((state) => state.auth);
 
-    const ResetPasswordLink = () => {
-        if (auth_state?.reset_password_url != "") {
-            return <a href={auth_state.reset_password_url}>Reset Password</a>;
-        } else {
-            return "";
-        }
-        return auth_state?.reset_password_url != ""
-            ? auth_state.reset_password_url
-            : "";
-    };
+    // const ResetPasswordLink = () => {
+    //     if (auth_state?.reset_password_url != "") {
+    //         return <a href={auth_state.reset_password_url}>Reset Password</a>;
+    //     } else {
+    //         return "";
+    //     }
+    // };
     return (
         <div
             role="alert"
@@ -29,7 +26,7 @@ export default function ResetPasswordLinkSent() {
                     }}
                 >
                     Reset password link sent to your email successfully.
-                    <ResetPasswordLink />
+                    {/* <ResetPasswordLink /> */}
                 </p>
             </div>
         </div>

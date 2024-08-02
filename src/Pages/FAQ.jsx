@@ -1,95 +1,103 @@
 import React, { useState } from "react";
 
 import Accordion from "react-bootstrap/Accordion";
-export default function FAQ() {
-    const [accordionContent, setAccordionContent] = useState([
-        {
-            category_title: "category 1",
-            contents: [
-                {
-                    heading: "Heading1",
-                    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut  enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor i    reprehenderit in voluptate velit esse cillum dolore eu fugiat    nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ",
-                },
-            ],
-        },
-        {
-            category_title: "category 1",
-            contents: [
-                {
-                    heading: "Heading1",
-                    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut  enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor i    reprehenderit in voluptate velit esse cillum dolore eu fugiat    nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ",
-                },
-                {
-                    heading: "Heading2",
-                    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut  enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor i    reprehenderit in voluptate velit esse cillum dolore eu fugiat    nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ",
-                },
-            ],
-        },
-        {
-            category_title: "category 1",
-            contents: [
-                {
-                    heading: "Heading1",
-                    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut  enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor i    reprehenderit in voluptate velit esse cillum dolore eu fugiat    nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ",
-                },
-                {
-                    heading: "Heading2",
-                    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut  enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor i    reprehenderit in voluptate velit esse cillum dolore eu fugiat    nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ",
-                },
+import PageHeader from "@src/Pages/includes/PageHeader";
+import api from "@src/apis/api";
+import { Link, useLoaderData } from "react-router-dom";
 
-                {
-                    heading: "Heading2",
-                    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut  enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor i    reprehenderit in voluptate velit esse cillum dolore eu fugiat    nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ",
-                },
-            ],
+export async function loader() {
+    const res = await fetch(api("faq_contents"), {
+        mode: "cors",
+        method: "get",
+        headers: {
+            "Content-Type": "application/json",
         },
-    ]);
+    });
+    if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    const faq_contents = await res.json();
+    return { faq_contents };
+}
+
+export default function FAQ() {
+    const { faq_contents } = useLoaderData();
     return (
         <>
-            {/* Header Start */}
-            <div className="container-fluid bg-primary py-4 mb-4 page-header">
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-lg-10 text-center">
-                            <h1 className="display-3 text-white animated slideInDown">
-                                FAQs
-                            </h1>
-                        </div>
+            <PageHeader title="FAQs">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb justify-content-center">
+                        <li className="breadcrumb-item">
+                            <Link className="text-white" to="/">
+                                Home
+                            </Link>
+                        </li>
+                        <li className="breadcrumb-item">
+                            <Link className="text-white" to="/download">
+                                FAQ's
+                            </Link>
+                        </li>
+                    </ol>
+                </nav>
+            </PageHeader>
+            <div className="container shadow inner-page-container-mb">
+            <div className="row justify-content-center" style={{ backgroundColor: "#06bbcc", color:"#fff" }}>
+                <div className="text-center wow fadeInUp mb-4"
+                        data-wow-delay="0.1s"
+                    >
+                        <h1 className="pt-4 text-white">Frequently Asked Questions</h1>
+                       
                     </div>
                 </div>
-            </div>
-            {/* Header End */}
-            <div className="container">
-                <Accordion>
-                    {accordionContent?.map((item, index) => (
-                        <div key={index}>
-                            <Accordion.Item eventKey={index}>
-                                <Accordion.Header>
-                                    {item.category_title}
-                                </Accordion.Header>
-                                <Accordion.Body>
-                                    {item.contents.map((content, index) => (
-                                        <div
-                                            key={index}
-                                            style={{
-                                                border: "2px dashed skyblue",
-                                            }}
-                                            className="p-2 rounded-3 mb-2"
+                <div className="row">
+                    
+                    <div className="col-md-12 p-lg-5">
+                        <Accordion defaultActiveKey="0">
+                            {faq_contents.data?.faq_contents?.map(
+                                (category, index) => (
+                                    <div key={index}>
+                                        <Accordion.Item
+                                            eventKey={String(index)}
                                         >
-                                            <div className="d-flex gap-2 ">
-                                                <i className="bi bi-question-circle fa-lg"></i>{" "}
-                                                <h4>{content.heading}</h4>
-                                            </div>
-                                            <div>
-                                                <p>{content.body}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </div>
-                    ))}
-                </Accordion>
+                                            <Accordion.Header>
+                                                {category.title_en}
+                                            </Accordion.Header>
+                                            <Accordion.Body>
+                                                {category?.faq_contents.map(
+                                                    (faq_content, index) => (
+                                                        <div
+                                                            key={index}
+                                                            style={{
+                                                                border: "1px dashed #ccc",
+                                                            }}
+                                                            className="p-2 rounded-3 mb-2"
+                                                        >
+                                                            <div className="d-flex gap-2 ">
+                                                                <i className="bi bi-question-circle fa-lg"></i>{" "}
+                                                                <h4>
+                                                                    {
+                                                                        faq_content.question
+                                                                    }
+                                                                </h4>
+                                                            </div>
+                                                            <div>
+                                                                <p>
+                                                                    {
+                                                                        faq_content.answer
+                                                                    }
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                )}
+                                            </Accordion.Body>
+                                        </Accordion.Item>
+                                    </div>
+                                )
+                            )}
+                        </Accordion>
+                    </div>
+                </div>
             </div>
         </>
     );

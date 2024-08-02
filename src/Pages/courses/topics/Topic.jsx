@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, json, useParams, useRouteError } from "react-router-dom";
-import { getCourseTopic } from "@src/features/app/CourseSlice";
+import { useParams } from "react-router-dom";
+import { getCourseTopic, setTopic } from "@src/features/app/CourseSlice";
 import parse from "html-react-parser";
 import { Button, Nav } from "react-bootstrap";
 import ReactPlayer from "react-player";
 import Placeholder from "react-bootstrap/Placeholder";
-import { setTopic } from "@src/features/app/CourseSlice";
-import PDFReader from "./includes/Pdf/PDFReader";
+import PDFReader from "@src/Pages/courses/includes/Pdf/PDFReader";
 import GoogleDocsViewer from "react-google-docs-viewer";
 import DateFormat from "@src/Utilities/DateFormat";
 import BootstrapModal from "@src/Components/BootstrapModal";
@@ -15,7 +14,7 @@ import CourseBradeCrumb from "@src/Pages/courses/includes/CourseBradeCrumb";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import PaginatedHtml from "@src/Utilities/PaginatedHtml";
 
-export default function CourseTopicDetail() {
+export default function Topic() {
     let { course_id, topic_id } = useParams();
     const [showModalType, setShowModalType] = useState({
         video: false,
@@ -129,7 +128,7 @@ export default function CourseTopicDetail() {
                         configuration={configuration}
                     />
                 );
-            } else {
+            } else if (upload.file_mime_type === "application/html") {
                 content = fileLoading ? (
                     <BootstrapSpinner />
                 ) : (
@@ -139,11 +138,9 @@ export default function CourseTopicDetail() {
                     //     fileUrl={upload.preview_path}
                     //     onClick={() => checkFIleLoad(upload.preview_path)}
                     // />
-                    <PDFReader
-                        file_path={`input.pdf`}
-                        configuration={configuration}
+                    <PaginatedHtml
+                    file_path={upload.preview_path}
                     />
-                    // <PaginatedHtml />
                 );
             }
         } else {
@@ -156,14 +153,7 @@ export default function CourseTopicDetail() {
     function MyVerticallyCenteredModal(props) {
         return (
             <BootstrapModal
-                title={
-                    props.upload.file_mime_type === "application/video"
-                        ? "Video"
-                        : props.upload.file_mime_type === "application/pdf"
-                        ? "PDF"
-                        : "PPT"
-                }
-                style={{backgroundColor:"rgba(0,0,255,0.3)",width:"100%"}}
+                title={course_topic?.title}
                 body={setModalBodyContent(props)}
                 {...props}
             />
@@ -299,7 +289,7 @@ export default function CourseTopicDetail() {
         return <DateFormat date={date} format="DD MMM YYYY" />;
     };
 
-    const RenderTopicDetail = () => {
+    const RenderTopic = () => {
         return (
             <>
                 <div
@@ -346,7 +336,7 @@ export default function CourseTopicDetail() {
                         <div className="row align-items-start mb-4">
                             <div className="col-lg-8 ">
                                 <div
-                                    className="col-12  p-4 shadow"
+                                    className="col-12 p-4 shadow"
                                     style={{ minHeight: "350px" }}
                                 >
                                     <article className="article">
@@ -477,20 +467,6 @@ export default function CourseTopicDetail() {
                                     className="p-4 col-12 shadow"
                                     style={{ minHeight: "350px" }}
                                 >
-                                    {/* Author */}
-                                    {/* <div className="widget widget-author">
-                                <div className="widget-title">
-                                    <h3>Author</h3>
-                                </div>
-                                <div className="widget-body">
-                                    <div className="media align-items-center">
-                                        <div className="media-body">
-                                            <h6>Rachel Roth</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> */}
-                                    {/* End Author */}
                                     {/* widget Tags */}
                                     <div className="widget widget-tags">
                                         <div
@@ -506,7 +482,24 @@ export default function CourseTopicDetail() {
                                             </h3>
                                         </div>
                                         <div className="widget-body mt-4">
-                                            {uploadsList()}
+                                            {course_topic_loading ? (
+                                                <>
+                                                    <Placeholder.Button
+                                                        xs={10}
+                                                        aria-hidden="true"
+                                                    />
+                                                    <Placeholder.Button
+                                                        xs={10}
+                                                        aria-hidden="true"
+                                                    />
+                                                    <Placeholder.Button
+                                                        xs={10}
+                                                        aria-hidden="true"
+                                                    />
+                                                </>
+                                            ) : (
+                                                uploadsList()
+                                            )}
                                         </div>
                                     </div>
                                     {/* End widget Tags */}
@@ -519,5 +512,5 @@ export default function CourseTopicDetail() {
         );
     };
 
-    return course_topic_loading ? <BootstrapSpinner /> : <RenderTopicDetail />;
+    return <RenderTopic />;
 }

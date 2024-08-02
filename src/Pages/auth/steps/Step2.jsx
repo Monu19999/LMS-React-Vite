@@ -79,9 +79,7 @@ export default function Step2({
                                     id="first_nameHelpBlock"
                                     className="text-danger"
                                 >
-                                    {["required", "pattern"].includes(
-                                        errors?.first_name?.type
-                                    ) && <>{errors.first_name.message}</>}
+                                    {errors.first_name?.message}
                                 </Form.Text>
                             </Form.Group>
                         </div>
@@ -106,9 +104,7 @@ export default function Step2({
                                     id="last_nameHelpBlock"
                                     className="text-danger"
                                 >
-                                    {["required", "pattern"].includes(
-                                        errors?.last_name?.type
-                                    ) && <>{errors.last_name.message}</>}
+                                    {errors.last_name?.message}
                                 </Form.Text>
                             </Form.Group>
                         </div>
@@ -133,9 +129,7 @@ export default function Step2({
                                     id="emailHelpBlock"
                                     className="text-danger"
                                 >
-                                    {["required", "pattern"].includes(
-                                        errors?.email?.type
-                                    ) && <>{errors.email.message}</>}
+                                    {errors.email?.message}
                                 </Form.Text>
                             </Form.Group>
                         </div>
@@ -160,15 +154,7 @@ export default function Step2({
                                     id="usernameHelpBlock"
                                     className="text-danger"
                                 >
-                                    {[
-                                        "required",
-                                        "minLength",
-                                        // "pattern",
-                                        "startWithAlphabet",
-                                        "repetedChar",
-                                    ].includes(errors?.username?.type) && (
-                                        <>{errors.username.message}</>
-                                    )}
+                                    {errors.username?.message}
                                 </Form.Text>
                             </Form.Group>
                         </div>
@@ -193,13 +179,7 @@ export default function Step2({
                                     id="passwordHelpBlock"
                                     className="text-danger"
                                 >
-                                    {[
-                                        "required",
-                                        "minLength",
-                                        "pattern",
-                                    ].includes(errors?.password?.type) && (
-                                        <>{errors.password.message}</>
-                                    )}
+                                    {errors.password?.message}
                                 </Form.Text>
                             </Form.Group>
                         </div>
@@ -224,24 +204,7 @@ export default function Step2({
                                     id="password_confirmationHelpBlock"
                                     className="text-danger"
                                 >
-                                    {errors?.password_confirmation?.type ===
-                                        "required" && (
-                                        <p className="errorMsg">
-                                            {
-                                                errors.password_confirmation
-                                                    .message
-                                            }
-                                        </p>
-                                    )}
-                                    {errors?.password_confirmation?.type ===
-                                        "validate" && (
-                                        <p className="errorMsg">
-                                            {
-                                                errors.password_confirmation
-                                                    .message
-                                            }
-                                        </p>
-                                    )}
+                                    {errors.password_confirmation?.message}
                                 </Form.Text>
                             </Form.Group>
                         </div>
@@ -275,12 +238,7 @@ export default function Step2({
                                     id="fk_department_idHelpBlock"
                                     className="text-danger"
                                 >
-                                    {errors?.fk_department_id?.type ===
-                                        "required" && (
-                                        <p className="errorMsg">
-                                            {errors.fk_department_id.message}
-                                        </p>
-                                    )}
+                                    {errors.fk_department_id?.message}
                                 </Form.Text>
                             </Form.Group>
                         </div>
@@ -312,12 +270,7 @@ export default function Step2({
                                     id="fk_office_idHelpBlock"
                                     className="text-danger"
                                 >
-                                    {errors?.fk_office_id?.type ===
-                                        "required" && (
-                                        <p className="errorMsg">
-                                            {errors.fk_office_id.message}
-                                        </p>
-                                    )}
+                                    {errors.fk_office_id?.message}
                                 </Form.Text>
                             </Form.Group>
                         </div>

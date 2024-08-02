@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import ProfileImage from "./ProfileImage";
 
 function StudentSidebar() {
     const [isSidebarActive, SetSidebarActive] = useState(false);
@@ -20,48 +21,81 @@ function StudentSidebar() {
             </div>
             <div
                 className="img bg-wrap text-center py-4"
-                style={{
-                    backgroundImage: "url(assets/img/dashboard/bg_1.jpg)",
-                }}
+                
             >
                 <div className="user-logo">
-                    <div
-                        className="img"
-                        style={{
-                            backgroundImage:
-                                "url(assets/img/dashboard/logo.jpg)",
-                        }}
-                    />
+                    <ProfileImage upload={user?.upload} className="img" />
                     <h3>{user?.name}</h3>
                 </div>
             </div>
             <ul className="list-unstyled components mb-5">
-                <li className="active">
-                    <Link to="/member">
+                <li>
+                    <NavLink
+                        end
+                        to="/member"
+                        className={({ isActive, isPending }) =>
+                            isPending ? "pending" : isActive ? "active" : ""
+                        }
+                    >
                         <span className="fa fa-home mr-3" /> Dashboard
-                    </Link>
+                    </NavLink>
                 </li>
                 <li>
-                    <Link to="/member/available_courses">
+                    <NavLink
+                        end
+                        to="/member/available_courses"
+                        className={({ isActive, isPending }) =>
+                            isPending ? "pending" : isActive ? "active" : ""
+                        }
+                    >
                         <span className="fa fa-gift mr-3" /> Available Courses
-                    </Link>
+                    </NavLink>
                 </li>
                 <li>
-                    <Link to="/member/courses">
+                    <NavLink
+                        end
+                        to="/member/courses"
+                        className={({ isActive, isPending }) =>
+                            isPending ? "pending" : isActive ? "active" : ""
+                        }
+                    >
                         <span className="fas fa-book mr-3" /> My Courses
-                    </Link>
+                    </NavLink>
                 </li>
                 <li>
-                    <Link to="/member/certificates">
+                    <NavLink
+                        end
+                        to="/member/certificates"
+                        className={({ isActive, isPending }) =>
+                            isPending ? "pending" : isActive ? "active" : ""
+                        }
+                    >
                         <span className="fas fa-user-graduate mr-3" /> My
                         Certificate
-                    </Link>
+                    </NavLink>
                 </li>
                 <li>
-                    <Link to="/member/change-password">
-                        <span className="fas fa-user-graduate mr-3" /> {" "}
-                        Change Password
-                    </Link>
+                    <NavLink
+                        end
+                        to="/member/change-password"
+                        className={({ isActive, isPending }) =>
+                            isPending ? "pending" : isActive ? "active" : ""
+                        }
+                    >
+                        <span className="fas fa-lock mr-3" /> Change
+                        Password
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink
+                        end
+                        to="/member/profile"
+                        className={({ isActive, isPending }) =>
+                            isPending ? "pending" : isActive ? "active" : ""
+                        }
+                    >
+                        <span className="fas fa-user mr-3" /> Profile
+                    </NavLink>
                 </li>
             </ul>
         </nav>

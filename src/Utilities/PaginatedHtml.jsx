@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-const PaginatedHtml = () => {
+const PaginatedHtml = ({file_path}) => {
   const [htmlContent, setHtmlContent] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [pages, setPages] = useState([]);
 
   useEffect(() => {
-    fetch(`input-24-07-2024.html`)
+    fetch(`${file_path}`)
       .then(response => response.text())
       .then(data => {
         setHtmlContent(data);

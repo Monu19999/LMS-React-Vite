@@ -36,19 +36,10 @@ function Navbar(props) {
             >
                 {menu.children ? (
                     <>
-                        <button className="c-navbar__link">
+                        <a className="c-navbar__link" style={{color: "rgb(6, 187, 204)"}}>
                             {menu.title_en}
-                            <svg
-                                className="c-navbar__link-icon"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    fillRule="evenodd"
-                                    clipRule="evenodd"
-                                    d="M2.217 8.502l1.435-1.435L12 15.415l8.348-8.348L21.783 8.5 12 18.284 2.217 8.501z"
-                                />
-                            </svg>
-                        </button>
+                           
+                        </a>
                         {makeMenuTree(menu.children, deep + 1)}
                     </>
                 ) : (
@@ -151,7 +142,7 @@ function Navbar(props) {
                                     </Link>
                                 </div>
                                 <div className="navbar-3 c-navbar__buttons ">
-                                    <span
+                                    {/* <span
                                         className="btn btn-primary py-2 px-4 fa-search-toggle"
                                         onClick={() =>
                                             setIsSearchBoxOpen(
@@ -176,7 +167,7 @@ function Navbar(props) {
                                             type="button"
                                             defaultValue="Search"
                                         />
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>

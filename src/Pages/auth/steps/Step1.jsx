@@ -144,9 +144,7 @@ export default function Step1({
                             id="first_nameHelpBlock"
                             className="text-danger"
                         >
-                            {["required", "minLength", "maxLength"].includes(
-                                errors?.mobile?.type
-                            ) && <>{errors.mobile.message}</>}
+                            {errors.mobile?.message}
                         </Form.Text>
                     </Form.Group>
                     <div className="form-group mt-4">
@@ -178,9 +176,7 @@ export default function Step1({
                                     id="first_nameHelpBlock"
                                     className="text-danger"
                                 >
-                                    {["required"].includes(
-                                        errors?.mobile_otp?.type
-                                    ) && <>{errors.mobile_otp.message}</>}
+                                    {errors.mobile_otp?.message}
                                 </Form.Text>
                             </Form.Group>
                             {button}

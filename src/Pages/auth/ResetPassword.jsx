@@ -148,9 +148,7 @@ export default function ResetPassword() {
                                     id="first_nameHelpBlock"
                                     className="text-danger"
                                 >
-                                    {["required", "pattern"].includes(
-                                        errors?.email?.type
-                                    ) && <>{errors.email.message}</>}
+                                    {errors.email?.message}
                                 </Form.Text>
                             </Form.Group>
                             <Form.Group
@@ -181,13 +179,7 @@ export default function ResetPassword() {
                                     id="first_nameHelpBlock"
                                     className="text-danger"
                                 >
-                                    {[
-                                        "required",
-                                        "minLength",
-                                        "pattern",
-                                    ].includes(errors?.password?.type) && (
-                                        <>{errors.password.message}</>
-                                    )}
+                                    {errors.password?.message}
                                 </Form.Text>
                             </Form.Group>
 
@@ -218,16 +210,7 @@ export default function ResetPassword() {
                                     id="password_confirmationHelpBlock"
                                     className="text-danger"
                                 >
-                                    {["required", "validate"].includes(
-                                        errors?.password_confirmation?.type
-                                    ) && (
-                                        <>
-                                            {
-                                                errors.password_confirmation
-                                                    .message
-                                            }
-                                        </>
-                                    )}
+                                    {errors.password_confirmation?.message}
                                 </Form.Text>
                             </Form.Group>
                             <div className="form-group mt-4">

@@ -16,9 +16,15 @@ function EnrollCourse({ course, className, style, course_enrolment_loading }) {
     const handleEnroll = async (e) => {
         setCourseEnrolmentLoading(true);
         e.preventDefault();
-        let response = await dispatch(enrollCourse(course));
+        let response = await dispatch(
+            enrollCourse({
+                id: course.id,
+                fk_department_id: course.course_hierarchy.fk_department_id,
+                fk_office_id: course.course_hierarchy.fk_office_id,
+            })
+        );
         if (
-            response.payload.hasOwnProperty("message") &&
+            response.payload.status == 401 &&
             response.payload.message === "Unauthenticated."
         ) {
             navigate("/auth/login");

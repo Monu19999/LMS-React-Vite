@@ -13,26 +13,21 @@ export default function Login() {
     const auth_state = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [isChecked, setIsChecked] = useState(Cookies.get("UserInfo") ? true : false);
+    const [isChecked, setIsChecked] = useState(
+        Cookies.get("UserInfo") ? true : false
+    );
 
-    const default_values =
-        import.meta.env.VITE_APP_ENV === "production"
-            ? {}
-            : {
-                  defaultValues: {
-                      email: "hw.sharma9@mp.gov.in",
-                      password: "password",
-                  },
-              };
+    // const default_values =
+    //     import.meta.env.VITE_APP_ENV === "production" ? {} : {};
 
     const {
         register,
         handleSubmit,
-        formState: { errors },
         getValues,
         setValue,
         watch,
-    } = useForm(default_values);
+        formState: { errors, isDirty, isValid },
+    } = useForm({});
 
     const isRememberChecked = watch("remember", false);
 
@@ -55,35 +50,39 @@ export default function Login() {
         const encryptedUserInfo = Cookies.get("UserInfo");
         if (encryptedUserInfo) {
             const decryptedUserInfo = JSON.parse(
-                CryptoJS.AES.decrypt(encryptedUserInfo, '8103379969').toString(CryptoJS.enc.Utf8)
+                CryptoJS.AES.decrypt(encryptedUserInfo, "8103379969").toString(
+                    CryptoJS.enc.Utf8
+                )
             );
             setValue("email", decryptedUserInfo.email);
             setValue("password", decryptedUserInfo.password);
         }
     }, [setValue]);
-    
 
     const loginUser = async (user) => {
         const { email, password, remember } = getValues();
         const userInfo = { email, password };
         if (remember) {
-            const encryptedUserInfo = CryptoJS.AES.encrypt(JSON.stringify(userInfo), '8103379969').toString();
+            const encryptedUserInfo = CryptoJS.AES.encrypt(
+                JSON.stringify(userInfo),
+                "8103379969"
+            ).toString();
             Cookies.set("UserInfo", encryptedUserInfo);
-            console.log(encryptedUserInfo)
+            console.log(encryptedUserInfo);
         }
 
         let response = await dispatch(login(user));
-        let data = response.payload?.data;
-        if (response.hasOwnProperty("errors")) {
-            return;
-        } else if (data?.status === 200) {
-            resetMessages();
-            navigate("/member");
-        }
+        // let data = response.payload?.data;
+        // if (response.hasOwnProperty("errors")) {
+        //     return;
+        // } else if (data?.status === 200) {
+        //     resetMessages();
+        //     navigate("/member");
+        // }
     };
 
     const handleRememberMe = (e) => {
-        console.log(e.target.checked)
+        console.log(e.target.checked);
         if (!e.target.checked) {
             Cookies.remove("UserInfo");
         }
@@ -92,7 +91,7 @@ export default function Login() {
 
     return (
         <>
-            <div className="wrap d-md-flex">
+            <div className="wrap d-md-flex" style={{ marginTop: "7%" }}>
                 <div className="text-wrap p-4  text-center d-flex align-items-center order-md-last">
                     <div className="text w-100">
                         <div className="d-flex justify-content-center mb-4">
@@ -145,6 +144,7 @@ export default function Login() {
                             <Form.Control
                                 type="text"
                                 placeholder="Enter Email"
+                                autoComplete="off"
                                 {...register("email", {
                                     required: "Email is Required!",
                                     pattern: {
@@ -157,9 +157,7 @@ export default function Login() {
                                 id="first_nameHelpBlock"
                                 className="text-danger"
                             >
-                                {["required", "pattern"].includes(
-                                    errors?.email?.type
-                                ) && <>{errors.email.message}</>}
+                                {errors.email?.message}
                             </Form.Text>
                         </Form.Group>
                         <Form.Group
@@ -178,15 +176,14 @@ export default function Login() {
                                 id="first_nameHelpBlock"
                                 className="text-danger"
                             >
-                                {["required"].includes(
-                                    errors?.password?.type
-                                ) && <>{errors.password.message}</>}
+                                {errors.password?.message}
                             </Form.Text>
                         </Form.Group>
                         <div className="form-group mt-4">
                             <button
                                 type="submit"
                                 className="form-control btn btn-primary submit px-3"
+                                disabled={!isDirty || !isValid}
                             >
                                 Sign In
                             </button>

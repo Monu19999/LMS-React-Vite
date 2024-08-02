@@ -668,6 +668,7 @@
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
+    margin-bottom: 60px !important;
 }
 
 .page-header-inner {
@@ -2338,7 +2339,7 @@ body.is-video-popup div[data-global-resource-path*="partials/header"] {
 
 #login-form .form-control {
     height: 48px;
-    background: rgba(52, 55, 71, 0.2);
+    background: #e8f0fe;
     color: #000;
     font-size: 16px;
     border-radius: 50px;
@@ -2562,8 +2563,8 @@ body.is-video-popup div[data-global-resource-path*="partials/header"] {
 
 #login-form .form-select {
     height: 48px;
-    background-color: #d6d7da;
-    color: #abacae;
+    background-color: #e8f0fe;
+    color: #000;
     font-size: 16px;
     border-radius: 50px;
     -webkit-box-shadow: none;
@@ -2597,3 +2598,38 @@ body.is-video-popup div[data-global-resource-path*="partials/header"] {
 .course-detail-bc ol.breadcrumb .breadcrumb-item {
     color: #fff !important;
 }
+
+.inner-page-container-mb {
+    margin-bottom: 40px !important;
+}
+
+.inner-page-container-mb .form-control {
+
+    line-height: 1.8 !important;
+    border-radius: 5px !important;
+
+}
+
+h4.heading-bg {
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #06bbcc;
+    color: #fff;
+}
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    justify-content: center !important;
+    margin-bottom: 30px !important;
+}
+
+@media (max-width: 991.98px) {
+    #sidebar.active {
+        margin-left: 0;
+        position: absolute;
+        z-index: 999;
+    }
+}
+
+

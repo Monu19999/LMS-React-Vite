@@ -157,6 +157,17 @@ h5,
     border-bottom: 1px solid #06BBCC;
 }
 
+#sidebar a.active {
+    background: transparent;
+    color: #fff;
+}
+
+#sidebar a.active:hover {
+    background: #06BBCC;
+    border-bottom: 1px solid #06BBCC;
+}
+
+
 #sidebar ul li.active>a {
     background: transparent;
     color: #fff;
