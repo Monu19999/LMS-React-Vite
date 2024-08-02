@@ -212,10 +212,10 @@ export const convertCourseMedia = createAsyncThunk(
     async (params, { rejectWithValue }) => {
         try {
             const headers = getAuthHeaders();
-            console.log("converted file ===>>>",params);
+            console.log("converted file ===>>>", headers);
+            console.log(api("auth_course_media_convert", params));
             const { data } = await axios.get(
                 api("auth_course_media_convert", params),
-                {},
                 {
                     headers,
                 }
@@ -382,16 +382,16 @@ export const courseSlice = createSlice({
             .addCase(readCourseTopic.rejected, (state, { payload }) => {
                 // console.log("readCourseTopic.rejected ", payload);
             })
+
             .addCase(convertCourseMedia.pending, (state, { payload }) => {
-                // console.log("convertCourseMedia.pending ", payload);
+                console.log("convertCourseMedia.pending ", payload);
             })
             .addCase(convertCourseMedia.fulfilled, (state, { payload }) => {
-                // console.log("convertCourseMedia.fulfilled", payload);
+                console.log("convertCourseMedia.fulfilled", payload);
             })
             .addCase(convertCourseMedia.rejected, (state, { payload }) => {
-                // console.log("readCourseTopic.rejected ", payload);
-            })
-            ;
+                console.log("convertCourseMedia.rejected ", payload);
+            });
     },
 });
 

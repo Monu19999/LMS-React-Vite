@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getCourseTopic, setTopic } from "@src/features/app/CourseSlice";
+import {
+    getCourseTopic,
+    setTopic,
+    convertCourseMedia,
+} from "@src/features/app/CourseSlice";
 import parse from "html-react-parser";
 import { Button, Nav } from "react-bootstrap";
 import ReactPlayer from "react-player";
@@ -13,7 +17,6 @@ import BootstrapModal from "@src/Components/BootstrapModal";
 import CourseBradeCrumb from "@src/Pages/courses/includes/CourseBradeCrumb";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import PaginatedHtml from "@src/Utilities/PaginatedHtml";
-import  convertCourseMedia  from "@src/features/app/CourseSlice";
 
 export default function Topic() {
     let { course_id, topic_id } = useParams();
@@ -21,7 +24,7 @@ export default function Topic() {
         video: false,
         pdf: false,
         ppt: false,
-        html:false,
+        html: false,
     });
 
     let [previous, setPrevious] = useState(null);
@@ -37,13 +40,6 @@ export default function Topic() {
 
     const [convert, setConvert] = useState({});
 
-const convertHandler = async ()=>{
-    console.log("converted file");
-    const convertedFile = await dispatch(convertCourseMedia({id:1}));
-    console.log("converted file");
-}
-
-
     const handleGetCourseTopic = async (params) => {
         let response = await dispatch(getCourseTopic(params));
         const payload = response.payload;
@@ -54,9 +50,17 @@ const convertHandler = async ()=>{
             dispatch(setTopic(data.current));
         }
     };
+
+    const fileConvertHandler = async (upload) => {
+        const response = await dispatch(convertCourseMedia(upload));
+        const payload = response.payload;
+        setConvert(payload);
+    };
+
     useEffect(() => {
         if (course_id && topic_id) {
             handleGetCourseTopic({ course_id, topic_id });
+            // fileConvertHandler();
         }
     }, []);
 
@@ -107,8 +111,9 @@ const convertHandler = async ()=>{
     };
 
     const setModalBodyContent = ({ upload, configuration }) => {
+        console.log("here => " + upload);
         let content = null;
-        const isSupportedType = checkFileMimeType(upload.file_mime_type);
+        const isSupportedType = checkFileMimeType(upload?.file_mime_type);
 
         if (isSupportedType) {
             if (upload.file_mime_type === "application/video") {
@@ -143,15 +148,17 @@ const convertHandler = async ()=>{
                 content = fileLoading ? (
                     <BootstrapSpinner />
                 ) : (
+                    <PDFReader
+                        file_path={upload.preview_path}
+                        configuration={configuration}
+                    />
                     // <GoogleDocsViewer
                     //     width="100%"
                     //     height="400px"
                     //     fileUrl={upload.preview_path}
                     //     onClick={() => checkFIleLoad(upload.preview_path)}
                     // />
-                    <PaginatedHtml
-                    file_path={upload.preview_path}
-                    />
+                    // <PaginatedHtml file_path={upload.preview_path} />
                 );
             }
         } else {
@@ -221,16 +228,14 @@ const convertHandler = async ()=>{
                     />
                 </>
             );
-        } 
-        else {
+        } else {
             return (
                 <>
                     <span>View PPT </span>
                     <Button
                         variant="primary"
                         onClick={(prev) => {
-                            // setShowModalType({ ...prev, pdf: true });
-                            convertHandler();
+                            setShowModalType({ ...prev, pdf: true });
                         }}
                     >
                         <i
@@ -238,16 +243,17 @@ const convertHandler = async ()=>{
                             style={{ fontSize: "24px" }}
                         ></i>
                     </Button>
-                    <MyVerticallyCenteredModal
-                        show={showModalType.ppt}
-                        onHide={(prev) =>
-                            setShowModalType({ ...prev, pdf: false })
-                        }
-                        upload={upload}
-                    />
+                    {convert?.pdf_path && (
+                        <MyVerticallyCenteredModal
+                            show={showModalType.ppt}
+                            onHide={(prev) =>
+                                setShowModalType({ ...prev, pdf: false })
+                            }
+                            upload={convert.pdf_path}
+                        />
+                    )}
                 </>
             );
-            
         }
     };
 
