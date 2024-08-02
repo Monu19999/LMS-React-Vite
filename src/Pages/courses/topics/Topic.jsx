@@ -13,7 +13,7 @@ import BootstrapModal from "@src/Components/BootstrapModal";
 import CourseBradeCrumb from "@src/Pages/courses/includes/CourseBradeCrumb";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import PaginatedHtml from "@src/Utilities/PaginatedHtml";
-import  convertCourseMedia  from "@src/features/app/CourseSlice";
+import  {convertCourseMedia}  from "@src/features/app/CourseSlice";
 
 export default function Topic() {
     let { course_id, topic_id } = useParams();
@@ -38,9 +38,11 @@ export default function Topic() {
     const [convert, setConvert] = useState({});
 
 const convertHandler = async ()=>{
-    console.log("converted file");
-    const convertedFile = await dispatch(convertCourseMedia({id:1}));
-    console.log("converted file");
+    // console.log("converted file");
+    const convertedFile = await dispatch(convertCourseMedia({id:16}));
+    console.log("preview path=..",convertedFile.payload.pdf_path.preview_path)
+    setConvert(convertedFile.payload.pdf_path.preview_path)
+    console.log("converted file1");
 }
 
 
@@ -229,7 +231,7 @@ const convertHandler = async ()=>{
                     <Button
                         variant="primary"
                         onClick={(prev) => {
-                            // setShowModalType({ ...prev, pdf: true });
+                            setShowModalType({ ...prev, pdf: true });
                             convertHandler();
                         }}
                     >

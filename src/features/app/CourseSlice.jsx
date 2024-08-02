@@ -211,15 +211,16 @@ export const convertCourseMedia = createAsyncThunk(
     "course/convertCourseMedia",
     async (params, { rejectWithValue }) => {
         try {
-            const headers = getAuthHeaders();
             console.log("converted file ===>>>",params);
+            const headers = getAuthHeaders();
             const { data } = await axios.get(
                 api("auth_course_media_convert", params),
-                {},
+                
                 {
                     headers,
                 }
             );
+            console.log(data)
             return data;
         } catch (error) {
             const { response } = error;
