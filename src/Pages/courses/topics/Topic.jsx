@@ -20,6 +20,7 @@ export default function Topic() {
         video: false,
         pdf: false,
         ppt: false,
+        html:false,
     });
 
     let [previous, setPrevious] = useState(null);
@@ -210,35 +211,36 @@ export default function Topic() {
                     />
                 </>
             );
-        } else if (
-            upload.file_mime_type === "application/vnd.ms-powerpoint" ||
-            upload.file_mime_type ===
-                "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-        ) {
-            return (
-                <>
-                    <span>View PPT </span>
-                    <Button
-                        variant="primary"
-                        onClick={(prev) => {
-                            setShowModalType({ ...prev, ppt: true });
-                        }}
-                    >
-                        <i
-                            className="bi bi-eye"
-                            style={{ fontSize: "24px" }}
-                        ></i>
-                    </Button>
-                    <MyVerticallyCenteredModal
-                        show={showModalType.ppt}
-                        onHide={(prev) =>
-                            setShowModalType({ ...prev, ppt: false })
-                        }
-                        upload={upload}
-                    />
-                </>
-            );
-        }
+        } 
+        // else if (
+        //     upload.file_mime_type === "application/vnd.ms-powerpoint" ||
+        //     upload.file_mime_type ===
+        //         "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        // ) {
+        //     return (
+        //         <>
+        //             <span>View PPT </span>
+        //             <Button
+        //                 variant="primary"
+        //                 onClick={(prev) => {
+        //                     setShowModalType({ ...prev, pdf: true });
+        //                 }}
+        //             >
+        //                 <i
+        //                     className="bi bi-eye"
+        //                     style={{ fontSize: "24px" }}
+        //                 ></i>
+        //             </Button>
+        //             <MyVerticallyCenteredModal
+        //                 show={showModalType.ppt}
+        //                 onHide={(prev) =>
+        //                     setShowModalType({ ...prev, pdf: false })
+        //                 }
+        //                 upload={upload}
+        //             />
+        //         </>
+        //     );
+        // }
     };
 
     const uploadsList = () => {
