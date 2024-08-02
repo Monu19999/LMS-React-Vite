@@ -12,9 +12,9 @@ const errorsMiddleware = (store) => (next) => (action) => {
         const { payload } = action;
         if (isRejectedWithValue(action)) {
             if (payload?.status == 401) {
-                Cookies.remove("token", "");
-                Cookies.remove("user", "");
-                window.location.reload();
+                // Cookies.remove("token", "");
+                // Cookies.remove("user", "");
+                // window.location.reload();
             }
             // if (payload.status == 500) {
             //     console.log(payload.status);

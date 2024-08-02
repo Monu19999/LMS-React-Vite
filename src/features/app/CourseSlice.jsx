@@ -383,16 +383,16 @@ export const courseSlice = createSlice({
             .addCase(readCourseTopic.rejected, (state, { payload }) => {
                 // console.log("readCourseTopic.rejected ", payload);
             })
+
             .addCase(convertCourseMedia.pending, (state, { payload }) => {
-                // console.log("convertCourseMedia.pending ", payload);
+                console.log("convertCourseMedia.pending ", payload);
             })
             .addCase(convertCourseMedia.fulfilled, (state, { payload }) => {
-                // console.log("convertCourseMedia.fulfilled", payload);
+                console.log("convertCourseMedia.fulfilled", payload);
             })
             .addCase(convertCourseMedia.rejected, (state, { payload }) => {
-                // console.log("readCourseTopic.rejected ", payload);
-            })
-            ;
+                console.log("convertCourseMedia.rejected ", payload);
+            });
     },
 });
 

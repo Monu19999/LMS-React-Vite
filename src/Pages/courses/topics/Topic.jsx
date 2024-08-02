@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getCourseTopic, setTopic } from "@src/features/app/CourseSlice";
+import {
+    getCourseTopic,
+    setTopic,
+    convertCourseMedia,
+} from "@src/features/app/CourseSlice";
 import parse from "html-react-parser";
 import { Button, Nav } from "react-bootstrap";
 import ReactPlayer from "react-player";
@@ -13,7 +17,7 @@ import BootstrapModal from "@src/Components/BootstrapModal";
 import CourseBradeCrumb from "@src/Pages/courses/includes/CourseBradeCrumb";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import PaginatedHtml from "@src/Utilities/PaginatedHtml";
-import  {convertCourseMedia}  from "@src/features/app/CourseSlice";
+// import  {convertCourseMedia}  from "@src/features/app/CourseSlice";
 
 export default function Topic() {
     let { course_id, topic_id } = useParams();
@@ -21,12 +25,14 @@ export default function Topic() {
         video: false,
         pdf: false,
         ppt: false,
-        html:false,
+        html: false,
     });
 
     let [previous, setPrevious] = useState(null);
     let [next, setNext] = useState(null);
     let [fileLoading, setFileLoading] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState(null);
 
     const course_topic_loading = useSelector(
         (state) => state.course.course_topic_loading
@@ -56,9 +62,13 @@ const convertHandler = async ()=>{
             dispatch(setTopic(data.current));
         }
     };
+
+    
+
     useEffect(() => {
         if (course_id && topic_id) {
             handleGetCourseTopic({ course_id, topic_id });
+            // fileConvertHandler();
         }
     }, []);
 
@@ -108,9 +118,10 @@ const convertHandler = async ()=>{
             });
     };
 
-    const setModalBodyContent = ({ upload, configuration }) => {
+    const setModalBodyContent = ( upload, configuration ) => {
+        console.log("here => " , upload);
         let content = null;
-        const isSupportedType = checkFileMimeType(upload.file_mime_type);
+        const isSupportedType = checkFileMimeType(upload?.file_mime_type);
 
         if (isSupportedType) {
             if (upload.file_mime_type === "application/video") {
@@ -137,27 +148,31 @@ const convertHandler = async ()=>{
             } else if (upload.file_mime_type === "application/pdf") {
                 content = (
                     <PDFReader
-                        file_path={upload.preview_path}
+                        // file_path={upload.preview_path}
+                        file_path={`DSA-Decoded.pdf`}
                         configuration={configuration}
                     />
                 );
-            } else if (upload.file_mime_type === "application/html") {
+            } else if (upload.file_mime_type === "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
                 content = fileLoading ? (
                     <BootstrapSpinner />
                 ) : (
+                    <PDFReader
+                        // file_path={upload.preview_path}
+                        file_path={`DSA-Decoded.pdf`}
+                        configuration={configuration}
+                    />
                     // <GoogleDocsViewer
                     //     width="100%"
                     //     height="400px"
                     //     fileUrl={upload.preview_path}
                     //     onClick={() => checkFIleLoad(upload.preview_path)}
                     // />
-                    <PaginatedHtml
-                    file_path={upload.preview_path}
-                    />
+                    // <PaginatedHtml file_path={upload.preview_path} />
                 );
             }
         } else {
-            content = <p>Unsupported file type</p>;
+            content = <PaginatedHtml file_path={upload.preview_path} />
         }
 
         return content;
@@ -167,89 +182,69 @@ const convertHandler = async ()=>{
         return (
             <BootstrapModal
                 title={course_topic?.title}
-                body={setModalBodyContent(props)}
+                body={modalContent}
                 {...props}
             />
         );
     }
-
     const RenderUploadsButton = ({ upload, configuration }) => {
-        if (upload.file_mime_type === "application/video") {
-            return (
-                <>
-                    <span>Watch video</span>
-                    <Button
-                        variant="primary"
-                        onClick={(prev) =>
-                            setShowModalType({ ...prev, video: true })
-                        }
-                    >
-                        <i
-                            className="bi bi-play"
-                            style={{ fontSize: "24px" }}
-                        ></i>
-                    </Button>
-                    <MyVerticallyCenteredModal
-                        show={showModalType.video}
-                        onHide={(prev) =>
-                            setShowModalType({ ...prev, video: false })
-                        }
-                        upload={upload}
-                    />
-                </>
-            );
-        } else if (upload.file_mime_type === "application/pdf") {
-            return (
-                <>
-                    <span>View PDF </span>
-                    <Button
-                        variant="primary"
-                        onClick={(prev) =>
-                            setShowModalType({ ...prev, pdf: true })
-                        }
-                    >
-                        <i
-                            className="bi bi-eye"
-                            style={{ fontSize: "24px" }}
-                        ></i>
-                    </Button>
-                    <MyVerticallyCenteredModal
+        const handleShowModal = () => {
+            console.log("upload", upload)
+
+            const content = setModalBodyContent(upload, configuration);
+            console.log("content=>", content)
+            setModalContent(content);
+            setShowModal(true);
+        };
+
+        const fileConvertHandler = async (upload) => {
+            const response = await dispatch(convertCourseMedia(upload));
+            const payload = response.payload;
+            // console.log("payload=> ",payload)
+            // setModalContent()
+        };
+        {
+            {/* <MyVerticallyCenteredModal
                         show={showModalType.pdf}
                         onHide={(prev) =>
                             setShowModalType({ ...prev, pdf: false })
                         }
                         upload={upload}
                         configuration={configuration}
-                    />
+                    /> */}
+        }
+
+        if (upload.file_mime_type === "application/video") {
+            return (
+                <>
+                    <span>Watch video</span>
+                    <Button variant="primary" onClick={handleShowModal}>
+                        <i className="bi bi-play" style={{ fontSize: "24px" }}></i>
+                    </Button>
                 </>
             );
-        } 
-        else {
+        } else if (upload.file_mime_type === "application/pdf") {
+            return (
+                <>
+                    <span>View PDF </span>
+                    <Button variant="primary" onClick={handleShowModal}>
+                        <i className="bi bi-eye" style={{ fontSize: "24px" }}></i>
+                    </Button>
+                </>
+            );
+        } else {
             return (
                 <>
                     <span>View PPT </span>
-                    <Button
-                        variant="primary"
-                        onClick={(prev) => {
-                            setShowModalType({ ...prev, pdf: true });
-                            convertHandler();
-                        }}
+                    <Button variant="primary" 
+                    // onClick={fileConvertHandler}
+                    onClick={handleShowModal}
+                    
                     >
-                        <i
-                            className="bi bi-eye"
-                            style={{ fontSize: "24px" }}
-                        ></i>
+                        <i className="bi bi-eye" style={{ fontSize: "24px" }}></i>
                     </Button>
-                    <MyVerticallyCenteredModal
-                        show={showModalType.ppt}
-                        onHide={(prev) =>
-                            setShowModalType({ ...prev, pdf: false })
-                        }
-                        upload={upload}
-                    />
                 </>
             );
-            
         }
     };
 
@@ -524,5 +519,16 @@ const convertHandler = async ()=>{
         );
     };
 
-    return <RenderTopic />;
+    return (
+        <>
+            <RenderTopic />
+            <MyVerticallyCenteredModal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                size="xl"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            />
+        </>
+    );
 }
