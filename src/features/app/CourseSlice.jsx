@@ -208,12 +208,13 @@ export const enrollCourse = createAsyncThunk(
 );
 
 export const convertCourseMedia = createAsyncThunk(
-    "course/enrollCourse",
-    async ({ id }, { rejectWithValue }) => {
+    "course/convertCourseMedia",
+    async (params, { rejectWithValue }) => {
         try {
             const headers = getAuthHeaders();
-            const { data } = await axios.post(
-                api("auth_course_enroll", id),
+            console.log("converted file ===>>>",params);
+            const { data } = await axios.get(
+                api("auth_course_media_convert", params),
                 {},
                 {
                     headers,
@@ -380,7 +381,17 @@ export const courseSlice = createSlice({
             })
             .addCase(readCourseTopic.rejected, (state, { payload }) => {
                 // console.log("readCourseTopic.rejected ", payload);
-            });
+            })
+            .addCase(convertCourseMedia.pending, (state, { payload }) => {
+                // console.log("convertCourseMedia.pending ", payload);
+            })
+            .addCase(convertCourseMedia.fulfilled, (state, { payload }) => {
+                // console.log("convertCourseMedia.fulfilled", payload);
+            })
+            .addCase(convertCourseMedia.rejected, (state, { payload }) => {
+                // console.log("readCourseTopic.rejected ", payload);
+            })
+            ;
     },
 });
 

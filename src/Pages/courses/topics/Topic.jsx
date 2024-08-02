@@ -13,6 +13,7 @@ import BootstrapModal from "@src/Components/BootstrapModal";
 import CourseBradeCrumb from "@src/Pages/courses/includes/CourseBradeCrumb";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import PaginatedHtml from "@src/Utilities/PaginatedHtml";
+import  convertCourseMedia  from "@src/features/app/CourseSlice";
 
 export default function Topic() {
     let { course_id, topic_id } = useParams();
@@ -33,6 +34,15 @@ export default function Topic() {
     const course_topic = useSelector((state) => state.course.course_topic);
 
     const dispatch = useDispatch();
+
+    const [convert, setConvert] = useState({});
+
+const convertHandler = async ()=>{
+    console.log("converted file");
+    const convertedFile = await dispatch(convertCourseMedia({id:1}));
+    console.log("converted file");
+}
+
 
     const handleGetCourseTopic = async (params) => {
         let response = await dispatch(getCourseTopic(params));
@@ -212,35 +222,33 @@ export default function Topic() {
                 </>
             );
         } 
-        // else if (
-        //     upload.file_mime_type === "application/vnd.ms-powerpoint" ||
-        //     upload.file_mime_type ===
-        //         "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-        // ) {
-        //     return (
-        //         <>
-        //             <span>View PPT </span>
-        //             <Button
-        //                 variant="primary"
-        //                 onClick={(prev) => {
-        //                     setShowModalType({ ...prev, pdf: true });
-        //                 }}
-        //             >
-        //                 <i
-        //                     className="bi bi-eye"
-        //                     style={{ fontSize: "24px" }}
-        //                 ></i>
-        //             </Button>
-        //             <MyVerticallyCenteredModal
-        //                 show={showModalType.ppt}
-        //                 onHide={(prev) =>
-        //                     setShowModalType({ ...prev, pdf: false })
-        //                 }
-        //                 upload={upload}
-        //             />
-        //         </>
-        //     );
-        // }
+        else {
+            return (
+                <>
+                    <span>View PPT </span>
+                    <Button
+                        variant="primary"
+                        onClick={(prev) => {
+                            // setShowModalType({ ...prev, pdf: true });
+                            convertHandler();
+                        }}
+                    >
+                        <i
+                            className="bi bi-eye"
+                            style={{ fontSize: "24px" }}
+                        ></i>
+                    </Button>
+                    <MyVerticallyCenteredModal
+                        show={showModalType.ppt}
+                        onHide={(prev) =>
+                            setShowModalType({ ...prev, pdf: false })
+                        }
+                        upload={upload}
+                    />
+                </>
+            );
+            
+        }
     };
 
     const uploadsList = () => {
