@@ -207,6 +207,26 @@ export const enrollCourse = createAsyncThunk(
     }
 );
 
+export const convertCourseMedia = createAsyncThunk(
+    "course/enrollCourse",
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const headers = getAuthHeaders();
+            const { data } = await axios.post(
+                api("auth_course_enroll", id),
+                {},
+                {
+                    headers,
+                }
+            );
+            return data;
+        } catch (error) {
+            const { response } = error;
+            return rejectWithValue(response);
+        }
+    }
+);
+
 export const courseSlice = createSlice({
     name: "course",
     initialState,

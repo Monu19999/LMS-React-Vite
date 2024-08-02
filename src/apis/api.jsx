@@ -51,6 +51,9 @@ const api_urls = {
     auth_course_topic_read: function (params) {
         return `/api/auth/course/${params.course_id}/course_topic/${params.topic_id}/read`;
     },
+    auth_course_media_convert: function (params) {
+        return `/api/auth/course_media/${params.id}/convert`;
+    },
     member_dashboard: "/api/auth/member/dashboard",
     member_courses: "/api/auth/member/courses",
     member_available_courses: "/api/auth/member/available_courses",
