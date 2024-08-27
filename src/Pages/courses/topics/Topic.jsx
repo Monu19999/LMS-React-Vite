@@ -28,9 +28,9 @@ export default function Topic() {
         html: false,
     });
 
-    let [previous, setPrevious] = useState(null);
-    let [next, setNext] = useState(null);
-    let [fileLoading, setFileLoading] = useState(false);
+    const [previous, setPrevious] = useState(null);
+    const [next, setNext] = useState(null);
+    const [fileLoading, setFileLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState(null);
 
@@ -43,14 +43,16 @@ export default function Topic() {
 
     const [convert, setConvert] = useState({});
 
-const convertHandler = async ()=>{
-    // console.log("converted file");
-    const convertedFile = await dispatch(convertCourseMedia({id:16}));
-    console.log("preview path=..",convertedFile.payload.pdf_path.preview_path)
-    setConvert(convertedFile.payload.pdf_path.preview_path)
-    console.log("converted file1");
-}
-
+    const convertHandler = async () => {
+        // console.log("converted file");
+        const convertedFile = await dispatch(convertCourseMedia({ id: 16 }));
+        console.log(
+            "preview path=..",
+            convertedFile.payload.pdf_path.preview_path
+        );
+        setConvert(convertedFile.payload.pdf_path.preview_path);
+        console.log("converted file1");
+    };
 
     const handleGetCourseTopic = async (params) => {
         let response = await dispatch(getCourseTopic(params));
@@ -62,8 +64,6 @@ const convertHandler = async ()=>{
             dispatch(setTopic(data.current));
         }
     };
-
-    
 
     useEffect(() => {
         if (course_id && topic_id) {
@@ -118,8 +118,8 @@ const convertHandler = async ()=>{
             });
     };
 
-    const setModalBodyContent = ( upload, configuration ) => {
-        console.log("here => " , upload);
+    const setModalBodyContent = (upload, configuration) => {
+        console.log("here => ", upload);
         let content = null;
         const isSupportedType = checkFileMimeType(upload?.file_mime_type);
 
@@ -148,32 +148,25 @@ const convertHandler = async ()=>{
             } else if (upload.file_mime_type === "application/pdf") {
                 content = (
                     <PDFReader
-                        // file_path={upload.preview_path}
-                        file_path={`DSA-Decoded.pdf`}
+                        file_path={upload.preview_path}
                         configuration={configuration}
                     />
                 );
-            } else if (upload.file_mime_type === "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
+            } else {
                 content = fileLoading ? (
                     <BootstrapSpinner />
                 ) : (
                     <PDFReader
-                        // file_path={upload.preview_path}
-                        file_path={`DSA-Decoded.pdf`}
+                        file_path={upload.preview_path}
                         configuration={configuration}
                     />
-                    // <GoogleDocsViewer
-                    //     width="100%"
-                    //     height="400px"
-                    //     fileUrl={upload.preview_path}
-                    //     onClick={() => checkFIleLoad(upload.preview_path)}
-                    // />
                     // <PaginatedHtml file_path={upload.preview_path} />
                 );
             }
-        } else {
-            content = <PaginatedHtml file_path={upload.preview_path} />
         }
+        //  else {
+        //     content = <PaginatedHtml file_path={upload.preview_path} />;
+        // }
 
         return content;
     };
@@ -189,29 +182,39 @@ const convertHandler = async ()=>{
     }
     const RenderUploadsButton = ({ upload, configuration }) => {
         const handleShowModal = () => {
-            console.log("upload", upload)
-
-            const content = setModalBodyContent(upload, configuration);
-            console.log("content=>", content)
-            setModalContent(content);
-            setShowModal(true);
+            fileConvertHandler(upload, configuration);
         };
 
-        const fileConvertHandler = async (upload) => {
-            const response = await dispatch(convertCourseMedia(upload));
-            const payload = response.payload;
-            // console.log("payload=> ",payload)
+        const fileConvertHandler = async (upload, configuration) => {
+            if (
+                upload.file_mime_type == "application/vnd.ms-powerpoint" ||
+                upload.file_mime_type ==
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            ) {
+                const response = await dispatch(convertCourseMedia(upload));
+                const payload = response.payload;
+                const content = setModalBodyContent(payload, configuration);
+                setModalContent(content);
+                setShowModal(true);
+            } else {
+                const content = setModalBodyContent(upload, configuration);
+                setModalContent(content);
+                setShowModal(true);
+            }
+            // console.log("payload=> ", payload);
             // setModalContent()
         };
         {
-            {/* <MyVerticallyCenteredModal
+            {
+                /* <MyVerticallyCenteredModal
                         show={showModalType.pdf}
                         onHide={(prev) =>
                             setShowModalType({ ...prev, pdf: false })
                         }
                         upload={upload}
                         configuration={configuration}
-                    /> */}
+                    /> */
+            }
         }
 
         if (upload.file_mime_type === "application/video") {
@@ -219,7 +222,10 @@ const convertHandler = async ()=>{
                 <>
                     <span>Watch video</span>
                     <Button variant="primary" onClick={handleShowModal}>
-                        <i className="bi bi-play" style={{ fontSize: "24px" }}></i>
+                        <i
+                            className="bi bi-play"
+                            style={{ fontSize: "24px" }}
+                        ></i>
                     </Button>
                 </>
             );
@@ -228,7 +234,10 @@ const convertHandler = async ()=>{
                 <>
                     <span>View PDF </span>
                     <Button variant="primary" onClick={handleShowModal}>
-                        <i className="bi bi-eye" style={{ fontSize: "24px" }}></i>
+                        <i
+                            className="bi bi-eye"
+                            style={{ fontSize: "24px" }}
+                        ></i>
                     </Button>
                 </>
             );
@@ -236,12 +245,15 @@ const convertHandler = async ()=>{
             return (
                 <>
                     <span>View PPT </span>
-                    <Button variant="primary" 
-                    // onClick={fileConvertHandler}
-                    onClick={handleShowModal}
-                    
+                    <Button
+                        variant="primary"
+                        // onClick={fileConvertHandler}
+                        onClick={handleShowModal}
                     >
-                        <i className="bi bi-eye" style={{ fontSize: "24px" }}></i>
+                        <i
+                            className="bi bi-eye"
+                            style={{ fontSize: "24px" }}
+                        ></i>
                     </Button>
                 </>
             );
