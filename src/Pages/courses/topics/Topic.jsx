@@ -148,8 +148,8 @@ const convertHandler = async ()=>{
             } else if (upload.file_mime_type === "application/pdf") {
                 content = (
                     <PDFReader
-                        // file_path={upload.preview_path}
-                        file_path={`DSA-Decoded.pdf`}
+                        file_path={upload.preview_path}
+                        // file_path={`DSA-Decoded.pdf`}
                         configuration={configuration}
                     />
                 );
@@ -158,8 +158,8 @@ const convertHandler = async ()=>{
                     <BootstrapSpinner />
                 ) : (
                     <PDFReader
-                        // file_path={upload.preview_path}
-                        file_path={`DSA-Decoded.pdf`}
+                        file_path={upload.preview_path}
+                        // file_path={`DSA-Decoded.pdf`}
                         configuration={configuration}
                     />
                     // <GoogleDocsViewer
