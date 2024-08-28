@@ -91,7 +91,7 @@ export default function Login() {
 
     return (
         <>
-            <div className="wrap d-md-flex" style={{ marginTop: "7%" }}>
+            <div className="wrap d-md-flex">
                 <div className="text-wrap p-4  text-center d-flex align-items-center order-md-last">
                     <div className="text w-100">
                         <div className="d-flex justify-content-center mb-4">

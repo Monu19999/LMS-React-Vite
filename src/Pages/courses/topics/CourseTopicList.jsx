@@ -1,6 +1,6 @@
 import { ListGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ReadCheckBox from "./includes/ReadCheckBox";
 import Placeholder from "react-bootstrap/Placeholder";
 
@@ -8,6 +8,7 @@ export default function CourseTopicList({ course, course_id }) {
     const course_loading = useSelector((state) => state.course.course_loading);
     const auth_user = useSelector((state) => state.auth.user);
     const enrollments = useSelector((state) => state.course.course.enrollments);
+    const navigate = useNavigate();
     return (
         <>
             <h4>Course contains:</h4>
@@ -49,7 +50,13 @@ export default function CourseTopicList({ course, course_id }) {
                                                         {topic.title}
                                                     </Link>
                                                 ) : (
-                                                    topic.title
+                                                    <span onClick={()=>{
+                                                        alert("please login to show content")
+                                                        navigate("/auth/login")
+                                                    }}>
+                                                    {topic.title}
+                                                    </span>
+                                                    
                                                 )}
                                             </h5>
                                             {auth_user &&

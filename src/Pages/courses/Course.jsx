@@ -35,7 +35,7 @@ function Course() {
 
     const CourseCreatedAt = () => {
         const created_at = new Date(course?.course?.created_at);
-        return <DateFormat date={created_at} format="DD/YYYY" />;
+        return <DateFormat date={created_at} format="DD/MM/YYYY" />;
     };
 
     const RenderCourse = () => {

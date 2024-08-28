@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
-    getCourseTopic,
-    setTopic,
-    convertCourseMedia,
+  getCourseTopic,
+  setTopic,
+  convertCourseMedia,
 } from "@src/features/app/CourseSlice";
 import parse from "html-react-parser";
 import { Button, Nav } from "react-bootstrap";
@@ -20,195 +20,198 @@ import PaginatedHtml from "@src/Utilities/PaginatedHtml";
 // import  {convertCourseMedia}  from "@src/features/app/CourseSlice";
 
 export default function Topic() {
-    let { course_id, topic_id } = useParams();
-    const [showModalType, setShowModalType] = useState({
-        video: false,
-        pdf: false,
-        ppt: false,
-        html: false,
-    });
+  let { course_id, topic_id } = useParams();
+  const [showModalType, setShowModalType] = useState({
+    video: false,
+    pdf: false,
+    ppt: false,
+    html: false,
+  });
 
-    const [previous, setPrevious] = useState(null);
-    const [next, setNext] = useState(null);
-    const [fileLoading, setFileLoading] = useState(false);
-    const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState(null);
+  const [previous, setPrevious] = useState(null);
+  const [next, setNext] = useState(null);
+  const [fileLoading, setFileLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
 
-    const course_topic_loading = useSelector(
-        (state) => state.course.course_topic_loading
-    );
-    const course_topic = useSelector((state) => state.course.course_topic);
+  const course_topic_loading = useSelector(
+    (state) => state.course.course_topic_loading
+  );
+  const course_topic = useSelector((state) => state.course.course_topic);
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const [convert, setConvert] = useState({});
+  const [convert, setConvert] = useState({});
 
-    const convertHandler = async () => {
-        // console.log("converted file");
-        const convertedFile = await dispatch(convertCourseMedia({ id: 16 }));
-        console.log(
-            "preview path=..",
-            convertedFile.payload.pdf_path.preview_path
-        );
-        setConvert(convertedFile.payload.pdf_path.preview_path);
-        console.log("converted file1");
-    };
+  const convertHandler = async () => {
+    // console.log("converted file");
+    const convertedFile = await dispatch(convertCourseMedia({ id: 16 }));
+    console.log("preview path=..", convertedFile.payload.pdf_path.preview_path);
+    setConvert(convertedFile.payload.pdf_path.preview_path);
+    console.log("converted file1");
+  };
 
-    const handleGetCourseTopic = async (params) => {
-        let response = await dispatch(getCourseTopic(params));
-        const payload = response.payload;
-        if (payload?.status == 200) {
-            const data = payload.data;
-            setPrevious(data.previous);
-            setNext(data.next);
-            dispatch(setTopic(data.current));
-        }
-    };
-
-    useEffect(() => {
-        if (course_id && topic_id) {
-            handleGetCourseTopic({ course_id, topic_id });
-            // fileConvertHandler();
-        }
-    }, []);
-
-    const fetchFile = async (file) => {
-        setFileLoading(true);
-        const response = await fetch(file, {
-            mode: "cors",
-            method: "GET",
-            headers: {
-                "access-control-allow-origin": "*",
-                "Content-type": "application/json; charset=UTF-8",
-            },
-            cache: "no-cache",
-        });
-        if (response.status == 200) {
-            setFileLoading(false);
-        }
-    };
-
-    const checkFileMimeType = (FileMimeType) => {
-        const mime_types = [
-            "application/video",
-            "application/pdf",
-            "application/vnd.ms-powerpoint",
-            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-        ];
-        return mime_types.includes(FileMimeType);
-    };
-
-    const checkFIleLoad = (preview_path) => {
-        fetch(preview_path)
-            .then((response) => {
-                if (response.status === 200) {
-                    console.log("SUCCESSS");
-                    return response.json();
-                } else if (response.status === 408) {
-                    console.log("SOMETHING WENT WRONG");
-                    this.setState({ requestFailed: true });
-                }
-            })
-            .then((data) => {
-                this.setState({ isLoading: false, downlines: data.response });
-                console.log("DATA STORED");
-            })
-            .catch((error) => {
-                this.setState({ requestFailed: true });
-            });
-    };
-
-    const setModalBodyContent = (upload, configuration) => {
-        console.log("here => ", upload);
-        let content = null;
-        const isSupportedType = checkFileMimeType(upload?.file_mime_type);
-
-        if (isSupportedType) {
-            if (upload.file_mime_type === "application/video") {
-                content = (
-                    <ReactPlayer
-                        url={upload.file_path}
-                        playing={false}
-                        controls={true}
-                        pip={false}
-                        onPlay={() => console.log("played")}
-                        onPause={() => console.log("paused")}
-                        onEnded={() => console.log("ended")}
-                        config={{
-                            file: {
-                                attributes: {
-                                    controlsList: "nodownload",
-                                    disablePictureInPicture: true,
-                                },
-                            },
-                        }}
-                        width="100%"
-                    />
-                );
-            } else if (upload.file_mime_type === "application/pdf") {
-                content = (
-                    <PDFReader
-                        file_path={upload.preview_path}
-                        // file_path={`DSA-Decoded.pdf`}
-                        configuration={configuration}
-                    />
-                );
-            } else {
-                content = fileLoading ? (
-                    <BootstrapSpinner />
-                ) : (
-                    <PDFReader
-                        file_path={upload.preview_path}
-                        // file_path={`DSA-Decoded.pdf`}
-                        configuration={configuration}
-                    />
-                    // <PaginatedHtml file_path={upload.preview_path} />
-                );
-            }
-        }
-        //  else {
-        //     content = <PaginatedHtml file_path={upload.preview_path} />;
-        // }
-
-        return content;
-    };
-
-    function MyVerticallyCenteredModal(props) {
-        return (
-            <BootstrapModal
-                title={course_topic?.title}
-                body={modalContent}
-                {...props}
-            />
-        );
+  const handleGetCourseTopic = async (params) => {
+    let response = await dispatch(getCourseTopic(params));
+    const payload = response.payload;
+    if (payload?.status == 200) {
+      const data = payload.data;
+      setPrevious(data.previous);
+      setNext(data.next);
+      dispatch(setTopic(data.current));
     }
-    const RenderUploadsButton = ({ upload, configuration }) => {
-        const handleShowModal = () => {
-            fileConvertHandler(upload, configuration);
-        };
+  };
 
-        const fileConvertHandler = async (upload, configuration) => {
-            if (
-                upload.file_mime_type == "application/vnd.ms-powerpoint" ||
-                upload.file_mime_type ==
-                    "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-            ) {
-                const response = await dispatch(convertCourseMedia(upload));
-                const payload = response.payload;
-                const content = setModalBodyContent(payload, configuration);
-                setModalContent(content);
-                setShowModal(true);
-            } else {
-                const content = setModalBodyContent(upload, configuration);
-                setModalContent(content);
-                setShowModal(true);
-            }
-            // console.log("payload=> ", payload);
-            // setModalContent()
-        };
-        {
-            {
-                /* <MyVerticallyCenteredModal
+  const navigate = useNavigate();
+
+  const goBack = () => {
+    navigate(-1); // -1 means go back one step in the history stack
+  };
+
+  useEffect(() => {
+    if (course_id && topic_id) {
+      handleGetCourseTopic({ course_id, topic_id });
+      // fileConvertHandler();
+    }
+  }, []);
+
+  const fetchFile = async (file) => {
+    setFileLoading(true);
+    const response = await fetch(file, {
+      mode: "cors",
+      method: "GET",
+      headers: {
+        "access-control-allow-origin": "*",
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      cache: "no-cache",
+    });
+    if (response.status == 200) {
+      setFileLoading(false);
+    }
+  };
+
+  const checkFileMimeType = (FileMimeType) => {
+    const mime_types = [
+      "application/video",
+      "application/pdf",
+      "application/vnd.ms-powerpoint",
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    ];
+    return mime_types.includes(FileMimeType);
+  };
+
+  const checkFIleLoad = (preview_path) => {
+    fetch(preview_path)
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("SUCCESSS");
+          return response.json();
+        } else if (response.status === 408) {
+          console.log("SOMETHING WENT WRONG");
+          this.setState({ requestFailed: true });
+        }
+      })
+      .then((data) => {
+        this.setState({ isLoading: false, downlines: data.response });
+        console.log("DATA STORED");
+      })
+      .catch((error) => {
+        this.setState({ requestFailed: true });
+      });
+  };
+
+  const setModalBodyContent = (upload, configuration) => {
+    console.log("here => ", upload.pdf_path.preview_path);
+    let content = null;
+    const isSupportedType = checkFileMimeType(upload?.file_mime_type);
+
+    if (isSupportedType) {
+      if (upload.file_mime_type === "application/video") {
+        content = (
+          <ReactPlayer
+            url={upload.file_path}
+            playing={false}
+            controls={true}
+            pip={false}
+            onPlay={() => console.log("played")}
+            onPause={() => console.log("paused")}
+            onEnded={() => console.log("ended")}
+            config={{
+              file: {
+                attributes: {
+                  controlsList: "nodownload",
+                  disablePictureInPicture: true,
+                },
+              },
+            }}
+            width="100%"
+          />
+        );
+      } else if (upload.file_mime_type === "application/pdf") {
+        content = (
+          <PDFReader
+            file_path={upload.pdf_path.preview_path}
+            // file_path={`DSA-Decoded.pdf`}
+            configuration={configuration}
+          />
+        );
+      } else {
+        content = fileLoading ? (
+          <BootstrapSpinner />
+        ) : (
+          <PDFReader
+            file_path={upload.pdf_path.preview_path}
+            // file_path={`DSA-Decoded.pdf`}
+            configuration={configuration}
+          />
+          // <PaginatedHtml file_path={upload.preview_path} />
+        );
+      }
+    }
+    //  else {
+    //     content = <PaginatedHtml file_path={upload.preview_path} />;
+    // }
+
+    return content;
+  };
+
+  function MyVerticallyCenteredModal(props) {
+    return (
+      <BootstrapModal
+        title={course_topic?.title}
+        body={modalContent}
+        {...props}
+      />
+    );
+  }
+  const RenderUploadsButton = ({ upload, configuration }) => {
+    const handleShowModal = () => {
+      fileConvertHandler(upload, configuration);
+    };
+
+    const fileConvertHandler = async (upload, configuration) => {
+      if (
+        upload.file_mime_type == "application/vnd.ms-powerpoint" ||
+        upload.file_mime_type ==
+          "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+      ) {
+        const response = await dispatch(convertCourseMedia(upload));
+        const payload = response.payload;
+        const content = setModalBodyContent(payload, configuration);
+        setModalContent(content);
+        setShowModal(true);
+      } else {
+        const content = setModalBodyContent(upload, configuration);
+        setModalContent(content);
+        setShowModal(true);
+      }
+      // console.log("payload=> ", payload);
+      // setModalContent()
+    };
+    {
+      {
+        /* <MyVerticallyCenteredModal
                         show={showModalType.pdf}
                         onHide={(prev) =>
                             setShowModalType({ ...prev, pdf: false })
@@ -216,333 +219,301 @@ export default function Topic() {
                         upload={upload}
                         configuration={configuration}
                     /> */
-            }
-        }
+      }
+    }
 
-        if (upload.file_mime_type === "application/video") {
-            return (
-                <>
-                    <span>Watch video</span>
-                    <Button variant="primary" onClick={handleShowModal}>
-                        <i
-                            className="bi bi-play"
-                            style={{ fontSize: "24px" }}
-                        ></i>
-                    </Button>
-                </>
-            );
-        } else if (upload.file_mime_type === "application/pdf") {
-            return (
-                <>
-                    <span>View PDF </span>
-                    <Button variant="primary" onClick={handleShowModal}>
-                        <i
-                            className="bi bi-eye"
-                            style={{ fontSize: "24px" }}
-                        ></i>
-                    </Button>
-                </>
-            );
-        } else {
-            return (
-                <>
-                    <span>View PPT </span>
-                    <Button
-                        variant="primary"
-                        // onClick={fileConvertHandler}
-                        onClick={handleShowModal}
-                    >
-                        <i
-                            className="bi bi-eye"
-                            style={{ fontSize: "24px" }}
-                        ></i>
-                    </Button>
-                </>
-            );
-        }
-    };
+    if (upload.file_mime_type === "application/video") {
+      return (
+        <>
+          <span>Watch video</span>
+          <Button variant="primary" onClick={handleShowModal}>
+            <i className="bi bi-play" style={{ fontSize: "24px" }}></i>
+          </Button>
+        </>
+      );
+    } else if (upload.file_mime_type === "application/pdf") {
+      return (
+        <>
+          <span>View PDF </span>
+          <Button variant="primary" onClick={handleShowModal}>
+            <i className="bi bi-eye" style={{ fontSize: "24px" }}></i>
+          </Button>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <span>View PPT </span>
+          <Button
+            variant="primary"
+            // onClick={fileConvertHandler}
+            onClick={handleShowModal}
+          >
+            <i className="bi bi-eye" style={{ fontSize: "24px" }}></i>
+          </Button>
+        </>
+      );
+    }
+  };
 
-    const uploadsList = () => {
-        if (course_topic?.uploads) {
+  const uploadsList = () => {
+    if (course_topic?.uploads) {
+      return (
+        <Nav defaultActiveKey="/home" className="flex-column gap-2" as="ul">
+          {course_topic.uploads.map((upload) => {
             return (
-                <Nav
-                    defaultActiveKey="/home"
-                    className="flex-column gap-2"
-                    as="ul"
-                >
-                    {course_topic.uploads.map((upload) => {
-                        return (
-                            <Nav.Item
-                                as="li"
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    borderBottom: "1px dashed #ccc",
-                                    marginBottom: "10px",
-                                    paddingBottom: "10px",
-                                }}
-                                key={upload.id}
-                            >
-                                <RenderUploadsButton
-                                    upload={upload}
-                                    configuration={
-                                        course_topic?.course?.assigned_admin
-                                            ?.category_course?.configuration
-                                    }
-                                />
-                            </Nav.Item>
-                        );
-                    })}
-                </Nav>
+              <Nav.Item
+                as="li"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  borderBottom: "1px dashed #ccc",
+                  marginBottom: "10px",
+                  paddingBottom: "10px",
+                }}
+                key={upload.id}
+              >
+                <RenderUploadsButton
+                  upload={upload}
+                  configuration={
+                    course_topic?.course?.assigned_admin?.category_course
+                      ?.configuration
+                  }
+                />
+              </Nav.Item>
             );
-        }
-    };
+          })}
+        </Nav>
+      );
+    }
+  };
 
-    const CourseTopicUpdatedAt = () => {
-        let date = "";
-        if (course_topic?.updated_at) {
-            date = new Date(course_topic?.updated_at);
-        } else if (course_topic?.created_at) {
-            date = new Date(course_topic?.created_at);
-        } else {
-            return date;
-        }
-        return <DateFormat date={date} format="DD MMM YYYY" />;
-    };
+  const CourseTopicUpdatedAt = () => {
+    let date = "";
+    if (course_topic?.updated_at) {
+      date = new Date(course_topic?.updated_at);
+    } else if (course_topic?.created_at) {
+      date = new Date(course_topic?.created_at);
+    } else {
+      return date;
+    }
+    return <DateFormat date={date} format="DD MMM YYYY" />;
+  };
 
-    const RenderTopic = () => {
-        return (
-            <>
-                <div
-                    className="container-fluid pt-4 mb-4 "
-                    style={{
-                        backgroundColor: "#343747",
-                        minHeight: 50,
-                    }}
-                >
-                    <div className="container">
-                        <div className="row justify-content-center">
-                            <div className="col-lg-12 course-detail-bc">
-                                {course_topic_loading ? (
-                                    <Placeholder.Button
-                                        xs={2}
-                                        aria-hidden="true"
-                                    />
-                                ) : (
-                                    <>
-                                        <CourseBradeCrumb
-                                            category_course={
-                                                course_topic?.course
-                                                    ?.assigned_admin
-                                                    ?.category_course
-                                            }
-                                            course_hierarchy={
-                                                course_topic?.course
-                                                    ?.assigned_admin
-                                                    ?.category_course
-                                                    ?.course_hierarchy
-                                            }
-                                        />
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/* {course_topic?.summary && parse(course_topic?.summary)}
+  const RenderTopic = () => {
+    return (
+      <>
+        <div
+          className="container-fluid pt-4 mb-4 "
+          style={{
+            backgroundColor: "#343747",
+            minHeight: 50,
+          }}
+        >
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="col-lg-12 course-detail-bc">
+                {course_topic_loading ? (
+                  <Placeholder.Button xs={2} aria-hidden="true" />
+                ) : (
+                  <>
+                    <CourseBradeCrumb
+                      category_course={
+                        course_topic?.course?.assigned_admin?.category_course
+                      }
+                      course_hierarchy={
+                        course_topic?.course?.assigned_admin?.category_course
+                          ?.course_hierarchy
+                      }
+                    />
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* {course_topic?.summary && parse(course_topic?.summary)}
             {uploadsList()} */}
 
-                <div className="blog-single gray-bg mt-4 mb-4">
-                    <div className="container mt-4 mb-4">
-                        <div className="row align-items-start mb-4">
-                            <div className="col-lg-8 ">
-                                <div
-                                    className="col-12 p-4 shadow"
-                                    style={{ minHeight: "350px" }}
-                                >
-                                    <article className="article">
-                                        <div className="article-title mb-2">
-                                            {course_topic_loading ? (
-                                                <Placeholder.Button
-                                                    xs={4}
-                                                    aria-hidden="true"
-                                                />
-                                            ) : (
-                                                <>
-                                                    <h3>
-                                                        {course_topic?.title}
-                                                    </h3>
-                                                    <div className="media">
-                                                        <div
-                                                            className="media-body pb-2"
-                                                            style={{
-                                                                borderBottom:
-                                                                    "1px solid #dedede",
-                                                                marginBottom:
-                                                                    "10px",
-                                                            }}
-                                                        >
-                                                            <strong>
-                                                                Last Updated On
-                                                                -
-                                                            </strong>
-                                                            <span>
-                                                                <CourseTopicUpdatedAt />
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </>
-                                            )}
-                                        </div>
-
-                                        <div className="article-content">
-                                            {course_topic_loading ? (
-                                                <>
-                                                    <p aria-hidden="true">
-                                                        <Placeholder.Button
-                                                            as="p"
-                                                            xs={6}
-                                                            aria-hidden="true"
-                                                            animation="glow"
-                                                        />
-                                                        <Placeholder.Button
-                                                            as="p"
-                                                            xs={12}
-                                                            aria-hidden="true"
-                                                            animation="glow"
-                                                        />
-                                                        <Placeholder.Button
-                                                            as="p"
-                                                            xs={8}
-                                                            aria-hidden="true"
-                                                            animation="glow"
-                                                        />
-                                                        <Placeholder.Button
-                                                            as="p"
-                                                            xs={10}
-                                                            aria-hidden="true"
-                                                            animation="glow"
-                                                        />
-                                                        <Placeholder.Button
-                                                            as="p"
-                                                            xs={12}
-                                                            aria-hidden="true"
-                                                            animation="glow"
-                                                        />
-                                                    </p>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    {course_topic?.summary &&
-                                                        parse(
-                                                            course_topic?.summary
-                                                        )}
-                                                </>
-                                            )}
-                                        </div>
-                                        <div
-                                            className="d-flex justify-content-between"
-                                            style={{
-                                                borderTop: "1px solid #dedede",
-                                                paddingTop: "20px",
-                                            }}
-                                        >
-                                            {previous ? (
-                                                <Button
-                                                    variant="secondary"
-                                                    onClick={() =>
-                                                        handleGetCourseTopic({
-                                                            course_id:
-                                                                course_id,
-                                                            topic_id: previous,
-                                                        })
-                                                    }
-                                                >
-                                                    Previous
-                                                </Button>
-                                            ) : (
-                                                <span></span>
-                                            )}
-                                            {next ? (
-                                                <Button
-                                                    variant="primary"
-                                                    onClick={() =>
-                                                        handleGetCourseTopic({
-                                                            course_id:
-                                                                course_id,
-                                                            topic_id: next,
-                                                        })
-                                                    }
-                                                >
-                                                    Next
-                                                </Button>
-                                            ) : (
-                                                <span></span>
-                                            )}
-                                        </div>
-                                    </article>
-                                </div>
+        <div className="blog-single gray-bg mt-4 mb-4">
+          <div className="container mt-4 mb-4">
+            <div className="row align-items-start mb-4">
+              <div className="col-lg-8 ">
+                <div
+                  className="col-12 p-4 shadow"
+                  style={{ minHeight: "350px" }}
+                >
+                  <article className="article">
+                    <div className="article-title mb-2">
+                      {course_topic_loading ? (
+                        <Placeholder.Button xs={4} aria-hidden="true" />
+                      ) : (
+                        <>
+                          <h3>{course_topic?.title}</h3>
+                          <div
+                            className="media"
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <div
+                              className="media-body pb-2"
+                              style={{
+                                borderBottom: "1px solid #dedede",
+                                marginBottom: "10px",
+                              }}
+                            >
+                              <strong>Last Updated On -</strong>
+                              <span>
+                                <CourseTopicUpdatedAt />
+                              </span>
                             </div>
-                            <div className="col-lg-4 blog-aside">
-                                <div
-                                    className="p-4 col-12 shadow"
-                                    style={{ minHeight: "350px" }}
-                                >
-                                    {/* widget Tags */}
-                                    <div className="widget widget-tags">
-                                        <div
-                                            className="widget-title"
-                                            style={{
-                                                borderBottom:
-                                                    "1px solid #dedede",
-                                                marginBottom: "10px",
-                                            }}
-                                        >
-                                            <h3 className="mb-4">
-                                                Related Documents
-                                            </h3>
-                                        </div>
-                                        <div className="widget-body mt-4">
-                                            {course_topic_loading ? (
-                                                <>
-                                                    <Placeholder.Button
-                                                        xs={10}
-                                                        aria-hidden="true"
-                                                    />
-                                                    <Placeholder.Button
-                                                        xs={10}
-                                                        aria-hidden="true"
-                                                    />
-                                                    <Placeholder.Button
-                                                        xs={10}
-                                                        aria-hidden="true"
-                                                    />
-                                                </>
-                                            ) : (
-                                                uploadsList()
-                                            )}
-                                        </div>
-                                    </div>
-                                    {/* End widget Tags */}
-                                </div>
+                            <div>
+                              <button
+                                className="btn-primary text-white px-2 py-1"
+                                onClick={goBack}
+                              >
+                                <i className="bi bi-arrow-left"> </i>back
+                              </button>
                             </div>
-                        </div>
+                          </div>
+                        </>
+                      )}
                     </div>
-                </div>
-            </>
-        );
-    };
 
-    return (
-        <>
-            <RenderTopic />
-            <MyVerticallyCenteredModal
-                show={showModal}
-                onHide={() => setShowModal(false)}
-                size="xl"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-            />
-        </>
+                    <div className="article-content">
+                      {course_topic_loading ? (
+                        <>
+                          <p aria-hidden="true">
+                            <Placeholder.Button
+                              as="p"
+                              xs={6}
+                              aria-hidden="true"
+                              animation="glow"
+                            />
+                            <Placeholder.Button
+                              as="p"
+                              xs={12}
+                              aria-hidden="true"
+                              animation="glow"
+                            />
+                            <Placeholder.Button
+                              as="p"
+                              xs={8}
+                              aria-hidden="true"
+                              animation="glow"
+                            />
+                            <Placeholder.Button
+                              as="p"
+                              xs={10}
+                              aria-hidden="true"
+                              animation="glow"
+                            />
+                            <Placeholder.Button
+                              as="p"
+                              xs={12}
+                              aria-hidden="true"
+                              animation="glow"
+                            />
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          {course_topic?.summary &&
+                            parse(course_topic?.summary)}
+                        </>
+                      )}
+                    </div>
+                    <div
+                      className="d-flex justify-content-between"
+                      style={{
+                        borderTop: "1px solid #dedede",
+                        paddingTop: "20px",
+                      }}
+                    >
+                      {previous ? (
+                        <Button
+                          variant="secondary"
+                          onClick={() =>
+                            handleGetCourseTopic({
+                              course_id: course_id,
+                              topic_id: previous,
+                            })
+                          }
+                        >
+                          Previous
+                        </Button>
+                      ) : (
+                        <span></span>
+                      )}
+                      {next ? (
+                        <Button
+                          variant="primary"
+                          onClick={() =>
+                            handleGetCourseTopic({
+                              course_id: course_id,
+                              topic_id: next,
+                            })
+                          }
+                        >
+                          Next
+                        </Button>
+                      ) : (
+                        <span></span>
+                      )}
+                    </div>
+                  </article>
+                </div>
+              </div>
+              <div className="col-lg-4 blog-aside">
+                <div
+                  className="p-4 col-12 shadow"
+                  style={{ minHeight: "350px" }}
+                >
+                  {/* widget Tags */}
+                  <div className="widget widget-tags">
+                    <div
+                      className="widget-title"
+                      style={{
+                        borderBottom: "1px solid #dedede",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <h3 className="mb-4">Related Documents</h3>
+                    </div>
+                    <div className="widget-body mt-4">
+                      {course_topic_loading ? (
+                        <>
+                          <Placeholder.Button xs={10} aria-hidden="true" />
+                          <Placeholder.Button xs={10} aria-hidden="true" />
+                          <Placeholder.Button xs={10} aria-hidden="true" />
+                        </>
+                      ) : (
+                        uploadsList()
+                      )}
+                    </div>
+                  </div>
+                  {/* End widget Tags */}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
     );
+  };
+
+  return (
+    <>
+      <RenderTopic />
+      <MyVerticallyCenteredModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        size="xl"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      />
+    </>
+  );
 }
