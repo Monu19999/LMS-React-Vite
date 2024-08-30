@@ -7,18 +7,17 @@ import memberReducer from '@src/features/member/MemberSlice';
 import Cookies from 'js-cookie';
 
 const errorsMiddleware = (store) => (next) => (action) => {
-    // console.log(action.type);
     if (action.type != undefined) {
         const { payload } = action;
         if (isRejectedWithValue(action)) {
             if (payload?.status == 401) {
-                // Cookies.remove("token", "");
-                // Cookies.remove("user", "");
-                // window.location.reload();
+                Cookies.remove("token", "");
+                Cookies.remove("user", "");
+                window.location.reload();
             }
-            // if (payload.status == 500) {
-            //     console.log(payload.status);
-            // }
+            if (payload.status == 500) {
+                console.log(payload.status);
+            }
         }
     }
     return next(action);
