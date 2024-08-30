@@ -125,7 +125,7 @@ export default function Topic() {
     };
 
     const setModalBodyContent = (upload, configuration) => {
-        console.log("here => ", upload.pdf_path.preview_path);
+        // console.log("here => ", upload.pdf_path.preview_path);
         let content = null;
         const isSupportedType = checkFileMimeType(upload?.file_mime_type);
 
@@ -154,7 +154,7 @@ export default function Topic() {
             } else if (upload.file_mime_type === "application/pdf") {
                 content = (
                     <PDFReader
-                        file_path={upload.pdf_path.preview_path}
+                        file_path={upload.preview_path}
                         // file_path={`DSA-Decoded.pdf`}
                         configuration={configuration}
                     />
@@ -164,7 +164,7 @@ export default function Topic() {
                     <BootstrapSpinner />
                 ) : (
                     <PDFReader
-                        file_path={upload.pdf_path.preview_path}
+                        file_path={upload.preview_path}
                         // file_path={`DSA-Decoded.pdf`}
                         configuration={configuration}
                     />
@@ -201,7 +201,10 @@ export default function Topic() {
             ) {
                 const response = await dispatch(convertCourseMedia(upload));
                 const payload = response.payload;
-                const content = setModalBodyContent(payload, configuration);
+                const content = setModalBodyContent(
+                    payload.pdf_path,
+                    configuration
+                );
                 setModalContent(content);
                 setShowModal(true);
             } else {

@@ -16,7 +16,7 @@ const PDFReader = ({ file_path, configuration }) => {
         setNumPages(numPages);
         setIsLoading(false);
     }
-console.log("pptx file path =>>>>>> ",file_path)
+    // console.log("pptx file path =>>>>>> ",file_path)
     return (
         <div>
             <Loader isLoading={isLoading} />
