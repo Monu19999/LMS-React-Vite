@@ -2599,6 +2599,10 @@ body.is-video-popup div[data-global-resource-path*="partials/header"] {
     color: #fff !important;
 }
 
+.member-courses ol.breadcrumb {
+    margin-bottom: 0px !important;
+}
+
 .inner-page-container-mb {
     margin-bottom: 40px !important;
 }
@@ -2616,6 +2620,7 @@ h4.heading-bg {
     background-color: #06bbcc;
     color: #fff;
 }
+
 .pagination {
     display: flex;
     padding-left: 0;
@@ -2631,5 +2636,3 @@ h4.heading-bg {
         z-index: 999;
     }
 }
-
-

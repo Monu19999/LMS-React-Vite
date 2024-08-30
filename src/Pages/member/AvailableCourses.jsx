@@ -20,7 +20,6 @@ const AvailableCourses = () => {
         dispatch(availableCourses());
     }, [dispatch]);
 
-    
     useEffect(() => {
         reset();
         if (member?.available_courses?.available_courses) {
@@ -31,16 +30,24 @@ const AvailableCourses = () => {
     const handleFormFilterOnChange = () => {
         const filtertext = getValues("course_name").toLowerCase();
 
-        const filteredCourse = member?.available_courses?.available_courses.map((availableCourse)=>{
-            const filterCourse = availableCourse.active_category_courses.filter((acc)=>{
-                return acc.course_name_en.toLowerCase().includes(filtertext);
-            })
+        const filteredCourse = member?.available_courses?.available_courses
+            .map((availableCourse) => {
+                const filterCourse =
+                    availableCourse.active_category_courses.filter((acc) => {
+                        return acc.course_name_en
+                            .toLowerCase()
+                            .includes(filtertext);
+                    });
 
-            return {
-                ...availableCourse,
-                active_category_courses:filterCourse
-            }
-        }).filter((availableCourse)=>(availableCourse.active_category_courses.length > 0));
+                return {
+                    ...availableCourse,
+                    active_category_courses: filterCourse,
+                };
+            })
+            .filter(
+                (availableCourse) =>
+                    availableCourse.active_category_courses.length > 0
+            );
 
         setFilteredCourses(filteredCourse);
         // console.log(filteredCourses)
@@ -50,32 +57,31 @@ const AvailableCourses = () => {
         <>
             <h4 className="mb-4 heading-bg">Available Courses</h4>
 
-            <div className="container-xxl mb-4 pb-4">
-                <div className="container shadow">
-                    <div className="row mb-4">
-                        <div className="col-lg-12 wow fadeInUp inner-page-container-mb" style={{ backgroundColor: "#06bbcc" }}>
-                            <div className="search-title">
-                                {/* Search Form Start */}
-                                <form>
-                                    <div className="row justify-content-center">
-                                        <div className="mb-2">
-                                            <div className="form-group">
-                                                <label>Search By Course Name</label>
-                                                <input
-                                                    type="text"
-                                                    autoComplete="off"
-                                                    {...register("course_name", {
-                                                        onChange: handleFormFilterOnChange,
-                                                    })}
-                                                    className="form-control"
-                                                    placeholder="Search By Title"
-                                                />
-                                            </div>
-                                        </div>
+            <div className="container">
+                <div className="row mb-4">
+                    <div
+                        className="col-lg-12 wow fadeInUp "
+                        style={{ backgroundColor: "#06bbcc" }}
+                    >
+                        <div className="search-title">
+                            {/* Search Form Start */}
+                            <form>
+                                <div className="row justify-content-center">
+                                    <div className="form-group">
+                                        <input
+                                            type="text"
+                                            autoComplete="off"
+                                            {...register("course_name", {
+                                                onChange:
+                                                    handleFormFilterOnChange,
+                                            })}
+                                            className="form-control"
+                                            placeholder="Search By Course Name"
+                                        />
                                     </div>
-                                </form>
-                                {/* Search Form End */}
-                            </div>
+                                </div>
+                            </form>
+                            {/* Search Form End */}
                         </div>
                     </div>
                 </div>
@@ -87,15 +93,23 @@ const AvailableCourses = () => {
                 <>
                     {filteredCourses.length > 0 ? (
                         filteredCourses.map((available_course, index) => (
-                            <Accordion key={available_course.id} defaultActiveKey="0">
+                            <Accordion
+                                key={available_course.id}
+                                defaultActiveKey="0"
+                                className="member-courses"
+                            >
                                 <Accordion.Item eventKey={String(index)}>
                                     <Accordion.Header>
-                                        {available_course?.active_category_courses.length > 0 && (
+                                        {available_course
+                                            ?.active_category_courses.length >
+                                            0 && (
                                             <nav aria-label="breadcrumb">
                                                 <ol className="breadcrumb">
                                                     <RenderCourseHierarchyBC
                                                         course_hierarchy={
-                                                            available_course.active_category_courses[0].course_hierarchy
+                                                            available_course
+                                                                .active_category_courses[0]
+                                                                .course_hierarchy
                                                         }
                                                     />
                                                 </ol>
@@ -104,11 +118,22 @@ const AvailableCourses = () => {
                                     </Accordion.Header>
                                     <Accordion.Body>
                                         <div className="row">
-                                            {available_course.active_category_courses.map((course) => (
-                                                <div className="col-lg-4 col-md-6 mb-4" key={course.id}>
-                                                    <CourseItem course={course} upload={course.course.upload} />
-                                                </div>
-                                            ))}
+                                            {available_course.active_category_courses.map(
+                                                (course) => (
+                                                    <div
+                                                        className="col-lg-4 col-md-6 mb-4"
+                                                        key={course.id}
+                                                    >
+                                                        <CourseItem
+                                                            course={course}
+                                                            upload={
+                                                                course.course
+                                                                    .upload
+                                                            }
+                                                        />
+                                                    </div>
+                                                )
+                                            )}
                                         </div>
                                     </Accordion.Body>
                                 </Accordion.Item>
