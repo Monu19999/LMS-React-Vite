@@ -496,9 +496,6 @@ function Test() {
     };
     return (
         <>
-            <div className="row">
-                <Button onClick={handleBack}>Back</Button>
-            </div>
             <RenderTopic />
             <MyVerticallyCenteredModal
                 show={showModal}
