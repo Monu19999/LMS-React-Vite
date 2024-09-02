@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import {
     getCourseTopic,
     setTopic,
@@ -57,6 +57,7 @@ export default function Topic() {
     const handleGetCourseTopic = async (params) => {
         let response = await dispatch(getCourseTopic(params));
         const payload = response.payload;
+        console.log(payload)
         if (payload?.status == 200) {
             const data = payload.data;
             setPrevious(data.previous);
@@ -66,11 +67,22 @@ export default function Topic() {
     };
 
     const navigate = useNavigate();
-
+     
     const goBack = () => {
-        navigate(-1); // -1 means go back one step in the history stack
+      // console.log(previous)
+      if (previous) {
+        handleGetCourseTopic({
+          course_id: course_id,
+          topic_id: previous,
+        });
+    
+        navigate(`/course/${course_id}/topic/${previous}/show`);
+      } else {
+        // navigate(`/course/${course_id}/show`); 
+        window.history.back();
+      }
     };
-
+    
     useEffect(() => {
         if (course_id && topic_id) {
             handleGetCourseTopic({ course_id, topic_id });
@@ -472,6 +484,10 @@ export default function Topic() {
                                             }}
                                         >
                                             {previous ? (
+                                              <Link
+                                              to={`/course/${course_id}/topic/${previous}/show`}
+                                              >
+
                                                 <Button
                                                     variant="secondary"
                                                     onClick={() =>
@@ -484,10 +500,15 @@ export default function Topic() {
                                                 >
                                                     Previous
                                                 </Button>
+                                              </Link>
                                             ) : (
                                                 <span></span>
                                             )}
                                             {next ? (
+                                              <Link
+                                              to={`/course/${course_id}/topic/${next}/show`}
+                                              >
+                                            
                                                 <Button
                                                     variant="primary"
                                                     onClick={() =>
@@ -500,6 +521,7 @@ export default function Topic() {
                                                 >
                                                     Next
                                                 </Button>
+                                              </Link>
                                             ) : (
                                                 <span></span>
                                             )}
