@@ -54,6 +54,8 @@ export default function Topic() {
         console.log("converted file1");
     };
 
+    const navigate = useNavigate();
+
     const handleGetCourseTopic = async (params) => {
         let response = await dispatch(getCourseTopic(params));
         const payload = response.payload;
@@ -62,10 +64,12 @@ export default function Topic() {
             setPrevious(data.previous);
             setNext(data.next);
             dispatch(setTopic(data.current));
+            // console.log(params);
+            // navigate(
+            //     `/course/${params.course_id}/topic/${params.topic_id}/show`
+            // );
         }
     };
-
-    const navigate = useNavigate();
 
     const goBack = () => {
         navigate(-1); // -1 means go back one step in the history stack
@@ -154,21 +158,24 @@ export default function Topic() {
             } else if (upload.file_mime_type === "application/pdf") {
                 content = (
                     <PDFReader
-                        file_path={upload.preview_path}
+                        preview_path={upload.preview_path}
+                        download_path={upload.download_path}
                         // file_path={`DSA-Decoded.pdf`}
                         configuration={configuration}
                     />
                 );
             } else {
+                var extension = upload.preview_path.split(".").pop();
                 content = fileLoading ? (
                     <BootstrapSpinner />
-                ) : (
+                ) : extension === "pdf" ? (
                     <PDFReader
-                        file_path={upload.preview_path}
-                        // file_path={`DSA-Decoded.pdf`}
+                        preview_path={upload.preview_path}
+                        download_path={upload.download_path}
                         configuration={configuration}
                     />
-                    // <PaginatedHtml file_path={upload.preview_path} />
+                ) : (
+                    <PaginatedHtml file_path={upload.preview_path} />
                 );
             }
         }

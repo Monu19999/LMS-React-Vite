@@ -6,7 +6,7 @@ import "./pdf.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const PDFReader = ({ file_path, configuration }) => {
+const PDFReader = ({ preview_path, download_path, configuration }) => {
     const [scale, setScale] = useState(1.0);
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
@@ -16,7 +16,7 @@ const PDFReader = ({ file_path, configuration }) => {
         setNumPages(numPages);
         setIsLoading(false);
     }
-    // console.log("pptx file path =>>>>>> ",file_path)
+    // console.log("pptx file path =>>>>>> ", preview_path);
     return (
         <div>
             <Loader isLoading={isLoading} />
@@ -30,11 +30,12 @@ const PDFReader = ({ file_path, configuration }) => {
                     numPages={numPages}
                     pageNumber={pageNumber}
                     setPageNumber={setPageNumber}
-                    file={file_path}
+                    preview_path={preview_path}
+                    download_path={download_path}
                     configuration={configuration}
                 />
                 <Document
-                    file={file_path}
+                    file={preview_path}
                     onLoadSuccess={onDocumentLoadSuccess}
                 >
                     <Page

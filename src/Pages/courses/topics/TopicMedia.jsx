@@ -11,6 +11,7 @@ import ReactPlayer from "react-player";
 import PDFReader from "@src/Pages/courses/includes/Pdf/PDFReader";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import GoogleDocsViewer from "react-google-docs-viewer";
+import PaginatedHtml from "@src/Utilities/PaginatedHtml";
 
 export default function TopicMedia({ course_topic }) {
     const [showModalType, setShowModalType] = useState({
@@ -87,23 +88,26 @@ export default function TopicMedia({ course_topic }) {
                     />
                 );
             } else {
+                var extension = upload.preview_path.split(".").pop();
                 content = fileLoading ? (
                     <BootstrapSpinner />
-                ) : (
+                ) : extension == "pdf" ? (
                     <PDFReader
                         file_path={upload.preview_path}
                         configuration={configuration}
                     />
-                    // <GoogleDocsViewer
-                    //     width="100%"
-                    //     height="400px"
-                    //     fileUrl={upload.preview_path}
-                    //     onClick={() => checkFIleLoad(upload.preview_path)}
-                    // />
+                ) : (
+                    <PaginatedHtml file_path={upload.preview_path} />
                 );
+                // <GoogleDocsViewer
+                //     width="100%"
+                //     height="400px"
+                //     fileUrl={upload.preview_path}
+                //     onClick={() => checkFIleLoad(upload.preview_path)}
+                // />
             }
         } else {
-            content = <p>Unsupported file type</p>;
+            content = <PaginatedHtml file_path={upload.preview_path} />;
         }
 
         return content;

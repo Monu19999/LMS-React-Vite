@@ -2,8 +2,15 @@ import React from "react";
 import PDFPrinter from "./PDFPrinter";
 
 const ControlPanel = (props) => {
-    const { file, pageNumber, numPages, setPageNumber, scale, setScale } =
-        props;
+    const {
+        preview_path,
+        download_path,
+        pageNumber,
+        numPages,
+        setPageNumber,
+        scale,
+        setScale,
+    } = props;
 
     const isFirstPage = pageNumber === 1;
     const isLastPage = pageNumber === numPages;
@@ -90,12 +97,12 @@ const ControlPanel = (props) => {
             {props?.configuration?.is_downloadable == 1 && (
                 <>
                     <div className="mx-3">
-                        <a href={file} download={true} title="download">
+                        <a href={preview_path} download={true} title="download">
                             <i className="fas fa-file-download clickable" />
                         </a>
                     </div>
                     <div className="mx-3">
-                        <PDFPrinter file={file} />
+                        <PDFPrinter file={preview_path} />
                     </div>
                 </>
             )}
