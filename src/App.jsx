@@ -32,6 +32,7 @@ import FAQ, { loader as faqLoader } from "./Pages/FAQ";
 import ChangePassword from "./Pages/member/ChangePassword";
 import Profile from "./Pages/member/Profile";
 import Topic from "./Pages/courses/topics/Topic";
+import Test from "./Test";
 
 const router = createHashRouter(
     createRoutesFromElements(
@@ -65,6 +66,11 @@ const router = createHashRouter(
                         exact
                         path="course/:course_id/topic/:topic_id/show"
                         element={<Topic />}
+                    />
+                    <Route
+                        exact
+                        path="test/:course_id/topic/:topic_id/show"
+                        element={<Test />}
                     />
                 </Route>
             </Route>
