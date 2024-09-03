@@ -44,19 +44,31 @@ export default function CourseTopicList({ course, course_id }) {
                                             <h5>
                                                 {auth_user &&
                                                 enrollments?.length > 0 ? (
-                                                    <Link
-                                                        to={`/course/${course.encr_id}/topic/${topic.encr_id}/show`}
+                                                    <>
+                                                        <Link
+                                                            to={`/course/${course.encr_id}/topic/${topic.encr_id}/show`}
+                                                        >
+                                                            {topic.title}
+                                                        </Link>
+                                                        <Link
+                                                            to={`/test/${course.encr_id}/topic/${topic.encr_id}/show`}
+                                                        >
+                                                            Test
+                                                        </Link>
+                                                    </>
+                                                ) : (
+                                                    <span
+                                                        onClick={() => {
+                                                            alert(
+                                                                "please login to show content"
+                                                            );
+                                                            navigate(
+                                                                "/auth/login"
+                                                            );
+                                                        }}
                                                     >
                                                         {topic.title}
-                                                    </Link>
-                                                ) : (
-                                                    <span onClick={()=>{
-                                                        alert("please login to show content")
-                                                        navigate("/auth/login")
-                                                    }}>
-                                                    {topic.title}
                                                     </span>
-                                                    
                                                 )}
                                             </h5>
                                             {auth_user &&

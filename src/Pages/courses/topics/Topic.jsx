@@ -67,7 +67,10 @@ export default function Topic() {
     };
 
     const navigate = useNavigate();
-     
+    const handleBack = () => {
+        console.log("clicked");
+        window.history.back();
+    };
     const goBack = () => {
       // console.log(previous)
       if (previous) {
@@ -416,9 +419,11 @@ export default function Topic() {
                                                             </span>
                                                         </div>
                                                         <div className="mb-2">
-                                                            <button
+                                                        <button
                                                                 className="btn-secondary text-white px-2 py-1"
-                                                                onClick={goBack}
+                                                                onClick={
+                                                                    handleBack
+                                                                }
                                                             >
                                                                 <i className="bi bi-arrow-left">
                                                                     {" "}
@@ -484,44 +489,24 @@ export default function Topic() {
                                             }}
                                         >
                                             {previous ? (
-                                              <Link
-                                              to={`/course/${course_id}/topic/${previous}/show`}
-                                              >
-
-                                                <Button
-                                                    variant="secondary"
-                                                    onClick={() =>
-                                                        handleGetCourseTopic({
-                                                            course_id:
-                                                                course_id,
-                                                            topic_id: previous,
-                                                        })
-                                                    }
+                                                <Link
+                                                    to={`/test/${course_id}/topic/${previous}/show`}
                                                 >
-                                                    Previous
-                                                </Button>
-                                              </Link>
+                                                    <Button type="button">
+                                                        Previous
+                                                    </Button>
+                                                </Link>
                                             ) : (
                                                 <span></span>
                                             )}
                                             {next ? (
-                                              <Link
-                                              to={`/course/${course_id}/topic/${next}/show`}
-                                              >
-                                            
-                                                <Button
-                                                    variant="primary"
-                                                    onClick={() =>
-                                                        handleGetCourseTopic({
-                                                            course_id:
-                                                                course_id,
-                                                            topic_id: next,
-                                                        })
-                                                    }
+                                                <Link
+                                                    to={`/test/${course_id}/topic/${next}/show`}
                                                 >
-                                                    Next
-                                                </Button>
-                                              </Link>
+                                                    <Button type="button">
+                                                        Next
+                                                    </Button>
+                                                </Link>
                                             ) : (
                                                 <span></span>
                                             )}
