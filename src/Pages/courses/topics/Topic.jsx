@@ -490,7 +490,7 @@ export default function Topic() {
                                         >
                                             {previous ? (
                                                 <Link
-                                                    to={`/test/${course_id}/topic/${previous}/show`}
+                                                    to={`/course/${course_id}/topic/${previous}/show`}
                                                 >
                                                     <Button type="button">
                                                         Previous
@@ -501,7 +501,7 @@ export default function Topic() {
                                             )}
                                             {next ? (
                                                 <Link
-                                                    to={`/test/${course_id}/topic/${next}/show`}
+                                                    to={`/course/${course_id}/topic/${next}/show`}
                                                 >
                                                     <Button type="button">
                                                         Next
