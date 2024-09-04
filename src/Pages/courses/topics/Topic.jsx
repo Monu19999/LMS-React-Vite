@@ -1,25 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
-import {
-    getCourseTopic,
-    setTopic,
-    convertCourseMedia,
-} from "@src/features/app/CourseSlice";
-import parse from "html-react-parser";
 import { Button, Nav } from "react-bootstrap";
-import ReactPlayer from "react-player";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import { getCourseTopic, setTopic } from "@src/features/app/CourseSlice";
+import parse from "html-react-parser";
 import Placeholder from "react-bootstrap/Placeholder";
-import PDFReader from "@src/Pages/courses/includes/Pdf/PDFReader";
-import GoogleDocsViewer from "react-google-docs-viewer";
-import DateFormat from "@src/Utilities/DateFormat";
-import BootstrapModal from "@src/Components/BootstrapModal";
 import CourseBradeCrumb from "@src/Pages/courses/includes/CourseBradeCrumb";
-import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import DateFormat from "@src/Utilities/DateFormat";
+import ReactPlayer from "react-player";
+import PDFReader from "@src/Pages/courses/includes/Pdf/PDFReader";
 import PaginatedHtml from "@src/Utilities/PaginatedHtml";
-// import  {convertCourseMedia}  from "@src/features/app/CourseSlice";
+import BootstrapModal from "@src/Components/BootstrapModal";
 
-export default function Topic() {
+function Topic() {
     let { course_id, topic_id } = useParams();
     const [showModalType, setShowModalType] = useState({
         video: false,
@@ -27,34 +20,15 @@ export default function Topic() {
         ppt: false,
         html: false,
     });
-
     const [previous, setPrevious] = useState(null);
     const [next, setNext] = useState(null);
-    const [fileLoading, setFileLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState(null);
-
     const course_topic_loading = useSelector(
         (state) => state.course.course_topic_loading
     );
     const course_topic = useSelector((state) => state.course.course_topic);
-
     const dispatch = useDispatch();
-
-    const [convert, setConvert] = useState({});
-
-    const convertHandler = async () => {
-        // console.log("converted file");
-        const convertedFile = await dispatch(convertCourseMedia({ id: 16 }));
-        console.log(
-            "preview path=..",
-            convertedFile.payload.pdf_path.preview_path
-        );
-        setConvert(convertedFile.payload.pdf_path.preview_path);
-        console.log("converted file1");
-    };
-
-    const navigate = useNavigate();
 
     const handleGetCourseTopic = async (params) => {
         let response = await dispatch(getCourseTopic(params));
@@ -70,32 +44,27 @@ export default function Topic() {
             // );
         }
     };
+    useEffect(() => {
+        handleGetCourseTopic({ course_id, topic_id });
+    }, [topic_id]);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    });
 
-    const goBack = () => {
-        navigate(-1); // -1 means go back one step in the history stack
+    const handleBack = () => {
+        window.history.back();
     };
 
-    useEffect(() => {
-        if (course_id && topic_id) {
-            handleGetCourseTopic({ course_id, topic_id });
-            // fileConvertHandler();
+    const CourseTopicUpdatedAt = () => {
+        let date = "";
+        if (course_topic?.updated_at) {
+            date = new Date(course_topic?.updated_at);
+        } else if (course_topic?.created_at) {
+            date = new Date(course_topic?.created_at);
+        } else {
+            return date;
         }
-    }, []);
-
-    const fetchFile = async (file) => {
-        setFileLoading(true);
-        const response = await fetch(file, {
-            mode: "cors",
-            method: "GET",
-            headers: {
-                "access-control-allow-origin": "*",
-                "Content-type": "application/json; charset=UTF-8",
-            },
-            cache: "no-cache",
-        });
-        if (response.status == 200) {
-            setFileLoading(false);
-        }
+        return <DateFormat date={date} format="DD MMM YYYY" />;
     };
 
     const checkFileMimeType = (FileMimeType) => {
@@ -106,26 +75,6 @@ export default function Topic() {
             "application/vnd.openxmlformats-officedocument.presentationml.presentation",
         ];
         return mime_types.includes(FileMimeType);
-    };
-
-    const checkFIleLoad = (preview_path) => {
-        fetch(preview_path)
-            .then((response) => {
-                if (response.status === 200) {
-                    console.log("SUCCESSS");
-                    return response.json();
-                } else if (response.status === 408) {
-                    console.log("SOMETHING WENT WRONG");
-                    this.setState({ requestFailed: true });
-                }
-            })
-            .then((data) => {
-                this.setState({ isLoading: false, downlines: data.response });
-                console.log("DATA STORED");
-            })
-            .catch((error) => {
-                this.setState({ requestFailed: true });
-            });
     };
 
     const setModalBodyContent = (upload, configuration) => {
@@ -277,7 +226,6 @@ export default function Topic() {
             );
         }
     };
-
     const uploadsList = () => {
         if (course_topic?.uploads) {
             return (
@@ -312,18 +260,6 @@ export default function Topic() {
                 </Nav>
             );
         }
-    };
-
-    const CourseTopicUpdatedAt = () => {
-        let date = "";
-        if (course_topic?.updated_at) {
-            date = new Date(course_topic?.updated_at);
-        } else if (course_topic?.created_at) {
-            date = new Date(course_topic?.created_at);
-        } else {
-            return date;
-        }
-        return <DateFormat date={date} format="DD MMM YYYY" />;
     };
 
     const RenderTopic = () => {
@@ -416,7 +352,9 @@ export default function Topic() {
                                                         <div className="mb-2">
                                                             <button
                                                                 className="btn-secondary text-white px-2 py-1"
-                                                                onClick={goBack}
+                                                                onClick={
+                                                                    handleBack
+                                                                }
                                                             >
                                                                 <i className="bi bi-arrow-left">
                                                                     {" "}
@@ -482,34 +420,24 @@ export default function Topic() {
                                             }}
                                         >
                                             {previous ? (
-                                                <Button
-                                                    variant="secondary"
-                                                    onClick={() =>
-                                                        handleGetCourseTopic({
-                                                            course_id:
-                                                                course_id,
-                                                            topic_id: previous,
-                                                        })
-                                                    }
+                                                <Link
+                                                    to={`/course/${course_id}/topic/${previous}/show`}
                                                 >
-                                                    Previous
-                                                </Button>
+                                                    <Button type="button">
+                                                        Previous
+                                                    </Button>
+                                                </Link>
                                             ) : (
                                                 <span></span>
                                             )}
                                             {next ? (
-                                                <Button
-                                                    variant="primary"
-                                                    onClick={() =>
-                                                        handleGetCourseTopic({
-                                                            course_id:
-                                                                course_id,
-                                                            topic_id: next,
-                                                        })
-                                                    }
+                                                <Link
+                                                    to={`/course/${course_id}/topic/${next}/show`}
                                                 >
-                                                    Next
-                                                </Button>
+                                                    <Button type="button">
+                                                        Next
+                                                    </Button>
+                                                </Link>
                                             ) : (
                                                 <span></span>
                                             )}
@@ -566,7 +494,6 @@ export default function Topic() {
             </>
         );
     };
-
     return (
         <>
             <RenderTopic />
@@ -580,3 +507,5 @@ export default function Topic() {
         </>
     );
 }
+
+export default Topic;
