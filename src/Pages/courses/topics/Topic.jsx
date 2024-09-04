@@ -41,23 +41,15 @@ export default function Topic() {
 
     const dispatch = useDispatch();
 
-    const [convert, setConvert] = useState({});
-
-    const convertHandler = async () => {
-        // console.log("converted file");
-        const convertedFile = await dispatch(convertCourseMedia({ id: 16 }));
-        console.log(
-            "preview path=..",
-            convertedFile.payload.pdf_path.preview_path
-        );
-        setConvert(convertedFile.payload.pdf_path.preview_path);
-        console.log("converted file1");
+    const navigate = useNavigate();
+    const handleBack = () => {
+        window.history.back();
     };
 
     const handleGetCourseTopic = async (params) => {
         let response = await dispatch(getCourseTopic(params));
         const payload = response.payload;
-        console.log(payload)
+        console.log(payload);
         if (payload?.status == 200) {
             const data = payload.data;
             setPrevious(data.previous);
@@ -66,48 +58,17 @@ export default function Topic() {
         }
     };
 
-    const navigate = useNavigate();
-    const handleBack = () => {
-        console.log("clicked");
-        window.history.back();
-    };
-    const goBack = () => {
-      // console.log(previous)
-      if (previous) {
-        handleGetCourseTopic({
-          course_id: course_id,
-          topic_id: previous,
-        });
-    
-        navigate(`/course/${course_id}/topic/${previous}/show`);
-      } else {
-        // navigate(`/course/${course_id}/show`); 
-        window.history.back();
-      }
-    };
-    
+    // useEffect(() => {
+    //     if (course_id && topic_id) {
+    //         handleGetCourseTopic({ course_id, topic_id });
+    //     }
+    // }, []);
     useEffect(() => {
-        if (course_id && topic_id) {
-            handleGetCourseTopic({ course_id, topic_id });
-            // fileConvertHandler();
-        }
-    }, []);
-
-    const fetchFile = async (file) => {
-        setFileLoading(true);
-        const response = await fetch(file, {
-            mode: "cors",
-            method: "GET",
-            headers: {
-                "access-control-allow-origin": "*",
-                "Content-type": "application/json; charset=UTF-8",
-            },
-            cache: "no-cache",
-        });
-        if (response.status == 200) {
-            setFileLoading(false);
-        }
-    };
+        handleGetCourseTopic({ course_id, topic_id });
+    }, [topic_id]);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    });
 
     const checkFileMimeType = (FileMimeType) => {
         const mime_types = [
@@ -117,26 +78,6 @@ export default function Topic() {
             "application/vnd.openxmlformats-officedocument.presentationml.presentation",
         ];
         return mime_types.includes(FileMimeType);
-    };
-
-    const checkFIleLoad = (preview_path) => {
-        fetch(preview_path)
-            .then((response) => {
-                if (response.status === 200) {
-                    console.log("SUCCESSS");
-                    return response.json();
-                } else if (response.status === 408) {
-                    console.log("SOMETHING WENT WRONG");
-                    this.setState({ requestFailed: true });
-                }
-            })
-            .then((data) => {
-                this.setState({ isLoading: false, downlines: data.response });
-                console.log("DATA STORED");
-            })
-            .catch((error) => {
-                this.setState({ requestFailed: true });
-            });
     };
 
     const setModalBodyContent = (upload, configuration) => {
@@ -419,7 +360,7 @@ export default function Topic() {
                                                             </span>
                                                         </div>
                                                         <div className="mb-2">
-                                                        <button
+                                                            <button
                                                                 className="btn-secondary text-white px-2 py-1"
                                                                 onClick={
                                                                     handleBack

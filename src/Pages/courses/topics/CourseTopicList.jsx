@@ -50,11 +50,11 @@ export default function CourseTopicList({ course, course_id }) {
                                                         >
                                                             {topic.title}
                                                         </Link>
-                                                        <Link
+                                                        {/* <Link
                                                             to={`/test/${course.encr_id}/topic/${topic.encr_id}/show`}
                                                         >
                                                             Test
-                                                        </Link>
+                                                        </Link> */}
                                                     </>
                                                 ) : (
                                                     <span
