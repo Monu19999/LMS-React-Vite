@@ -1,25 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import {
-    getCourseTopic,
-    setTopic,
-    convertCourseMedia,
-} from "@src/features/app/CourseSlice";
-import parse from "html-react-parser";
 import { Button, Nav } from "react-bootstrap";
-import ReactPlayer from "react-player";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import { getCourseTopic, setTopic } from "@src/features/app/CourseSlice";
+import parse from "html-react-parser";
 import Placeholder from "react-bootstrap/Placeholder";
-import PDFReader from "@src/Pages/courses/includes/Pdf/PDFReader";
-import GoogleDocsViewer from "react-google-docs-viewer";
-import DateFormat from "@src/Utilities/DateFormat";
-import BootstrapModal from "@src/Components/BootstrapModal";
 import CourseBradeCrumb from "@src/Pages/courses/includes/CourseBradeCrumb";
-import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import DateFormat from "@src/Utilities/DateFormat";
+import ReactPlayer from "react-player";
+import PDFReader from "@src/Pages/courses/includes/Pdf/PDFReader";
 import PaginatedHtml from "@src/Utilities/PaginatedHtml";
-// import  {convertCourseMedia}  from "@src/features/app/CourseSlice";
+import BootstrapModal from "@src/Components/BootstrapModal";
 
-export default function Topic() {
+function Topic() {
     let { course_id, topic_id } = useParams();
     const [showModalType, setShowModalType] = useState({
         video: false,
@@ -27,29 +20,19 @@ export default function Topic() {
         ppt: false,
         html: false,
     });
-
     const [previous, setPrevious] = useState(null);
     const [next, setNext] = useState(null);
-    const [fileLoading, setFileLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState(null);
-
     const course_topic_loading = useSelector(
         (state) => state.course.course_topic_loading
     );
     const course_topic = useSelector((state) => state.course.course_topic);
-
     const dispatch = useDispatch();
-
-    const navigate = useNavigate();
-    const handleBack = () => {
-        window.history.back();
-    };
 
     const handleGetCourseTopic = async (params) => {
         let response = await dispatch(getCourseTopic(params));
         const payload = response.payload;
-        console.log(payload);
         if (payload?.status == 200) {
             const data = payload.data;
             setPrevious(data.previous);
@@ -57,18 +40,28 @@ export default function Topic() {
             dispatch(setTopic(data.current));
         }
     };
-
-    // useEffect(() => {
-    //     if (course_id && topic_id) {
-    //         handleGetCourseTopic({ course_id, topic_id });
-    //     }
-    // }, []);
     useEffect(() => {
         handleGetCourseTopic({ course_id, topic_id });
     }, [topic_id]);
     useEffect(() => {
         window.scrollTo(0, 0);
     });
+
+    const handleBack = () => {
+        window.history.back();
+    };
+
+    const CourseTopicUpdatedAt = () => {
+        let date = "";
+        if (course_topic?.updated_at) {
+            date = new Date(course_topic?.updated_at);
+        } else if (course_topic?.created_at) {
+            date = new Date(course_topic?.created_at);
+        } else {
+            return date;
+        }
+        return <DateFormat date={date} format="DD MMM YYYY" />;
+    };
 
     const checkFileMimeType = (FileMimeType) => {
         const mime_types = [
@@ -81,7 +74,7 @@ export default function Topic() {
     };
 
     const setModalBodyContent = (upload, configuration) => {
-        console.log("here => ", upload.pdf_path.preview_path);
+        // console.log("here => ", upload.pdf_path.preview_path);
         let content = null;
         const isSupportedType = checkFileMimeType(upload?.file_mime_type);
 
@@ -110,21 +103,24 @@ export default function Topic() {
             } else if (upload.file_mime_type === "application/pdf") {
                 content = (
                     <PDFReader
-                        file_path={upload.pdf_path.preview_path}
+                        preview_path={upload.preview_path}
+                        download_path={upload.download_path}
                         // file_path={`DSA-Decoded.pdf`}
                         configuration={configuration}
                     />
                 );
             } else {
+                var extension = upload.preview_path.split(".").pop();
                 content = fileLoading ? (
                     <BootstrapSpinner />
-                ) : (
+                ) : extension === "pdf" ? (
                     <PDFReader
-                        file_path={upload.pdf_path.preview_path}
-                        // file_path={`DSA-Decoded.pdf`}
+                        preview_path={upload.preview_path}
+                        download_path={upload.download_path}
                         configuration={configuration}
                     />
-                    // <PaginatedHtml file_path={upload.preview_path} />
+                ) : (
+                    <PaginatedHtml file_path={upload.preview_path} />
                 );
             }
         }
@@ -157,7 +153,10 @@ export default function Topic() {
             ) {
                 const response = await dispatch(convertCourseMedia(upload));
                 const payload = response.payload;
-                const content = setModalBodyContent(payload, configuration);
+                const content = setModalBodyContent(
+                    payload.pdf_path,
+                    configuration
+                );
                 setModalContent(content);
                 setShowModal(true);
             } else {
@@ -223,7 +222,6 @@ export default function Topic() {
             );
         }
     };
-
     const uploadsList = () => {
         if (course_topic?.uploads) {
             return (
@@ -258,18 +256,6 @@ export default function Topic() {
                 </Nav>
             );
         }
-    };
-
-    const CourseTopicUpdatedAt = () => {
-        let date = "";
-        if (course_topic?.updated_at) {
-            date = new Date(course_topic?.updated_at);
-        } else if (course_topic?.created_at) {
-            date = new Date(course_topic?.created_at);
-        } else {
-            return date;
-        }
-        return <DateFormat date={date} format="DD MMM YYYY" />;
     };
 
     const RenderTopic = () => {
@@ -431,7 +417,7 @@ export default function Topic() {
                                         >
                                             {previous ? (
                                                 <Link
-                                                    to={`/test/${course_id}/topic/${previous}/show`}
+                                                    to={`/course/${course_id}/topic/${previous}/show`}
                                                 >
                                                     <Button type="button">
                                                         Previous
@@ -442,7 +428,7 @@ export default function Topic() {
                                             )}
                                             {next ? (
                                                 <Link
-                                                    to={`/test/${course_id}/topic/${next}/show`}
+                                                    to={`/course/${course_id}/topic/${next}/show`}
                                                 >
                                                     <Button type="button">
                                                         Next
@@ -504,7 +490,6 @@ export default function Topic() {
             </>
         );
     };
-
     return (
         <>
             <RenderTopic />
@@ -518,3 +503,5 @@ export default function Topic() {
         </>
     );
 }
+
+export default Topic;
