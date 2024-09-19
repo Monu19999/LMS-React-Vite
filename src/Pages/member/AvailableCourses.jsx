@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { availableCourses } from "@src/features/member/MemberSlice";
-import CourseItem from "@src/Pages/courses/includes/CourseItem";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
-import { Accordion } from "react-bootstrap";
-import RenderCourseHierarchyBC from "../courses/includes/RenderCourseHierarchyBC";
 import { useForm } from "react-hook-form";
+import CourseAccordianList from "./includes/CourseAccordianList";
+import CourseSearchForm from "./includes/CourseSearchForm";
 
 const AvailableCourses = () => {
-    const { register, getValues, reset } = useForm();
-
     const dispatch = useDispatch();
     const [filteredCourses, setFilteredCourses] = useState([]);
 
@@ -18,25 +15,22 @@ const AvailableCourses = () => {
 
     useEffect(() => {
         dispatch(availableCourses());
-    }, [dispatch]);
+    }, []);
 
     useEffect(() => {
-        reset();
         if (member?.available_courses?.available_courses) {
             setFilteredCourses(member.available_courses.available_courses);
         }
     }, [member]);
 
-    const handleFormFilterOnChange = () => {
-        const filtertext = getValues("course_name").toLowerCase();
-
+    const handleFormFilterOnChange = (input_value) => {
         const filteredCourse = member?.available_courses?.available_courses
             .map((availableCourse) => {
                 const filterCourse =
                     availableCourse.active_category_courses.filter((acc) => {
                         return acc.course_name_en
                             .toLowerCase()
-                            .includes(filtertext);
+                            .includes(input_value);
                     });
 
                 return {
@@ -50,99 +44,20 @@ const AvailableCourses = () => {
             );
 
         setFilteredCourses(filteredCourse);
-        // console.log(filteredCourses)
     };
 
     return (
         <>
             <h4 className="mb-4 heading-bg">Available Courses</h4>
 
-            <div className="container">
-                <div className="row mb-4">
-                    <div
-                        className="col-lg-12 wow fadeInUp "
-                        style={{ backgroundColor: "#06bbcc" }}
-                    >
-                        <div className="search-title">
-                            {/* Search Form Start */}
-                            <form>
-                                <div className="row justify-content-center">
-                                    <div className="form-group">
-                                        <input
-                                            type="text"
-                                            autoComplete="off"
-                                            {...register("course_name", {
-                                                onChange:
-                                                    handleFormFilterOnChange,
-                                            })}
-                                            className="form-control"
-                                            placeholder="Search By Course Name"
-                                        />
-                                    </div>
-                                </div>
-                            </form>
-                            {/* Search Form End */}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <CourseSearchForm onChangeCallback={handleFormFilterOnChange} />
 
             {Memberloading ? (
                 <BootstrapSpinner />
             ) : (
-                <>
-                    {filteredCourses.length > 0 ? (
-                        filteredCourses.map((available_course, index) => (
-                            <Accordion
-                                key={available_course.id}
-                                defaultActiveKey="0"
-                                className="member-courses"
-                            >
-                                <Accordion.Item eventKey={String(index)}>
-                                    <Accordion.Header>
-                                        {available_course
-                                            ?.active_category_courses.length >
-                                            0 && (
-                                            <nav aria-label="breadcrumb">
-                                                <ol className="breadcrumb">
-                                                    <RenderCourseHierarchyBC
-                                                        course_hierarchy={
-                                                            available_course
-                                                                .active_category_courses[0]
-                                                                .course_hierarchy
-                                                        }
-                                                    />
-                                                </ol>
-                                            </nav>
-                                        )}
-                                    </Accordion.Header>
-                                    <Accordion.Body>
-                                        <div className="row">
-                                            {available_course.active_category_courses.map(
-                                                (course) => (
-                                                    <div
-                                                        className="col-lg-4 col-md-6 mb-4"
-                                                        key={course.id}
-                                                    >
-                                                        <CourseItem
-                                                            course={course}
-                                                            upload={
-                                                                course.course
-                                                                    .upload
-                                                            }
-                                                        />
-                                                    </div>
-                                                )
-                                            )}
-                                        </div>
-                                    </Accordion.Body>
-                                </Accordion.Item>
-                            </Accordion>
-                        ))
-                    ) : (
-                        <h1 className="text-center">No Available Courses</h1>
-                    )}
-                </>
+                <CourseAccordianList filtered_courses={filteredCourses}>
+                    {filteredCourses.length === 0 && "No Available Courses"}
+                </CourseAccordianList>
             )}
         </>
     );

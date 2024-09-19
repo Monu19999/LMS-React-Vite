@@ -220,7 +220,6 @@ export const convertCourseMedia = createAsyncThunk(
                     headers,
                 }
             );
-            console.log(data);
             return data;
         } catch (error) {
             const { response } = error;
@@ -330,7 +329,7 @@ export const courseSlice = createSlice({
                 state.course_enrolment_loading = true;
             })
             .addCase(enrollCourse.fulfilled, (state, { payload }) => {
-                console.log("Payload => ", payload);
+                // console.log("Payload => ", payload);
                 state.course_enrolment_loading = false;
                 if (payload.status == 200) {
                     state.course = payload.course;

@@ -62,6 +62,24 @@ export const availableCourses = createAsyncThunk(
     }
 );
 
+export const myCertificates = createAsyncThunk(
+    "member/myCertificates",
+    async (data, { rejectWithValue }) => {
+        let api_url = api("member_certificates");
+        try {
+            const headers = getAuthHeaders();
+            const { data } = await axios.get(api_url, {
+                headers,
+                withCredentials: true,
+            });
+            return data;
+        } catch (error) {
+            const { response } = error;
+            return rejectWithValue(response);
+        }
+    }
+);
+
 export const memberSlice = createSlice({
     name: "member",
     initialState,
@@ -114,6 +132,21 @@ export const memberSlice = createSlice({
                 state.member_loading = false;
                 state.error = payload.data;
                 // throw new Response("Bad Request", payload.data);
+            })
+
+            // Get certificates
+            .addCase(myCertificates.pending, (state, action) => {
+                state.member_loading = true;
+            })
+            .addCase(myCertificates.fulfilled, (state, { payload }) => {
+                state.member_loading = false;
+                if (payload.status == 200) {
+                    state.pages.my_certificates = payload.data;
+                }
+            })
+            .addCase(myCertificates.rejected, (state, { payload }) => {
+                state.member_loading = false;
+                state.error = payload.data;
             });
     },
 });

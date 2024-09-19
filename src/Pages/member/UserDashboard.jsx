@@ -39,7 +39,7 @@ function UserDashboard() {
                                                 </div>
                                             </div>
                                             <div className="col-auto">
-                                                <i className="fas fa-book fa-2x text-gray-300" />
+                                                <i className="fas fa-book fa-2x text-primary" />
                                             </div>
                                         </div>
                                     </div>
@@ -49,11 +49,11 @@ function UserDashboard() {
                         {/* Certificate Card Example */}
                         <div className="col-xl-4 col-md-6 mb-4">
                             <Link to="certificates">
-                                <div className="card border-left-success shadow h-100 py-2">
+                                <div className="card border-left-course shadow h-100 py-2">
                                     <div className="card-body">
                                         <div className="row no-gutters align-items-center">
                                             <div className="col mr-2">
-                                                <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                <div className="text-xs font-weight-bold text-course text-uppercase mb-1">
                                                     Certificate
                                                 </div>
                                                 <div className="h5 mb-0 font-weight-bold text-gray-800">
@@ -64,7 +64,7 @@ function UserDashboard() {
                                                 </div>
                                             </div>
                                             <div className="col-auto">
-                                                <i className="fas fa-file fa-2x text-gray-300" />
+                                                <i className="fas fa-file fa-2x text-course" />
                                             </div>
                                         </div>
                                     </div>
@@ -73,11 +73,11 @@ function UserDashboard() {
                         </div>
                         {/* Pending Requests Card Example */}
                         <div className="col-xl-4 col-md-6 mb-4">
-                            <div className="card border-left-warning shadow h-100 py-2">
+                            <div className="card border-left-success shadow h-100 py-2">
                                 <div className="card-body">
                                     <div className="row no-gutters align-items-center">
                                         <div className="col mr-2">
-                                            <div className="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Course completion
                                             </div>
                                             <div className="h5 mb-0 font-weight-bold text-gray-800">
@@ -88,7 +88,7 @@ function UserDashboard() {
                                             </div>
                                         </div>
                                         <div className="col-auto">
-                                            <i className="fas fa-user-graduate fa-2x text-gray-300" />
+                                            <i className="fas fa-user-graduate fa-2x text-success" />
                                         </div>
                                     </div>
                                 </div>

@@ -147,7 +147,6 @@ export default function TopicMedia({ course_topic }) {
     };
 
     const RenderUploadsButton = ({ upload, configuration }) => {
-        console.log(upload);
         const handleShowModal = (upload, configuration) => {
             fileConvertHandler(upload, configuration);
         };

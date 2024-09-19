@@ -57,6 +57,7 @@ const api_urls = {
     member_dashboard: "/api/auth/member/dashboard",
     member_courses: "/api/auth/member/courses",
     member_available_courses: "/api/auth/member/available_courses",
+    member_certificates: "/api/auth/member/certificates",
 };
 
 export default function api(api_name, param = null) {

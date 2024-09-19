@@ -195,6 +195,7 @@ const initialState = {
         Cookies.get("user") == undefined
             ? null
             : JSON.parse(Cookies.get("user")),
+    is_login: Cookies.get("token") !== undefined,
     token: Cookies.get("token") == undefined ? null : Cookies.get("token"),
     user_loading: false,
 

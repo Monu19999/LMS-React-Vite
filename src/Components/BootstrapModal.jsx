@@ -1,21 +1,22 @@
 import { Modal } from "react-bootstrap";
 import "./BootstrapModal.css";
 
-function BootstrapModal(props) {
+function BootstrapModal({ title, body, ...props }) {
     return (
         <Modal
             {...props}
-            size="xl"
             aria-labelledby="contained-modal-title-vcenter"
-            dialogClassName="modal-70w"
             centered
         >
-            <Modal.Header closeButton>
+            <Modal.Header
+                closeButton={props?.showclosebutton == "false" ? false : true}
+            >
                 <Modal.Title id="contained-modal-title-vcenter">
-                    {props.title}
+                    {title}
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body>{props.body}</Modal.Body>
+            <Modal.Body>{body}</Modal.Body>
+            {props.children}
         </Modal>
     );
 }

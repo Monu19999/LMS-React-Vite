@@ -3,12 +3,15 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ReadCheckBox from "./includes/ReadCheckBox";
 import Placeholder from "react-bootstrap/Placeholder";
+import { useState } from "react";
+import BootstrapModal from "@src/Components/BootstrapModal";
 
-export default function CourseTopicList({ course, course_id }) {
+export default function CourseTopicList({ course }) {
+    const [alert, setAlert] = useState(false);
+    const is_login = useSelector((state) => state.auth.is_login);
     const course_loading = useSelector((state) => state.course.course_loading);
     const auth_user = useSelector((state) => state.auth.user);
     const enrollments = useSelector((state) => state.course.course.enrollments);
-    const navigate = useNavigate();
     return (
         <>
             <h4>Course contains:</h4>
@@ -42,7 +45,32 @@ export default function CourseTopicList({ course, course_id }) {
                                     <ListGroup.Item key={topic.id}>
                                         <div className="d-flex justify-content-between">
                                             <h5>
-                                                {auth_user &&
+                                                {auth_user ? (
+                                                    enrollments?.length > 0 ? (
+                                                        <>
+                                                            <Link
+                                                                to={`/course/${course.encr_id}/topic/${topic.encr_id}/show`}
+                                                            >
+                                                                {topic.title}
+                                                            </Link>
+                                                        </>
+                                                    ) : (
+                                                        <a
+                                                            href="#"
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                setAlert(true);
+                                                            }}
+                                                        >
+                                                            {topic.title}
+                                                        </a>
+                                                    )
+                                                ) : (
+                                                    <Link to="/auth/login">
+                                                        {topic.title}
+                                                    </Link>
+                                                )}
+                                                {/* {auth_user &&
                                                 enrollments?.length > 0 ? (
                                                     <>
                                                         <Link
@@ -50,32 +78,28 @@ export default function CourseTopicList({ course, course_id }) {
                                                         >
                                                             {topic.title}
                                                         </Link>
-                                                        {/* <Link
-                                                            to={`/test/${course.encr_id}/topic/${topic.encr_id}/show`}
-                                                        >
-                                                            Test
-                                                        </Link> */}
                                                     </>
                                                 ) : (
-                                                    <span
+                                                    <a
+                                                        href="javascript:void(0)"
                                                         onClick={() => {
-                                                            alert(
-                                                                "please login to show content"
-                                                            );
+                                                            // alert(
+                                                            //     "please login to show content"
+                                                            // );
                                                             navigate(
                                                                 "/auth/login"
                                                             );
                                                         }}
                                                     >
                                                         {topic.title}
-                                                    </span>
-                                                )}
+                                                    </a>
+                                                )} */}
                                             </h5>
                                             {auth_user &&
                                                 enrollments?.length > 0 && (
                                                     <ReadCheckBox
                                                         topic={topic}
-                                                        course_id={course_id}
+                                                        course_id={course.id}
                                                     />
                                                 )}
                                         </div>
@@ -136,6 +160,15 @@ export default function CourseTopicList({ course, course_id }) {
                     )}
                 </div>
             </div>
+            <BootstrapModal
+                size="sm"
+                show={alert}
+                onHide={() => setAlert(false)}
+                backdrop="static"
+                keyboard={false}
+                title="Alert"
+                body="You are not enrolled for this course!"
+            ></BootstrapModal>
         </>
     );
 }

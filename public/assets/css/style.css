@@ -2636,3 +2636,11 @@ h4.heading-bg {
         z-index: 999;
     }
 }
+
+.border-left-course {
+    border-left: 0.25rem solid #0a2cc4 !important;
+}
+
+.text-course {
+    color: #0a2cc4;
+}

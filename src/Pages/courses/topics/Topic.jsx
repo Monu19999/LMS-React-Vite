@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button, Nav } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-import { getCourseTopic, setTopic } from "@src/features/app/CourseSlice";
+import { useParams } from "react-router-dom";
+import {
+    getCourseTopic,
+    setTopic,
+    convertCourseMedia,
+} from "@src/features/app/CourseSlice";
 import parse from "html-react-parser";
 import Placeholder from "react-bootstrap/Placeholder";
 import CourseBradeCrumb from "@src/Pages/courses/includes/CourseBradeCrumb";
@@ -11,6 +15,8 @@ import ReactPlayer from "react-player";
 import PDFReader from "@src/Pages/courses/includes/Pdf/PDFReader";
 import PaginatedHtml from "@src/Utilities/PaginatedHtml";
 import BootstrapModal from "@src/Components/BootstrapModal";
+import BootstrapProgressBar from "./includes/BootstrapProgressBar";
+import TopicPaginationButtons from "./includes/TopicPaginationButtons";
 
 function Topic() {
     let { course_id, topic_id } = useParams();
@@ -22,6 +28,7 @@ function Topic() {
     });
     const [previous, setPrevious] = useState(null);
     const [next, setNext] = useState(null);
+    const [read_topic_data, setReadTopicData] = useState(0);
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState(null);
     const course_topic_loading = useSelector(
@@ -37,19 +44,17 @@ function Topic() {
             const data = payload.data;
             setPrevious(data.previous);
             setNext(data.next);
+            setReadTopicData(data?.read_percentage);
             dispatch(setTopic(data.current));
-            // console.log(params);
-            // navigate(
-            //     `/course/${params.course_id}/topic/${params.topic_id}/show`
-            // );
         }
     };
     useEffect(() => {
         handleGetCourseTopic({ course_id, topic_id });
     }, [topic_id]);
+
     useEffect(() => {
         window.scrollTo(0, 0);
-    });
+    }, [previous, next, course_topic]);
 
     const handleBack = () => {
         window.history.back();
@@ -78,7 +83,6 @@ function Topic() {
     };
 
     const setModalBodyContent = (upload, configuration) => {
-        // console.log("here => ", upload.pdf_path.preview_path);
         let content = null;
         const isSupportedType = checkFileMimeType(upload?.file_mime_type);
 
@@ -109,23 +113,23 @@ function Topic() {
                     <PDFReader
                         preview_path={upload.preview_path}
                         download_path={upload.download_path}
-                        // file_path={`DSA-Decoded.pdf`}
                         configuration={configuration}
                     />
                 );
             } else {
                 var extension = upload.preview_path.split(".").pop();
-                content = fileLoading ? (
-                    <BootstrapSpinner />
-                ) : extension === "pdf" ? (
-                    <PDFReader
-                        preview_path={upload.preview_path}
-                        download_path={upload.download_path}
-                        configuration={configuration}
-                    />
-                ) : (
-                    <PaginatedHtml file_path={upload.preview_path} />
-                );
+                console.log(upload);
+
+                content =
+                    extension === "pdf" ? (
+                        <PDFReader
+                            preview_path={upload.preview_path}
+                            download_path={upload.download_path}
+                            configuration={configuration}
+                        />
+                    ) : (
+                        <PaginatedHtml file_path={upload.preview_path} />
+                    );
             }
         }
         //  else {
@@ -138,6 +142,8 @@ function Topic() {
     function MyVerticallyCenteredModal(props) {
         return (
             <BootstrapModal
+                size="xl"
+                dialogClassName="modal-70w"
                 title={course_topic?.title}
                 body={modalContent}
                 {...props}
@@ -295,14 +301,17 @@ function Topic() {
                                                     ?.course_hierarchy
                                             }
                                         />
+                                        <BootstrapProgressBar
+                                            percentage={
+                                                read_topic_data.percentage
+                                            }
+                                        />
                                     </>
                                 )}
                             </div>
                         </div>
                     </div>
                 </div>
-                {/* {course_topic?.summary && parse(course_topic?.summary)}
-            {uploadsList()} */}
 
                 <div className="blog-single gray-bg mt-4 mb-4">
                     <div className="container mt-4 mb-4">
@@ -343,7 +352,7 @@ function Topic() {
                                                         >
                                                             <strong>
                                                                 Last Updated On
-                                                                -
+                                                                -{" "}
                                                             </strong>
                                                             <span>
                                                                 <CourseTopicUpdatedAt />
@@ -412,36 +421,14 @@ function Topic() {
                                                 </>
                                             )}
                                         </div>
-                                        <div
-                                            className="d-flex justify-content-between"
-                                            style={{
-                                                borderTop: "1px solid #dedede",
-                                                paddingTop: "20px",
-                                            }}
-                                        >
-                                            {previous ? (
-                                                <Link
-                                                    to={`/course/${course_id}/topic/${previous}/show`}
-                                                >
-                                                    <Button type="button">
-                                                        Previous
-                                                    </Button>
-                                                </Link>
-                                            ) : (
-                                                <span></span>
-                                            )}
-                                            {next ? (
-                                                <Link
-                                                    to={`/course/${course_id}/topic/${next}/show`}
-                                                >
-                                                    <Button type="button">
-                                                        Next
-                                                    </Button>
-                                                </Link>
-                                            ) : (
-                                                <span></span>
-                                            )}
-                                        </div>
+                                        <TopicPaginationButtons
+                                            course_topic={course_topic}
+                                            topic_id={topic_id}
+                                            read_topic_data={read_topic_data}
+                                            next={next}
+                                            previous={previous}
+                                            course_id={course_id}
+                                        />
                                     </article>
                                 </div>
                             </div>

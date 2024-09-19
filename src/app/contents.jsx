@@ -9,3 +9,10 @@ export const HTTP_HEADERS = {
     "Content-Type": "application/json",
     Accept: "application/json; charset=UTF-8",
 };
+
+export const mime_types = Object.freeze([
+    "application/video",
+    "application/pdf",
+    "application/vnd.ms-powerpoint",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+]);

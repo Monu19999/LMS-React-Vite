@@ -2,12 +2,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import parse from "html-react-parser";
-import { getCourse } from "@src/features/app/CourseSlice";
+import { getCourse, setCourse } from "@src/features/app/CourseSlice";
 import CourseTopicList from "./topics/CourseTopicList";
 import CourseBradeCrumb from "./includes/CourseBradeCrumb";
 import DateFormat from "@src/Utilities/DateFormat";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
-import { setCourse } from "@src/features/app/CourseSlice";
 
 function Course() {
     const course = useSelector((state) => state.course.course);
@@ -42,10 +41,10 @@ function Course() {
         return (
             <>
                 <div
-                    className="container-fluid py-4 mb-4 "
+                    className="container-fluid py-4 mb-4"
                     style={{
                         backgroundColor: "#343747",
-                        minHeight: "225px",
+                        minHeight: "250px",
                     }}
                 >
                     <div className="container">
@@ -221,7 +220,7 @@ function Course() {
 
                 <div className="container-xxl">
                     <div className="container p-0">
-                        <div className="container py-5">
+                        <div className="container py-3">
                             <div className="row list">
                                 <div
                                     className="col-lg-8 p-4"
@@ -259,7 +258,6 @@ function Course() {
                                     {course?.course?.topics && (
                                         <CourseTopicList
                                             course={course.course}
-                                            course_id={course_id}
                                         />
                                     )}
                                 </div>
