@@ -14,7 +14,6 @@ function Course() {
     const course_read_status = useSelector(
         (state) => state.course.course_read_status
     );
-
     let { course_id } = useParams();
 
     const dispatch = useDispatch();
@@ -31,7 +30,6 @@ function Course() {
             }
         }
     };
-
     useEffect(() => {
         dispatch(setCourse(null));
         if (course_id) {
@@ -184,7 +182,12 @@ function Course() {
                                                 </li>
                                             )}
                                             <li>Full lifetime access</li>
-                                            <li>Certification of completion</li>
+                                            {course.configuration
+                                                .is_create_cerfiticate == 1 && (
+                                                <li>
+                                                    Certification of completion
+                                                </li>
+                                            )}
                                         </ul>
                                     </div>
                                     {/* <div className="col-12 mt-4 text-center mb-4">
