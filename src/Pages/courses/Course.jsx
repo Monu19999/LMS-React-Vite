@@ -94,7 +94,6 @@ function Course() {
                                     </li> */}
                                     </ol>
                                 </nav>
-
                                 {auth_user && course_read_status && (
                                     <BootstrapProgressBar
                                         percentage={
@@ -182,8 +181,9 @@ function Course() {
                                                 </li>
                                             )}
                                             <li>Full lifetime access</li>
-                                            {course.configuration
-                                                .is_create_cerfiticate == 1 && (
+                                            {course?.configuration
+                                                ?.is_create_cerfiticate ==
+                                                1 && (
                                                 <li>
                                                     Certification of completion
                                                 </li>
