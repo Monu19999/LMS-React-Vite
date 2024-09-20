@@ -10,6 +10,7 @@ const initialState = {
     search_courses: [],
     courses: [],
     course: null,
+    course_read_status: null,
     course_topic: null,
     search: {
         page: null,
@@ -308,6 +309,7 @@ export const courseSlice = createSlice({
                 state.isSuccess = true;
                 if (payload.status == 200) {
                     state.course = payload.data.course;
+                    state.course_read_status = payload.data.read_percentage;
                     state.errors = [];
                     state.error_message = null;
                 }
@@ -363,6 +365,7 @@ export const courseSlice = createSlice({
                 state.course_topic_loading = false;
                 if (payload.status == 200) {
                     state.course_topic = payload.data.course_topic;
+                    state.course_read_status = payload.data.read_percentage;
                     state.errors = [];
                     state.error_message = null;
                 }

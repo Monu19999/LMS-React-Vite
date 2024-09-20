@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import parse from "html-react-parser";
@@ -7,13 +7,20 @@ import CourseTopicList from "./topics/CourseTopicList";
 import CourseBradeCrumb from "./includes/CourseBradeCrumb";
 import DateFormat from "@src/Utilities/DateFormat";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
+import BootstrapProgressBar from "./topics/includes/BootstrapProgressBar";
 
 function Course() {
     const course = useSelector((state) => state.course.course);
+    const course_read_status = useSelector(
+        (state) => state.course.course_read_status
+    );
+
     let { course_id } = useParams();
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const auth_user = useSelector((state) => state.auth.user);
 
     const handleGetCourse = async () => {
         let response = await dispatch(getCourse(course_id));
@@ -89,6 +96,15 @@ function Course() {
                                     </li> */}
                                     </ol>
                                 </nav>
+
+                                {auth_user && course_read_status && (
+                                    <BootstrapProgressBar
+                                        percentage={
+                                            course_read_status.percentage
+                                        }
+                                    />
+                                )}
+
                                 {/* <p className="text-white">
                                 4.50{" "}
                                 <i className="fa fa-star" aria-hidden="true" />

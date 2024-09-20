@@ -8,7 +8,7 @@ import { readCourseTopic } from "@src/features/app/CourseSlice";
 export default function PaginationButtons({
     course_topic,
     topic_id,
-    read_topic_data,
+    course_read_status,
     course_id,
     previous,
     next,
@@ -66,10 +66,11 @@ export default function PaginationButtons({
                         Next
                     </Button>
                 ) : (
-                    read_topic_data?.total_topics_count &&
-                    read_topic_data?.total_read_count &&
-                    parseInt(read_topic_data?.total_read_count) ===
-                        parseInt(read_topic_data?.total_topics_count) - 1 && (
+                    course_read_status?.total_topics_count &&
+                    course_read_status?.total_read_count &&
+                    parseInt(course_read_status?.total_read_count) ===
+                        parseInt(course_read_status?.total_topics_count) -
+                            1 && (
                         <Button
                             type="button"
                             variant="success"

@@ -28,13 +28,15 @@ function Topic() {
     });
     const [previous, setPrevious] = useState(null);
     const [next, setNext] = useState(null);
-    const [read_topic_data, setReadTopicData] = useState(0);
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState(null);
     const course_topic_loading = useSelector(
         (state) => state.course.course_topic_loading
     );
     const course_topic = useSelector((state) => state.course.course_topic);
+    const course_read_status = useSelector(
+        (state) => state.course.course_read_status
+    );
     const dispatch = useDispatch();
 
     const handleGetCourseTopic = async (params) => {
@@ -44,7 +46,6 @@ function Topic() {
             const data = payload.data;
             setPrevious(data.previous);
             setNext(data.next);
-            setReadTopicData(data?.read_percentage);
             dispatch(setTopic(data.current));
         }
     };
@@ -301,11 +302,13 @@ function Topic() {
                                                     ?.course_hierarchy
                                             }
                                         />
-                                        <BootstrapProgressBar
-                                            percentage={
-                                                read_topic_data.percentage
-                                            }
-                                        />
+                                        {course_read_status && (
+                                            <BootstrapProgressBar
+                                                percentage={
+                                                    course_read_status.percentage
+                                                }
+                                            />
+                                        )}
                                     </>
                                 )}
                             </div>
@@ -424,7 +427,9 @@ function Topic() {
                                         <TopicPaginationButtons
                                             course_topic={course_topic}
                                             topic_id={topic_id}
-                                            read_topic_data={read_topic_data}
+                                            course_read_status={
+                                                course_read_status
+                                            }
                                             next={next}
                                             previous={previous}
                                             course_id={course_id}
