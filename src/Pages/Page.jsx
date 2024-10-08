@@ -5,6 +5,7 @@ import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import parse from "html-react-parser";
 import api from "@src/apis/api";
 import PageHeader from "./includes/PageHeader";
+import { Col, Container, Row } from "react-bootstrap";
 
 function Page() {
     let { page } = useParams();
@@ -42,10 +43,11 @@ function Page() {
                     </PageHeader>
 
                     <div className="container-xxl py-5">
-                        <div className="container ">
-                            <div className="row g-5">
-                                <div
-                                    className="col-lg-6 wow fadeInUp"
+                        <Container>
+                            <Row className="g-5">
+                                <Col
+                                    lg={6}
+                                    className="wow fadeInUp"
                                     data-wow-delay="0.1s"
                                     style={{ minHeight: 400 }}
                                 >
@@ -57,9 +59,10 @@ function Page() {
                                             style={{ objectFit: "cover" }}
                                         />
                                     </div>
-                                </div>
-                                <div
-                                    className="col-lg-6 wow fadeInUp"
+                                </Col>
+                                <Col
+                                    lg={6}
+                                    className="wow fadeInUp"
                                     data-wow-delay="0.3s"
                                     style={{ display: "table" }}
                                 >
@@ -81,9 +84,9 @@ function Page() {
                                                 )}
                                         </p>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
+                                </Col>
+                            </Row>
+                        </Container>
                     </div>
                 </>
             )}

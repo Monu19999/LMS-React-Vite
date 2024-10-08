@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import api from "@src/apis/api";
 import PageHeader from "@src/Pages/includes/PageHeader";
 import { Link, useLoaderData } from "react-router-dom";
+import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
 
 export const loader = async () => {
     try {
@@ -74,76 +75,82 @@ function Video() {
                     </ol>
                 </nav>
             </PageHeader>
-            <div className="container-xxl " style={{ minHeight:"450px"}}>
-                <div className="container shadow inner-page-container-mb ">
-                   <div className="row mb-4">
-                   <div className="col-lg-12 wow fadeInUp"
-                        style={{ backgroundColor: "#06bbcc" }}
-                    >
-                        <div className="search-title">
-                            {/* Search Form Start */}
-                            <form onSubmit={handleSubmit(handleFormFilter)}>
-                                <div className="row justify-content-center">
-                                    <div className="col-lg-8 col-md-6 mt-3">
-                                        <div className="form-group">
-                                            <input
-                                                type="text"
-                                                autoComplete="off"
-                                                {...register("title", {
-                                                    required:
-                                                        "Title is required.",
-                                                })}
-                                                className="form-control"
-                                                placeholder="Search By Title"
-                                            />
-                                        </div>
-                                        {errors.title && (
-                                            <p className="text-danger">
-                                                {errors.title.message}
-                                            </p>
-                                        )}
-                                    </div>
-                                    <div className="col-lg-4 col-md-6 mb-2">
-                                        <div className="form-group mt-3">
-                                            <button
-                                                className="btn btn-dark py-md-2 px-md-4 animated slideInRight"
-                                                style={{
-                                                    borderRadius: 40,
-                                                    marginRight: 20,
-                                                }}
-                                                type="submit"
-                                            >
-                                                Search
-                                            </button>
-                                            <button
-                                                className="btn btn-light py-md-2 px-md-4 animated slideInRight"
-                                                style={{ borderRadius: 40 }}
-                                                type="button"
-                                                onClick={handleResetSearch}
-                                            >
-                                                <i className="fas fa-refresh" />{" "}
-                                                Reset
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            {/* Search Form End */}
-                        </div>
-                    </div>
-                   </div>
+            <div className="container-xxl " style={{ minHeight: "450px" }}>
+                <Container className="shadow inner-page-container-mb ">
+                    <Row className="mb-4">
+                        <Col
+                            lg={12}
+                            className="wow fadeInUp"
+                            style={{ backgroundColor: "#06bbcc" }}
+                        >
+                            <div className="search-title">
+                                {/* Search Form Start */}
+                                <Form onSubmit={handleSubmit(handleFormFilter)}>
+                                    <Row className="justify-content-center">
+                                        <Col lg={8} md={6} className="mt-3">
+                                            <div className="form-group">
+                                                <input
+                                                    type="text"
+                                                    autoComplete="off"
+                                                    {...register("title", {
+                                                        required:
+                                                            "Title is required.",
+                                                    })}
+                                                    className="form-control"
+                                                    placeholder="Search By Title"
+                                                />
+                                            </div>
+                                            {errors.title && (
+                                                <p className="text-danger">
+                                                    {errors.title.message}
+                                                </p>
+                                            )}
+                                        </Col>
+                                        <Col lg={4} md={6} className="mb-2">
+                                            <div className="form-group mt-3">
+                                                <Button
+                                                    variant="dark"
+                                                    className="py-md-2 px-md-4 animated slideInRight"
+                                                    style={{
+                                                        borderRadius: 40,
+                                                        marginRight: 20,
+                                                    }}
+                                                    type="submit"
+                                                >
+                                                    Search
+                                                </Button>
+                                                <Button
+                                                    variant="light"
+                                                    className="py-md-2 px-md-4 animated slideInRight"
+                                                    style={{ borderRadius: 40 }}
+                                                    type="button"
+                                                    onClick={handleResetSearch}
+                                                >
+                                                    <i className="fas fa-refresh" />{" "}
+                                                    Reset
+                                                </Button>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </Form>
+                                {/* Search Form End */}
+                            </div>
+                        </Col>
+                    </Row>
 
-                    <div className="container">
-                    <div className="row">
-                        <div className="col-12 mb-4">
-                            <div className="table-responsive">
-                            <table className="table table-striped table-bordered table-hover align-items-center justify-content-center">
+                    <Row className="mb-4">
+                        <Col className="col-12 mb-4">
+                            <Table
+                                responsive
+                                striped
+                                bordered
+                                hover
+                                className="align-items-center justify-content-center"
+                            >
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th >S.No</th>
-                                        <th >
-                                            Title
-                                        </th>
+                                        <th>S.No</th>
+                                        <th>Title</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -162,12 +169,10 @@ function Video() {
                                         </tr>
                                     ))}
                                 </tbody>
-                            </table>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
+                            </Table>
+                        </Col>
+                    </Row>
+                </Container>
             </div>
         </>
     );

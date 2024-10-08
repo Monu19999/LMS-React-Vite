@@ -8,6 +8,7 @@ import { getUser, getAuthHeaders } from "@src/features/app/AuthSlice";
 import { toast } from "react-toastify";
 import ProfileImage from "@src/Components/Layout/Student/ProfileImage";
 import ServerErrors from "@src/Components/ServerErrors";
+import { Button, Col, Row } from "react-bootstrap";
 
 export default function Profile() {
     const [image, setImage] = useState("");
@@ -82,8 +83,8 @@ export default function Profile() {
     return (
         <>
             <h4 className="mb-4 heading-bg">Profile</h4>
-            <div className="row">
-                <div className="col-xl-4">
+            <Row>
+                <Col xl={4}>
                     {/* Profile picture card*/}
                     <div
                         className="card mb-4 mb-xl-0"
@@ -154,8 +155,8 @@ export default function Profile() {
                                                         style={{ color: "red" }}
                                                     ></i>
                                                 </span>
-                                                <button
-                                                    className="btn btn-success"
+                                                <Button
+                                                    variant="success"
                                                     type="submit"
                                                     disabled={
                                                         !image ||
@@ -163,7 +164,7 @@ export default function Profile() {
                                                     }
                                                 >
                                                     Save
-                                                </button>
+                                                </Button>
                                             </>
                                         )}
                                         {!image && (
@@ -216,7 +217,7 @@ export default function Profile() {
                             </form>
                         </div>
                     </div>
-                </div>
+                </Col>
                 <div className="col-xl-8">
                     {/* Account details card*/}
                     <div className="card mb-4" style={{ height: "100%" }}>
@@ -360,7 +361,7 @@ export default function Profile() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </Row>
         </>
     );
 }

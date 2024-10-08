@@ -33,6 +33,7 @@ import ChangePassword from "./Pages/member/ChangePassword";
 import Profile from "./Pages/member/Profile";
 import Topic from "./Pages/courses/topics/Topic";
 import Test from "./Test";
+import Rating from "./Components/Rating/Rating";
 
 const router = createHashRouter(
     createRoutesFromElements(
@@ -54,6 +55,7 @@ const router = createHashRouter(
                 />
                 <Route exact path="page/:page" element={<Page />} />
                 <Route exact path="courses" element={<Courses />} />
+                <Route exact path="rating" element={<Rating />} />
                 <Route exact path="feedback" element={<Feedback />} />
                 <Route exact path="faq" element={<FAQ />} loader={faqLoader} />
                 <Route

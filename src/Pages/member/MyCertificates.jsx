@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { myCertificates } from "@src/features/member/MemberSlice";
-import { Button } from "react-bootstrap";
+import { Button, Card, Col, Image, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -59,22 +59,19 @@ const MyCertificates = () => {
     return (
         <>
             <h4 className="mb-4 heading-bg">My Certificates</h4>
-            <div className="row">
+            <Row>
                 {member?.my_certificates?.certificates?.length > 0 ? (
                     member?.my_certificates?.certificates.map((item, index) => (
-                        <div
-                            className="col-sm-12 col-md-12 col-lg-4"
-                            key={item.id}
-                        >
-                            <div className="card">
-                                <div className="card-body">
-                                    <h5 className="card-title">
+                        <Col sm={12} md={12} lg={4} key={item.id}>
+                            <Card>
+                                <Card.Body>
+                                    <Card.Title className="text-center">
                                         Certificate of{" "}
                                         {item.category_course.course_name_en}
-                                    </h5>
+                                    </Card.Title>
                                     <div className="course-item bg-light">
                                         <div className="position-relative overflow-hidden">
-                                            <img
+                                            <Image
                                                 className="img-fluid"
                                                 src={
                                                     item?.course?.upload
@@ -107,14 +104,14 @@ const MyCertificates = () => {
                                         </div>
                                     </div>
                                     {/* <Button variant="primary">Download</Button> */}
-                                </div>
-                            </div>
-                        </div>
+                                </Card.Body>
+                            </Card>
+                        </Col>
                     ))
                 ) : (
                     <h4 className="text-center">No Certificate Available!</h4>
                 )}
-            </div>
+            </Row>
         </>
     );
 };

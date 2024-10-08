@@ -4,6 +4,7 @@ import appReducer from '@src/features/app/AppSlice';
 import courseReducer from '@src/features/app/CourseSlice';
 import homeReducer from '@src/features/app/HomeSlice';
 import memberReducer from '@src/features/member/MemberSlice';
+import rateReducer from '@src/features/app/RateSlice';
 import Cookies from 'js-cookie';
 
 const errorsMiddleware = (store) => (next) => (action) => {
@@ -29,6 +30,7 @@ export default configureStore({
         auth: authReducer,
         course: courseReducer,
         home: homeReducer,
+        rating: rateReducer,
 
         member: memberReducer,
     },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import parse from "html-react-parser";
@@ -8,12 +8,15 @@ import CourseBradeCrumb from "./includes/CourseBradeCrumb";
 import DateFormat from "@src/Utilities/DateFormat";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import BootstrapProgressBar from "./topics/includes/BootstrapProgressBar";
+import Rating from "@src/Components/Rating/Rating";
+import { Col, Container, Row } from "react-bootstrap";
 
 function Course() {
     const course = useSelector((state) => state.course.course);
     const course_read_status = useSelector(
         (state) => state.course.course_read_status
     );
+    const course_rating = useSelector((state) => state.course.rating);
     let { course_id } = useParams();
 
     const dispatch = useDispatch();
@@ -42,6 +45,20 @@ function Course() {
         return <DateFormat date={created_at} format="DD/MM/YYYY" />;
     };
 
+    const randerStarRating = () => {
+        return (
+            course?.configuration?.is_rating == 1 && (
+                <Rating
+                    fk_course_category_course_id={
+                        course?.course?.fk_course_category_courses_id
+                    }
+                    is_rated={course?.ratings_count > 0}
+                    rating={course_rating}
+                />
+            )
+        );
+    };
+
     const RenderCourse = () => {
         return (
             <>
@@ -52,9 +69,9 @@ function Course() {
                         minHeight: "250px",
                     }}
                 >
-                    <div className="container">
-                        <div className="row justify-content-center">
-                            <div className="col-lg-8 course-detail-bc">
+                    <Container>
+                        <Row className="justify-content-center">
+                            <Col lg={8} className="course-detail-bc">
                                 <CourseBradeCrumb
                                     category_course={
                                         course?.course?.assigned_admin
@@ -77,7 +94,7 @@ function Course() {
                             </div> */}
                                 <nav>
                                     <ol className="view-course-update ">
-                                        <li className="view-course-update">
+                                        <li className="viedaw-course-update">
                                             <Link className="text-white" to="/">
                                                 <i className="fas fa-clock" />{" "}
                                                 Last updated <CourseCreatedAt />
@@ -94,6 +111,7 @@ function Course() {
                                     </li> */}
                                     </ol>
                                 </nav>
+                                {randerStarRating()}
                                 {auth_user && course_read_status && (
                                     <BootstrapProgressBar
                                         percentage={
@@ -101,7 +119,6 @@ function Course() {
                                         }
                                     />
                                 )}
-
                                 {/* <p className="text-white">
                                 4.50{" "}
                                 <i className="fa fa-star" aria-hidden="true" />
@@ -113,11 +130,8 @@ function Course() {
                                     aria-hidden="true"
                                 />
                             </p> */}
-                            </div>
-                            <div
-                                className="col-lg-4"
-                                style={{ position: "relative" }}
-                            >
+                            </Col>
+                            <Col lg={4} style={{ position: "relative" }}>
                                 <div className="view-course-right-column">
                                     <div className="position-relative overflow-hidden p-4">
                                         <img
@@ -200,9 +214,9 @@ function Course() {
                                     />
                                 </div> */}
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </Col>
+                        </Row>
+                    </Container>
                 </div>
 
                 {/* Course Preview Modal Start */}
@@ -238,68 +252,47 @@ function Course() {
                 {/* Course Preview Modal End */}
 
                 <div className="container-xxl">
-                    <div className="container p-0">
-                        <div className="container py-3">
-                            <div className="row list">
-                                <div
-                                    className="col-lg-8 p-4"
-                                    style={{
-                                        border: "1px solid #d1d7dc",
-                                        padding: "2.4rem 0",
-                                    }}
-                                >
-                                    <div className="wow">
-                                        <h4>Course Description</h4>
-                                        <p className="text-primary">
-                                            {
-                                                course?.course?.assigned_admin
-                                                    ?.category_course
-                                                    ?.course_name_en
-                                            }
-                                        </p>
-                                        <ul>
-                                            <li>
-                                                {course?.course?.description &&
-                                                    parse(
-                                                        course.course
-                                                            .description
-                                                    )}
-                                            </li>
-                                        </ul>
-                                    </div>
+                    <Container className="p-0 py-3">
+                        <Row className="list">
+                            <Col
+                                lg={8}
+                                className="p-4"
+                                style={{
+                                    border: "1px solid #d1d7dc",
+                                    padding: "2.4rem 0",
+                                }}
+                            >
+                                <div className="wow">
+                                    <h4>Course Description</h4>
+                                    <p className="text-primary">
+                                        {
+                                            course?.course?.assigned_admin
+                                                ?.category_course
+                                                ?.course_name_en
+                                        }
+                                    </p>
+                                    <ul>
+                                        <li>
+                                            {course?.course?.description &&
+                                                parse(
+                                                    course.course.description
+                                                )}
+                                        </li>
+                                    </ul>
                                 </div>
+                            </Col>
+                        </Row>
+                        <Row className="mt-4 list">
+                            <div
+                                className="wow fadeIndown p-0"
+                                data-wow-delay="0.1s"
+                            >
+                                {course?.course?.topics && (
+                                    <CourseTopicList course={course.course} />
+                                )}
                             </div>
-                            <div className="row mt-4 list">
-                                <div
-                                    className="wow fadeIndown p-0"
-                                    data-wow-delay="0.1s"
-                                >
-                                    {course?.course?.topics && (
-                                        <CourseTopicList
-                                            course={course.course}
-                                        />
-                                    )}
-                                </div>
-                            </div>
-                            {/* <div className="row mt-4 list">
-                            <div className="wow fadeInUp" data-wow-delay="0.1s">
-                                <h4>Course Description :</h4>
-                                <p className="text-primary">Courtesy:</p>
-                                <ul>
-                                    <li>Bharat Skill</li>
-                                    <li>
-                                        Directorate General of Training (DGT)
-                                    </li>
-                                    <li>
-                                        Ministry of Skill Development and
-                                        Entrepreneurship
-                                    </li>
-                                    <li>Government of India</li>
-                                </ul>
-                            </div>
-                        </div> */}
-                        </div>
-                    </div>
+                        </Row>
+                    </Container>
                 </div>
             </>
         );

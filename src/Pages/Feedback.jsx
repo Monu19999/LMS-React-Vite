@@ -238,8 +238,9 @@ function Feedback() {
                                 <Col md={3} className="d-flex gap-2">
                                     <div className="col-12 text-center">
                                         <Button
+                                            variant="primary"
                                             type="submit"
-                                            className="btn btn-primary py-2 px-4 "
+                                            className="py-2 px-4 "
                                             style={{
                                                 borderRadius: 40,
                                                 marginRight: "10px",
@@ -248,8 +249,9 @@ function Feedback() {
                                             Submit{" "}
                                         </Button>
                                         <Button
+                                            variant="secondary"
                                             type="button"
-                                            className="btn btn-secondary py-2 px-4 "
+                                            className="py-2 px-4 "
                                             style={{
                                                 borderRadius: 40,
                                                 color: "#fff",

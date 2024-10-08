@@ -276,30 +276,33 @@ export default function Register() {
                 <div className="row justify-content-center mt-4">
                     <div className="col-md-3 d-flex gap-2">
                         <div className="form-group">
-                            <button
-                                className="form-control btn btn-secondary submit px-3"
+                            <Button
+                                className="form-control submit px-3"
                                 type="submit"
+                                variant="secondary"
                                 onClick={handlePreviousStep}
                             >
                                 Back
-                            </button>
+                            </Button>
                         </div>
                         <div className="form-group">
-                            <button
-                                className="form-control btn btn-primary submit px-4"
+                            <Button
+                                className="form-control submit px-4"
                                 type="submit"
+                                variant="primary"
                             >
                                 Submit
-                            </button>
+                            </Button>
                         </div>
                         <div className="form-group">
-                            <button
-                                className="form-control btn btn-secondary submit px-3"
+                            <Button
+                                className="form-control submit px-3"
                                 type="button"
+                                variant="secondary"
                                 onClick={handleResetForm}
                             >
                                 Reset
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </div>

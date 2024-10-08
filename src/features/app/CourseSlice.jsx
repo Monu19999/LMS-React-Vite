@@ -10,6 +10,7 @@ const initialState = {
     search_courses: [],
     courses: [],
     course: null,
+    rating: null,
     course_read_status: null,
     course_topic: null,
     search: {
@@ -250,6 +251,9 @@ export const courseSlice = createSlice({
         setTopic: (state, action) => {
             state.topic = action.payload;
         },
+        setCourseRating: (state, action) => {
+            state.rating = action.payload;
+        },
         updateState: (state, action) => {
             action.payload.map((item) => {
                 state[item.key] = item.value;
@@ -309,6 +313,7 @@ export const courseSlice = createSlice({
                 state.isSuccess = true;
                 if (payload.status == 200) {
                     state.course = payload.data.course;
+                    state.rating = payload.data.rating;
                     state.course_read_status = payload.data.read_percentage;
                     state.errors = [];
                     state.error_message = null;
@@ -398,7 +403,13 @@ export const courseSlice = createSlice({
     },
 });
 
-export const { setSearch, resetSearch, setCourse, setTopic, updateState } =
-    courseSlice.actions;
+export const {
+    setSearch,
+    resetSearch,
+    setCourse,
+    setTopic,
+    setCourseRating,
+    updateState,
+} = courseSlice.actions;
 
 export default courseSlice.reducer;

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import EnrollCourse from "./EnrollCourse";
 import { useSelector } from "react-redux";
+import { Image } from "react-bootstrap";
 
 function CourseItem({ course, upload }) {
     const course_enrolment_loading = useSelector(
@@ -9,7 +10,7 @@ function CourseItem({ course, upload }) {
     return (
         <div className="course-item bg-light">
             <div className="position-relative overflow-hidden">
-                <img
+                <Image
                     className="img-fluid"
                     src={upload?.preview_path ?? "assets/img/course-2.jpg"}
                     alt={upload?.original_name}

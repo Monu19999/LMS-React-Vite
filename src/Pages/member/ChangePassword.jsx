@@ -58,8 +58,8 @@ function ChangePassword() {
     return (
         <>
             <h4 className="mb-4 heading-bg">Change Password</h4>
-            <div className="row justify-content-center">
-                <div className="col-xl-6">
+            <Row className="justify-content-center">
+                <Col xl={6}>
                     {/* Account details card*/}
                     <div className="card mb-4" style={{ height: "100%" }}>
                         <div className="card-header">Change Password</div>
@@ -207,8 +207,9 @@ function ChangePassword() {
 
                                     <Col md={12} className="d-flex gap-2">
                                         <Button
+                                            variant="primary"
                                             type="submit"
-                                            className="btn btn-primary py-2 px-4 "
+                                            className="py-2 px-4 "
                                             style={{
                                                 borderRadius: 40,
                                                 marginRight: "10px",
@@ -222,8 +223,9 @@ function ChangePassword() {
                                             Change Password{" "}
                                         </Button>
                                         <Button
+                                            variant="secondary"
                                             type="button"
-                                            className="btn btn-secondary py-2 px-4 "
+                                            className="py-2 px-4 "
                                             style={{
                                                 borderRadius: 40,
                                                 color: "#fff",
@@ -237,8 +239,8 @@ function ChangePassword() {
                             </Form>
                         </div>
                     </div>
-                </div>
-            </div>
+                </Col>
+            </Row>
         </>
     );
 }

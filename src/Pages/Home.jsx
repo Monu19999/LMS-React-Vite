@@ -10,6 +10,7 @@ import FooterSlider from "@src/Components/Layout/includes/FooterSlider";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import ShowImage from "@src/Utilities/ShowImage";
 import CourseItem from "@src/Pages/courses/includes/CourseItem";
+import { Image } from "react-bootstrap";
 
 export default function Home() {
     const { homedata, home_loading } = useSelector((state) => state.home);
@@ -92,7 +93,7 @@ export default function Home() {
                                     className="owl-carousel-item position-relative"
                                     key={slider.id}
                                 >
-                                    <img
+                                    <Image
                                         className="img-fluid"
                                         src={
                                             slider?.upload
@@ -216,7 +217,7 @@ export default function Home() {
                             style={{ minHeight: 400 }}
                         >
                             <div className="position-relative h-100">
-                                <img
+                                <Image
                                     className="img-fluid position-absolute w-100 h-100"
                                     src="assets/img/e-book1.png"
                                     alt="e-book1.png"
@@ -294,7 +295,7 @@ export default function Home() {
                                         >
                                             <div className="thumbnail">
                                                 <div className="thumb-logo">
-                                                    <img
+                                                    <Image
                                                         src="assets/img/logo.png"
                                                         alt="logo.png"
                                                         style={{

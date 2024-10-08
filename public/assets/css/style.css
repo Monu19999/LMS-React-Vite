@@ -2644,3 +2644,12 @@ h4.heading-bg {
 .text-course {
     color: #0a2cc4;
 }
+
+@font-face {
+    font-family: "Kruti Dev";
+    src: url("assets/fonts/Kruti-Dev-010-Regular.ttf") format("truetype");
+}
+
+.hindi_fonts {
+    font-family: Kruti Dev !important;
+}

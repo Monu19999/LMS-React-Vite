@@ -8,6 +8,7 @@ import { getDepartments } from "@src/features/app/AppSlice";
 import { setSearch } from "@src/features/app/CourseSlice";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { Col, Container, Row } from "react-bootstrap";
 
 function Courses() {
     const { departments } = useSelector((state) => state.app);
@@ -132,15 +133,16 @@ function Courses() {
             </div>
             {/* Header End */}
             <div className="container-xxl mb-4 pb-4">
-                <div className="container shadow">
-                    <div className="row mb-4">
+                <Container className="shadow">
+                    <Row className="mb-4">
                         {/* <div className="col-12" style={{ backgroundColor: "#06bbcc" }}>
                             <div className="d-flex justify-content-center pt-4">
                                 <h4>Search Course</h4>
                             </div>
                         </div> */}
-                        <div
-                            className="col-lg-12 wow fadeInUp inner-page-container-mb"
+                        <Col
+                            lg={12}
+                            className="wow fadeInUp inner-page-container-mb"
                             style={{ backgroundColor: "#06bbcc" }}
                         >
                             <div className="search-title">
@@ -307,27 +309,29 @@ function Courses() {
                                 </form>
                                 {/* Search Form End */}
                             </div>
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
 
                     {/* All searched Courses Start */}
                     <div className="container-xxl py-5">
-                        <div className="container ">
+                        <Container>
                             <div
                                 className="text-center wow fadeInUp"
                                 data-wow-delay="0.1s"
                             >
                                 <h1 className="mb-5">All Courses</h1>
                             </div>
-                            <div className="row">
+                            <Row>
                                 {course_loading ? (
                                     <BootstrapSpinner />
                                 ) : (
                                     search_courses?.data &&
                                     search_courses.data.map((course) => {
                                         return (
-                                            <div
-                                                className="col-lg-4 col-md-6 mb-4"
+                                            <Col
+                                                lg={4}
+                                                md={6}
+                                                className="mb-4"
                                                 key={course.id}
                                             >
                                                 <CourseItem
@@ -336,26 +340,26 @@ function Courses() {
                                                         course.course.upload
                                                     }
                                                 />
-                                            </div>
+                                            </Col>
                                         );
                                     })
                                 )}
-                            </div>
-                        </div>
+                            </Row>
+                        </Container>
                     </div>
                     {/* All searched Courses Start */}
 
                     {/* Searched Courses Pagination Start */}
-                    <div className="row justify-content-center mb-4 ">
-                        <div className="col-md-12 text-center">
+                    <Row className="justify-content-center mb-4 ">
+                        <Col md={12} className="text-center">
                             <Pagination
                                 changePage={changePage}
                                 data={search_courses}
                             />
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
                     {/* Searched Courses Pagination End */}
-                </div>
+                </Container>
             </div>
         </>
     );

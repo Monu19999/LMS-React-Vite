@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import { getCourseTopic } from "@src/features/app/CourseSlice";
 import parse from "html-react-parser";
-import { Button, Nav } from "react-bootstrap";
+import { Button, Col, Container, Nav, Row } from "react-bootstrap";
 import ReactPlayer from "react-player";
 import Placeholder from "react-bootstrap/Placeholder";
 import { setTopic } from "@src/features/app/CourseSlice";
@@ -315,16 +315,17 @@ export default function CourseTopicDetail() {
     const RenderTopicDetail = () => {
         return (
             <>
-                <div
-                    className="container-fluid pt-4 mb-4 "
+                <Container
+                    fluid
+                    className="pt-4 mb-4 "
                     style={{
                         backgroundColor: "#343747",
                         minHeight: 50,
                     }}
                 >
-                    <div className="container">
-                        <div className="row justify-content-center">
-                            <div className="col-lg-12 course-detail-bc">
+                    <Container>
+                        <Row className="justify-content-center">
+                            <Col lg={12} className="course-detail-bc">
                                 {course_topic_loading ? (
                                     <Placeholder.Button
                                         xs={2}
@@ -347,19 +348,19 @@ export default function CourseTopicDetail() {
                                         />
                                     </>
                                 )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Container>
                 {/* {course_topic?.summary && parse(course_topic?.summary)}
             {uploadsList()} */}
 
                 <div className="blog-single gray-bg mt-4 mb-4">
-                    <div className="container mt-4 mb-4">
-                        <div className="row align-items-start mb-4">
-                            <div className="col-lg-8 ">
+                    <Container className="mt-4 mb-4">
+                        <Row className="align-items-start mb-4">
+                            <Col lg={8}>
                                 <div
-                                    className="col-12  p-4 shadow"
+                                    className="col-12 p-4 shadow"
                                     style={{ minHeight: "350px" }}
                                 >
                                     <article className="article">
@@ -484,8 +485,8 @@ export default function CourseTopicDetail() {
                                         </div>
                                     </article>
                                 </div>
-                            </div>
-                            <div className="col-lg-4 blog-aside">
+                            </Col>
+                            <Col lg={4} className="blog-aside">
                                 <div
                                     className="p-4 col-12 shadow"
                                     style={{ minHeight: "350px" }}
@@ -524,9 +525,9 @@ export default function CourseTopicDetail() {
                                     </div>
                                     {/* End widget Tags */}
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </Col>
+                        </Row>
+                    </Container>
                 </div>
             </>
         );

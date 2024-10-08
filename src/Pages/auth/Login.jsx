@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -180,13 +180,14 @@ export default function Login() {
                             </Form.Text>
                         </Form.Group>
                         <div className="form-group mt-4">
-                            <button
+                            <Button
                                 type="submit"
-                                className="form-control btn btn-primary submit px-3"
+                                className="form-control submit px-3"
+                                variant="primary"
                                 disabled={!isDirty || !isValid}
                             >
                                 Sign In
-                            </button>
+                            </Button>
                         </div>
                         <div className="form-group d-md-flex">
                             <div className="w-50 text-left d-flex ">
