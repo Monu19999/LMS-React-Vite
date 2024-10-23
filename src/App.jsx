@@ -21,19 +21,21 @@ import Register from "@src/Pages/auth/Register";
 import MyCourses from "@src/Pages/member/MyCourses";
 import MyCertificates from "@src/Pages/member/MyCertificates";
 import AvailableCourses from "@src/Pages/member/AvailableCourses";
-import ForgetPassword from "./Pages/auth/ForgetPassword";
-import ResetPasswordLinkSent from "./Pages/auth/ResetPasswordLinkSent";
-import ResetPassword from "./Pages/auth/ResetPassword";
+import ForgetPassword from "@src/Pages/auth/ForgetPassword";
+import ResetPasswordLinkSent from "@src/Pages/auth/ResetPasswordLinkSent";
+import ResetPassword from "@src/Pages/auth/ResetPassword";
 import StudentLayout from "@src/Components/Layout/Student/StudentLayout";
-import Download, { loader as downloadLoader } from "./Pages/Download";
-import Video, { loader as videoLoader } from "./Pages/Video";
-import Feedback from "./Pages/Feedback";
-import FAQ, { loader as faqLoader } from "./Pages/FAQ";
-import ChangePassword from "./Pages/member/ChangePassword";
-import Profile from "./Pages/member/Profile";
-import Topic from "./Pages/courses/topics/Topic";
+import Download, { loader as downloadLoader } from "@src/Pages/Download";
+import Video, { loader as videoLoader } from "@src/Pages/Video";
+import Feedback from "@src/Pages/Feedback";
+import FAQ, { loader as faqLoader } from "@src/Pages/FAQ";
+import ChangePassword from "@src/Pages/member/ChangePassword";
+import Profile from "@src/Pages/member/Profile";
+import Topic from "@src/Pages/courses/topics/Topic";
 import Test from "./Test";
 import Rating from "./Components/Rating/Rating";
+import AttempExam from "@src/Pages/courses/Exam/AttempExam";
+import StartExam from "@src/Pages/courses/Exam/StartExam";
 
 const router = createHashRouter(
     createRoutesFromElements(
@@ -64,6 +66,16 @@ const router = createHashRouter(
                     element={<Course />}
                 />
                 <Route element={<PrivateRoute />}>
+                    <Route
+                        exact
+                        path="course/:course_id/attemp-exam"
+                        element={<AttempExam />}
+                    />
+                    <Route
+                        exact
+                        path="course/:course_id/start-exam"
+                        element={<StartExam />}
+                    />
                     <Route
                         exact
                         path="course/:course_id/topic/:topic_id/show"

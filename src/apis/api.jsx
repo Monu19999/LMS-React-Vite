@@ -55,6 +55,11 @@ const api_urls = {
         return `/api/auth/course_media/${params.id}/convert`;
     },
     auth_rating: "/api/auth/rating",
+    auth_exam_update: function (params) {
+        return `/api/auth/exam/${params.id}`;
+    },
+    auth_exam: "/api/auth/exam",
+    // auth_exam_update: "/api/auth/exam",
     member_dashboard: "/api/auth/member/dashboard",
     member_courses: "/api/auth/member/courses",
     member_available_courses: "/api/auth/member/available_courses",

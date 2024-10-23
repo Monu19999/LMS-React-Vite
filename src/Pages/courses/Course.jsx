@@ -9,7 +9,7 @@ import DateFormat from "@src/Utilities/DateFormat";
 import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import BootstrapProgressBar from "./topics/includes/BootstrapProgressBar";
 import Rating from "@src/Components/Rating/Rating";
-import { Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 
 function Course() {
     const course = useSelector((state) => state.course.course);
@@ -27,6 +27,8 @@ function Course() {
     const handleGetCourse = async () => {
         let response = await dispatch(getCourse(course_id));
         let payload = response.payload;
+        console.log(payload);
+
         if (payload != undefined) {
             if (payload.hasOwnProperty("status") && payload.status == 500) {
                 navigate("/");
@@ -203,6 +205,18 @@ function Course() {
                                                 </li>
                                             )}
                                         </ul>
+                                    </div>
+                                    <div className="col-12 mt-4 text-center mb-4">
+                                        <Link
+                                            to={`/course/${course.encr_id}/attemp-exam`}
+                                        >
+                                            <Button
+                                                type="button"
+                                                variant="success"
+                                            >
+                                                Attempt Course Exam
+                                            </Button>
+                                        </Link>
                                     </div>
                                     {/* <div className="col-12 mt-4 text-center mb-4">
                                     <EnrollCourse
