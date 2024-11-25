@@ -32,7 +32,7 @@ export default function CourseAccordian({ filtered_course, index }) {
                                 >
                                     <CourseItem
                                         course={course}
-                                        upload={course.course.upload}
+                                        upload={course?.course?.upload}
                                     />
                                 </div>
                             )

@@ -2653,3 +2653,38 @@ h4.heading-bg {
 .hindi_fonts {
     font-family: Kruti Dev !important;
 }
+
+.instructions ol li {
+    margin-bottom: 10px;
+}
+
+.instructions h1 {
+    margin-bottom: 20px;
+}
+
+.instructions h3 {
+    margin-bottom: 20px;
+}
+
+.question_en {
+    font-size: 18px;
+    font-weight: 600;
+    padding: 5px;
+}
+
+.question_hi {
+    font-size: 18px;
+    font-weight: 600;
+    padding: 5px;
+}
+
+.question_options {
+    margin-top: 20px;
+}
+
+.question_options .options {
+    align-items: center;
+    /* display: flex; */
+    top: 6px;
+    position: relative;
+}

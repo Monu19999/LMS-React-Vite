@@ -19,6 +19,7 @@ const initialState = {
         office: null,
         course_name: null,
     },
+    is_course_completed: false,
     course_loading: false,
     course_topic_loading: false,
     course_enrolment_loading: false,
@@ -259,6 +260,19 @@ export const courseSlice = createSlice({
                 state[item.key] = item.value;
             });
         },
+        isCourseCompleted: (state, action) => {
+            if (state.course != null) {
+                let topics = state?.course?.course?.topics;
+                if (topics) {
+                    let read_exists = topics.map(
+                        (topic) => topic?.read_exists || false
+                    );
+                    state.is_course_completed = !read_exists.includes(false);
+                } else {
+                    state.is_course_completed = false;
+                }
+            }
+        },
     },
     extraReducers(builder) {
         builder
@@ -308,7 +322,8 @@ export const courseSlice = createSlice({
             .addCase(getCourse.pending, (state) => {
                 state.course_loading = true;
             })
-            .addCase(getCourse.fulfilled, (state, { payload }) => {
+            .addCase(getCourse.fulfilled, (state, action) => {
+                let { payload } = action;
                 state.course_loading = false;
                 state.isSuccess = true;
                 if (payload.status == 200) {
@@ -317,6 +332,7 @@ export const courseSlice = createSlice({
                     state.course_read_status = payload.data.read_percentage;
                     state.errors = [];
                     state.error_message = null;
+                    courseSlice.caseReducers.isCourseCompleted(state, action);
                 }
             })
             .addCase(getCourse.rejected, (state, { payload }) => {
@@ -339,7 +355,7 @@ export const courseSlice = createSlice({
                 // console.log("Payload => ", payload);
                 state.course_enrolment_loading = false;
                 if (payload.status == 200) {
-                    state.course = payload.course;
+                    state.course = payload?.data?.course;
                     state.isSuccess = true;
                     state.errors = [];
                     state.error_message = null;
@@ -384,7 +400,25 @@ export const courseSlice = createSlice({
             .addCase(readCourseTopic.pending, (state, { payload }) => {
                 // console.log("readCourseTopic.pending ", payload);
             })
-            .addCase(readCourseTopic.fulfilled, (state, { payload }) => {
+            .addCase(readCourseTopic.fulfilled, (state, action) => {
+                const { payload } = action;
+                if (payload?.status === 200) {
+                    const topic_read = payload.data.topic_read;
+                    const copy_course = { ...state?.course };
+                    const topics = copy_course?.course?.topics;
+                    let updated_topics = topics.map((topic) => {
+                        if (topic.id == topic_read.fk_course_topic_id) {
+                            topic.read_exists = true;
+                        }
+                        return topic;
+                    });
+                    copy_course.course.topics = updated_topics;
+                    state.course = copy_course;
+                    if (payload?.data?.read_percentage) {
+                        state.course_read_status = payload.data.read_percentage;
+                    }
+                    courseSlice.caseReducers.isCourseCompleted(state, action);
+                }
                 // console.log("readCourseTopic.fulfilled", payload);
             })
             .addCase(readCourseTopic.rejected, (state, { payload }) => {
@@ -410,6 +444,7 @@ export const {
     setTopic,
     setCourseRating,
     updateState,
+    isCourseCompleted,
 } = courseSlice.actions;
 
 export default courseSlice.reducer;

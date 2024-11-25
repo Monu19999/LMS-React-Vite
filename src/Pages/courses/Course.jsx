@@ -10,24 +10,27 @@ import BootstrapSpinner from "@src/Components/BootstrapSpinner";
 import BootstrapProgressBar from "./topics/includes/BootstrapProgressBar";
 import Rating from "@src/Components/Rating/Rating";
 import { Button, Col, Container, Row } from "react-bootstrap";
+import CheckCourseCompleted from "./Exam/CheckCourseCompleted";
 
 function Course() {
-    const course = useSelector((state) => state.course.course);
-    const course_read_status = useSelector(
-        (state) => state.course.course_read_status
-    );
-    const course_rating = useSelector((state) => state.course.rating);
     let { course_id } = useParams();
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const course = useSelector((state) => state.course.course);
+    const course_read_status = useSelector(
+        (state) => state.course.course_read_status
+    );
+    const course_rating = useSelector((state) => state.course.rating);
+    const is_course_completed = useSelector(
+        (state) => state.course.is_course_completed
+    );
     const auth_user = useSelector((state) => state.auth.user);
 
     const handleGetCourse = async () => {
         let response = await dispatch(getCourse(course_id));
         let payload = response.payload;
-        console.log(payload);
 
         if (payload != undefined) {
             if (payload.hasOwnProperty("status") && payload.status == 500) {
@@ -206,18 +209,24 @@ function Course() {
                                             )}
                                         </ul>
                                     </div>
-                                    <div className="col-12 mt-4 text-center mb-4">
-                                        <Link
-                                            to={`/course/${course.encr_id}/attemp-exam`}
-                                        >
-                                            <Button
-                                                type="button"
-                                                variant="success"
-                                            >
-                                                Attempt Course Exam
-                                            </Button>
-                                        </Link>
-                                    </div>
+                                    {/* {is_course_completed == false && "Not "}{" "}
+                                    Completed */}
+                                    <CheckCourseCompleted error="">
+                                        {
+                                            <div className="col-12 mt-4 text-center mb-4">
+                                                <Link
+                                                    to={`/course/${course.encr_id}/attemp-exam`}
+                                                >
+                                                    <Button
+                                                        type="button"
+                                                        variant="success"
+                                                    >
+                                                        Attempt Course Exam
+                                                    </Button>
+                                                </Link>
+                                            </div>
+                                        }
+                                    </CheckCourseCompleted>
                                     {/* <div className="col-12 mt-4 text-center mb-4">
                                     <EnrollCourse
                                         course={course}

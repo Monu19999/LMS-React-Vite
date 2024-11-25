@@ -47,7 +47,9 @@ export default function CountdownTimer({ handleCountDownExpired, targetDate }) {
     };
 
     const CountDownExpired = () => {
-        handleCountDownExpired();
+        console.log("Expired");
+
+        // handleCountDownExpired();
     };
 
     return (

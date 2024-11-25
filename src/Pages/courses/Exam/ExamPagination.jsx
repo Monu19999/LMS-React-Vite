@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, ModalFooter } from "react-bootstrap";
 import BootstrapModal from "@src/Components/BootstrapModal";
-import { setPage } from "@src/features/app/QbmsExamSlice";
+import { setPage, setQuestion } from "@src/features/app/QbmsExamSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function ExamPagination(props) {
@@ -16,11 +16,13 @@ export default function ExamPagination(props) {
     const handlePrev = () => {
         if (page > 0) {
             dispatch(setPage(page - 1));
+            // dispatch(setQuestion());
         }
     };
     const handleSaveAndNext = () => {
         if (page < totalPage) {
             props.saveAnswer({
+                is_submit: false,
                 updated_page: page + 1,
                 question: question?.id,
                 action: "update_answer",
@@ -30,6 +32,7 @@ export default function ExamPagination(props) {
     };
     const handleQuizSubmit = () => {
         props.saveAnswer({
+            is_submit: true,
             updated_page: page,
             question: question?.id,
             action: "update_exam",
