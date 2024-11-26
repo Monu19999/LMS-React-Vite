@@ -1,4 +1,4 @@
-import { Placeholder } from "react-bootstrap";
+import { Breadcrumb, Placeholder } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import RenderCourseHierarchyBC from "./RenderCourseHierarchyBC";
@@ -28,20 +28,18 @@ export default function CourseBradeCrumb({
     };
 
     return (
-        <nav aria-label="breadcrumb" className="mb-4">
-            <ol className="breadcrumb">
-                {course_topic_loading ? (
-                    <Placeholder.Button xs={2} aria-hidden="true" />
-                ) : (
-                    <>
-                        <RenderHomeBC />
-                        <RenderCourseHierarchyBC
-                            course_hierarchy={course_hierarchy}
-                        />
-                        <RenderCourseNameBC />
-                    </>
-                )}
-            </ol>
-        </nav>
+        <Breadcrumb className="mb-4">
+            {course_topic_loading ? (
+                <Placeholder.Button xs={2} aria-hidden="true" />
+            ) : (
+                <>
+                    <RenderHomeBC />
+                    <RenderCourseHierarchyBC
+                        course_hierarchy={course_hierarchy}
+                    />
+                    <RenderCourseNameBC />
+                </>
+            )}
+        </Breadcrumb>
     );
 }

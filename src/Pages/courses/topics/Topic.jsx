@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Nav } from "react-bootstrap";
+import { Button, Col, Container, Nav, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
@@ -272,16 +272,17 @@ function Topic() {
     const RenderTopic = () => {
         return (
             <>
-                <div
-                    className="container-fluid pt-4 mb-4 "
+                <Container
+                    fluid
+                    className="pt-4 mb-4 "
                     style={{
                         backgroundColor: "#343747",
                         minHeight: 50,
                     }}
                 >
-                    <div className="container">
-                        <div className="row justify-content-center">
-                            <div className="col-lg-12 course-detail-bc">
+                    <Container>
+                        <Row className="justify-content-center">
+                            <Col lg={12} className="course-detail-bc">
                                 {course_topic_loading ? (
                                     <Placeholder.Button
                                         xs={2}
@@ -311,15 +312,15 @@ function Topic() {
                                         )}
                                     </>
                                 )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Container>
 
                 <div className="blog-single gray-bg mt-4 mb-4">
-                    <div className="container mt-4 mb-4">
-                        <div className="row align-items-start mb-4">
-                            <div className="col-lg-8 ">
+                    <Container className="mt-4 mb-4">
+                        <Row className="align-items-start mb-4">
+                            <Col lg={8}>
                                 <div
                                     className="col-12 p-4 shadow"
                                     style={{ minHeight: "350px" }}
@@ -436,7 +437,7 @@ function Topic() {
                                         />
                                     </article>
                                 </div>
-                            </div>
+                            </Col>
                             <div className="col-lg-4 blog-aside">
                                 <div
                                     className="p-4 col-12 shadow"
@@ -480,8 +481,8 @@ function Topic() {
                                     {/* End widget Tags */}
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </Row>
+                    </Container>
                 </div>
             </>
         );

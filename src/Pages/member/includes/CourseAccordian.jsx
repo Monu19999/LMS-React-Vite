@@ -1,5 +1,5 @@
 import React from "react";
-import { Accordion } from "react-bootstrap";
+import { Accordion, Col, Row } from "react-bootstrap";
 import RenderCourseHierarchyBC from "@src/Pages/courses/includes/RenderCourseHierarchyBC";
 import CourseItem from "@src/Pages/courses/includes/CourseItem";
 
@@ -23,21 +23,23 @@ export default function CourseAccordian({ filtered_course, index }) {
                     )}
                 </Accordion.Header>
                 <Accordion.Body>
-                    <div className="row">
+                    <Row>
                         {filtered_course.active_category_courses.map(
                             (course) => (
-                                <div
-                                    className="col-lg-4 col-md-6 mb-4"
+                                <Col
+                                    lg={4}
+                                    md={6}
+                                    className="mb-4"
                                     key={course.id}
                                 >
                                     <CourseItem
                                         course={course}
                                         upload={course?.course?.upload}
                                     />
-                                </div>
+                                </Col>
                             )
                         )}
-                    </div>
+                    </Row>
                 </Accordion.Body>
             </Accordion.Item>
         </Accordion>

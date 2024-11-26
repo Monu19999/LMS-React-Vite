@@ -1,20 +1,21 @@
 import React from "react";
+import { Col, Container, Row } from "react-bootstrap";
 
 function PageHeader(props) {
     return (
         <>
             {/* Header Start */}
             <div className="container-fluid bg-primary py-4 mb-4 page-header">
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-lg-10 text-center">
+                <Container>
+                    <Row className="justify-content-center">
+                        <Col lg={10} className="text-center">
                             <h1 className="display-3 text-white animated slideInDown">
                                 {props.title}
                             </h1>
                             {props.children}
-                        </div>
-                    </div>
-                </div>
+                        </Col>
+                    </Row>
+                </Container>
             </div>
             {/* Header End */}
         </>

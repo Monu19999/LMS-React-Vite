@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Col, Container, Row } from "react-bootstrap";
 
 function CourseSearchForm({ onChangeCallback }) {
     const [course_name, setCourseName] = useState("");
@@ -10,15 +11,16 @@ function CourseSearchForm({ onChangeCallback }) {
     };
 
     return (
-        <div className="container">
-            <div className="row mb-4">
-                <div
-                    className="col-lg-12 wow fadeInUp"
+        <Container>
+            <Row className="mb-4">
+                <Col
+                    lg={12}
+                    className="wow fadeInUp"
                     style={{ backgroundColor: "#06bbcc" }}
                 >
                     <div className="search-title">
                         {/* Search Form Start */}
-                        <div className="row justify-content-center">
+                        <Row className="justify-content-center">
                             <div className="form-group">
                                 <input
                                     type="text"
@@ -29,12 +31,12 @@ function CourseSearchForm({ onChangeCallback }) {
                                     placeholder="Search By Course Name"
                                 />
                             </div>
-                        </div>
+                        </Row>
                         {/* Search Form End */}
                     </div>
-                </div>
-            </div>
-        </div>
+                </Col>
+            </Row>
+        </Container>
     );
 }
 
