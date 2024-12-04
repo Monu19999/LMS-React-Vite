@@ -8,7 +8,16 @@ import { getDepartments } from "@src/features/app/AppSlice";
 import { setSearch } from "@src/features/app/CourseSlice";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Col, Container, Row } from "react-bootstrap";
+import {
+    Button,
+    Col,
+    Container,
+    FormControl,
+    FormGroup,
+    FormLabel,
+    FormSelect,
+    Row,
+} from "react-bootstrap";
 
 function Courses() {
     const { departments } = useSelector((state) => state.app);
@@ -148,11 +157,13 @@ function Courses() {
                             <div className="search-title">
                                 {/* Search Form Start */}
                                 <form onSubmit={handleSubmit(handleFormFilter)}>
-                                    <div className="row justify-content-center">
-                                        <div className="col-md-6 mb-2">
-                                            <div className="form-group">
-                                                <label>Department</label>
-                                                <select
+                                    <Row className="justify-content-center">
+                                        <Col md={6} className="mb-2">
+                                            <FormGroup>
+                                                <FormLabel className="mb-0">
+                                                    Department
+                                                </FormLabel>
+                                                <FormSelect
                                                     className="form-control"
                                                     {...register("department", {
                                                         onChange:
@@ -193,13 +204,15 @@ function Courses() {
                                                                 </option>
                                                             )
                                                         )}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <div className="form-group">
-                                                <label>Office</label>
-                                                <select
+                                                </FormSelect>
+                                            </FormGroup>
+                                        </Col>
+                                        <Col md={6}>
+                                            <FormGroup>
+                                                <FormLabel className="mb-0">
+                                                    Office
+                                                </FormLabel>
+                                                <FormSelect
                                                     className="form-control"
                                                     {...register("office", {
                                                         onChange: (e) => {
@@ -256,15 +269,15 @@ function Courses() {
                                                                     </option>
                                                                 )
                                                             )}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-6 mb-2">
-                                            <div className="form-group">
-                                                <label>
+                                                </FormSelect>
+                                            </FormGroup>
+                                        </Col>
+                                        <Col md={6} className="mb-2">
+                                            <FormGroup>
+                                                <FormLabel className="mb-0">
                                                     Search By Course Name
-                                                </label>
-                                                <input
+                                                </FormLabel>
+                                                <FormControl
                                                     type="text"
                                                     autoComplete="off"
                                                     {...register(
@@ -277,15 +290,15 @@ function Courses() {
                                                             },
                                                         }
                                                     )}
-                                                    className="form-control"
                                                     placeholder="Search By Title"
-                                                />
-                                            </div>
-                                        </div>
+                                                ></FormControl>
+                                            </FormGroup>
+                                        </Col>
                                         <div className="col-md-6 mb-2">
                                             <div className="form-group mt-4">
-                                                <button
-                                                    className="btn btn-dark py-md-2 px-md-4 animated slideInRight"
+                                                <Button
+                                                    variant="dark"
+                                                    className="py-md-2 px-md-4 animated slideInRight"
                                                     style={{
                                                         borderRadius: 40,
                                                         marginRight: 20,
@@ -293,19 +306,20 @@ function Courses() {
                                                     type="submit"
                                                 >
                                                     Search
-                                                </button>
-                                                <button
-                                                    className="btn btn-light py-md-2 px-md-4 animated slideInRight"
+                                                </Button>
+                                                <Button
+                                                    variant="light"
+                                                    className="py-md-2 px-md-4 animated slideInRight"
                                                     style={{ borderRadius: 40 }}
                                                     type="button"
                                                     onClick={handleResetSearch}
                                                 >
                                                     <i className="fas fa-refresh" />{" "}
                                                     Reset
-                                                </button>
+                                                </Button>
                                             </div>
                                         </div>
-                                    </div>
+                                    </Row>
                                 </form>
                                 {/* Search Form End */}
                             </div>

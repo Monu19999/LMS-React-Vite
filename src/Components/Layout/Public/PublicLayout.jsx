@@ -8,6 +8,7 @@ import Navbar from "@src/Components/Layout/includes/Navbar";
 import ScrollToTop from "@src/Components/Layout/includes/ScrollToTop";
 import FooterCopyright from "@src/Components/Layout/includes/FooterCopyright";
 import Toaster from "@src/Components/Toaster";
+import { Container } from "react-bootstrap";
 
 // Load css
 // import "@public/assets/css/bootstrap.min.css";
@@ -35,13 +36,14 @@ function PublicLayout() {
             <Navbar />
             <Outlet />
             {/* Footer Start */}
-            <div
-                className="container-fluid bg-dark text-light footer wow fadeIn"
+            <Container
+                fluid
+                className="bg-dark text-light footer wow fadeIn"
                 data-wow-delay="0.1s"
             >
                 <FooterMenu />
                 <FooterCopyright />
-            </div>
+            </Container>
             {/* Footer End */}
 
             <ScrollToTop />

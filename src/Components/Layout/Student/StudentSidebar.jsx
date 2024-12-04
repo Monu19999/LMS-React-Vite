@@ -19,10 +19,7 @@ function StudentSidebar() {
                     <i className="fa fa-bars text-white" aria-hidden="true"></i>
                 </button>
             </div>
-            <div
-                className="img bg-wrap text-center py-4"
-                
-            >
+            <div className="img bg-wrap text-center py-4">
                 <div className="user-logo">
                     <ProfileImage upload={user?.upload} className="img" />
                     <h3>{user?.name}</h3>
@@ -82,8 +79,7 @@ function StudentSidebar() {
                             isPending ? "pending" : isActive ? "active" : ""
                         }
                     >
-                        <span className="fas fa-lock mr-3" /> Change
-                        Password
+                        <span className="fas fa-lock mr-3" /> Change Password
                     </NavLink>
                 </li>
                 <li>

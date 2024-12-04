@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { mobileNavToggle } from "@src/features/app/AppSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { Container, Row } from "react-bootstrap";
 
 function Navbar(props) {
     const [menus, setMenus] = useState("");
@@ -36,9 +37,11 @@ function Navbar(props) {
             >
                 {menu.children ? (
                     <>
-                        <a className="c-navbar__link" style={{color: "rgb(6, 187, 204)"}}>
+                        <a
+                            className="c-navbar__link"
+                            style={{ color: "rgb(6, 187, 204)" }}
+                        >
                             {menu.title_en}
-                           
                         </a>
                         {makeMenuTree(menu.children, deep + 1)}
                     </>
@@ -94,8 +97,8 @@ function Navbar(props) {
         <>
             {/* Navbar Start */}
             <nav className="c-navbar shadow" id="js-navbar">
-                <div className="container-fluid">
-                    <div className="row">
+                <Container fluid>
+                    <Row>
                         <div className="c-navbar__container">
                             <div
                                 id="hs_cos_wrapper_navigation-primary"
@@ -171,8 +174,8 @@ function Navbar(props) {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </Row>
+                </Container>
             </nav>
             {/* Navbar End */}
         </>

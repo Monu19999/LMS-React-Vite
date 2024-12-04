@@ -438,7 +438,7 @@ function Topic() {
                                     </article>
                                 </div>
                             </Col>
-                            <div className="col-lg-4 blog-aside">
+                            <Col lg={4} className="blog-aside">
                                 <div
                                     className="p-4 col-12 shadow"
                                     style={{ minHeight: "350px" }}
@@ -480,7 +480,7 @@ function Topic() {
                                     </div>
                                     {/* End widget Tags */}
                                 </div>
-                            </div>
+                            </Col>
                         </Row>
                     </Container>
                 </div>

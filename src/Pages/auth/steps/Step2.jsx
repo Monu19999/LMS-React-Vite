@@ -21,22 +21,12 @@ export default function Step2({
                 </div>
                 {userLoading && <BootstrapSpinner />}
                 {authState?.success_message && (
-                    <div
-                        className="alert alert-success alert-block"
-                        style={{
-                            marginBottom: "0px",
-                        }}
-                    >
+                    <div className="alert alert-success alert-block mb-0">
                         <strong>{authState.success_message}</strong>
                     </div>
                 )}
                 {authState?.error_message && (
-                    <div
-                        className="alert alert-danger alert-block"
-                        style={{
-                            marginBottom: "0px",
-                        }}
-                    >
+                    <div className="alert alert-danger alert-block mb-0">
                         <strong>{authState.error_message}</strong>
                         {Object.values(authState?.errors).map((error, key) => (
                             <div

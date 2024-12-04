@@ -1,4 +1,5 @@
 import React from "react";
+import { Col, Container, Row } from "react-bootstrap";
 import OwlCarousel from "react-owl-carousel";
 
 function FooterSlider() {
@@ -35,12 +36,12 @@ function FooterSlider() {
         <>
             {/* footer logos Start */}
             <div id="logo-slider">
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-md-12" style={{ padding: 0 }}>
+                <Container>
+                    <Row className="justify-content-center">
+                        <Col md={12} className="p-0">
                             <div className="footer-section-row">
                                 <OwlCarousel
-                                    className="first-img  owl-carousel owl-theme owl-loaded owl-drag"
+                                    className="first-img owl-carousel owl-theme owl-loaded owl-drag"
                                     {...options}
                                 >
                                     <div className="owl-stage-outer">
@@ -173,9 +174,9 @@ function FooterSlider() {
                                     </div>
                                 </OwlCarousel>
                             </div>
-                        </div>
-                    </div>
-                </div>
+                        </Col>
+                    </Row>
+                </Container>
             </div>
             {/* footer logos End */}
         </>

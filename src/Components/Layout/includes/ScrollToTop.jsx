@@ -1,13 +1,15 @@
+import { Button } from "react-bootstrap";
+
 function ScrollToTop() {
     return (
         <>
             {/* Back to Top */}
-            <button
+            <Button
                 onClick={() => window.scrollTo(0, 0)}
                 className="btn btn-lg btn-primary btn-lg-square back-to-top"
             >
                 <i className="bi bi-arrow-up" />
-            </button>
+            </Button>
             {/* Back to Top */}
         </>
     );

@@ -67,8 +67,9 @@ function Course() {
     const RenderCourse = () => {
         return (
             <>
-                <div
-                    className="container-fluid py-4 mb-4"
+                <Container
+                    fluid
+                    className="py-4 mb-4"
                     style={{
                         backgroundColor: "#343747",
                         minHeight: "250px",
@@ -98,7 +99,7 @@ function Course() {
                                     parse(course.course.description)}
                             </div> */}
                                 <nav>
-                                    <ol className="view-course-update ">
+                                    <ol className="view-course-update">
                                         <li className="viedaw-course-update">
                                             <Link className="text-white" to="/">
                                                 <i className="fas fa-clock" />{" "}
@@ -240,7 +241,7 @@ function Course() {
                             </Col>
                         </Row>
                     </Container>
-                </div>
+                </Container>
 
                 {/* Course Preview Modal Start */}
                 {/* <div

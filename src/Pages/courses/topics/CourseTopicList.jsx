@@ -1,4 +1,4 @@
-import { ListGroup } from "react-bootstrap";
+import { Col, ListGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ReadCheckBox from "./includes/ReadCheckBox";
@@ -15,7 +15,7 @@ export default function CourseTopicList({ course }) {
     return (
         <>
             <h4>Course contains:</h4>
-            <div className="col-lg-8 p-0">
+            <Col lg={8} className="p-0">
                 <div className="accordion" id="regularAccordionRobots">
                     {course_loading ? (
                         <ListGroup className="d-flex gap-2">
@@ -47,13 +47,11 @@ export default function CourseTopicList({ course }) {
                                             <h5>
                                                 {auth_user ? (
                                                     enrollments?.length > 0 ? (
-                                                        <>
-                                                            <Link
-                                                                to={`/course/${course.encr_id}/topic/${topic.encr_id}/show`}
-                                                            >
-                                                                {topic.title}
-                                                            </Link>
-                                                        </>
+                                                        <Link
+                                                            to={`/course/${course.encr_id}/topic/${topic.encr_id}/show`}
+                                                        >
+                                                            {topic.title}
+                                                        </Link>
                                                     ) : (
                                                         <a
                                                             href="#"
@@ -159,7 +157,7 @@ export default function CourseTopicList({ course }) {
                         </ListGroup>
                     )}
                 </div>
-            </div>
+            </Col>
             <BootstrapModal
                 size="sm"
                 show={alert}

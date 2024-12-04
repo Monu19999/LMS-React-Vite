@@ -15,7 +15,6 @@ export default function CheckCourseAttempts({ children }) {
             // Fetch the course
             dispatch(getCourse(course_id));
         }
-        console.log(course);
     }, []);
 
     return <>{children}</>;

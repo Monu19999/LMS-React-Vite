@@ -63,7 +63,7 @@ function Settings() {
 
     return (
         <div id="topbar">
-            <div className="d-flex align-items-center ">
+            <div className="d-flex align-items-center">
                 <div className="container-fluid d-flex justify-content-end">
                     <ul className="d-flex align-items-center list-unstyled m-0 justify-content-end">
                         <li className="px-0">

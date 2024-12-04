@@ -18,22 +18,47 @@ export default function CheckCourseCompleted({ children, error }) {
             // Fetch the course
             dispatch(getCourse(course_id));
         }
-        console.log(course);
     }, []);
+
+    const checkIfCourseCompleted = () => {
+        return is_course_completed;
+    };
+    const checkIfQuizAlreadyPassed = () => {
+        // if qbms_exams_count is 1 means quiz is already given and passed
+        return course?.qbms_exams_count == 0;
+    };
+    const checkIfOfficeProvideQuiz = () => {
+        course?.configuration?.is_provide_quiz == 0 &&
+            console.log(`Office do not provides quiz.`);
+        return course?.configuration?.is_provide_quiz == 1;
+    };
+    const CheckIfCourseHaveQuestions = () => {
+        console.log(
+            course?.questions_count,
+            course?.configuration?.no_of_questions_in_quiz
+        );
+
+        course?.questions_count >=
+            course?.configuration?.no_of_questions_in_quiz ==
+            false && console.log("Course haven't enough questions to show.");
+        return (
+            course?.questions_count >=
+            course?.configuration?.no_of_questions_in_quiz
+        );
+    };
     return (
         <>
-            {
-                course_loading ? (
-                    <BootstrapSpinner />
-                ) : !course_loading && // fetch course API is running
-                  is_course_completed && // Check all topics are read
-                  course?.qbms_exams_count == 0 && // Check if quiz is alread passed
-                  course?.configuration?.is_provide_quiz == 1 ? ( // Check if office provide quiz
-                    children // if true render children
-                ) : (
-                    error
-                ) // if false render error message
-            }
+            {course_loading ? (
+                <BootstrapSpinner />
+            ) : !course_loading && // fetch course API is running
+              checkIfCourseCompleted() && // Check all topics are read
+              checkIfQuizAlreadyPassed() && // Check if quiz is alread passed
+              checkIfOfficeProvideQuiz() && // Check if office provide quiz
+              CheckIfCourseHaveQuestions() ? ( // Check if course have enough questions to show
+                children // if true render children
+            ) : (
+                error // if false render error message
+            )}
         </>
     );
 }

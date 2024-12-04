@@ -6,6 +6,8 @@ import { getCourse } from "@src/features/app/CourseSlice";
 import CanAttemptExam from "./CanAttemptExam";
 
 export default function ExpiredNotice({ exam }) {
+    console.log("exam");
+    console.log(exam?.category_course?.configuration);
     let { course_id } = useParams();
     const dispatch = useDispatch();
     const { exam_loading, can_attempt, left_hours } = useSelector(
@@ -34,6 +36,17 @@ export default function ExpiredNotice({ exam }) {
         }
         hoursLeft();
     }, []);
+
+    const DoesProvideCertificate = () => {
+        if (course?.configuration?.is_provide_certificate == 1) {
+            return (
+                <>
+                    Please collect your certificate from My Certificate menu on
+                    your dashboard in some time.
+                </>
+            );
+        }
+    };
 
     return (
         <>
@@ -76,10 +89,8 @@ export default function ExpiredNotice({ exam }) {
                                         </p>
                                         {exam?.is_passed == true ? (
                                             <p>
-                                                You passed this quiz. Please
-                                                collect your certificate from My
-                                                Certificate menu on your
-                                                dashboard in some time.
+                                                You passed this quiz.{" "}
+                                                <DoesProvideCertificate />
                                             </p>
                                         ) : (
                                             <>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 
@@ -25,32 +26,41 @@ function GuestLayout() {
                     </div>
                 </div>
             </div>
-            <div
-                className="container-fluid bg-dark text-light footer wow fadeIn"
+            <Container
+                fluid
+                className="bg-dark text-light footer wow fadeIn"
                 data-wow-delay="0.1s"
             >
-                <div className="container">
+                <Container>
                     <div className="copyright">
-                        <div className="row">
-                            <div className="col-md-6 col-lg-6 text-center text-md-start mb-3 mb-md-0">
+                        <Row>
+                            <Col
+                                md={6}
+                                lg={6}
+                                className="text-center text-md-start mb-3 mb-md-0"
+                            >
                                 ©{" "}
                                 <a className="border-bottom" href="#">
                                     e-shiksha
                                 </a>
                                 , All Right Reserved.
-                            </div>
-                            <div className="col-md-6 col-lg-6 text-center text-md-end">
+                            </Col>
+                            <Col
+                                md={6}
+                                lg={6}
+                                className="text-center text-md-end"
+                            >
                                 <div className="footer-menu">
                                     Designed and Developed By{" "}
                                     <a className="border-bottom" href="#">
                                         MPSEDC (CoE)
                                     </a>
                                 </div>
-                            </div>
-                        </div>
+                            </Col>
+                        </Row>
                     </div>
-                </div>
-            </div>
+                </Container>
+            </Container>
         </>
     );
 }

@@ -1,3 +1,4 @@
+import { Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -34,23 +35,24 @@ function FooterMenu() {
     }
     function RenderMenus() {
         return (
-            <div className="col-lg-12 col-md-12 text-center">
+            <Col lg={12} md={12} className="text-center">
                 {bottom_menus && loopMenuObj(bottom_menus)}
-            </div>
+            </Col>
         );
     }
     return (
-        <div
-            className="container-fluid py-3"
+        <Container
+            fluid
+            className="py-3"
             style={{
                 backgroundColor: "#1e233d",
                 borderBottom: "1px solid rgba(256, 256, 256, .1)",
             }}
         >
-            <div className="row g-5 justify-content-center">
+            <Row className="g-5 justify-content-center">
                 <RenderMenus />
-            </div>
-        </div>
+            </Row>
+        </Container>
     );
 }
 

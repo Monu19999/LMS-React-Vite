@@ -41,7 +41,7 @@ export default function Step1({
 
     return (
         <div className="wrap d-md-flex">
-            <div className="text-wrap p-4  text-center d-flex align-items-center order-md-last">
+            <div className="text-wrap p-4 text-center d-flex align-items-center order-md-last">
                 <div className="text w-100">
                     <div className="d-flex justify-content-center mb-4">
                         <Link to="/">
@@ -70,22 +70,12 @@ export default function Step1({
                 </div>
                 {userLoading && <BootstrapSpinner />}
                 {authState?.success_message && (
-                    <div
-                        className="alert alert-success alert-block"
-                        style={{
-                            marginBottom: "0px",
-                        }}
-                    >
+                    <div className="alert alert-success alert-block mb-0">
                         <strong>{authState.success_message}</strong>
                     </div>
                 )}
                 {authState?.error_message && (
-                    <div
-                        className="alert alert-danger alert-block"
-                        style={{
-                            marginBottom: "0px",
-                        }}
-                    >
+                    <div className="alert alert-danger alert-block mb-0">
                         <strong>{authState.error_message}</strong>
                         {Object.values(authState?.errors).map((error, key) => (
                             <div
@@ -99,7 +89,7 @@ export default function Step1({
                 )}
                 {!authState?.error_message && !authState?.success_message && (
                     <div role="alert" className="alert alert-primary p-2 mb-3">
-                        <div className="d-flex ">
+                        <div className="d-flex">
                             <i
                                 className="fa fa-info-circle mr-4"
                                 style={{
@@ -107,11 +97,7 @@ export default function Step1({
                                     marginTop: 5,
                                 }}
                             />
-                            <p
-                                style={{
-                                    margin: 0,
-                                }}
-                            >
+                            <p className="m-0">
                                 Enter mobile number and click 'get OTP' to
                                 confirm it. An OTP will be sent to your phone
                                 via SMS. Copy the OTP from the SMS and enter

@@ -317,7 +317,7 @@ export default function CourseTopicDetail() {
             <>
                 <Container
                     fluid
-                    className="pt-4 mb-4 "
+                    className="pt-4 mb-4"
                     style={{
                         backgroundColor: "#343747",
                         minHeight: 50,
